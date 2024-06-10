@@ -24,6 +24,13 @@ export const plugins = [
             <Button>Delete All</Button>
           </div>
         ),
+        relations: {
+          enable: true,
+          value: {
+            type: "dir",
+            ids: ["item"],
+          },
+        },
       },
     ],
   },
@@ -42,13 +49,24 @@ export type PluginDir = {
   files?: PluginFile[];
   template?: React.ElementType;
   actions?: React.ReactNode;
+  relations?: Relations;
 };
+
+export type Relations =
+  | {
+      enable: false;
+    }
+  | {
+      enable: true;
+      value: { type: "dir" | "file"; ids: string[] }[];
+    };
 
 export type PluginFile = {
   id: string;
   name: string;
   template: React.ElementType;
   actions?: React.ReactNode;
+  relations?: Relations;
 };
 
 export function getPlugin(id: string) {

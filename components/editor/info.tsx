@@ -1,10 +1,14 @@
 "use client";
 
+import Link from "next/link";
+
 import { AnimatePresence, motion } from "framer-motion";
-import { useContext, useEffect, useState, useTransition } from "react";
+import path from "path";
+import React, { useContext, useEffect, useState, useTransition } from "react";
 
 import { EditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
 import { File, getFile } from "@/app/actions";
+import { ConfigurationResult } from "@/lib/core";
 
 import {
   Accordion,
@@ -20,20 +24,21 @@ import {
 } from "@/components/ui/card";
 
 type InfoProps = {
-  pluginPath: string;
-  filePath: string[];
   actions?: React.ReactNode;
 };
 
-export function Info({ pluginPath, filePath, actions }: InfoProps) {
+export function Info({ actions }: InfoProps) {
   const [file, setFile] = useState<(File & { type?: string }) | null>(null);
   const [isPending, startTransition] = useTransition();
-  const { collapsed } = useContext(EditorContext);
+  const { collapsed, relations, pluginPath, pluginId, filePath } =
+    useContext(EditorContext);
 
   useEffect(() => {
-    startTransition(() => {
-      getFile(pluginPath, filePath.join("/")).then((file) => setFile(file));
-    });
+    if (pluginPath && filePath) {
+      startTransition(() => {
+        getFile(pluginPath, filePath.join("/")).then((file) => setFile(file));
+      });
+    }
   }, [pluginPath, filePath]);
 
   return (
@@ -140,10 +145,53 @@ export function Info({ pluginPath, filePath, actions }: InfoProps) {
                 </CardContent>
               </Card>
             </AccordionItem>
+
+            <AccordionItem value="relations" asChild>
+              <Card>
+                <CardContent className="py-0 px-3">
+                  <AccordionTrigger icon>
+                    <div className="flex flex-col items-start space-y-1.5 text-start">
+                      <CardTitle>Relations Files</CardTitle>
+                      <CardDescription>
+                        List of relations of this file
+                      </CardDescription>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    {pluginId &&
+                      relations?.map((r) => (
+                        <RelationFile
+                          pluginId={pluginId}
+                          key={r.path.join("/")}
+                          {...r}
+                        />
+                      ))}
+                  </AccordionContent>
+                </CardContent>
+              </Card>
+            </AccordionItem>
           </Accordion>
         </motion.div>
       )}
     </AnimatePresence>
+  );
+}
+
+function RelationFile({
+  path: filePath,
+  name,
+  pluginId,
+}: ConfigurationResult & { pluginId: string }) {
+  return (
+    <Link
+      href={"/" + path.join(pluginId, "editor", ...filePath.slice(1))}
+      className="space-y-1 rounded-lg bg-gray-100 p-2 dark:bg-gray-800 flex flex-col"
+    >
+      <h1 className="font-medium">{name}</h1>
+      <p className="text-sm text-gray-500 dark:text-gray-400">
+        {filePath.slice(1).join("/")}
+      </p>
+    </Link>
   );
 }
 

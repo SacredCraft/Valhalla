@@ -90,9 +90,6 @@ export function traverse(
   path: string[] = [],
 ) {
   for (const key in obj) {
-    if (path[path.length - 1] === "state-machine") {
-      // console.log(key, obj[key]);
-    }
     if (typeof obj[key] === "object") {
       traverse(obj[key], cb, [...path, key]);
     }

@@ -18,7 +18,11 @@ type ContextType = {
   form?: ReturnType<typeof useForm>;
   collapsed?: boolean;
   configuration?: ConfigurationResult;
+  relations?: ConfigurationResult[];
   saved: boolean;
+  pluginPath?: string;
+  filePath?: string[];
+  pluginId?: string;
 };
 
 export const EditorContext = createContext<ContextType>({
@@ -26,11 +30,13 @@ export const EditorContext = createContext<ContextType>({
 });
 
 type ClientProps = {
+  pluginId?: string;
   pluginPath?: string;
   filePath?: string[];
   template?: React.ReactNode;
   info?: React.ReactNode;
   initialConfiguration: ConfigurationResult;
+  relations: ConfigurationResult[];
 };
 
 export default function Client({
@@ -39,6 +45,8 @@ export default function Client({
   template,
   info,
   initialConfiguration,
+  relations,
+  pluginId,
 }: ClientProps) {
   const realPath = useMemo(
     () => [pluginPath || "", ...filePath],
@@ -77,7 +85,18 @@ export default function Client({
   }
 
   return (
-    <EditorContext.Provider value={{ form, collapsed, configuration, saved }}>
+    <EditorContext.Provider
+      value={{
+        form,
+        pluginId,
+        collapsed,
+        configuration,
+        saved,
+        relations,
+        pluginPath,
+        filePath,
+      }}
+    >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <Tabs

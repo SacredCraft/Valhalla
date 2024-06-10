@@ -1,6 +1,6 @@
 import { getTemplateAndActions } from "@/config/plugins";
 import { getPluginPath } from "@/lib/cookies";
-import { getConfigurationJson } from "@/lib/core";
+import { getConfigurationJson, getRelations } from "@/lib/core";
 
 import { Info } from "@/components/editor/info";
 
@@ -45,14 +45,16 @@ export default async function Editor({
     ...filePath,
   ]);
 
+  const relations = await getRelations(pluginId, pluginPath, filePath);
+
   return (
     <Client
+      relations={relations || []}
       initialConfiguration={initialConfiguration}
       pluginPath={pluginPath}
       filePath={filePath}
-      info={
-        <Info pluginPath={pluginPath} filePath={filePath} actions={Actions} />
-      }
+      pluginId={pluginId}
+      info={<Info actions={Actions} />}
       template={Template ? <Template /> : <div>Template not found</div>}
     />
   );

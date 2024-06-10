@@ -1,16 +1,11 @@
 "use server";
 
 import fs from "fs";
-import { merge } from "lodash";
+import { flatMap, map, merge } from "lodash";
 import path from "path";
 
-import {
-  convertConfigurationToJson,
-  convertJsonToConfiguration,
-  toResult,
-} from "@/lib/core-utils";
-
-import { isFormDeletableValue } from "./form";
+import { getPlugin } from "@/config/plugins";
+import { convertConfigurationToJson, toResult } from "@/lib/core-utils";
 
 function getValhallaDir(filePath: string[]) {
   return path.join(...filePath, ".valhalla");
@@ -64,20 +59,87 @@ function deleteValhallaFile(filePath: string[]) {
   fs.unlinkSync(path.join(getValhallaDir(filePath)));
 }
 
+function mapRelationsValueToConfiguration(
+  pluginPath: string,
+  value: any,
+  filePath: string[],
+) {
+  let res: ConfigurationResult[] = [];
+  if (value.type === "file") {
+    flatMap(value.ids, (id: string) => {
+      getConfigurationJson([pluginPath, id]).then((configuration) => {
+        res.push(configuration);
+      });
+    });
+  } else {
+    flatMap(value.ids, (id: string) => {
+      flatMap(fs.readdirSync(path.join(pluginPath, id)), (file) => {
+        if (file === ".DS_Store" || file === ".valhalla") {
+          return;
+        }
+        getConfigurationJson([pluginPath, id, file]).then((configuration) => {
+          if (configuration.path.slice(1).join("/") !== filePath.join("/")) {
+            res.push(configuration);
+          }
+        });
+      });
+    });
+  }
+  return res;
+}
+
+export async function getRelations(
+  pluginId: string,
+  pluginPath: string,
+  filePath: string[],
+) {
+  const plugin = getPlugin(pluginId);
+  if (filePath.length === 1) {
+    const file = plugin?.dirs[0].files?.find((file) => file.id === filePath[0]);
+    if (file?.relations?.enable) {
+      const relationsValue = file.relations.value;
+      return mapRelationsValueToConfiguration(
+        pluginPath,
+        relationsValue,
+        filePath,
+      );
+    }
+    if (plugin?.dirs[0].relations?.enable) {
+      const relationsValue = plugin.dirs[0].relations.value;
+      return mapRelationsValueToConfiguration(
+        pluginPath,
+        relationsValue,
+        filePath,
+      );
+    }
+  } else {
+    const dir = plugin?.dirs.find((dir) => dir.id === filePath[0]);
+    if (dir?.relations?.enable) {
+      const relationsValue = dir.relations.value;
+      return mapRelationsValueToConfiguration(
+        pluginPath,
+        relationsValue,
+        filePath,
+      );
+    }
+  }
+  return null;
+}
+
 export async function getConfigurationJson(
   filePath: string[],
 ): Promise<ConfigurationResult> {
-  if (!fs.existsSync(path.join(...filePath))) {
-    return { exists: false };
-  }
   const fileName = filePath[filePath.length - 1];
+  if (!fs.existsSync(path.join(...filePath))) {
+    return { exists: false, path: filePath, name: fileName };
+  }
   const folder = filePath.slice(0, -1);
   let actualCacheFileName = fileName.endsWith(".json")
     ? fileName
     : fileName + ".json";
 
   let raw = fs.readFileSync(path.join(...folder, fileName), "utf-8");
-  let content = convertConfigurationToJson(fileName, raw).toJSON();
+  let content = convertConfigurationToJson(fileName, raw);
 
   if (fs.existsSync(path.join(getValhallaDir(folder), actualCacheFileName))) {
     const cacheContent = JSON.parse(
@@ -88,12 +150,16 @@ export async function getConfigurationJson(
       raw,
       content: JSON.stringify(merge(content, cacheContent)),
       exists: true,
+      name: fileName,
+      path: filePath,
     };
   }
   return {
     raw,
     content: JSON.stringify(content),
     exists: true,
+    name: fileName,
+    path: filePath,
   };
 }
 
@@ -122,4 +188,6 @@ export type ConfigurationResult = {
   content?: string;
   exists: boolean;
   type?: string;
+  name: string;
+  path: string[];
 };
