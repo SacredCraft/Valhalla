@@ -9,6 +9,7 @@ import React, { useContext, useEffect, useState, useTransition } from "react";
 import { EditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
 import { File, getFile } from "@/app/actions";
 import { ConfigurationResult } from "@/lib/core";
+import { cn } from "@/lib/utils";
 
 import {
   Accordion,
@@ -59,7 +60,7 @@ export function Info({ actions }: InfoProps) {
             <AccordionItem value="info" asChild>
               <Card>
                 {!isPending && file ? (
-                  <CardContent className="grid py-0 px-3 text-sm">
+                  <CardContent className="grid p-0 text-sm">
                     <AccordionTrigger icon>
                       <div className="flex items-center gap-4 space-x-2 text-start">
                         <div className="flex aspect-square w-12 items-center justify-center rounded-md bg-gray-100 dark:bg-gray-800">
@@ -73,7 +74,7 @@ export function Info({ actions }: InfoProps) {
                         </div>
                       </div>
                     </AccordionTrigger>
-                    <AccordionContent className="space-y-4">
+                    <AccordionContent className="space-y-4 px-3">
                       <div className="flex items-center justify-between">
                         <div className="text-gray-500 dark:text-gray-400">
                           File Size
@@ -110,7 +111,7 @@ export function Info({ actions }: InfoProps) {
 
             <AccordionItem value="actions" asChild>
               <Card>
-                <CardContent className="py-0 px-3">
+                <CardContent className="p-0">
                   <AccordionTrigger icon>
                     <div className="flex flex-col items-start space-y-1.5 text-start">
                       <CardTitle>Actions</CardTitle>
@@ -119,14 +120,16 @@ export function Info({ actions }: InfoProps) {
                       </CardDescription>
                     </div>
                   </AccordionTrigger>
-                  <AccordionContent>{actions}</AccordionContent>
+                  <AccordionContent className="px-3">
+                    {actions}
+                  </AccordionContent>
                 </CardContent>
               </Card>
             </AccordionItem>
 
             <AccordionItem value="versions" asChild>
               <Card>
-                <CardContent className="py-0 px-3">
+                <CardContent className="p-0">
                   <AccordionTrigger icon>
                     <div className="flex flex-col items-start space-y-1.5 text-start">
                       <CardTitle>Versions</CardTitle>
@@ -135,7 +138,7 @@ export function Info({ actions }: InfoProps) {
                       </CardDescription>
                     </div>
                   </AccordionTrigger>
-                  <AccordionContent className="space-y-4">
+                  <AccordionContent className="space-y-4 px-3">
                     <Version
                       version="1.0.0"
                       description="Initial version of the file"
@@ -148,7 +151,7 @@ export function Info({ actions }: InfoProps) {
 
             <AccordionItem value="relations" asChild>
               <Card>
-                <CardContent className="py-0 px-3">
+                <CardContent className="p-0">
                   <AccordionTrigger icon>
                     <div className="flex flex-col items-start space-y-1.5 text-start">
                       <CardTitle>Relations Files</CardTitle>
@@ -157,7 +160,7 @@ export function Info({ actions }: InfoProps) {
                       </CardDescription>
                     </div>
                   </AccordionTrigger>
-                  <AccordionContent>
+                  <AccordionContent className="px-3">
                     {pluginId &&
                       relations?.map((r) => (
                         <RelationFile

@@ -1,11 +1,15 @@
 "use server";
 
 import fs from "fs";
-import { flatMap, map, merge } from "lodash";
+import { flatMap } from "lodash";
 import path from "path";
 
 import { getPlugin } from "@/config/plugins";
-import { convertConfigurationToJson, toResult } from "@/lib/core-utils";
+import {
+  convertConfigurationToJson,
+  mergeObjects,
+  toResult,
+} from "@/lib/core-utils";
 
 function getValhallaDir(filePath: string[]) {
   return path.join(...filePath, ".valhalla");
@@ -148,7 +152,7 @@ export async function getConfigurationJson(
 
     return {
       raw,
-      content: JSON.stringify(merge(content, cacheContent)),
+      content: JSON.stringify(mergeObjects(content, cacheContent)),
       exists: true,
       name: fileName,
       path: filePath,
@@ -165,15 +169,14 @@ export async function getConfigurationJson(
 
 export async function setConfigurationJson(
   filePath: string[],
-  contentToSave: any,
+  cache: any,
+  raw: string,
 ) {
   const fileName = filePath[filePath.length - 1];
   const folder = filePath.slice(0, -1);
   let actualCacheFileName = fileName.endsWith(".json")
     ? fileName
     : fileName + ".json";
-
-  const { cache, raw } = toResult(fileName, contentToSave);
 
   fs.writeFileSync(path.join(...folder, fileName), raw, "utf-8");
 

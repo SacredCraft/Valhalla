@@ -56,16 +56,22 @@ export default function Client({
   const [collapsed, setCollapsed] = useState(false);
   const [configuration, setConfiguration] =
     useState<ConfigurationResult>(initialConfiguration);
+
+  const values = useMemo(
+    () => JSON.parse(configuration.content || "{}"),
+    [configuration.content],
+  );
+
   const [saved, setSaved] = useState(true);
 
   const form = useForm({
-    defaultValues: JSON.parse(configuration.content || "{}"),
+    values,
   });
 
   const { watch } = form;
 
   useEffect(() => {
-    const subscription = watch((values) => {
+    const { unsubscribe } = watch((values) => {
       setSaved(false);
       const { res, raw } = toResult(filePath[filePath.length - 1], values);
       setConfiguration({
@@ -74,11 +80,17 @@ export default function Client({
         raw,
       });
     });
-    return () => subscription.unsubscribe();
+    return () => unsubscribe();
   }, [configuration, filePath, form, realPath, watch]);
 
   function onSubmit(values: any) {
-    setConfigurationJson(realPath, values).then((configuration) => {
+    const { cache, raw, res } = toResult(filePath[filePath.length - 1], values);
+    setConfiguration({
+      ...configuration,
+      content: res,
+      raw,
+    });
+    setConfigurationJson(realPath, cache, raw).then(() => {
       toast.success("Saved successfully");
     });
     setSaved(true);

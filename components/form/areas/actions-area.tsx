@@ -1,10 +1,14 @@
 "use client";
 
 import { Code, CodeXml, TrashIcon } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 
 import { EditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
-import { getFormValue } from "@/lib/form";
+import {
+  getFormValue,
+  isFormDeletableValue,
+  setFormDeleteValue,
+} from "@/lib/form";
 import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
@@ -14,29 +18,32 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-type AreaActionProps = {
+type ActionsAreaProps = {
   nodes: string[];
   onDelete?: (nodes: string[]) => void;
   onTempDelete?: (nodes: string[]) => void;
   children?: React.ReactNode;
 } & React.HTMLProps<HTMLDivElement>;
 
-export function AreaAction({
+export function ActionsArea({
   nodes,
   onDelete,
   onTempDelete,
   children,
   className,
   ...rest
-}: AreaActionProps) {
+}: ActionsAreaProps) {
   const { form } = useContext(EditorContext);
 
   const [hover, setHover] = useState(false);
   const [deleteHover, setDeleteHover] = useState(false);
   const [deleteTempHover, setDeleteTempHover] = useState(false);
   const [deleted, setDeleted] = useState(false);
-  const [tempDeleted, setTempDeleted] = useState(
-    form?.getValues(nodes[0])?._temp || false,
+  const tempDeleted = useMemo(
+    () =>
+      isFormDeletableValue(form?.getValues(nodes[0])) &&
+      form?.getValues(nodes[0])._temp,
+    [form, nodes],
   );
 
   const watchFields = form?.watch(nodes);
@@ -44,21 +51,18 @@ export function AreaAction({
   useEffect(() => {
     const subscription = form?.watch(() => {
       setDeleted(false);
-      setTempDeleted(false);
     });
     return () => subscription?.unsubscribe();
   }, [watchFields, form]);
 
   function handleDelete() {
     nodes.forEach((node) => {
-      form?.setValue(node, {
-        _value: getFormValue(form?.getValues(node)),
-        _deleted: true,
-        _temp: false,
-      });
+      form?.setValue(
+        node,
+        setFormDeleteValue(getFormValue(form?.getValues(node))),
+      );
     });
 
-    setTempDeleted(false);
     setDeleted(true);
     onDelete?.(nodes);
   }
@@ -66,20 +70,17 @@ export function AreaAction({
   function handleTempDelete() {
     if (tempDeleted) {
       setDeleted(false);
-      setTempDeleted(false);
       nodes.forEach((node) => {
         form?.setValue(node, getFormValue(form?.getValues(node)));
       });
     } else {
       nodes.forEach((node) => {
-        form?.setValue(node, {
-          _value: getFormValue(form?.getValues(node)),
-          _deleted: true,
-          _temp: true,
-        });
+        form?.setValue(
+          node,
+          setFormDeleteValue(getFormValue(form?.getValues(node)), true, true),
+        );
       });
       setDeleted(false);
-      setTempDeleted(true);
       onTempDelete?.(nodes);
     }
   }
