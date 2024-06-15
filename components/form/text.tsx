@@ -18,11 +18,11 @@ import { Input } from "@/components/ui/input";
 type TextProps = {
   label?: React.ReactNode;
   description?: React.ReactNode;
-  name: string;
+  node: string;
 } & React.ComponentProps<typeof Input>;
 
 export function Text({
-  name,
+  node,
   description,
   label,
   defaultValue,
@@ -36,7 +36,7 @@ export function Text({
   return (
     <FormField
       control={form.control}
-      name={name}
+      name={node}
       defaultValue={getFormValue(defaultValue)}
       render={({ field: { value, ...field } }) => (
         <FormItem className={className}>

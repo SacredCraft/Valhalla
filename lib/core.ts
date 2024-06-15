@@ -7,8 +7,7 @@ import path from "path";
 import { getPlugin } from "@/config/plugins";
 import {
   convertConfigurationToJson,
-  mergeObjects,
-  toResult,
+  convertJsonToConfiguration,
 } from "@/lib/core-utils";
 
 function getValhallaDir(filePath: string[]) {
@@ -135,33 +134,33 @@ export async function getConfigurationJson(
 ): Promise<ConfigurationResult> {
   const fileName = filePath[filePath.length - 1];
   if (!fs.existsSync(path.join(...filePath))) {
-    return { exists: false, path: filePath, name: fileName };
+    return { path: filePath, name: fileName };
   }
   const folder = filePath.slice(0, -1);
   let actualCacheFileName = fileName.endsWith(".json")
     ? fileName
     : fileName + ".json";
 
-  let raw = fs.readFileSync(path.join(...folder, fileName), "utf-8");
-  let content = convertConfigurationToJson(fileName, raw);
+  let content = convertConfigurationToJson(
+    fileName,
+    fs.readFileSync(path.join(...folder, fileName), "utf-8"),
+  );
 
   if (fs.existsSync(path.join(getValhallaDir(folder), actualCacheFileName))) {
-    const cacheContent = JSON.parse(
+    const cache = JSON.parse(
       getValhallaFileContent([...folder, actualCacheFileName]) || "{}",
     );
 
     return {
-      raw,
-      content: JSON.stringify(mergeObjects(content, cacheContent)),
-      exists: true,
+      cache,
+      content: content,
       name: fileName,
       path: filePath,
     };
   }
   return {
-    raw,
-    content: JSON.stringify(content),
-    exists: true,
+    cache: content,
+    content: content,
     name: fileName,
     path: filePath,
   };
@@ -170,7 +169,7 @@ export async function getConfigurationJson(
 export async function setConfigurationJson(
   filePath: string[],
   cache: any,
-  raw: string,
+  content: any,
 ) {
   const fileName = filePath[filePath.length - 1];
   const folder = filePath.slice(0, -1);
@@ -178,7 +177,11 @@ export async function setConfigurationJson(
     ? fileName
     : fileName + ".json";
 
-  fs.writeFileSync(path.join(...folder, fileName), raw, "utf-8");
+  fs.writeFileSync(
+    path.join(...folder, fileName),
+    convertJsonToConfiguration(fileName, content),
+    "utf-8",
+  );
 
   setValhallaFileContent(
     [...folder, actualCacheFileName],
@@ -187,9 +190,8 @@ export async function setConfigurationJson(
 }
 
 export type ConfigurationResult = {
-  raw?: string;
-  content?: string;
-  exists: boolean;
+  content?: any;
+  cache?: any;
   type?: string;
   name: string;
   path: string[];

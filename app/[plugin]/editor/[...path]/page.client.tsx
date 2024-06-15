@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { ConfigurationResult, setConfigurationJson } from "@/lib/core";
-import { toResult } from "@/lib/core-utils";
+import { getContent } from "@/lib/core-utils";
 
 import { Preview } from "@/components/editor/preview";
 import { Button } from "@/components/ui/button";
@@ -57,10 +57,7 @@ export default function Client({
   const [configuration, setConfiguration] =
     useState<ConfigurationResult>(initialConfiguration);
 
-  const values = useMemo(
-    () => JSON.parse(configuration.content || "{}"),
-    [configuration.content],
-  );
+  const values = useMemo(() => configuration.cache, [configuration]);
 
   const [saved, setSaved] = useState(true);
 
@@ -73,24 +70,24 @@ export default function Client({
   useEffect(() => {
     const { unsubscribe } = watch((values) => {
       setSaved(false);
-      const { res, raw } = toResult(filePath[filePath.length - 1], values);
+
+      const content = getContent(values);
+
       setConfiguration({
         ...configuration,
-        content: res,
-        raw,
+        content,
+        cache: values,
       });
     });
     return () => unsubscribe();
   }, [configuration, filePath, form, realPath, watch]);
 
-  function onSubmit(values: any) {
-    const { cache, raw, res } = toResult(filePath[filePath.length - 1], values);
-    setConfiguration({
-      ...configuration,
-      content: res,
-      raw,
-    });
-    setConfigurationJson(realPath, cache, raw).then(() => {
+  function onSubmit() {
+    setConfigurationJson(
+      realPath,
+      configuration.cache,
+      configuration.content,
+    ).then(() => {
       toast.success("Saved successfully");
     });
     setSaved(true);

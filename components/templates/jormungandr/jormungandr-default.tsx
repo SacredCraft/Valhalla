@@ -1,6 +1,7 @@
 "use client";
 
 import { useContext } from "react";
+import { useForm } from "react-hook-form";
 
 import { EditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
 import {
@@ -15,10 +16,11 @@ import { ListArea } from "@/components/form/areas/list-area";
 import { ButtonGroup } from "@/components/form/button-group";
 import { Enum } from "@/components/form/enum";
 import { Text } from "@/components/form/text";
+import { BaseAttack } from "@/components/templates/jormungandr/mechanism/base-attack";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
-export function ZaphkielItem() {
+export function JormungandrDefault() {
   const { form } = useContext(EditorContext);
 
   return (
@@ -28,7 +30,7 @@ export function ZaphkielItem() {
         description="Configure the basic information of the item."
       >
         <Text
-          name="type"
+          node="type"
           label="Type"
           description="Edit the type of the item."
           defaultValue="HUSK"
@@ -37,13 +39,13 @@ export function ZaphkielItem() {
       <GroupArea title="Default" description="Configure the default settings.">
         <div className="flex md:flex-row flex-col w-full md:items-center items-start md:space-x-4 md:space-y-2 space-y-4">
           <Text
-            name="default.display-name"
+            node="default.display-name"
             label="Display Name"
             description="Edit the display name of the item."
             defaultValue="我是傻逼"
           />
           <ButtonGroup
-            name="default.display-name-visible"
+            node="default.display-name-visible"
             label="Display Name Visibility"
             description="Edit the display name visibility of the item."
             defaultValue={true}
@@ -53,7 +55,7 @@ export function ZaphkielItem() {
           </ButtonGroup>
         </div>
         <Text
-          name="default.health"
+          node="default.health"
           label="Health"
           description="Edit the health of the item."
           type="number"
@@ -65,7 +67,7 @@ export function ZaphkielItem() {
           description="Edit the model of the item."
         >
           <Enum
-            name="default.model"
+            node="default.model"
             label="Model"
             items={[
               { value: "zenda_bugs", label: "Zenda Bugs" },
@@ -74,7 +76,7 @@ export function ZaphkielItem() {
             description="Edit the model of the item."
           />
 
-          <div className="space-y-2 overflow-visible">
+          <div className="space-y-2">
             <Label className="text-base">Model Options</Label>
             <ActionsArea
               className="flex md:flex-row flex-col md:items-center items-start md:space-x-4 md:space-y-0 space-y-4 rounded-lg border p-3"
@@ -84,13 +86,13 @@ export function ZaphkielItem() {
               ]}
             >
               <Text
-                name="default.model-options.nametag"
+                node="default.model-options.nametag"
                 label="Nametag"
                 description="Edit the nametag of the item."
                 defaultValue="yournametag"
               />
               <ButtonGroup
-                name="default.model-options.state-machine"
+                node="default.model-options.state-machine"
                 label="State Machine"
                 description="Edit the state machine of the item."
                 defaultValue={true}
@@ -110,7 +112,6 @@ export function ZaphkielItem() {
       >
         <ListArea
           node="mechanism"
-          deletable
           labelKey={(item) => item?.["id"] ?? item?.["=="]}
           draggable
           footer={({ items }) => (
@@ -123,50 +124,99 @@ export function ZaphkielItem() {
             </Button>
           )}
         >
-          {({ item, items, deletable }) => (
-            <>
-              {deletable && (
-                <div className="flex">
-                  <div className="ml-auto flex gap-2">
-                    <Button
-                      size="sm"
-                      onClick={() => {
-                        const value = items.map((i, index) =>
-                          i === item
-                            ? isFormDeletableValue(item)
-                              ? getFormValue(item)
-                              : setFormDeleteValue(
-                                  getFormValue(item),
-                                  true,
-                                  true,
-                                  index,
-                                )
-                            : i,
-                        );
-                        form?.setValue("mechanism", value);
-                      }}
-                    >
-                      Temp Delete
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      onClick={() => {
-                        form?.setValue(
-                          "mechanism",
-                          items.filter((i) => i !== item),
-                        );
-                      }}
-                    >
-                      Delete
-                    </Button>
-                  </div>
+          {({ item, items, labelKey, index }) => (
+            <div className="space-y-4">
+              {getMatchedMechanism({ item, labelKey, index })}
+              <div className="flex">
+                <div className="ml-auto flex gap-2">
+                  <TempDeleteButton form={form} items={items} item={item} />
+                  <DeleteButton form={form} items={items} item={item} />
                 </div>
-              )}
-            </>
+              </div>
+            </div>
           )}
         </ListArea>
       </GroupArea>
     </div>
+  );
+}
+
+export type MechanismProps = {
+  item: any;
+  index: number;
+  labelKey: (item: any) => string;
+};
+
+export function getMatchedMechanism({
+  item,
+  index,
+  ...rest
+}: MechanismProps): React.ReactNode {
+  const key: string = item?.["=="] ?? item?.["id"];
+  if (isFormDeletableValue(item)) {
+    return <div>Deleted</div>;
+  }
+  switch (key) {
+    case "BASE_ATTACK":
+      return <BaseAttack item={item} labelKey={rest.labelKey} index={index} />;
+    default:
+      return <div>Unknown Mechanism</div>;
+  }
+}
+
+export function TempDeleteButton({
+  form,
+  items,
+  item,
+  node,
+}: {
+  form: ReturnType<typeof useForm> | undefined;
+  items: any[];
+  item: any;
+  node?: string;
+}) {
+  return (
+    <Button
+      size="sm"
+      onClick={() => {
+        const index = items.findIndex((i) => i === item);
+
+        form?.setValue(
+          node ? `${node}.${index}` : `mechanism.${index}`,
+          isFormDeletableValue(item)
+            ? getFormValue(item)
+            : setFormDeleteValue(getFormValue(item), true, true),
+        );
+      }}
+    >
+      Temp Delete
+    </Button>
+  );
+}
+
+export function DeleteButton({
+  form,
+  items,
+  item,
+  node,
+}: {
+  form: ReturnType<typeof useForm> | undefined;
+  items: any[];
+  item: any;
+  node?: string;
+}) {
+  return (
+    <Button
+      size="sm"
+      variant="destructive"
+      onClick={() => {
+        form?.setValue(
+          node ?? "mechanism",
+          items.filter((i) => i !== item),
+        );
+      }}
+    >
+      Delete
+    </Button>
   );
 }

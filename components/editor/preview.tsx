@@ -3,6 +3,7 @@
 import { Suspense, useContext } from "react";
 
 import { EditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
+import { convertJsonToConfiguration, mergeObjects } from "@/lib/core-utils";
 
 import { HighLighter } from "@/components/ui/shiki/dynamic";
 
@@ -13,19 +14,29 @@ export function Preview() {
     <Suspense
       fallback={
         <pre>
-          <code>{configuration?.raw ? configuration?.raw : "Loading..."}</code>
+          <code>
+            {configuration?.content
+              ? convertJsonToConfiguration(
+                  configuration?.name!!,
+                  configuration?.content!!,
+                )
+              : "Loading..."}
+          </code>
         </pre>
       }
     >
       <HighLighter
         className="h-full flex-1 overflow-auto md:w-1/2 w-full font-mono"
         lang="yaml"
-        content={configuration?.raw!!}
+        content={convertJsonToConfiguration(
+          configuration?.name!!,
+          configuration?.content!!,
+        )}
       />
       <HighLighter
         className="h-full flex-1 overflow-auto md:w-1/2 w-full font-mono"
         lang="json"
-        content={JSON.stringify(JSON.parse(configuration?.content!!), null, 2)}
+        content={JSON.stringify(configuration?.cache ?? {}, null, 2)}
       />
     </Suspense>
   );

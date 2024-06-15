@@ -9,7 +9,6 @@ import React, { useContext, useEffect, useState, useTransition } from "react";
 import { EditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
 import { File, getFile } from "@/app/actions";
 import { ConfigurationResult } from "@/lib/core";
-import { cn } from "@/lib/utils";
 
 import {
   Accordion,

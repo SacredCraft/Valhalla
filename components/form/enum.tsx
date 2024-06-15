@@ -32,12 +32,12 @@ import {
 type EnumProps = {
   label?: React.ReactNode;
   description?: React.ReactNode;
-  name: string;
+  node: string;
   items: { label: string; value: string }[];
 } & React.HTMLProps<HTMLDivElement>;
 
 export function Enum({
-  name,
+  node,
   description,
   defaultValue,
   label,
@@ -52,7 +52,7 @@ export function Enum({
   return (
     <FormField
       control={form.control}
-      name={name}
+      name={node}
       defaultValue={getFormValue(defaultValue)}
       render={({ field }) => (
         <FormItem className={cn(className, "flex flex-col")}>
@@ -93,7 +93,7 @@ export function Enum({
                         value={item.label}
                         key={item.value}
                         onSelect={() => {
-                          form.setValue(name, item.value);
+                          form.setValue(node, item.value);
                         }}
                       >
                         {item.label}

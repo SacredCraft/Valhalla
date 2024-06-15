@@ -19,7 +19,7 @@ import {
 type ButtonGroupProps = {
   label?: React.ReactNode;
   description?: React.ReactNode;
-  name: string;
+  node: string;
   children: React.ReactNode[];
   defaultValue?: string | string[] | boolean;
   value?: string | string[] | boolean;
@@ -32,7 +32,7 @@ export function ButtonGroup({
   label,
   defaultValue,
   className,
-  name,
+  node,
   ...rest
 }: ButtonGroupProps) {
   const { form } = useContext(EditorContext);
@@ -45,7 +45,7 @@ export function ButtonGroup({
     <FormField
       defaultValue={getFormValue(defaultValue)}
       control={form.control}
-      name={name}
+      name={node}
       render={({ field: { value, ...field } }) => (
         <FormItem className={className}>
           {label && <FormLabel>{label}</FormLabel>}

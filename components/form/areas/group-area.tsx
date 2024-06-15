@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { MutableRefObject, useState } from "react";
 
 import { cn } from "@/lib/utils";
+import { useControllableState } from "@radix-ui/react-use-controllable-state";
 
 import {
   Accordion,
@@ -22,6 +23,8 @@ type GroupAreaProps = {
   description?: string;
   children?: React.ReactNode;
   defaultCollapsed?: boolean;
+  collapsed?: boolean;
+  onValueChange?: (value: boolean) => void;
   model?: boolean;
   icon?: boolean | React.ReactNode;
   classNames?: {
@@ -40,8 +43,14 @@ export function GroupArea({
   defaultCollapsed = true,
   model,
   icon = true,
+  onValueChange,
+  collapsed: propsCollapsed,
 }: GroupAreaProps) {
-  const [collapsed, setCollapsed] = useState(defaultCollapsed);
+  const [collapsed, setCollapsed] = useControllableState<boolean>({
+    prop: propsCollapsed,
+    defaultProp: defaultCollapsed,
+    onChange: onValueChange,
+  });
   const [opened, setOpened] = useState(false);
 
   function toggle() {

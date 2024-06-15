@@ -44,7 +44,7 @@ export default function Settings() {
                 </CardHeader>
                 <CardContent>
                   <PathInput pluginId={plugin.id} />
-                  <Input type="hidden" name="pluginId" value={plugin.id} />
+                  <Input type="hidden" node="pluginId" value={plugin.id} />
                 </CardContent>
                 <CardFooter className="border-t px-6 py-4">
                   <Button type="submit">Save</Button>
@@ -74,7 +74,7 @@ function PathInput({ pluginId }: { pluginId: string }) {
     <Skeleton className="h-8 w-full" />
   ) : (
     <Input
-      name="path"
+      node="path"
       placeholder={`/server/plugins/${pluginId}`}
       defaultValue={path}
     />

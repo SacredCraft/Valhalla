@@ -1,10 +1,9 @@
-import { isArray } from "lodash";
+import _ from "lodash";
 
 type FormDeletableValue = {
   _value: any;
   _deleted: boolean;
   _temp: boolean;
-  _index?: number;
 };
 
 export function getFormValue(value: any) {
@@ -24,7 +23,7 @@ export function isFormDeletableValue(value: any): value is FormDeletableValue {
 }
 
 export function containFormDeletableValueArray(value: any) {
-  if (isArray(value)) {
+  if (_.isArray(value)) {
     return value.some((item) => {
       return isFormDeletableValue(item);
     });
@@ -45,12 +44,10 @@ export function setFormDeleteValue(
   value: any,
   deleted: boolean = true,
   temp: boolean = false,
-  index?: number,
 ) {
   return {
     _value: value,
     _deleted: deleted,
     _temp: temp,
-    _index: index != undefined ? index : undefined,
   };
 }

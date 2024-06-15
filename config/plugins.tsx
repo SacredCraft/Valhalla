@@ -1,12 +1,12 @@
 import { Candy } from "lucide-react";
 
-import { ZaphkielItem } from "@/components/templates/zaphkiel-item";
+import { JormungandrDefault } from "@/components/templates/jormungandr/jormungandr-default";
 import { Button } from "@/components/ui/button";
 
 export const plugins = [
   {
-    id: "zaphkiel",
-    name: "Zaphkiel",
+    id: "jormungandr",
+    name: "Jormungandr",
     icon: Candy,
     dirs: [
       { id: "root", name: "Root" },
@@ -17,7 +17,7 @@ export const plugins = [
       {
         id: "item",
         name: "Item",
-        template: ZaphkielItem,
+        template: JormungandrDefault,
         actions: (
           <div className="flex flex-col gap-2">
             <Button>Add Item</Button>

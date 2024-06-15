@@ -1,86 +1,7 @@
-import {
-  forOwn,
-  isArray,
-  isEmpty,
-  isObject,
-  mergeWith,
-  omitBy,
-  sortedIndexBy,
-} from "lodash";
+import _, { cloneDeep, isArray, isObject } from "lodash";
 
 import { isFormDeletableValue } from "@/lib/form";
 import { fromJson, fromString } from "@/lib/yaml";
-
-function splitObject(
-  obj: any,
-  predicate: (value: any, key: string) => boolean,
-): { matched: any; notMatched: any } {
-  const matched: any = Array.isArray(obj) ? [] : {};
-  const notMatched: any = Array.isArray(obj) ? [] : {};
-
-  forOwn(obj, (value, key) => {
-    if (isObject(value) && !Array.isArray(value) && predicate(value, key)) {
-      if (Array.isArray(matched)) {
-        matched.push(value);
-      } else {
-        matched[key] = value;
-      }
-    } else if (isObject(value) && !Array.isArray(value)) {
-      const { matched: nestedMatched, notMatched: nestedNotMatched } =
-        splitObject(value, predicate);
-
-      if (!isEmpty(nestedMatched)) {
-        if (Array.isArray(matched)) {
-          matched.push(nestedMatched);
-        } else {
-          matched[key] = nestedMatched;
-        }
-      }
-      if (!isEmpty(nestedNotMatched)) {
-        if (Array.isArray(notMatched)) {
-          notMatched.push(nestedNotMatched);
-        } else {
-          notMatched[key] = nestedNotMatched;
-        }
-      }
-    } else if (Array.isArray(value)) {
-      const { matched: nestedMatched, notMatched: nestedNotMatched } =
-        splitObject(value, predicate);
-      matched[key] = nestedMatched;
-      notMatched[key] = nestedNotMatched;
-    } else {
-      if (Array.isArray(notMatched)) {
-        notMatched.push(value);
-      } else {
-        notMatched[key] = value;
-      }
-    }
-  });
-
-  if (Array.isArray(matched)) {
-    // Remove empty arrays from matched
-    return { matched: matched.filter((v) => !isEmpty(v)), notMatched };
-  } else {
-    // Remove empty objects from matched
-    return { matched: omitBy(matched, isEmpty), notMatched };
-  }
-}
-
-export function toResult(fileName: string, contentToConvert: any) {
-  const predicate = (value: any) => isFormDeletableValue(value);
-
-  const { matched: cache, notMatched: content } = splitObject(
-    contentToConvert,
-    predicate,
-  );
-
-  return {
-    cache,
-    content,
-    raw: convertJsonToConfiguration(fileName, content),
-    res: JSON.stringify(mergeObjects(content, cache)),
-  };
-}
 
 export function convertJsonToConfiguration(
   fileName: string,
@@ -112,23 +33,76 @@ export function convertConfigurationToJson(
   }
 }
 
-function mergeArrays(array1: any[], array2: any[], key: string): any[] {
-  const result = [...array2];
-  const insertIndex = sortedIndexBy(array2, { [key]: 1 }, key);
-  result.splice(insertIndex, 0, ...array1);
-  return result;
-}
-
 export function mergeObjects(obj1: any, obj2: any): any {
-  if (isArray(obj1) && isArray(obj2)) {
-    return mergeArrays(obj1, obj2, "_index");
-  } else if (isObject(obj1) && isObject(obj2)) {
-    return mergeWith({}, obj1, obj2, (value1: any, value2: any) => {
-      if (isArray(value1) && isArray(value2)) {
-        return mergeArrays(value1, value2, "_index");
+  if (_.isArray(obj1) && _.isArray(obj2)) {
+    return [...obj1, ...obj2];
+  } else if (_.isObject(obj1) && _.isObject(obj2)) {
+    const merged: { [key: string]: any } = _.cloneDeep(obj1); // Fixed line
+    _.forOwn(obj2, (value, key) => {
+      if (key in merged) {
+        merged[key] = mergeObjects(merged[key], value);
+      } else {
+        merged[key] = value;
       }
     });
+    return merged;
   } else {
-    return obj1 || obj2;
+    return obj2;
+  }
+}
+
+export function getContent(obj: any): any {
+  const content: any = {};
+  function recurse(current: any, parent: any, path: string[]): void {
+    if (isFormDeletableValue(current)) {
+      return;
+    }
+    if (_.isObject(current) && !_.isArray(current)) {
+      // If the current value is an object (but not an array), iterate its properties
+      _.forOwn(current, (value, key) => {
+        recurse(value, current, [...path, key]);
+      });
+    } else if (_.isArray(current)) {
+      // If the current value is an array, iterate its elements
+      _.forEach(current, (value, index) => {
+        recurse(value, current, [...path, index.toString()]);
+      });
+    } else {
+      // If the current value is neither an object nor an array, process it directly
+      _.set(content, path, current);
+    }
+  }
+
+  recurse(obj, null, []);
+
+  return cleanObject(content);
+}
+
+function cleanObject(obj: any): any {
+  if (_.isArray(obj)) {
+    // 对于数组，递归清理每个元素
+    return obj.reduce((acc, item) => {
+      const cleanedItem = cleanObject(item);
+      if (cleanedItem !== undefined) {
+        acc.push(cleanedItem);
+      }
+      return acc;
+    }, [] as any[]);
+  } else if (isObject(obj) && obj !== null) {
+    // 对于对象（包括非 PlainObject），递归清理每个键值对
+    return _.reduce(
+      obj,
+      (result, value, key) => {
+        const cleanedValue = cleanObject(value);
+        if (cleanedValue !== undefined) {
+          result[key] = cleanedValue;
+        }
+        return result;
+      },
+      {} as any,
+    );
+  } else {
+    // 对于其他类型的值，返回非 null 的值
+    return obj !== null ? obj : undefined;
   }
 }
