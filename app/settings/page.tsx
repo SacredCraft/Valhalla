@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import { useEffect, useState, useTransition } from "react";
+import { toast } from "sonner";
 
 import { savePath } from "@/app/actions";
 import { plugins } from "@/config/plugins";
@@ -44,10 +45,12 @@ export default function Settings() {
                 </CardHeader>
                 <CardContent>
                   <PathInput pluginId={plugin.id} />
-                  <Input type="hidden" node="pluginId" value={plugin.id} />
+                  <Input type="hidden" name="pluginId" value={plugin.id} />
                 </CardContent>
                 <CardFooter className="border-t px-6 py-4">
-                  <Button type="submit">Save</Button>
+                  <Button type="submit" onClick={() => toast.success("Saved!")}>
+                    Save
+                  </Button>
                 </CardFooter>
               </Card>
             </form>
@@ -74,7 +77,7 @@ function PathInput({ pluginId }: { pluginId: string }) {
     <Skeleton className="h-8 w-full" />
   ) : (
     <Input
-      node="path"
+      name="path"
       placeholder={`/server/plugins/${pluginId}`}
       defaultValue={path}
     />
