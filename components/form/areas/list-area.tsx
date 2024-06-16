@@ -154,7 +154,14 @@ export function ListArea({
                       ),
                     }}
                     icon={
-                      <GripVertical className="size-4 invisible group-hover:visible animate-in fade-in" />
+                      <GripVertical
+                        className={cn(
+                          "size-4 invisible animate-in fade-in",
+                          draggable && getCollapsed(item.id)
+                            ? "group-hover:visible"
+                            : undefined,
+                        )}
+                      />
                     }
                   >
                     {children && children({ item })}

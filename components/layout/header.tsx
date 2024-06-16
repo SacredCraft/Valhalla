@@ -4,9 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { Home, PanelLeft, Search, Settings } from "lucide-react";
-import React, { Fragment } from "react";
+import React, { Fragment, useMemo } from "react";
 
 import { plugins } from "@/config/plugins";
+import { cn } from "@/lib/utils";
 
 import {
   Breadcrumb,
@@ -22,6 +23,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export function Header() {
   const pages = usePathname().split("/").filter(Boolean);
+  const isEditor = useMemo(() => pages.includes("editor"), [pages]);
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
@@ -82,7 +84,10 @@ export function Header() {
                   <BreadcrumbLink asChild>
                     <Link
                       href={`/${pages.slice(0, index + 1).join("/")}`}
-                      className="capitalize"
+                      className={cn(
+                        "capitalize",
+                        isEditor ? "pointer-events-none" : undefined,
+                      )}
                     >
                       {page}
                     </Link>
