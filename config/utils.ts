@@ -8,7 +8,8 @@ export function getPlugin(id: string) {
 export function findFileAttributes(
   files: PluginFile[],
   path: string[],
-  parentTemplate?: Template,
+  filename: string,
+  parentTemplates?: Template[],
   parentActions?: React.ReactNode,
 ): { template?: Template; actions?: React.ReactNode } {
   const currentName = path[0];
@@ -16,18 +17,23 @@ export function findFileAttributes(
 
   for (const file of files) {
     if (file.name === currentName) {
-      const currentTemplate = file.template ?? parentTemplate;
+      const currentTemplates = file.templates ?? parentTemplates;
       const currentActions = file.actions ?? parentActions;
 
       if (restPath.length === 0) {
-        return { template: currentTemplate, actions: currentActions };
+        // Find a matching template
+        const template = currentTemplates?.find((tpl) =>
+          new RegExp(tpl.regex).test(filename),
+        );
+        return { template, actions: currentActions };
       }
 
       if (file.type === "dir" && file.files) {
         return findFileAttributes(
           file.files,
           restPath,
-          currentTemplate,
+          filename,
+          currentTemplates,
           currentActions,
         );
       }
@@ -35,5 +41,8 @@ export function findFileAttributes(
   }
 
   // If file is not found, return the parent directory's attributes
-  return { template: parentTemplate, actions: parentActions };
+  const template = parentTemplates?.find((tpl) =>
+    new RegExp(tpl.regex).test(filename),
+  );
+  return { template, actions: parentActions };
 }

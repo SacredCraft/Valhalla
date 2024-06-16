@@ -22,10 +22,12 @@ export async function getFilesByPath(
 ): Promise<File[] | undefined> {
   try {
     const mappedFiles = fs
-      .readdirSync(path.join("/"))
+      .readdirSync(path.map((i) => decodeURIComponent(i)).join("/"))
       .filter((file) => !file.startsWith("."))
       .map(async (file) => {
-        const stats = fs.statSync(`${path.join("/")}/${file}`);
+        const stats = fs.statSync(
+          `${path.map((i) => decodeURIComponent(i)).join("/")}/${file}`,
+        );
         return {
           type: stats.isDirectory() ? "dir" : "file",
           name: file,

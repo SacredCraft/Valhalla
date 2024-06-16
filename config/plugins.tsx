@@ -13,18 +13,24 @@ export const plugins = [
       {
         name: "config.yml",
         type: "file",
-        template: {
-          name: "JormungandrGlobalConfig",
-          value: () => {},
-        },
+        templates: [
+          {
+            name: "JormungandrGlobalConfig",
+            value: () => {},
+            regex: ".*\\.ya?ml$",
+          },
+        ],
       },
       {
         name: "item",
         type: "dir",
-        template: {
-          name: "JormungandrDefault",
-          value: JormungandrDefault,
-        },
+        templates: [
+          {
+            name: "JormungandrDefault",
+            value: JormungandrDefault,
+            regex: ".*\\.ya?ml$",
+          },
+        ],
         files: [],
       },
     ],

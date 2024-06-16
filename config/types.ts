@@ -16,7 +16,7 @@ export type Relations =
 
 export type PluginFile = {
   name: string;
-  template?: Template;
+  templates?: Template[];
   actions?: React.ReactNode;
   relations?: Relations;
 } & (
@@ -32,4 +32,5 @@ export type PluginFile = {
 export type Template = {
   name: string;
   value?: React.ElementType;
+  regex: string;
 };

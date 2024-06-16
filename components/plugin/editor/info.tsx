@@ -36,7 +36,10 @@ export function Info({ actions }: InfoProps) {
   useEffect(() => {
     if (pluginPath && filePath) {
       startTransition(() => {
-        getFile(pluginPath, filePath.join("/")).then((file) => setFile(file));
+        getFile(
+          pluginPath,
+          filePath.map((i) => decodeURIComponent(i)).join("/"),
+        ).then((file) => setFile(file));
       });
     }
   }, [pluginPath, filePath]);

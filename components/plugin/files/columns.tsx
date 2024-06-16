@@ -51,10 +51,11 @@ export const columns: ColumnDef<File>[] = [
     cell: ({ row, table }) => {
       const plugin = table.options.meta?.getPlugin()!!;
       const path = table.options.meta?.getPath()!!;
-      const attributes = findFileAttributes(plugin.files, [
-        ...path,
+      const attributes = findFileAttributes(
+        plugin.files,
+        [...path, row.original.name],
         row.original.name,
-      ]);
+      );
       if (row.original.type === "dir") {
         return <Badge variant="default">Directory</Badge>;
       }

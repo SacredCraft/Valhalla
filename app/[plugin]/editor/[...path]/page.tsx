@@ -28,7 +28,11 @@ export default async function Editor({
   let Template: React.ElementType | undefined;
   let Actions: React.ReactNode | undefined;
 
-  const attributes = findFileAttributes(plugin.files, filePath);
+  const attributes = findFileAttributes(
+    plugin.files,
+    filePath,
+    filePath[filePath.length - 1],
+  );
 
   if (attributes) {
     Template = attributes.template?.value;
@@ -38,10 +42,9 @@ export default async function Editor({
   let initialConfiguration: ConfigurationResult;
 
   try {
-    initialConfiguration = await getConfigurationJson([
-      pluginPath,
-      ...filePath,
-    ]);
+    initialConfiguration = await getConfigurationJson(
+      [pluginPath, ...filePath].map((i) => decodeURIComponent(i)),
+    );
   } catch (e) {
     redirect(`/${pluginId}/files/${filePath.join("/")}`);
   }
