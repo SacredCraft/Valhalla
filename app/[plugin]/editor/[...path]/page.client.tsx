@@ -8,10 +8,9 @@ import { toast } from "sonner";
 import { ConfigurationResult, setConfigurationJson } from "@/lib/core";
 import { getContent } from "@/lib/core-utils";
 
-import { Preview } from "@/components/editor/preview";
+import { Raw } from "@/components/editor/raw";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { OpenInVSC } from "@/components/ui/open-in-vsc";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type ContextType = {
@@ -105,18 +104,10 @@ export default function Client({
               <div className="flex items-center gap-2">
                 <TabsList>
                   <TabsTrigger value="edit">Edit</TabsTrigger>
-                  <TabsTrigger value="preview">Preview</TabsTrigger>
+                  <TabsTrigger value="raw">Raw</TabsTrigger>
                 </TabsList>
               </div>
               <div className="ml-auto flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-7 gap-1 hidden md:inline-flex"
-                  asChild
-                >
-                  <OpenInVSC path={realPath.join("/")}>Open in VSC</OpenInVSC>
-                </Button>
                 <Button
                   className="h-7 gap-1"
                   size="sm"
@@ -142,10 +133,10 @@ export default function Client({
             </TabsContent>
             <TabsContent
               forceMount
-              value="preview"
+              value="raw"
               className="flex md:flex-row flex-col gap-4 data-[state=inactive]:hidden"
             >
-              <Preview />
+              <Raw />
             </TabsContent>
           </Tabs>
         </form>

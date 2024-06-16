@@ -17,7 +17,6 @@ import { ColumnDef, RowData } from "@tanstack/react-table";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { OpenInVSC } from "@/components/ui/open-in-vsc";
 import {
   Tooltip,
   TooltipContent,
@@ -168,14 +167,6 @@ export const columns: ColumnDef<FileCol>[] = [
             </TooltipTrigger>
             <TooltipContent>Copy path</TooltipContent>
           </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="secondary" size="icon" className="h-7 w-7">
-                <OpenInVSC path={path} />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Open in VSCode</TooltipContent>
-          </Tooltip>
         </div>
       );
     },
@@ -189,6 +180,5 @@ declare module "@tanstack/react-table" {
     goBack: () => void;
     getPluginPath: () => string | undefined;
     getPluginId: () => string;
-    folders: string[];
   }
 }

@@ -132,7 +132,6 @@ export function DataTable({ pluginId, dir, current }: DataTableProps) {
       },
       getPluginPath: () => pluginPath,
       getPluginId: () => pluginId,
-      folders,
     },
   });
 

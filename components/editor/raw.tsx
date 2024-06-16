@@ -7,7 +7,7 @@ import { convertJsonToConfiguration } from "@/lib/core-utils";
 
 import { HighLighter } from "@/components/ui/shiki/dynamic";
 
-export function Preview() {
+export function Raw() {
   const { configuration } = useEditorContext();
 
   return (
