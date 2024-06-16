@@ -19,15 +19,12 @@ type ContextType = {
   collapsed?: boolean;
   configuration?: ConfigurationResult;
   relations?: ConfigurationResult[];
-  saved: boolean;
   pluginPath?: string;
   filePath?: string[];
   pluginId?: string;
 };
 
-const EditorContext = createContext<ContextType>({
-  saved: true,
-});
+const EditorContext = createContext<ContextType>({});
 
 export const useEditorContext = () => useContext(EditorContext);
 
@@ -61,8 +58,6 @@ export default function Client({
 
   const values = useMemo(() => configuration.cache, [configuration]);
 
-  const [saved, setSaved] = useState(true);
-
   const form = useForm({
     values,
   });
@@ -70,29 +65,21 @@ export default function Client({
   const { watch } = form;
 
   useEffect(() => {
-    const { unsubscribe } = watch((values) => {
-      setSaved(false);
-
-      const content = getContent(values);
-
-      setConfiguration({
-        ...configuration,
-        content,
-        cache: values,
-      });
-    });
+    const { unsubscribe } = watch((values) => {});
     return () => unsubscribe();
   }, [configuration, filePath, form, realPath, watch]);
 
-  function onSubmit() {
-    setConfigurationJson(
-      realPath,
-      configuration.cache,
-      configuration.content,
-    ).then(() => {
+  function onSubmit(values: any) {
+    const content = getContent(values);
+
+    setConfiguration({
+      ...configuration,
+      content,
+      cache: values,
+    });
+    setConfigurationJson(realPath, values, content).then(() => {
       toast.success("Saved successfully");
     });
-    setSaved(true);
   }
 
   return (
@@ -102,7 +89,6 @@ export default function Client({
         pluginId,
         collapsed,
         configuration,
-        saved,
         relations,
         pluginPath,
         filePath,
@@ -140,12 +126,7 @@ export default function Client({
                 >
                   Collapse Tools
                 </Button>
-                <Button
-                  className="h-7 gap-1"
-                  size="sm"
-                  type="submit"
-                  disabled={saved}
-                >
+                <Button className="h-7 gap-1" size="sm" type="submit">
                   <Save className="h-3.5 w-3.5" />
                   Save
                 </Button>
