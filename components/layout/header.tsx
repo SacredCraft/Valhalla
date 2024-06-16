@@ -122,7 +122,7 @@ export function Header() {
             : pages.map((page, index) =>
                 index === pages.length - 1 ? (
                   <BreadcrumbPage key={page} className="capitalize">
-                    {page}
+                    {decodeURIComponent(page)}
                   </BreadcrumbPage>
                 ) : (
                   <Fragment key={page}>
@@ -132,7 +132,7 @@ export function Header() {
                           href={`/${pages.slice(0, index + 1).join("/")}`}
                           className={"capitalize"}
                         >
-                          {page}
+                          {decodeURIComponent(page)}
                         </Link>
                       </BreadcrumbLink>
                     </BreadcrumbItem>
