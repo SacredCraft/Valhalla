@@ -159,7 +159,9 @@ export const columns: ColumnDef<FileCol>[] = [
                 className="h-7 w-7"
                 onClick={(e) => {
                   e.stopPropagation();
-                  navigator.clipboard.writeText(path.substr(pluginPath.length + 1));
+                  navigator.clipboard.writeText(
+                    path.slice(pluginPath.length + 1),
+                  );
                 }}
               >
                 <Copy className="size-4" />
