@@ -108,6 +108,7 @@ export const columns: ColumnDef<File>[] = [
                 size="icon"
                 className="h-7 w-7"
                 disabled={row.original.type === "dir"}
+                asChild
               >
                 <Link href={`/${pluginId}/editor/${relativePath.join("/")}`}>
                   <Edit className="size-4" />
