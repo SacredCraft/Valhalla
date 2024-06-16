@@ -128,7 +128,7 @@ export function ListArea({
                 drag={draggable && getCollapsed(item.id) ? "y" : false}
                 key={item.id}
                 value={item}
-                whileDrag={{ scale: 0.9, opacity: 0.8 }}
+                whileDrag={{ scale: 0.95, opacity: 0.8 }}
               >
                 <Node node={String(item.id)}>
                   <GroupArea
