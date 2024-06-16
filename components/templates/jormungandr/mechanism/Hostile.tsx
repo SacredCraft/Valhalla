@@ -2,7 +2,6 @@ import { useMemo } from "react";
 
 import { useEditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
 
-import { GroupArea } from "@/components/form/areas/group-area";
 import { Enum } from "@/components/form/enum";
 import { Node, useNode } from "@/components/form/node";
 import { Text } from "@/components/form/text";
