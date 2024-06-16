@@ -1,4 +1,4 @@
-import _, { cloneDeep, isArray, isObject } from "lodash";
+import _, { isObject } from "lodash";
 
 import { isFormDeletableValue } from "@/lib/form";
 import { fromJson, fromString } from "@/lib/yaml";
@@ -53,19 +53,20 @@ export function mergeObjects(obj1: any, obj2: any): any {
 
 export function getContent(obj: any): any {
   const content: any = {};
-  function recurse(current: any, parent: any, path: string[]): void {
+
+  function recurse(current: any, path: string[]): void {
     if (isFormDeletableValue(current)) {
       return;
     }
     if (_.isObject(current) && !_.isArray(current)) {
       // If the current value is an object (but not an array), iterate its properties
       _.forOwn(current, (value, key) => {
-        recurse(value, current, [...path, key]);
+        recurse(value, [...path, key]);
       });
     } else if (_.isArray(current)) {
       // If the current value is an array, iterate its elements
       _.forEach(current, (value, index) => {
-        recurse(value, current, [...path, index.toString()]);
+        recurse(value, [...path, index.toString()]);
       });
     } else {
       // If the current value is neither an object nor an array, process it directly
@@ -73,14 +74,13 @@ export function getContent(obj: any): any {
     }
   }
 
-  recurse(obj, null, []);
+  recurse(obj, []);
 
   return cleanObject(content);
 }
 
 function cleanObject(obj: any): any {
   if (_.isArray(obj)) {
-    // 对于数组，递归清理每个元素
     return obj.reduce((acc, item) => {
       const cleanedItem = cleanObject(item);
       if (cleanedItem !== undefined) {
@@ -89,7 +89,6 @@ function cleanObject(obj: any): any {
       return acc;
     }, [] as any[]);
   } else if (isObject(obj) && obj !== null) {
-    // 对于对象（包括非 PlainObject），递归清理每个键值对
     return _.reduce(
       obj,
       (result, value, key) => {
@@ -102,7 +101,6 @@ function cleanObject(obj: any): any {
       {} as any,
     );
   } else {
-    // 对于其他类型的值，返回非 null 的值
     return obj !== null ? obj : undefined;
   }
 }

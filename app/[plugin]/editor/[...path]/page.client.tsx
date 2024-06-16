@@ -1,7 +1,7 @@
 "use client";
 
 import { Save } from "lucide-react";
-import { createContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -25,9 +25,11 @@ type ContextType = {
   pluginId?: string;
 };
 
-export const EditorContext = createContext<ContextType>({
+const EditorContext = createContext<ContextType>({
   saved: true,
 });
+
+export const useEditorContext = () => useContext(EditorContext);
 
 type ClientProps = {
   pluginId?: string;

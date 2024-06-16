@@ -1,10 +1,9 @@
 "use client";
 
-import { useContext } from "react";
-
-import { EditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
+import { useEditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
 import { getFormValue } from "@/lib/form";
 
+import { useNode } from "@/components/form/node";
 import {
   FormControl,
   FormDescription,
@@ -18,25 +17,27 @@ import { Input } from "@/components/ui/input";
 type TextProps = {
   label?: React.ReactNode;
   description?: React.ReactNode;
-  node: string;
 } & React.ComponentProps<typeof Input>;
 
 export function Text({
-  node,
   description,
   label,
   defaultValue,
   className,
   ...rest
 }: TextProps) {
-  const { form } = useContext(EditorContext);
+  const { form } = useEditorContext();
+  const { node } = useNode();
   if (!form) {
     throw new Error("Text component must be used within a form context.");
   }
+  if (!node) {
+    throw new Error("Text component must be used within a node context.");
+  }
   return (
     <FormField
-      control={form.control}
       name={node}
+      control={form.control}
       defaultValue={getFormValue(defaultValue)}
       render={({ field: { value, ...field } }) => (
         <FormItem className={className}>

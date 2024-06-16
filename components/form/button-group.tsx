@@ -1,12 +1,13 @@
 "use client";
 
-import { cloneElement, createElement, forwardRef, useContext } from "react";
+import { forwardRef } from "react";
 import React from "react";
 
-import { EditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
+import { useEditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
 import { getFormValue } from "@/lib/form";
 import { useControllableState } from "@radix-ui/react-use-controllable-state";
 
+import { useNode } from "@/components/form/node";
 import { Button } from "@/components/ui/button";
 import {
   FormControl,
@@ -19,7 +20,6 @@ import {
 type ButtonGroupProps = {
   label?: React.ReactNode;
   description?: React.ReactNode;
-  node: string;
   children: React.ReactNode[];
   defaultValue?: string | string[] | boolean;
   value?: string | string[] | boolean;
@@ -32,13 +32,20 @@ export function ButtonGroup({
   label,
   defaultValue,
   className,
-  node,
   ...rest
 }: ButtonGroupProps) {
-  const { form } = useContext(EditorContext);
+  const { form } = useEditorContext();
+  const { node } = useNode();
 
   if (!form) {
-    throw new Error("Text component must be used within a form context.");
+    throw new Error(
+      "ButtonGroup component must be used within a form context.",
+    );
+  }
+  if (!node) {
+    throw new Error(
+      "ButtonGroup component must be used within a node context.",
+    );
   }
 
   return (

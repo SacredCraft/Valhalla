@@ -4,9 +4,9 @@ import Link from "next/link";
 
 import { AnimatePresence, motion } from "framer-motion";
 import path from "path";
-import React, { useContext, useEffect, useState, useTransition } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 
-import { EditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
+import { useEditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
 import { File, getFile } from "@/app/actions";
 import { ConfigurationResult } from "@/lib/core";
 
@@ -31,7 +31,7 @@ export function Info({ actions }: InfoProps) {
   const [file, setFile] = useState<(File & { type?: string }) | null>(null);
   const [isPending, startTransition] = useTransition();
   const { collapsed, relations, pluginPath, pluginId, filePath } =
-    useContext(EditorContext);
+    useEditorContext();
 
   useEffect(() => {
     if (pluginPath && filePath) {

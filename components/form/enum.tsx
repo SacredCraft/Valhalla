@@ -1,12 +1,11 @@
 "use client";
 
-import { useContext } from "react";
-
-import { EditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
+import { useEditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
 import { getFormValue } from "@/lib/form";
 import { cn } from "@/lib/utils";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 
+import { useNode } from "@/components/form/node";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -32,21 +31,24 @@ import {
 type EnumProps = {
   label?: React.ReactNode;
   description?: React.ReactNode;
-  node: string;
   items: { label: string; value: string }[];
+  defaultValue?: string;
 } & React.HTMLProps<HTMLDivElement>;
 
 export function Enum({
-  node,
   description,
   defaultValue,
   label,
   className,
   items,
 }: EnumProps) {
-  const { form } = useContext(EditorContext);
+  const { form } = useEditorContext();
+  const { node } = useNode();
   if (!form) {
     throw new Error("Enum component must be used within a form context.");
+  }
+  if (!node) {
+    throw new Error("Enum component must be used within a node context.");
   }
 
   return (

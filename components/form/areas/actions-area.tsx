@@ -1,9 +1,9 @@
 "use client";
 
 import { Code, CodeXml, TrashIcon } from "lucide-react";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import { EditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
+import { useEditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
 import {
   getFormValue,
   isFormDeletableValue,
@@ -11,6 +11,7 @@ import {
 } from "@/lib/form";
 import { cn } from "@/lib/utils";
 
+import { useNode } from "@/components/form/node";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -19,69 +20,61 @@ import {
 } from "@/components/ui/tooltip";
 
 type ActionsAreaProps = {
-  nodes: string[];
   onDelete?: (nodes: string[]) => void;
   onTempDelete?: (nodes: string[]) => void;
   children?: React.ReactNode;
 } & React.HTMLProps<HTMLDivElement>;
 
 export function ActionsArea({
-  nodes,
   onDelete,
   onTempDelete,
   children,
   className,
   ...rest
 }: ActionsAreaProps) {
-  const { form } = useContext(EditorContext);
+  const { form } = useEditorContext();
+  const { nodes } = useNode();
 
   const [hover, setHover] = useState(false);
   const [deleteHover, setDeleteHover] = useState(false);
   const [deleteTempHover, setDeleteTempHover] = useState(false);
-  const [deleted, setDeleted] = useState(false);
+  const deleted = useMemo(() => {
+    const value = form?.getValues(nodes?.[0]!!);
+    if (value) {
+      return isFormDeletableValue(value) && value._deleted;
+    }
+    return false;
+  }, [form?.formState, nodes]);
   const tempDeleted = useMemo(
     () =>
-      isFormDeletableValue(form?.getValues(nodes[0])) &&
-      form?.getValues(nodes[0])._temp,
-    [form, nodes],
+      isFormDeletableValue(form?.getValues(nodes?.[0]!!)) &&
+      form?.getValues(nodes?.[0]!!)._temp,
+    [form?.formState, nodes],
   );
 
-  const watchFields = form?.watch(nodes);
-
-  useEffect(() => {
-    const subscription = form?.watch(() => {
-      setDeleted(false);
-    });
-    return () => subscription?.unsubscribe();
-  }, [watchFields, form]);
-
   function handleDelete() {
-    nodes.forEach((node) => {
+    nodes!!.forEach((node) => {
       form?.setValue(
         node,
         setFormDeleteValue(getFormValue(form?.getValues(node))),
       );
     });
-
-    setDeleted(true);
-    onDelete?.(nodes);
+    onDelete?.(nodes!!);
   }
 
   function handleTempDelete() {
     if (tempDeleted) {
-      setDeleted(false);
-      nodes.forEach((node) => {
+      nodes?.forEach((node) => {
         form?.setValue(node, getFormValue(form?.getValues(node)));
       });
     } else {
-      nodes.forEach((node) => {
+      nodes?.forEach((node) => {
         form?.setValue(
           node,
           setFormDeleteValue(getFormValue(form?.getValues(node)), true, true),
         );
       });
-      setDeleted(false);
-      onTempDelete?.(nodes);
+      onTempDelete?.(nodes!!);
     }
   }
 
