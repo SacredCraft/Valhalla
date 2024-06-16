@@ -1,61 +1,48 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+
 import fs from "fs";
 import path from "path";
 
+import { Plugin } from "@/config/types";
 import { setPluginPath } from "@/lib/cookies";
 
 export type File = {
-  files?: File[];
-  dir: boolean;
+  type: "dir" | "file";
   name: string;
-  path: string;
+  path: string[];
   size: number;
   createdAt: string;
   updatedAt: string;
 };
 
-export async function getFilesByPluginAndDir(
-  pluginPath: string,
-  dir: string,
+export async function getFilesByPath(
+  path: string[],
 ): Promise<File[] | undefined> {
-  let actualPath: string;
-  if (dir === "root") {
-    actualPath = pluginPath;
-  } else {
-    actualPath = path.join(pluginPath, dir);
-  }
   try {
     const mappedFiles = fs
-      .readdirSync(actualPath)
-      .filter(
-        (file) =>
-          (dir === "root"
-            ? fs.statSync(`${actualPath}/${file}`).isFile()
-            : true) && !file.startsWith("."),
-      )
+      .readdirSync(path.join("/"))
+      .filter((file) => !file.startsWith("."))
       .map(async (file) => {
-        const stats = fs.statSync(`${actualPath}/${file}`);
+        const stats = fs.statSync(`${path.join("/")}/${file}`);
         return {
-          dir: stats.isDirectory(),
+          type: stats.isDirectory() ? "dir" : "file",
           name: file,
-          path: `${actualPath}/${file}`,
+          path: `${path.join("/")}/${file}`.split("/"),
           createdAt: stats.birthtime.toLocaleString(),
           updatedAt: stats.mtime.toLocaleString(),
           size: stats.size,
-          files: stats.isDirectory()
-            ? await getFilesByPluginAndDir(actualPath, file)
-            : undefined,
         } as File;
       });
 
     const files = await Promise.all(mappedFiles);
 
     return files.sort((a, b) => {
-      if (a.dir && !b.dir) {
+      if (a.type === "dir" && b.type !== "dir") {
         return -1;
       }
-      if (!a.dir && b.dir) {
+      if (a.type !== "dir" && b.type === "dir") {
         return 1;
       }
       return a.name.localeCompare(b.name);
@@ -68,17 +55,17 @@ export async function getFilesByPluginAndDir(
 export async function getFile(
   pluginPath: string,
   filePath: string,
-): Promise<File & { type?: string }> {
+): Promise<File & { ext?: string }> {
   const stats = fs.statSync(path.join(pluginPath, filePath));
 
   return {
-    dir: false,
+    type: stats.isDirectory() ? "dir" : "file",
     name: path.basename(filePath),
-    path: filePath,
+    path: filePath.split("/"),
     createdAt: stats.birthtime.toLocaleString(),
     updatedAt: stats.mtime.toLocaleString(),
     size: stats.size,
-    type: path.extname(filePath).slice(1),
+    ext: path.extname(filePath).slice(1),
   };
 }
 
@@ -86,7 +73,7 @@ export async function savePath(formData: FormData) {
   const path = formData.get("path") as string;
   const pluginId = formData.get("pluginId") as string;
 
-  setPluginPath(pluginId, path);
+  await setPluginPath(pluginId, path);
 }
 
 export async function deleteFile(filePath: string): Promise<boolean> {
@@ -108,4 +95,8 @@ export async function saveFile(
   content: string,
 ) {
   fs.writeFileSync(path.join(pluginPath, filePath), content);
+}
+
+export async function revalidateFiles(plugin: Plugin, path: string[]) {
+  revalidatePath(`/${plugin.id}/files/${path.join("/")}`);
 }

@@ -28,7 +28,7 @@ type InfoProps = {
 };
 
 export function Info({ actions }: InfoProps) {
-  const [file, setFile] = useState<(File & { type?: string }) | null>(null);
+  const [file, setFile] = useState<(File & { ext?: string }) | null>(null);
   const [isPending, startTransition] = useTransition();
   const { collapsed, relations, pluginPath, pluginId, filePath } =
     useEditorContext();
@@ -68,7 +68,7 @@ export function Info({ actions }: InfoProps) {
                         <div className="flex-1 space-y-1">
                           <div className="font-medium">{file.name}</div>
                           <div className="text-sm text-gray-500 dark:text-gray-400">
-                            {file.path}
+                            {file.path.join("/")}
                           </div>
                         </div>
                       </div>

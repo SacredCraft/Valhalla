@@ -1,8 +1,10 @@
-import { getTemplateAndActions } from "@/config/plugins";
-import { getPluginPath } from "@/lib/cookies";
-import { getConfigurationJson, getRelations } from "@/lib/core";
+import { notFound, redirect } from "next/navigation";
 
-import { Info } from "@/components/editor/info";
+import { findFileAttributes, getPlugin } from "@/config/utils";
+import { getPluginPath } from "@/lib/cookies";
+import { ConfigurationResult, getConfigurationJson } from "@/lib/core";
+
+import { Info } from "@/components/plugin/editor/info";
 
 import Client from "./page.client";
 
@@ -16,40 +18,37 @@ type Props = {
 export default async function Editor({
   params: { plugin: pluginId, path: filePath },
 }: Props) {
+  const plugin = getPlugin(pluginId);
   const pluginPath = await getPluginPath(pluginId);
+
+  if (!plugin || !pluginPath) {
+    return notFound();
+  }
 
   let Template: React.ElementType | undefined;
   let Actions: React.ReactNode | undefined;
-  if (filePath.length === 1) {
-    const res = getTemplateAndActions(pluginId, "root", filePath[0]);
-    Template = res?.template;
-    Actions = res?.actions;
-  } else if (filePath.length > 1) {
-    const res = getTemplateAndActions(
-      pluginId,
-      filePath[0],
-      filePath[filePath.length - 1],
-    );
-    Template = res?.template;
-    Actions = res?.actions;
-  } else {
-    return <div>Invalid path</div>;
+
+  const attributes = findFileAttributes(plugin.files, filePath);
+
+  if (attributes) {
+    Template = attributes.template?.value;
+    Actions = attributes.actions;
   }
 
-  if (!pluginPath) {
-    return <div>Plugin not found</div>;
+  let initialConfiguration: ConfigurationResult;
+
+  try {
+    initialConfiguration = await getConfigurationJson([
+      pluginPath,
+      ...filePath,
+    ]);
+  } catch (e) {
+    redirect(`/${pluginId}/files/${filePath.join("/")}`);
   }
-
-  const initialConfiguration = await getConfigurationJson([
-    pluginPath,
-    ...filePath,
-  ]);
-
-  const relations = await getRelations(pluginId, pluginPath, filePath);
 
   return (
     <Client
-      relations={relations || []}
+      relations={[]}
       initialConfiguration={initialConfiguration}
       pluginPath={pluginPath}
       filePath={filePath}

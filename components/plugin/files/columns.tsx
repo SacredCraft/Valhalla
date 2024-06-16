@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 
+import { at } from "lodash";
 import {
   Copy,
   Delete,
@@ -13,6 +14,8 @@ import {
 import { toast } from "sonner";
 
 import { File, deleteFile, renameFile } from "@/app/actions";
+import { Plugin } from "@/config/types";
+import { findFileAttributes } from "@/config/utils";
 import { ColumnDef, RowData } from "@tanstack/react-table";
 
 import { Badge } from "@/components/ui/badge";
@@ -23,17 +26,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-export type FileCol = Omit<File, "files"> & {
-  status: "active" | "inactive";
-  files?: FileCol[];
-};
-
-export const columns: ColumnDef<FileCol>[] = [
+export const columns: ColumnDef<File>[] = [
   {
-    accessorKey: "dir",
+    accessorKey: "type",
     header: "Type",
     cell: ({ row }) => {
-      return (row.getValue("dir") as boolean) ? (
+      return row.getValue("type") === "dir" ? (
         <Folder className="fill-current text-primary" />
       ) : (
         <FileIcon />
@@ -49,14 +47,21 @@ export const columns: ColumnDef<FileCol>[] = [
     },
   },
   {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => {
-      const status = row.getValue("status");
-      return status === "active" ? (
-        <Badge variant="default">Active</Badge>
+    header: "Template",
+    cell: ({ row, table }) => {
+      const plugin = table.options.meta?.getPlugin()!!;
+      const path = table.options.meta?.getPath()!!;
+      const attributes = findFileAttributes(plugin.files, [
+        ...path,
+        row.original.name,
+      ]);
+      if (row.original.type === "dir") {
+        return <Badge variant="default">Directory</Badge>;
+      }
+      return attributes?.template ? (
+        <Badge variant="default">{attributes.template.name}</Badge>
       ) : (
-        <Badge variant="outline">Inactive</Badge>
+        <Badge variant="outline">None</Badge>
       );
     },
   },
@@ -88,10 +93,11 @@ export const columns: ColumnDef<FileCol>[] = [
     accessorKey: "actions",
     header: "Actions",
     cell: ({ row, table }) => {
-      const path = row.original.path;
-      const pluginPath = table.options.meta?.getPluginPath()!!;
-      const pluginId = table.options.meta?.getPluginId();
-      const actualPath = path.replace(pluginPath, "");
+      const pluginId = table.options.meta?.getPlugin().id;
+      const relativePath = [
+        ...(table.options.meta?.getPath() ?? []),
+        row.original.name,
+      ];
       return (
         <div className="flex items-center gap-2">
           <Tooltip>
@@ -100,9 +106,9 @@ export const columns: ColumnDef<FileCol>[] = [
                 variant="secondary"
                 size="icon"
                 className="h-7 w-7"
-                disabled={row.original.dir}
+                disabled={row.original.type === "dir"}
               >
-                <Link href={`/${pluginId}/editor/${actualPath}`}>
+                <Link href={`/${pluginId}/editor/${relativePath.join("/")}`}>
                   <Edit className="size-4" />
                 </Link>
               </Button>
@@ -119,9 +125,12 @@ export const columns: ColumnDef<FileCol>[] = [
                   e.stopPropagation();
                   const name = prompt("Enter the new name", row.original.name);
                   if (name) {
-                    const newPath = path.replace(row.original.name, name);
-                    renameFile(path, newPath);
-                    table.options.meta?.refreshData();
+                    const newPath = row.original.path
+                      .join("/")
+                      .replace(row.original.name, name);
+                    renameFile(row.original.path.join("/"), newPath).then(() =>
+                      table.options.meta?.refresh(),
+                    );
                   }
                 }}
               >
@@ -138,11 +147,12 @@ export const columns: ColumnDef<FileCol>[] = [
                 className="h-7 w-7"
                 onClick={(e) => {
                   e.stopPropagation();
-                  deleteFile(row.original.path).then((res) => {
+                  deleteFile(row.original.path.join("/")).then((res) => {
                     if (!res) {
                       toast.error("Failed to delete the file");
+                    } else {
+                      table.options.meta?.refresh();
                     }
-                    table.options.meta?.refreshData();
                   });
                 }}
               >
@@ -160,7 +170,9 @@ export const columns: ColumnDef<FileCol>[] = [
                 onClick={(e) => {
                   e.stopPropagation();
                   navigator.clipboard.writeText(
-                    path.slice(pluginPath.length + 1),
+                    table.options.meta?.getPath().join("/")
+                      ? row.original.path.join("/")
+                      : "",
                   );
                 }}
               >
@@ -178,9 +190,8 @@ export const columns: ColumnDef<FileCol>[] = [
 declare module "@tanstack/react-table" {
   interface TableMeta<TData extends RowData> {
     setData: (data: TData[]) => void;
-    refreshData: () => void;
-    goBack: () => void;
-    getPluginPath: () => string | undefined;
-    getPluginId: () => string;
+    getPlugin: () => Plugin;
+    getPath: () => string[];
+    refresh: () => void;
   }
 }

@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { ConfigurationResult, setConfigurationJson } from "@/lib/core";
 import { getContent } from "@/lib/core-utils";
 
-import { Raw } from "@/components/editor/raw";
+import { Raw } from "@/components/plugin/editor/raw";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

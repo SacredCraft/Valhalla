@@ -4,7 +4,7 @@ import fs from "fs";
 import { flatMap } from "lodash";
 import path from "path";
 
-import { getPlugin } from "@/config/plugins";
+import { getPlugin } from "@/config/utils";
 import {
   convertConfigurationToJson,
   convertJsonToConfiguration,
@@ -89,44 +89,6 @@ function mapRelationsValueToConfiguration(
     });
   }
   return res;
-}
-
-export async function getRelations(
-  pluginId: string,
-  pluginPath: string,
-  filePath: string[],
-) {
-  const plugin = getPlugin(pluginId);
-  if (filePath.length === 1) {
-    const file = plugin?.dirs[0].files?.find((file) => file.id === filePath[0]);
-    if (file?.relations?.enable) {
-      const relationsValue = file.relations.value;
-      return mapRelationsValueToConfiguration(
-        pluginPath,
-        relationsValue,
-        filePath,
-      );
-    }
-    if (plugin?.dirs[0].relations?.enable) {
-      const relationsValue = plugin.dirs[0].relations.value;
-      return mapRelationsValueToConfiguration(
-        pluginPath,
-        relationsValue,
-        filePath,
-      );
-    }
-  } else {
-    const dir = plugin?.dirs.find((dir) => dir.id === filePath[0]);
-    if (dir?.relations?.enable) {
-      const relationsValue = dir.relations.value;
-      return mapRelationsValueToConfiguration(
-        pluginPath,
-        relationsValue,
-        filePath,
-      );
-    }
-  }
-  return null;
 }
 
 export async function getConfigurationJson(
