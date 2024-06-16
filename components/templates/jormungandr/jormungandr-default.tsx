@@ -9,8 +9,8 @@ import { ButtonGroup } from "@/components/form/button-group";
 import { Enum } from "@/components/form/enum";
 import { Node } from "@/components/form/node";
 import { Text } from "@/components/form/text";
-import { Hostile } from "@/components/templates/jormungandr/mechanism/Hostile";
 import { BaseAttack } from "@/components/templates/jormungandr/mechanism/base-attack";
+import { Hostile } from "@/components/templates/jormungandr/mechanism/hostile";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
