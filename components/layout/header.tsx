@@ -130,7 +130,10 @@ export function Header() {
                       <BreadcrumbLink asChild>
                         <Link
                           href={`/${pages.slice(0, index + 1).join("/")}`}
-                          className={"capitalize"}
+                          className={cn(
+                            "capitalize",
+                            isEditor && index === 1 && "pointer-events-none",
+                          )}
                         >
                           {decodeURIComponent(page)}
                         </Link>
