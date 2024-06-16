@@ -116,7 +116,8 @@ export const columns: ColumnDef<FileCol>[] = [
                 variant="secondary"
                 size="icon"
                 className="h-7 w-7"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   const name = prompt("Enter the new name", row.original.name);
                   if (name) {
                     const newPath = path.replace(row.original.name, name);
@@ -136,7 +137,8 @@ export const columns: ColumnDef<FileCol>[] = [
                 variant="secondary"
                 size="icon"
                 className="h-7 w-7"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   deleteFile(row.original.path).then((res) => {
                     if (!res) {
                       toast.error("Failed to delete the file");
@@ -156,7 +158,8 @@ export const columns: ColumnDef<FileCol>[] = [
                 variant="secondary"
                 size="icon"
                 className="h-7 w-7"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   navigator.clipboard.writeText(path);
                 }}
               >
@@ -186,5 +189,6 @@ declare module "@tanstack/react-table" {
     goBack: () => void;
     getPluginPath: () => string | undefined;
     getPluginId: () => string;
+    folders: string[];
   }
 }

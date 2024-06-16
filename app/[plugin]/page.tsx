@@ -2,12 +2,13 @@
 
 import { useAtomValue } from "jotai";
 import { ChevronLeft, ListFilter, PlusCircle } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { getPlugin } from "@/config/plugins";
 import { tableAtom } from "@/lib/state";
 import { ReloadIcon } from "@radix-ui/react-icons";
 
+import { HeaderItem, useHeaderContext } from "@/components/layout/header";
 import { DataTable } from "@/components/plugin/data-table";
 import { Button } from "@/components/ui/button";
 import {

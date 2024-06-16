@@ -14,6 +14,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
+import { HeaderItem, useHeaderContext } from "@/components/layout/header";
 import {
   Card,
   CardContent,
@@ -48,6 +49,29 @@ export function DataTable({ pluginId, dir, current }: DataTableProps) {
   const [pluginPath, setPluginPath] = useState<string>();
   const isRoot = useMemo(() => !folders.length, [folders]);
   const setTable = useSetAtom(tableAtom);
+
+  const { setItems } = useHeaderContext();
+
+  useEffect(() => {
+    let beforeHref = `/${pluginId}`;
+    let items: HeaderItem[] = [
+      {
+        label: pluginId ?? "Plugin",
+        link: beforeHref,
+      },
+    ];
+    items = [
+      ...items,
+      ...folders?.map(
+        (item) =>
+          ({
+            label: item,
+            link: `${beforeHref}/${item}`,
+          }) as HeaderItem,
+      ),
+    ];
+    setItems?.(items);
+  }, [folders, pluginId, setItems]);
 
   useEffect(() => {
     getPluginPath(pluginId).then(setPluginPath);
@@ -108,6 +132,7 @@ export function DataTable({ pluginId, dir, current }: DataTableProps) {
       },
       getPluginPath: () => pluginPath,
       getPluginId: () => pluginId,
+      folders,
     },
   });
 
