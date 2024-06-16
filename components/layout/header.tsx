@@ -86,7 +86,9 @@ export function Header() {
                       href={`/${pages.slice(0, index + 1).join("/")}`}
                       className={cn(
                         "capitalize",
-                        isEditor ? "pointer-events-none" : undefined,
+                        isEditor && index != 0
+                          ? "pointer-events-none"
+                          : undefined,
                       )}
                     >
                       {page}
