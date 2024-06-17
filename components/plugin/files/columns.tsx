@@ -1,13 +1,8 @@
 "use client";
 
-import Link from "next/link";
-
-import { at } from "lodash";
 import {
   Copy,
   Delete,
-  Edit,
-  Eye,
   File as FileIcon,
   Folder,
   FolderPen,
@@ -21,7 +16,15 @@ import { ColumnDef, RowData } from "@tanstack/react-table";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ImageModel } from "@/components/ui/image-model";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Tooltip,
   TooltipContent,
@@ -127,24 +130,46 @@ export const columns: ColumnDef<File>[] = [
             <TooltipContent>Rename</TooltipContent>
           </Tooltip>
           <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="secondary"
-                size="icon"
-                className="h-7 w-7"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  deleteFile(row.original.path.join("/")).then((res) => {
-                    if (!res) {
-                      toast.error("Failed to delete the file");
-                    } else {
-                      table.options.meta?.refresh();
-                    }
-                  });
-                }}
-              >
-                <Delete className="size-4" />
-              </Button>
+            <TooltipTrigger
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="secondary" size="icon" className="h-7 w-7">
+                    <Delete className="size-4" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>
+                      Are you sure you want to delete this file?
+                    </DialogTitle>
+                    <DialogDescription>
+                      This action cannot be undone.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <Button variant="outline">No</Button>
+                    <Button
+                      variant="destructive"
+                      onClick={() => {
+                        deleteFile(row.original.path.join("/")).then((res) => {
+                          if (!res) {
+                            toast.error("Failed to delete the file");
+                          } else {
+                            table.options.meta?.refresh();
+                          }
+                        });
+                      }}
+                    >
+                      Yes
+                    </Button>
+                    <Button variant="default">Move it to Trash Bin</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </TooltipTrigger>
             <TooltipContent>Delete</TooltipContent>
           </Tooltip>
