@@ -1,6 +1,5 @@
 "use client";
 
-import { Provider as JotaiProvider } from "jotai";
 import { useState } from "react";
 import { Toaster } from "sonner";
 
@@ -14,16 +13,14 @@ export default function Providers({
   return (
     <>
       <Toaster />
-      <JotaiProvider>
-        <HeaderContext.Provider
-          value={{
-            items,
-            setItems,
-          }}
-        >
-          <TooltipProvider delayDuration={100}>{children}</TooltipProvider>
-        </HeaderContext.Provider>
-      </JotaiProvider>
+      <HeaderContext.Provider
+        value={{
+          items,
+          setItems,
+        }}
+      >
+        <TooltipProvider delayDuration={100}>{children}</TooltipProvider>
+      </HeaderContext.Provider>
     </>
   );
 }
