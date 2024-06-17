@@ -12,7 +12,7 @@ import {
 } from "@/lib/core-utils";
 import { yaml } from "@codemirror/lang-yaml";
 import type { ViewUpdate } from "@codemirror/view";
-import { vscodeLight } from "@uiw/codemirror-theme-vscode";
+import { githubLightInit } from "@uiw/codemirror-theme-github";
 import CodeMirror from "@uiw/react-codemirror";
 
 export function Raw() {
@@ -23,15 +23,13 @@ export function Raw() {
     () => [pluginPath || "", ...(filePath ?? [])],
     [filePath, pluginPath],
   );
-  const [modified, setModified] = useState(false);
 
   const [value, setValue] = useState(
     convertJsonToConfiguration(configuration?.name!!, configuration?.content),
   );
 
-  const onChange = useCallback((val: string, viewUpdate: ViewUpdate) => {
+  const onChange = useCallback((val: string, _viewUpdate: ViewUpdate) => {
     setValue(val);
-    setModified(true);
   }, []);
 
   const onSubmit = useCallback(() => {
@@ -45,7 +43,6 @@ export function Raw() {
       }));
       setConfigurationJson(realPath, cache, content).then(() => {
         toast.success("Saved successfully");
-        setModified(false);
       });
     }
   }, [form, configuration?.name, value, setConfiguration, realPath]);
@@ -57,8 +54,12 @@ export function Raw() {
   return (
     <CodeMirror
       value={value}
-      className="w-full"
-      theme={vscodeLight}
+      className="w-full font-mono"
+      theme={githubLightInit({
+        settings: {
+          gutterBorder: "none",
+        },
+      })}
       extensions={[yaml()]}
       onChange={onChange}
     />

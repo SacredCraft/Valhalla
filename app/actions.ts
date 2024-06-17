@@ -102,3 +102,15 @@ export async function saveFile(
 export async function revalidateFiles(plugin: Plugin, path: string[]) {
   revalidatePath(`/${plugin.id}/files/${path.join("/")}`);
 }
+
+export async function getFileContent(
+  path: string,
+  options:
+    | {
+        encoding: BufferEncoding;
+        flag?: string | undefined;
+      }
+    | BufferEncoding,
+) {
+  return fs.readFileSync(path, options);
+}

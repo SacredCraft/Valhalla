@@ -7,6 +7,7 @@ import {
   Copy,
   Delete,
   Edit,
+  Eye,
   File as FileIcon,
   Folder,
   FolderPen,
@@ -20,6 +21,7 @@ import { ColumnDef, RowData } from "@tanstack/react-table";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ImageModel } from "@/components/ui/image-model";
 import {
   Tooltip,
   TooltipContent,
@@ -94,28 +96,46 @@ export const columns: ColumnDef<File>[] = [
     accessorKey: "actions",
     header: "Actions",
     cell: ({ row, table }) => {
-      const pluginId = table.options.meta?.getPlugin().id;
       const relativePath = [
         ...(table.options.meta?.getPath() ?? []),
         row.original.name,
       ];
+      const plugin = table.options.meta?.getPlugin()!!;
+      const pluginId = plugin.id;
+      const path = table.options.meta?.getPath()!!;
+      const attributes = findFileAttributes(
+        plugin.files,
+        [...path, row.original.name],
+        row.original.name,
+      );
+      const isImage = attributes.template?.name === "Image";
       return (
         <div className="flex items-center gap-2">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button
-                variant="secondary"
-                size="icon"
-                className="h-7 w-7"
-                disabled={row.original.type === "dir"}
-                asChild
-              >
-                <Link href={`/${pluginId}/editor/${relativePath.join("/")}`}>
-                  <Edit className="size-4" />
-                </Link>
-              </Button>
+              {isImage ? (
+                <ImageModel src={row.original.path.join("/")}>
+                  <Button variant="secondary" size="icon" className="h-7 w-7">
+                    <Eye className="size-4" />
+                  </Button>
+                </ImageModel>
+              ) : (
+                <Button
+                  variant="secondary"
+                  size="icon"
+                  className="h-7 w-7"
+                  disabled={row.original.type === "dir"}
+                  asChild
+                >
+                  <Link href={`/${pluginId}/editor/${relativePath.join("/")}`}>
+                    <Edit className="size-4" />
+                  </Link>
+                </Button>
+              )}
             </TooltipTrigger>
-            <TooltipContent>Edit the configuration</TooltipContent>
+            <TooltipContent>
+              {isImage ? "Preview Image" : "Edit the configuration"}
+            </TooltipContent>
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>

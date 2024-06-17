@@ -1,3 +1,4 @@
+import { globalTemplates } from "@/config/global";
 import { plugins } from "@/config/plugins";
 import { PluginFile, Template } from "@/config/types";
 
@@ -41,7 +42,14 @@ export function findFileAttributes(
   }
 
   // If file is not found, return the parent directory's attributes
-  const template = parentTemplates?.find((tpl) =>
+  let template = parentTemplates?.find((tpl) =>
+    new RegExp(tpl.regex).test(filename),
+  );
+  if (template) {
+    return { template, actions: parentActions };
+  }
+
+  template = globalTemplates?.find((tpl) =>
     new RegExp(tpl.regex).test(filename),
   );
   return { template, actions: parentActions };

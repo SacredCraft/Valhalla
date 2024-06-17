@@ -58,10 +58,6 @@
   }
 }
 
-pre {
-  @apply h-full flex-1 overflow-y-auto whitespace-pre-wrap break-words rounded-lg border p-4 shadow;
-}
-
 .ͼ1.cm-focused {
   @apply outline-0;
 }
