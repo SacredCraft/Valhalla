@@ -40,7 +40,10 @@ export const useHeaderContext = () => useContext(HeaderContext);
 
 export function Header() {
   const pages = usePathname().split("/").filter(Boolean);
-  const isEditor = useMemo(() => pages.includes("editor"), [pages]);
+  const isPluginPage = useMemo(
+    () => pages.includes("editor") || pages.includes("files"),
+    [pages],
+  );
   const router = useRouter();
   const { items } = useHeaderContext();
 
@@ -102,17 +105,7 @@ export function Header() {
                   <Fragment key={item.label}>
                     <BreadcrumbItem>
                       <BreadcrumbLink asChild>
-                        <Link
-                          href={item.link}
-                          className={cn(
-                            "capitalize",
-                            isEditor && index != 0
-                              ? "pointer-events-none"
-                              : undefined,
-                          )}
-                        >
-                          {item.label}
-                        </Link>
+                        <Link href={item.link}>{item.label}</Link>
                       </BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
@@ -121,7 +114,13 @@ export function Header() {
               )
             : pages.map((page, index) =>
                 index === pages.length - 1 ? (
-                  <BreadcrumbPage key={page}>
+                  <BreadcrumbPage
+                    key={page}
+                    className={cn(
+                      isPluginPage && index <= 1 && "capitalize",
+                      !isPluginPage && "capitalize",
+                    )}
+                  >
                     {decodeURIComponent(page)}
                   </BreadcrumbPage>
                 ) : (
@@ -131,8 +130,11 @@ export function Header() {
                         <Link
                           href={`/${pages.slice(0, index + 1).join("/")}`}
                           className={cn(
-                            index === 1 && "capitalize",
-                            isEditor && index === 1 && "pointer-events-none",
+                            !isPluginPage && "capitalize",
+                            isPluginPage && index <= 1 && "capitalize",
+                            isPluginPage &&
+                              index === 1 &&
+                              "pointer-events-none",
                           )}
                         >
                           {decodeURIComponent(page)}
