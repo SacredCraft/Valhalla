@@ -1,7 +1,15 @@
 "use client";
 
 import { Save } from "lucide-react";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -17,6 +25,11 @@ type ContextType = {
   form?: ReturnType<typeof useForm>;
   collapsed?: boolean;
   configuration?: ConfigurationResult;
+  setConfiguration?: Dispatch<SetStateAction<ConfigurationResult>>;
+  submitCallbacks?: Map<string, (values: any) => void>;
+  setSubmitCallbacks?: Dispatch<
+    SetStateAction<Map<string, (values: any) => void>>
+  >;
   relations?: ConfigurationResult[];
   pluginPath?: string;
   filePath?: string[];
@@ -54,6 +67,9 @@ export default function Client({
   const [collapsed, setCollapsed] = useState(false);
   const [configuration, setConfiguration] =
     useState<ConfigurationResult>(initialConfiguration);
+  const [submitCallbacks, setSubmitCallbacks] = useState<
+    Map<string, (values: any) => void>
+  >(new Map());
 
   const values = useMemo(() => configuration.cache, [configuration]);
 
@@ -61,24 +77,24 @@ export default function Client({
     values,
   });
 
-  const { watch } = form;
-
-  useEffect(() => {
-    const { unsubscribe } = watch((values) => {});
-    return () => unsubscribe();
-  }, [configuration, filePath, form, realPath, watch]);
-
   function onSubmit(values: any) {
-    const content = getContent(values);
+    if (tabValue === "edit") {
+      const content = getContent(values);
 
-    setConfiguration({
-      ...configuration,
-      content,
-      cache: values,
-    });
-    setConfigurationJson(realPath, values, content).then(() => {
-      toast.success("Saved successfully");
-    });
+      setConfiguration((prev) => ({
+        ...prev,
+        content,
+        cache: values,
+      }));
+      setConfigurationJson(realPath, values, content).then(() => {
+        toast.success("Saved successfully");
+      });
+    } else if (tabValue === "raw") {
+      const callback = submitCallbacks.get("raw");
+      if (callback) {
+        callback(values);
+      }
+    }
   }
 
   return (
@@ -88,9 +104,12 @@ export default function Client({
         pluginId,
         collapsed,
         configuration,
+        setConfiguration,
         relations,
         pluginPath,
         filePath,
+        submitCallbacks,
+        setSubmitCallbacks,
       }}
     >
       <Form {...form}>
@@ -119,7 +138,8 @@ export default function Client({
                 </Button>
                 <Button className="h-7 gap-1" size="sm" type="submit">
                   <Save className="h-3.5 w-3.5" />
-                  Save
+                  Save Changes In{" "}
+                  <span className="font-bold capitalize">{tabValue}</span>
                 </Button>
               </div>
             </div>
