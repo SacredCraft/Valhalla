@@ -16,10 +16,11 @@ type ImageModelProps = {
 export function ImageModel({ children, src }: ImageModelProps) {
   const [file, setFile] = useState<string>();
   const [isPending, startTransition] = useTransition();
+  const fileExt = src.split(".").pop();
 
   const content = useMemo(
-    () => `data:image/png;base64,${file}` || src,
-    [file, src],
+    () => `data:image/${fileExt};base64,${file}` || src,
+    [file, fileExt, src],
   );
 
   useEffect(() => {

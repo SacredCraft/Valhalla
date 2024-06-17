@@ -7,6 +7,7 @@ import {
   createContext,
   useContext,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { useForm } from "react-hook-form";
@@ -62,7 +63,7 @@ export default function Client({
     () => [pluginPath || "", ...filePath],
     [filePath, pluginPath],
   );
-  const [tabValue, setTabValue] = useState("edit");
+  const [tabValue, setTabValue] = useState(template ? "edit" : "raw");
   const [collapsed, setCollapsed] = useState(false);
   const [configuration, setConfiguration] =
     useState<ConfigurationResult>(initialConfiguration);
@@ -121,7 +122,7 @@ export default function Client({
             <div className="flex items-center">
               <div className="flex items-center gap-2">
                 <TabsList>
-                  <TabsTrigger value="edit">Edit</TabsTrigger>
+                  {template && <TabsTrigger value="edit">Edit</TabsTrigger>}
                   <TabsTrigger value="raw">Raw</TabsTrigger>
                 </TabsList>
               </div>
@@ -142,14 +143,16 @@ export default function Client({
                 </Button>
               </div>
             </div>
-            <TabsContent
-              forceMount
-              value="edit"
-              className="flex flex-col-reverse gap-4 data-[state=inactive]:hidden md:flex-row w-full"
-            >
-              <div className="flex-1">{template}</div>
-              {info}
-            </TabsContent>
+            {template && (
+              <TabsContent
+                forceMount
+                value="edit"
+                className="flex flex-col-reverse gap-4 data-[state=inactive]:hidden md:flex-row w-full"
+              >
+                <div className="flex-1">{template}</div>
+                {info}
+              </TabsContent>
+            )}
             <TabsContent
               forceMount
               value="raw"

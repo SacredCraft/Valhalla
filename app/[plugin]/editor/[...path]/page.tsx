@@ -57,7 +57,7 @@ export default async function Editor({
       filePath={filePath}
       pluginId={pluginId}
       info={<Info actions={Actions} />}
-      template={Template ? <Template /> : <div>Template not found</div>}
+      template={Template ? <Template /> : undefined}
     />
   );
 }
