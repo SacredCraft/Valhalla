@@ -5,6 +5,7 @@ import { flatMap } from "lodash";
 import path from "path";
 
 import {
+  cleanObject,
   convertConfigurationToJson,
   convertJsonToConfiguration,
 } from "@/lib/core-utils";
@@ -255,7 +256,7 @@ export async function setConfigurationJson(
 
   setValhallaFileContent(
     [...folder, actualCacheFileName],
-    JSON.stringify(cache, null, 2),
+    JSON.stringify(cleanObject(cache), null, 2),
   );
 }
 

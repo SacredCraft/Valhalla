@@ -1,7 +1,11 @@
 "use client";
 
 import { useEditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
-import { getFormValue } from "@/lib/form";
+import {
+  getFormValue,
+  isFormDeletableValue,
+  setFormDeleteValue,
+} from "@/lib/form";
 import { cn } from "@/lib/utils";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 
@@ -14,6 +18,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
+  CommandSeparator,
 } from "@/components/ui/command";
 import {
   FormControl,
@@ -33,6 +38,7 @@ type EnumProps = {
   description?: React.ReactNode;
   items: { label: string; value: string }[];
   defaultValue?: string;
+  clearable?: boolean;
 } & React.HTMLProps<HTMLDivElement>;
 
 export function Enum({
@@ -41,6 +47,7 @@ export function Enum({
   label,
   className,
   items,
+  clearable = true,
 }: EnumProps) {
   const { form } = useEditorContext();
   const { node } = useNode();
@@ -53,7 +60,7 @@ export function Enum({
     <FormField
       control={form.control}
       name={node}
-      defaultValue={getFormValue(defaultValue)}
+      defaultValue={defaultValue}
       render={({ field }) => (
         <FormItem className={cn(className, "flex flex-col")}>
           {label && <FormLabel>{label}</FormLabel>}
@@ -68,10 +75,10 @@ export function Enum({
                     !getFormValue(field.value) && "text-muted-foreground",
                   )}
                 >
-                  {getFormValue(field.value)
+                  {!isFormDeletableValue(field.value) && field.value
                     ? items.find(
                         (item) => item.value === getFormValue(field.value),
-                      )?.label
+                      )?.label || field.value
                     : `Select ${label?.toString().toLowerCase()}...`}
                   <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -107,6 +114,18 @@ export function Enum({
                         />
                       </CommandItem>
                     ))}
+                  </CommandGroup>
+                  <CommandSeparator />
+                  <CommandGroup>
+                    {clearable && (
+                      <CommandItem
+                        onSelect={() => {
+                          form.setValue(node, null);
+                        }}
+                      >
+                        Clear
+                      </CommandItem>
+                    )}
                   </CommandGroup>
                 </CommandList>
               </Command>

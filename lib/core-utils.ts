@@ -79,7 +79,7 @@ export function getContent(obj: any): any {
   return cleanObject(content);
 }
 
-function cleanObject(obj: any): any {
+export function cleanObject(obj: any): any {
   if (_.isArray(obj)) {
     return obj.reduce((acc, item) => {
       const cleanedItem = cleanObject(item);
