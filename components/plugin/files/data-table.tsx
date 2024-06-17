@@ -2,14 +2,11 @@
 
 import { usePathname, useRouter } from "next/navigation";
 
-import { TrashIcon } from "lucide-react";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { createContext, useContext, useEffect, useState } from "react";
 
+import { useFilesContext } from "@/app/[plugin]/files/[[...path]]/page.client";
 import { File, revalidate } from "@/app/actions";
-import { Plugin } from "@/config/types";
 import { findFileAttributes } from "@/config/utils";
-import { Trash, emptyTrash } from "@/lib/core";
 import { cn } from "@/lib/utils";
 import {
   flexRender,
@@ -17,7 +14,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { Button } from "@/components/ui/button";
+import { TrashBin } from "@/components/plugin/files/trash-bin";
 import {
   Card,
   CardContent,
@@ -26,15 +23,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { ImageModel } from "@/components/ui/image-model";
 import {
   Table,
@@ -44,29 +32,29 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 import { columns } from "./columns";
 
-interface DataTableProps {
-  plugin: Plugin;
-  files: File[];
-  path: string[];
-  trash: Trash[];
-  pluginPath: string;
-}
+type ContextType = {
+  table: ReturnType<typeof useReactTable<File>>;
+};
 
-export function DataTable({
-  plugin,
-  path,
-  files,
-  trash,
-  pluginPath,
-}: DataTableProps) {
+export const FilesTableContext = createContext<ContextType | undefined>(
+  undefined,
+);
+
+export const useFilesTableContext = () => {
+  const context = useContext(FilesTableContext);
+  if (!context) {
+    throw new Error(
+      "useFilesTableContext must be used within a FilesTableProvider",
+    );
+  }
+  return context;
+};
+
+export function DataTable() {
+  const { plugin, pluginPath, path, trash, files } = useFilesContext();
   const [data, setData] = useState<File[]>(files);
   const router = useRouter();
   const pathname = usePathname();
@@ -88,27 +76,52 @@ export function DataTable({
   });
 
   return (
-    <Template
-      count={data.length}
-      table={table}
-      trash={trash}
-      plugin={plugin}
-      pluginPath={pluginPath}
-    >
-      <TableBody>
-        {table.getRowModel().rows?.length ? (
-          table.getRowModel().rows.map((row) => {
-            const attributes = findFileAttributes(
-              plugin.files,
-              [...path, row.original.name],
-              row.original.name,
-            );
-            const relativePath = [...path, row.original.name];
-            const isImage = attributes.template?.name === "Image";
-            return isImage ? (
-              <ImageModel key={row.id} src={row.original.path.join("/")}>
+    <FilesTableContext.Provider value={{ table }}>
+      <Template>
+        <TableBody>
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => {
+              const attributes = findFileAttributes(
+                plugin.files,
+                [...path, row.original.name],
+                row.original.name,
+              );
+              const relativePath = [...path, row.original.name];
+              const isImage = attributes.template?.name === "Image";
+              return isImage ? (
+                <ImageModel key={row.id} src={row.original.path.join("/")}>
+                  <TableRow
+                    className="h-12 cursor-pointer"
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </ImageModel>
+              ) : (
                 <TableRow
-                  className="h-12 cursor-pointer"
+                  className={cn(
+                    "h-12 cursor-pointer",
+                    row.original.type === "dir" &&
+                      "bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700",
+                  )}
+                  onClick={() => {
+                    if (row.original.type === "dir") {
+                      router.push(
+                        `/${plugin.id}/files/${table.options.meta?.getPath().join("/")}/${row.original.name}`,
+                      );
+                    } else {
+                      router.push(
+                        `/${plugin.id}/editor/${relativePath.join("/")}`,
+                      );
+                    }
+                  }}
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
@@ -120,124 +133,29 @@ export function DataTable({
                     </TableCell>
                   ))}
                 </TableRow>
-              </ImageModel>
-            ) : (
-              <TableRow
-                className={cn(
-                  "h-12 cursor-pointer",
-                  row.original.type === "dir" &&
-                    "bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700",
-                )}
-                onClick={() => {
-                  if (row.original.type === "dir") {
-                    router.push(
-                      `/${plugin.id}/files/${table.options.meta?.getPath().join("/")}/${row.original.name}`,
-                    );
-                  } else {
-                    router.push(
-                      `/${plugin.id}/editor/${relativePath.join("/")}`,
-                    );
-                  }
-                }}
-                data-state={row.getIsSelected() && "selected"}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            );
-          })
-        ) : (
-          <TableRow>
-            <TableCell colSpan={columns.length} className="h-24 text-center">
-              No files found.
-            </TableCell>
-          </TableRow>
-        )}
-      </TableBody>
-    </Template>
+              );
+            })
+          ) : (
+            <TableRow>
+              <TableCell colSpan={columns.length} className="h-24 text-center">
+                No files found.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Template>
+    </FilesTableContext.Provider>
   );
 }
 
-function Template({
-  count,
-  children,
-  table,
-  trash,
-  plugin,
-  pluginPath,
-}: {
-  count?: number;
-  children: React.ReactNode;
-  table: ReturnType<typeof useReactTable<File>>;
-  trash: Trash[];
-  plugin: Plugin;
-  pluginPath: string;
-}) {
+function Template({ children }: { children: React.ReactNode }) {
+  const { table } = useFilesTableContext();
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center">
           Files Browser
-          <Tooltip>
-            <TooltipTrigger className="ml-auto">
-              <Dialog>
-                <DialogTrigger>
-                  <Button variant="outline" size="icon">
-                    <TrashIcon className="size-4" />
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Trash Bin</DialogTitle>
-                    <DialogDescription>
-                      Manage and restore deleted configurations
-                    </DialogDescription>
-                  </DialogHeader>
-                  {trash.length ? (
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>File Name</TableHead>
-                          <TableHead>Deleted By</TableHead>
-                          <TableHead>Deleted At</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {trash.map((file) => (
-                          <TableRow key={file.fileName}>
-                            <TableCell>{file.fileName}</TableCell>
-                            <TableCell>{file.operator}</TableCell>
-                            <TableCell>{file.deletedAt}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  ) : (
-                    <div className="text-center text-muted-foreground">
-                      No files in trash bin
-                    </div>
-                  )}
-                  <DialogFooter>
-                    <Button
-                      variant="destructive"
-                      onClick={() => {
-                        emptyTrash(pluginPath).then(() => {
-                          table.options.meta?.refresh();
-                          toast.success("Trash bin emptied");
-                        });
-                      }}
-                    >
-                      Empty Trash Bin
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            </TooltipTrigger>
-            <TooltipContent>Trash Bin</TooltipContent>
-          </Tooltip>
+          <TrashBin />
         </CardTitle>
         <CardDescription>
           Browse and manage configurations for the plugin
@@ -268,8 +186,8 @@ function Template({
       </CardContent>
       <CardFooter>
         <div className="text-xs text-muted-foreground">
-          Showing <strong>1-10</strong> of <strong>{count ?? 0}</strong>{" "}
-          configurations
+          Showing <strong>1-10</strong> of{" "}
+          <strong>{table.options.data.length ?? 0}</strong> configurations
         </div>
       </CardFooter>
     </Card>
