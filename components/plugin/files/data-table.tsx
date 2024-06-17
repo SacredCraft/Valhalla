@@ -1,12 +1,15 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
-import { useState } from "react";
+import { TrashIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
-import { revalidateFiles } from "@/app/actions";
-import { File } from "@/app/actions";
+import { File, revalidate } from "@/app/actions";
 import { Plugin } from "@/config/types";
+import { findFileAttributes } from "@/config/utils";
+import { Trash, emptyTrash } from "@/lib/core";
 import { cn } from "@/lib/utils";
 import {
   flexRender,
@@ -14,6 +17,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -23,6 +27,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { ImageModel } from "@/components/ui/image-model";
+import {
   Table,
   TableBody,
   TableCell,
@@ -30,6 +44,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import { columns } from "./columns";
 
@@ -37,11 +56,24 @@ interface DataTableProps {
   plugin: Plugin;
   files: File[];
   path: string[];
+  trash: Trash[];
+  pluginPath: string;
 }
 
-export function DataTable({ plugin, path, files }: DataTableProps) {
+export function DataTable({
+  plugin,
+  path,
+  files,
+  trash,
+  pluginPath,
+}: DataTableProps) {
   const [data, setData] = useState<File[]>(files);
   const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setData(files);
+  }, [files]);
 
   const table = useReactTable({
     data,
@@ -51,40 +83,72 @@ export function DataTable({ plugin, path, files }: DataTableProps) {
       setData,
       getPlugin: () => plugin,
       getPath: () => path,
-      refresh: async () => {
-        await revalidateFiles(plugin, path);
-      },
+      refresh: () => revalidate(pathname),
     },
   });
 
   return (
-    <Template count={data.length} table={table}>
+    <Template
+      count={data.length}
+      table={table}
+      trash={trash}
+      plugin={plugin}
+      pluginPath={pluginPath}
+    >
       <TableBody>
         {table.getRowModel().rows?.length ? (
-          table.getRowModel().rows.map((row) => (
-            <TableRow
-              key={row.id}
-              className={cn(
-                "h-12",
-                row.original.type === "dir" &&
-                  "cursor-pointer bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700",
-              )}
-              data-state={row.getIsSelected() && "selected"}
-              onClick={() => {
-                if (row.original.type === "dir") {
-                  router.push(
-                    `/${plugin.id}/files/${table.options.meta?.getPath().join("/")}/${row.original.name}`,
-                  );
-                }
-              }}
-            >
-              {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))
+          table.getRowModel().rows.map((row) => {
+            const attributes = findFileAttributes(
+              plugin.files,
+              [...path, row.original.name],
+              row.original.name,
+            );
+            const relativePath = [...path, row.original.name];
+            const isImage = attributes.template?.name === "Image";
+            return isImage ? (
+              <ImageModel key={row.id} src={row.original.path.join("/")}>
+                <TableRow
+                  className="h-12 cursor-pointer"
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </ImageModel>
+            ) : (
+              <TableRow
+                className={cn(
+                  "h-12 cursor-pointer",
+                  row.original.type === "dir" &&
+                    "bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700",
+                )}
+                onClick={() => {
+                  if (row.original.type === "dir") {
+                    router.push(
+                      `/${plugin.id}/files/${table.options.meta?.getPath().join("/")}/${row.original.name}`,
+                    );
+                  } else {
+                    router.push(
+                      `/${plugin.id}/editor/${relativePath.join("/")}`,
+                    );
+                  }
+                }}
+                data-state={row.getIsSelected() && "selected"}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            );
+          })
         ) : (
           <TableRow>
             <TableCell colSpan={columns.length} className="h-24 text-center">
@@ -101,15 +165,80 @@ function Template({
   count,
   children,
   table,
+  trash,
+  plugin,
+  pluginPath,
 }: {
   count?: number;
   children: React.ReactNode;
   table: ReturnType<typeof useReactTable<File>>;
+  trash: Trash[];
+  plugin: Plugin;
+  pluginPath: string;
 }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Files Browser</CardTitle>
+        <CardTitle className="flex items-center">
+          Files Browser
+          <Tooltip>
+            <TooltipTrigger className="ml-auto">
+              <Dialog>
+                <DialogTrigger>
+                  <Button variant="outline" size="icon">
+                    <TrashIcon className="size-4" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Trash Bin</DialogTitle>
+                    <DialogDescription>
+                      Manage and restore deleted configurations
+                    </DialogDescription>
+                  </DialogHeader>
+                  {trash.length ? (
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>File Name</TableHead>
+                          <TableHead>Deleted By</TableHead>
+                          <TableHead>Deleted At</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {trash.map((file) => (
+                          <TableRow key={file.fileName}>
+                            <TableCell>{file.fileName}</TableCell>
+                            <TableCell>{file.operator}</TableCell>
+                            <TableCell>{file.deletedAt}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  ) : (
+                    <div className="text-center text-muted-foreground">
+                      No files in trash bin
+                    </div>
+                  )}
+                  <DialogFooter>
+                    <Button
+                      variant="destructive"
+                      onClick={() => {
+                        emptyTrash(pluginPath).then(() => {
+                          table.options.meta?.refresh();
+                          toast.success("Trash bin emptied");
+                        });
+                      }}
+                    >
+                      Empty Trash Bin
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </TooltipTrigger>
+            <TooltipContent>Trash Bin</TooltipContent>
+          </Tooltip>
+        </CardTitle>
         <CardDescription>
           Browse and manage configurations for the plugin
         </CardDescription>

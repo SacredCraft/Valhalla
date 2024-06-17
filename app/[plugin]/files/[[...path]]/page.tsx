@@ -2,8 +2,8 @@ import { notFound } from "next/navigation";
 
 import { PluginFilesClient } from "@/app/[plugin]/files/[[...path]]/page.client";
 import { getFilesByPath } from "@/app/actions";
-import { getPlugin } from "@/config/utils";
 import { getPluginPath } from "@/lib/cookies";
+import { getDeletedFiles } from "@/lib/core";
 
 type PluginFilesProps = {
   params: {
@@ -22,6 +22,15 @@ export default async function PluginFiles({
   }
 
   const files = (await getFilesByPath([pluginPath, ...path])) ?? [];
+  const trash = (await getDeletedFiles(pluginPath)) ?? [];
 
-  return <PluginFilesClient pluginId={pluginId} path={path} files={files} />;
+  return (
+    <PluginFilesClient
+      pluginPath={pluginPath}
+      pluginId={pluginId}
+      path={path}
+      files={files}
+      trash={trash}
+    />
+  );
 }
