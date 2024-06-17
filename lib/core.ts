@@ -4,26 +4,134 @@ import fs from "fs";
 import { flatMap } from "lodash";
 import path from "path";
 
-import { getPlugin } from "@/config/utils";
 import {
   convertConfigurationToJson,
   convertJsonToConfiguration,
 } from "@/lib/core-utils";
 
+export type Trash = {
+  fileName: string;
+  operator: string;
+  deletedAt: string;
+  content?: any;
+  size?: number;
+  path: string[];
+  type: "json" | "base64";
+};
+
+function findValhallaDirs(dir: string): string[] {
+  let valhallaDirs: string[] = [];
+
+  const files = fs.readdirSync(dir);
+  files.forEach((file) => {
+    const fullPath = path.join(dir, file);
+    const stat = fs.lstatSync(fullPath);
+
+    if (stat.isDirectory()) {
+      if (file === ".valhalla") {
+        valhallaDirs.push(fullPath);
+      } else {
+        valhallaDirs = valhallaDirs.concat(findValhallaDirs(fullPath));
+      }
+    }
+  });
+
+  return valhallaDirs;
+}
+
+// 递归删除 valhalla 目录中以 ".deleted" 结尾的文件
+export async function emptyTrash(filePath: string) {
+  if (!fs.existsSync(filePath) || !fs.lstatSync(filePath).isDirectory()) {
+    return;
+  }
+
+  const valhallaDirs = findValhallaDirs(filePath);
+
+  for (const dir of valhallaDirs) {
+    emptyTrashRecursive(dir);
+  }
+}
+
+function emptyTrashRecursive(dir: string) {
+  const files = fs.readdirSync(dir);
+  files.forEach((file) => {
+    const fullPath = path.join(dir, file);
+    const stat = fs.lstatSync(fullPath);
+
+    if (stat.isDirectory()) {
+      emptyTrashRecursive(fullPath);
+    } else if (stat.isFile() && file.endsWith(".deleted")) {
+      fs.unlinkSync(fullPath);
+    }
+  });
+}
+
+// 递归查找 valhalla 目录中以 ".deleted" 结尾的文件
+export async function getDeletedFiles(filePath: string): Promise<Trash[]> {
+  if (!fs.existsSync(filePath) || !fs.lstatSync(filePath).isDirectory()) {
+    return [];
+  }
+
+  const valhallaDirs = findValhallaDirs(filePath);
+  let allResults: string[] = [];
+
+  for (const dir of valhallaDirs) {
+    const deletedFiles = getDeletedFilesRecursive(dir);
+    allResults = allResults.concat(deletedFiles);
+  }
+
+  return allResults.map((r) => {
+    const content: {
+      operator: string;
+      type: "json" | "base64";
+      time: string;
+      content: any;
+    } = JSON.parse(fs.readFileSync(r, "utf-8"));
+
+    let contentValue;
+
+    if (content.type === "json") {
+      contentValue = content.content;
+    } else {
+      contentValue = Buffer.from(content.content, "base64").toString("utf-8");
+    }
+
+    return {
+      fileName: path.basename(r).replace(".deleted", ""),
+      operator: content.operator,
+      deletedAt: content.time,
+      type: content.type,
+      content: contentValue,
+      size: fs.statSync(r).size,
+      path: r.split("/"),
+    };
+  });
+}
+
+function getDeletedFilesRecursive(dir: string): string[] {
+  let results: string[] = [];
+
+  const files = fs.readdirSync(dir);
+  files.forEach((file) => {
+    const fullPath = path.join(dir, file);
+    const stat = fs.lstatSync(fullPath);
+
+    if (stat.isDirectory()) {
+      results = results.concat(getDeletedFilesRecursive(fullPath));
+    } else if (stat.isFile() && file.endsWith(".deleted")) {
+      results.push(fullPath);
+    }
+  });
+
+  return results;
+}
+
 function getValhallaDir(filePath: string[]) {
   return path.join(...filePath, ".valhalla");
 }
 
-function checkValhallaDirExists(filePath: string[]) {
-  return fs.existsSync(getValhallaDir(filePath));
-}
-
 function createValhallaDir(filePath: string[]) {
   fs.mkdirSync(getValhallaDir(filePath));
-}
-
-function deleteValhallaDir(filePath: string[]) {
-  fs.rmdirSync(getValhallaDir(filePath));
 }
 
 function deleteAllValhallaDirs(filePath: string[]) {

@@ -5,7 +5,6 @@ import { revalidatePath } from "next/cache";
 import fs from "fs";
 import path from "path";
 
-import { Plugin } from "@/config/types";
 import { setPluginPath } from "@/lib/cookies";
 
 export type File = {
@@ -99,10 +98,6 @@ export async function saveFile(
   fs.writeFileSync(path.join(pluginPath, filePath), content);
 }
 
-export async function revalidateFiles(plugin: Plugin, path: string[]) {
-  revalidatePath(`/${plugin.id}/files/${path.join("/")}`);
-}
-
 export async function getFileContent(
   path: string,
   options:
@@ -113,4 +108,8 @@ export async function getFileContent(
     | BufferEncoding,
 ) {
   return fs.readFileSync(path, options);
+}
+
+export async function revalidate(path: string) {
+  revalidatePath(path);
 }

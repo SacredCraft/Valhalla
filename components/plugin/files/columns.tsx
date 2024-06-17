@@ -100,43 +100,8 @@ export const columns: ColumnDef<File>[] = [
         ...(table.options.meta?.getPath() ?? []),
         row.original.name,
       ];
-      const plugin = table.options.meta?.getPlugin()!!;
-      const pluginId = plugin.id;
-      const path = table.options.meta?.getPath()!!;
-      const attributes = findFileAttributes(
-        plugin.files,
-        [...path, row.original.name],
-        row.original.name,
-      );
-      const isImage = attributes.template?.name === "Image";
       return (
         <div className="flex items-center gap-2">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              {isImage ? (
-                <ImageModel src={row.original.path.join("/")}>
-                  <Button variant="secondary" size="icon" className="h-7 w-7">
-                    <Eye className="size-4" />
-                  </Button>
-                </ImageModel>
-              ) : (
-                <Button
-                  variant="secondary"
-                  size="icon"
-                  className="h-7 w-7"
-                  disabled={row.original.type === "dir"}
-                  asChild
-                >
-                  <Link href={`/${pluginId}/editor/${relativePath.join("/")}`}>
-                    <Edit className="size-4" />
-                  </Link>
-                </Button>
-              )}
-            </TooltipTrigger>
-            <TooltipContent>
-              {isImage ? "Preview Image" : "Edit the configuration"}
-            </TooltipContent>
-          </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -191,11 +156,7 @@ export const columns: ColumnDef<File>[] = [
                 className="h-7 w-7"
                 onClick={(e) => {
                   e.stopPropagation();
-                  navigator.clipboard.writeText(
-                    table.options.meta?.getPath().join("/")
-                      ? row.original.path.join("/")
-                      : "",
-                  );
+                  navigator.clipboard.writeText(relativePath.join("/"));
                 }}
               >
                 <Copy className="size-4" />
