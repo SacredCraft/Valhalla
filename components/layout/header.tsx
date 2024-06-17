@@ -121,7 +121,7 @@ export function Header() {
               )
             : pages.map((page, index) =>
                 index === pages.length - 1 ? (
-                  <BreadcrumbPage key={page} className="capitalize">
+                  <BreadcrumbPage key={page}>
                     {decodeURIComponent(page)}
                   </BreadcrumbPage>
                 ) : (
@@ -131,7 +131,7 @@ export function Header() {
                         <Link
                           href={`/${pages.slice(0, index + 1).join("/")}`}
                           className={cn(
-                            "capitalize",
+                            index === 1 && "capitalize",
                             isEditor && index === 1 && "pointer-events-none",
                           )}
                         >
