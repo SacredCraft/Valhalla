@@ -22,23 +22,29 @@ import { Form } from "@/components/ui/form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type ContextType = {
-  form?: ReturnType<typeof useForm>;
-  collapsed?: boolean;
-  configuration?: ConfigurationResult;
-  setConfiguration?: Dispatch<SetStateAction<ConfigurationResult>>;
-  submitCallbacks?: Map<string, (values: any) => void>;
-  setSubmitCallbacks?: Dispatch<
+  form: ReturnType<typeof useForm>;
+  collapsed: boolean;
+  configuration: ConfigurationResult;
+  setConfiguration: Dispatch<SetStateAction<ConfigurationResult>>;
+  submitCallbacks: Map<string, (values: any) => void>;
+  setSubmitCallbacks: Dispatch<
     SetStateAction<Map<string, (values: any) => void>>
   >;
-  relations?: ConfigurationResult[];
-  pluginPath?: string;
-  filePath?: string[];
-  pluginId?: string;
+  relations: ConfigurationResult[];
+  pluginPath: string;
+  filePath: string[];
+  pluginId: string;
 };
 
-const EditorContext = createContext<ContextType>({});
+const EditorContext = createContext<ContextType | undefined>(undefined);
 
-export const useEditorContext = () => useContext(EditorContext);
+export const useEditorContext = () => {
+  const context = useContext(EditorContext);
+  if (!context) {
+    throw new Error("useEditorContext must be used within an EditorContext");
+  }
+  return context;
+};
 
 type ClientProps = {
   pluginId?: string;
@@ -95,6 +101,10 @@ export default function Client({
         callback(values);
       }
     }
+  }
+
+  if (!pluginId || !pluginPath) {
+    return <></>;
   }
 
   return (

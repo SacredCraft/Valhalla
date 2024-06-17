@@ -44,9 +44,7 @@ export function Enum({
 }: EnumProps) {
   const { form } = useEditorContext();
   const { node } = useNode();
-  if (!form) {
-    throw new Error("Enum component must be used within a form context.");
-  }
+
   if (!node) {
     throw new Error("Enum component must be used within a node context.");
   }

@@ -34,10 +34,8 @@ export function Hostile({}: MechanismProps) {
 function Parameters() {
   const { form } = useEditorContext();
   const { node } = useNode();
-  const alert = useMemo(
-    () => form?.getValues(`${node}.alert`),
-    [form?.formState, node],
-  );
+  const alert = form.watch(`${node}.alert`);
+
   return (
     alert === "RANGE" && (
       <div className="space-y-2">

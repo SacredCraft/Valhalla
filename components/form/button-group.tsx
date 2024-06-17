@@ -37,11 +37,6 @@ export function ButtonGroup({
   const { form } = useEditorContext();
   const { node } = useNode();
 
-  if (!form) {
-    throw new Error(
-      "ButtonGroup component must be used within a form context.",
-    );
-  }
   if (!node) {
     throw new Error(
       "ButtonGroup component must be used within a node context.",

@@ -62,10 +62,7 @@ export function ListArea({
   const { form } = useEditorContext();
   const { node } = useNode();
 
-  const originalItems = useMemo(
-    () => (form?.getValues(node!!) ?? []) as unknown as any[],
-    [form?.formState, node],
-  );
+  const originalItems = (form.watch(node!!) ?? []) as unknown as any[];
 
   const getValue = (obj: any, keys: string[]) => {
     for (const key of keys) {
@@ -98,7 +95,7 @@ export function ListArea({
 
   useEffect(() => {
     const values = items.map((item, index) => item.value);
-    form?.setValue(node!!, values);
+    form.setValue(node!!, values);
   }, [form, items, node]);
 
   const [collapsedItems, setCollapsedItems] = useState<boolean[]>([]);

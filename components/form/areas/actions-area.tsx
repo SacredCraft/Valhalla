@@ -39,24 +39,24 @@ export function ActionsArea({
   const [deleteHover, setDeleteHover] = useState(false);
   const [deleteTempHover, setDeleteTempHover] = useState(false);
   const deleted = useMemo(() => {
-    const value = form?.getValues(nodes?.[0]!!);
+    const value = form.getValues(nodes?.[0]!!);
     if (value) {
       return isFormDeletableValue(value) && value._deleted;
     }
     return false;
-  }, [form?.formState, nodes]);
+  }, [form.formState, nodes]);
   const tempDeleted = useMemo(
     () =>
-      isFormDeletableValue(form?.getValues(nodes?.[0]!!)) &&
-      form?.getValues(nodes?.[0]!!)._temp,
-    [form?.formState, nodes],
+      isFormDeletableValue(form.getValues(nodes?.[0]!!)) &&
+      form.getValues(nodes?.[0]!!)._temp,
+    [form.formState, nodes],
   );
 
   function handleDelete() {
     nodes!!.forEach((node) => {
-      form?.setValue(
+      form.setValue(
         node,
-        setFormDeleteValue(getFormValue(form?.getValues(node))),
+        setFormDeleteValue(getFormValue(form.getValues(node))),
       );
     });
     onDelete?.(nodes!!);
@@ -65,13 +65,13 @@ export function ActionsArea({
   function handleTempDelete() {
     if (tempDeleted) {
       nodes?.forEach((node) => {
-        form?.setValue(node, getFormValue(form?.getValues(node)));
+        form.setValue(node, getFormValue(form.getValues(node)));
       });
     } else {
       nodes?.forEach((node) => {
-        form?.setValue(
+        form.setValue(
           node,
-          setFormDeleteValue(getFormValue(form?.getValues(node)), true, true),
+          setFormDeleteValue(getFormValue(form.getValues(node)), true, true),
         );
       });
       onTempDelete?.(nodes!!);

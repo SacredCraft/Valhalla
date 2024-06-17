@@ -28,12 +28,11 @@ export function Text({
 }: TextProps) {
   const { form } = useEditorContext();
   const { node } = useNode();
-  if (!form) {
-    throw new Error("Text component must be used within a form context.");
-  }
+
   if (!node) {
     throw new Error("Text component must be used within a node context.");
   }
+
   return (
     <FormField
       name={node}

@@ -7,7 +7,13 @@ type ContextType = {
 
 const NodeContext = createContext<ContextType>({});
 
-export const useNode = () => useContext(NodeContext);
+export const useNode = () => {
+  const context = useContext(NodeContext);
+  if (!context) {
+    throw new Error("useNode must be used within a Node");
+  }
+  return context;
+};
 
 export function Node({
   extended = true,
