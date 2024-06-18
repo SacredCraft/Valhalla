@@ -10,7 +10,7 @@ import {
 } from "react";
 
 import { File } from "@/app/actions";
-import { Plugin, Template } from "@/config/types";
+import { Plugin } from "@/config/types";
 import { findFileAttributes, getPlugin } from "@/config/utils";
 import { Trash } from "@/lib/core";
 

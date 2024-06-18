@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { deleteFile, renameFile } from "@/app/actions";
-import { moveToTrash } from "@/lib/core";
+import { renameFile } from "@/app/actions";
 import { Row, Table } from "@tanstack/react-table";
 
 import { FileCol } from "@/components/plugin/files/files-table-columns";
