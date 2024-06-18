@@ -1,11 +1,7 @@
 "use client";
 
 import { useEditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
-import {
-  getFormValue,
-  isFormDeletableValue,
-  setFormDeleteValue,
-} from "@/lib/form";
+import { getFormValue, isFormDeletableValue } from "@/lib/form";
 import { cn } from "@/lib/utils";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 

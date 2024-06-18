@@ -1,7 +1,7 @@
 "use client";
 
 import { Code, CodeXml, TrashIcon } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { useEditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
 import {

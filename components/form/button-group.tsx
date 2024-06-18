@@ -1,7 +1,6 @@
 "use client";
 
-import { forwardRef } from "react";
-import React from "react";
+import React, { forwardRef } from "react";
 
 import { useEditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
 import { getFormValue } from "@/lib/form";

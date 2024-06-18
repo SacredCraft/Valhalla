@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { Home, Settings } from "lucide-react";
+import { Settings } from "lucide-react";
 import React from "react";
 
 import { plugins } from "@/config/plugins";

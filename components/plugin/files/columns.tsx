@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { File, deleteFile, renameFile } from "@/app/actions";
 import { Plugin } from "@/config/types";
 import { findFileAttributes } from "@/config/utils";
+import { moveToTrash } from "@/lib/core";
 import { ColumnDef, RowData } from "@tanstack/react-table";
 
 import { Badge } from "@/components/ui/badge";
@@ -150,23 +151,42 @@ export const columns: ColumnDef<File>[] = [
                       This action cannot be undone.
                     </DialogDescription>
                   </DialogHeader>
-                  <DialogFooter>
-                    <Button variant="outline">No</Button>
-                    <Button
-                      variant="destructive"
-                      onClick={() => {
-                        deleteFile(row.original.path.join("/")).then((res) => {
-                          if (!res) {
-                            toast.error("Failed to delete the file");
-                          } else {
+                  <DialogFooter className="flex flex-col sm:flex-row sm:justify-between gap-y-2">
+                    {row.original.type === "file" && (
+                      <Button
+                        variant="default"
+                        onClick={() => {
+                          moveToTrash(row.original.path, "admin").then(() => {
+                            toast.success("File moved to trash bin");
                             table.options.meta?.refresh();
-                          }
-                        });
-                      }}
-                    >
-                      Yes
-                    </Button>
-                    <Button variant="default">Move it to Trash Bin</Button>
+                          });
+                        }}
+                      >
+                        Move it to Trash Bin
+                      </Button>
+                    )}
+                    <div className="flex gap-2 sm:ml-auto">
+                      <Button variant="outline" className="w-full sm:w-fit">
+                        No
+                      </Button>
+                      <Button
+                        className="w-full sm:w-fit"
+                        variant="destructive"
+                        onClick={() => {
+                          deleteFile(row.original.path.join("/")).then(
+                            (res) => {
+                              if (!res) {
+                                toast.error("Failed to delete the file");
+                              } else {
+                                table.options.meta?.refresh();
+                              }
+                            },
+                          );
+                        }}
+                      >
+                        Yes
+                      </Button>
+                    </div>
                   </DialogFooter>
                 </DialogContent>
               </Dialog>

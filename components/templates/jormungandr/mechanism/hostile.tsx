@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-
 import { useEditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
 
 import { Enum } from "@/components/form/enum";

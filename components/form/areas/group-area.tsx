@@ -1,6 +1,6 @@
 "use client";
 
-import { MutableRefObject, useState } from "react";
+import { useState } from "react";
 
 import { cn } from "@/lib/utils";
 import { useControllableState } from "@radix-ui/react-use-controllable-state";

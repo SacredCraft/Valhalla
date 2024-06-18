@@ -63,5 +63,5 @@
 }
 
 .cm-editor {
-  @apply rounded-lg border overflow-hidden;
+  @apply overflow-hidden rounded-lg border;
 }

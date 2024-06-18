@@ -41,7 +41,7 @@ export function TrashBin() {
               <TrashIcon className="size-4" />
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="max-w-3xl">
             <DialogHeader>
               <DialogTitle>Trash Bin</DialogTitle>
               <DialogDescription>

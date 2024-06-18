@@ -20,6 +20,60 @@ export type Trash = {
   type: "json" | "base64";
 };
 
+export async function moveToTrash(filePath: string[], operator: string) {
+  const fileName = filePath[filePath.length - 1];
+  const folder = filePath.slice(0, -1);
+  const trashFileName = fileName + ".deleted";
+
+  if (!fs.existsSync([...folder, fileName].join("/"))) {
+    return;
+  }
+
+  fs.renameSync(
+    [...folder, fileName].join("/"),
+    [getValhallaDir(folder), trashFileName].join("/"),
+  );
+
+  let content: string;
+
+  try {
+    const value = convertConfigurationToJson(
+      fileName,
+      fs.readFileSync(
+        [getValhallaDir(folder), trashFileName].join("/"),
+        "utf-8",
+      ),
+      true,
+    );
+    content = JSON.stringify(
+      {
+        operator,
+        type: "json",
+        time: new Date().toISOString(),
+        content: value,
+      },
+      null,
+      2,
+    );
+  } catch (e) {
+    content = JSON.stringify(
+      {
+        operator,
+        type: "base64",
+        time: new Date().toISOString(),
+        content: fs.readFileSync(
+          [getValhallaDir(folder), trashFileName].join("/"),
+          "base64",
+        ),
+      },
+      null,
+      2,
+    );
+  }
+
+  setValhallaFileContent([...folder, trashFileName], content);
+}
+
 function findValhallaDirs(dir: string): string[] {
   let valhallaDirs: string[] = [];
 
@@ -128,7 +182,7 @@ function getDeletedFilesRecursive(dir: string): string[] {
 }
 
 function getValhallaDir(filePath: string[]) {
-  return path.join(...filePath, ".valhalla");
+  return [...filePath, ".valhalla"].join(path.sep);
 }
 
 function createValhallaDir(filePath: string[]) {
@@ -165,10 +219,6 @@ function setValhallaFileContent(filePath: string[], content: string) {
     content,
     "utf-8",
   );
-}
-
-function deleteValhallaFile(filePath: string[]) {
-  fs.unlinkSync(path.join(getValhallaDir(filePath)));
 }
 
 function mapRelationsValueToConfiguration(

@@ -21,6 +21,7 @@ export function convertJsonToConfiguration(
 export function convertConfigurationToJson(
   fileName: string,
   content: string,
+  strict: boolean = false,
 ): any {
   switch (fileName.split(".").pop()) {
     case "json":
@@ -28,8 +29,12 @@ export function convertConfigurationToJson(
     case "yaml":
     case "yml":
       return fromString(content).toJSON();
-    default:
+    default: {
+      if (strict) {
+        throw new Error(`Unsupported file extension: ${fileName}`);
+      }
       return {};
+    }
   }
 }
 
