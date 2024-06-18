@@ -6,7 +6,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 import { useFilesContext } from "@/app/[plugin]/files/[[...path]]/page.client";
 import { File, revalidate } from "@/app/actions";
-import { findFileAttributes } from "@/config/utils";
 import { cn } from "@/lib/utils";
 import {
   ColumnFiltersState,

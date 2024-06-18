@@ -1,39 +1,15 @@
 "use client";
 
-import {
-  Copy,
-  Delete,
-  File as FileIcon,
-  Folder,
-  FolderPen,
-} from "lucide-react";
-import { toast } from "sonner";
+import { File as FileIcon, Folder } from "lucide-react";
 
-import { File, deleteFile, renameFile } from "@/app/actions";
+import { File } from "@/app/actions";
 import { Plugin, Template } from "@/config/types";
-import { findFileAttributes } from "@/config/utils";
-import { moveToTrash } from "@/lib/core";
 import { ColumnDef, RowData } from "@tanstack/react-table";
 
 import { FilesTableColumnHeader } from "@/components/plugin/files/files-table-column-header";
 import { FilesTableRowActions } from "@/components/plugin/files/files-table-row-actions";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 export type FileCol = File & { template?: Template };
 
