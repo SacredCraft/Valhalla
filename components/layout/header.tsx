@@ -128,13 +128,14 @@ export function Header() {
                     <BreadcrumbItem>
                       <BreadcrumbLink asChild>
                         <Link
-                          href={`/${pages.slice(0, index + 1).join("/")}`}
+                          href={
+                            isPluginPage && index === 1
+                              ? `/${pages[0]}`
+                              : `/${pages.slice(0, index + 1).join("/")}`
+                          }
                           className={cn(
                             !isPluginPage && "capitalize",
                             isPluginPage && index <= 1 && "capitalize",
-                            isPluginPage &&
-                              index === 1 &&
-                              "pointer-events-none",
                           )}
                         >
                           {decodeURIComponent(page)}
