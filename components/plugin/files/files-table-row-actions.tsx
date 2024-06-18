@@ -2,7 +2,6 @@
 
 import { Star } from "lucide-react";
 
-import { renameFile } from "@/app/actions";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row, Table } from "@tanstack/react-table";
 
