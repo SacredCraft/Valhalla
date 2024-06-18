@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 import { findFileAttributes } from "@/config/utils";
 import { Cross2Icon } from "@radix-ui/react-icons";
 
@@ -13,26 +15,32 @@ export function FilesTableToolbar() {
 
   const isFiltered = table.getState().columnFilters.length > 0;
 
-  const templates = table.options.data.map((row) => {
-    const plugin = table.options.meta?.getPlugin()!!;
-    const path = table.options.meta?.getPath()!!;
-    const attributes = findFileAttributes(
-      plugin.files,
-      [...path, row.name],
-      row.name,
-    );
-    return {
-      value: attributes?.template?.name ?? "None",
-      label: attributes?.template?.name ?? "None",
-    };
-  });
+  const templates = _.uniqBy(
+    table.options.data.map((row) => {
+      const plugin = table.options.meta?.getPlugin()!!;
+      const path = table.options.meta?.getPath()!!;
+      const attributes = findFileAttributes(
+        plugin.files,
+        [...path, row.name],
+        row.name,
+      );
+      return {
+        value: attributes?.template?.name ?? "None",
+        label: attributes?.template?.name ?? "None",
+      };
+    }),
+    "value",
+  );
 
-  const types = table.options.data.map((row) => {
-    return {
-      value: row.type,
-      label: row.type === "dir" ? "Directory" : "File",
-    };
-  });
+  const types = _.uniqBy(
+    table.options.data.map((row) => {
+      return {
+        value: row.type,
+        label: row.type === "dir" ? "Directory" : "File",
+      };
+    }),
+    "value",
+  );
 
   return (
     <div className="flex items-center justify-between">
