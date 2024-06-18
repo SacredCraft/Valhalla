@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { useFilesContext } from "@/app/[plugin]/files/[[...path]]/page.client";
 import { emptyTrash } from "@/lib/core";
 
-import { useFilesTableContext } from "@/components/plugin/files/data-table";
+import { useFilesTableContext } from "@/components/plugin/files/files-table";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -34,11 +34,12 @@ export function TrashBin() {
   const { trash, pluginPath } = useFilesContext();
   return (
     <Tooltip>
-      <TooltipTrigger className="ml-auto">
+      <TooltipTrigger>
         <Dialog>
           <DialogTrigger>
-            <Button variant="outline" size="icon">
-              <TrashIcon className="size-4" />
+            <Button variant="outline" size="sm" className="h-8">
+              <TrashIcon className="mr-2 h-4 w-4" />
+              Trash Bin
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-3xl">
@@ -88,7 +89,7 @@ export function TrashBin() {
           </DialogContent>
         </Dialog>
       </TooltipTrigger>
-      <TooltipContent>Trash Bin</TooltipContent>
+      <TooltipContent>Open Trash Bin</TooltipContent>
     </Tooltip>
   );
 }

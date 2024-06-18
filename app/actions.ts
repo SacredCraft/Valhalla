@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import fs from "fs";
 import path from "path";
 
+import { Template } from "@/config/types";
 import { setPluginPath } from "@/lib/cookies";
 
 export type File = {

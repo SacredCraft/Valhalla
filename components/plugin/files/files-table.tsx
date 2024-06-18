@@ -9,12 +9,23 @@ import { File, revalidate } from "@/app/actions";
 import { findFileAttributes } from "@/config/utils";
 import { cn } from "@/lib/utils";
 import {
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
   flexRender,
   getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
+import { FilesTablePagination } from "@/components/plugin/files/files-table-pagination";
+import { FilesTableToolbar } from "@/components/plugin/files/files-table-toolbar";
 import { TrashBin } from "@/components/plugin/files/trash-bin";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -33,7 +44,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { columns } from "./columns";
+import { FileCol, filesTableColumns } from "./files-table-columns";
+import { New } from "./new";
 
 type ContextType = {
   table: ReturnType<typeof useReactTable<File>>;
@@ -53,9 +65,14 @@ export const useFilesTableContext = () => {
   return context;
 };
 
-export function DataTable() {
+export function FilesTable() {
   const { plugin, pluginPath, path, trash, files } = useFilesContext();
-  const [data, setData] = useState<File[]>(files);
+  const [data, setData] = useState<FileCol[]>(files);
+  const [rowSelection, setRowSelection] = useState({});
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
+
   const router = useRouter();
   const pathname = usePathname();
 
@@ -65,8 +82,24 @@ export function DataTable() {
 
   const table = useReactTable({
     data,
-    columns,
+    columns: filesTableColumns,
+    state: {
+      sorting,
+      columnVisibility,
+      rowSelection,
+      columnFilters,
+    },
+    enableRowSelection: true,
+    onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
     meta: {
       setData,
       getPlugin: () => plugin,
@@ -81,13 +114,8 @@ export function DataTable() {
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => {
-              const attributes = findFileAttributes(
-                plugin.files,
-                [...path, row.original.name],
-                row.original.name,
-              );
               const relativePath = [...path, row.original.name];
-              const isImage = attributes.template?.name === "Image";
+              const isImage = row.original.template?.name === "Image";
               return isImage ? (
                 <ImageModel key={row.id} src={row.original.path.join("/")}>
                   <TableRow
@@ -137,7 +165,10 @@ export function DataTable() {
             })
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
+              <TableCell
+                colSpan={filesTableColumns.length}
+                className="h-24 text-center"
+              >
                 No files found.
               </TableCell>
             </TableRow>
@@ -152,16 +183,27 @@ function Template({ children }: { children: React.ReactNode }) {
   const { table } = useFilesTableContext();
   return (
     <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center">
-          Files Browser
-          <TrashBin />
-        </CardTitle>
-        <CardDescription>
+      <CardHeader className="p-4 pb-2 space-y-0.5">
+        <CardTitle className="text-lg">Files Browser</CardTitle>
+        <CardDescription className="text-lg">
           Browse and manage configurations for the plugin
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-4 py-2 space-y-2">
+        <div className="flex bg-gray-100 dark:bg-gray-800 p-2 rounded-lg">
+          <div className="flex items-center gap-2">
+            <New />
+          </div>
+          <div className="ml-auto flex items-center gap-2">
+            {table.getSelectedRowModel().rows.length !== 0 && (
+              <Button className="h-8" variant="destructive">
+                Delete Selected ({table.getSelectedRowModel().rows.length})
+              </Button>
+            )}
+            <TrashBin />
+          </div>
+        </div>
+        <FilesTableToolbar />
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -184,11 +226,8 @@ function Template({ children }: { children: React.ReactNode }) {
           {children}
         </Table>
       </CardContent>
-      <CardFooter>
-        <div className="text-xs text-muted-foreground">
-          Showing <strong>1-10</strong> of{" "}
-          <strong>{table.options.data.length ?? 0}</strong> configurations
-        </div>
+      <CardFooter className="p-4 pt-2">
+        <FilesTablePagination table={table} />
       </CardFooter>
     </Card>
   );
