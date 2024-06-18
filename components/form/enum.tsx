@@ -1,5 +1,7 @@
 "use client";
 
+import { KeyboardEvent, useEffect, useState } from "react";
+
 import { useEditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
 import { getFormValue, isFormDeletableValue } from "@/lib/form";
 import { cn } from "@/lib/utils";
@@ -35,6 +37,7 @@ type EnumProps = {
   items: { label: string; value: string }[];
   defaultValue?: string;
   clearable?: boolean;
+  creatable?: boolean;
 } & React.HTMLProps<HTMLDivElement>;
 
 export function Enum({
@@ -42,11 +45,36 @@ export function Enum({
   defaultValue,
   label,
   className,
-  items,
+  items: originItems,
   clearable = true,
+  creatable = false,
 }: EnumProps) {
+  const [items, setItems] =
+    useState<{ label: string; value: string }[]>(originItems);
+  const [inputValue, setInputValue] = useState<string>("");
   const { form } = useEditorContext();
   const { node } = useNode();
+
+  useEffect(() => {
+    setItems(originItems);
+  }, [originItems]);
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter" && creatable) {
+      event.preventDefault();
+      if (inputValue && node && !items.find((i) => i.value === inputValue)) {
+        setItems((prev) => [
+          ...prev,
+          {
+            label: inputValue,
+            value: inputValue,
+          },
+        ]);
+        form.setValue(node, inputValue);
+        setInputValue("");
+      }
+    }
+  };
 
   if (!node) {
     throw new Error("Enum component must be used within a node context.");
@@ -67,7 +95,7 @@ export function Enum({
                   variant="outline"
                   role="combobox"
                   className={cn(
-                    "w-[200px] justify-between",
+                    "w-[220px] justify-between",
                     !getFormValue(field.value) && "text-muted-foreground",
                   )}
                 >
@@ -80,15 +108,19 @@ export function Enum({
                 </Button>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className="w-[220px] p-0">
               <Command>
                 <CommandInput
+                  onKeyDown={handleKeyDown}
+                  value={inputValue}
+                  onValueChange={setInputValue}
                   placeholder={`Search ${label?.toString().toLowerCase()}...`}
                   className="h-9"
                 />
                 <CommandList>
                   <CommandEmpty>
                     No {label?.toString().toLowerCase()} found.
+                    <span className="block">Enter to create one.</span>
                   </CommandEmpty>
                   <CommandGroup>
                     {items.map((item) => (
@@ -111,18 +143,20 @@ export function Enum({
                       </CommandItem>
                     ))}
                   </CommandGroup>
-                  <CommandSeparator />
-                  <CommandGroup>
-                    {clearable && (
-                      <CommandItem
-                        onSelect={() => {
-                          form.setValue(node, null);
-                        }}
-                      >
-                        Clear
-                      </CommandItem>
-                    )}
-                  </CommandGroup>
+                  {clearable && field.value && (
+                    <>
+                      <CommandSeparator />
+                      <CommandGroup>
+                        <CommandItem
+                          onSelect={() => {
+                            form.setValue(node, null);
+                          }}
+                        >
+                          Clear
+                        </CommandItem>
+                      </CommandGroup>
+                    </>
+                  )}
                 </CommandList>
               </Command>
             </PopoverContent>

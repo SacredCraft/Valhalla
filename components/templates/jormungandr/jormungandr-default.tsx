@@ -69,6 +69,7 @@ export function JormungandrDefault() {
             <Node node="model">
               <Enum
                 label="Model"
+                creatable
                 items={[
                   { value: "zenda_bugs", label: "Zenda Bugs" },
                   { value: "azura_bugs", label: "Azura Bugs" },
