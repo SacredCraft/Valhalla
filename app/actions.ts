@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import fs from "fs";
 import path from "path";
 
-import { setPluginPath } from "@/lib/cookies";
+import { getPluginPath, setPluginPath } from "@/lib/cookies";
 
 export type File = {
   type: "dir" | "file";
@@ -16,21 +16,24 @@ export type File = {
   updatedAt: string;
 };
 
-export async function getFilesByPath(
-  path: string[],
+export async function getPluginFiles(
+  pluginId: string,
+  relativePath: string[],
 ): Promise<File[] | undefined> {
+  const pluginPath = await getPluginPath(pluginId);
+  const absolutePath = pluginPath ? [pluginPath, ...relativePath] : [];
   try {
     const mappedFiles = fs
-      .readdirSync(path.map((i) => decodeURIComponent(i)).join("/"))
+      .readdirSync(absolutePath.map((i) => decodeURIComponent(i)).join("/"))
       .filter((file) => !file.startsWith("."))
       .map(async (file) => {
         const stats = fs.statSync(
-          `${path.map((i) => decodeURIComponent(i)).join("/")}/${file}`,
+          `${absolutePath.map((i) => decodeURIComponent(i)).join("/")}/${file}`,
         );
         return {
           type: stats.isDirectory() ? "dir" : "file",
           name: file,
-          path: `${path.join("/")}/${file}`.split("/"),
+          path: `${relativePath.join(path.sep)}/${file}`.split(path.sep),
           createdAt: stats.birthtime.toLocaleString(),
           updatedAt: stats.mtime.toLocaleString(),
           size: stats.size,

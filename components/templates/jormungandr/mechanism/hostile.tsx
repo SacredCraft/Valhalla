@@ -1,4 +1,4 @@
-import { useEditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
+import { useEditorContext } from "@/app/plugins/[plugin]/editor/[...path]/page.client";
 
 import { Enum } from "@/components/form/enum";
 import { Node, useNode } from "@/components/form/node";

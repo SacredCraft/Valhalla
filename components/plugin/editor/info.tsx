@@ -6,8 +6,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import path from "path";
 import React, { useEffect, useState, useTransition } from "react";
 
-import { useEditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
 import { File, getFile } from "@/app/actions";
+import { useEditorContext } from "@/app/plugins/[plugin]/editor/[...path]/page.client";
 import { ConfigurationResult } from "@/lib/core";
 
 import {

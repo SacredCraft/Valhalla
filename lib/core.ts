@@ -4,6 +4,7 @@ import fs from "fs";
 import { flatMap } from "lodash";
 import path from "path";
 
+import { getPluginPath } from "@/lib/cookies";
 import {
   cleanObject,
   convertConfigurationToJson,
@@ -95,12 +96,18 @@ function findValhallaDirs(dir: string): string[] {
 }
 
 // 递归删除 valhalla 目录中以 ".deleted" 结尾的文件
-export async function emptyTrash(filePath: string) {
-  if (!fs.existsSync(filePath) || !fs.lstatSync(filePath).isDirectory()) {
+export async function emptyTrash(pluginId: string) {
+  const pluginPath = await getPluginPath(pluginId);
+
+  if (!pluginPath) {
     return;
   }
 
-  const valhallaDirs = findValhallaDirs(filePath);
+  if (!fs.existsSync(pluginPath) || !fs.lstatSync(pluginPath).isDirectory()) {
+    return;
+  }
+
+  const valhallaDirs = findValhallaDirs(pluginPath);
 
   for (const dir of valhallaDirs) {
     emptyTrashRecursive(dir);
@@ -122,12 +129,23 @@ function emptyTrashRecursive(dir: string) {
 }
 
 // 递归查找 valhalla 目录中以 ".deleted" 结尾的文件
-export async function getDeletedFiles(filePath: string): Promise<Trash[]> {
-  if (!fs.existsSync(filePath) || !fs.lstatSync(filePath).isDirectory()) {
+export async function getDeletedFiles(
+  pluginId: string,
+  relativePath: string[],
+): Promise<Trash[]> {
+  const pluginPath = await getPluginPath(pluginId);
+  if (!pluginPath) {
+    return [];
+  }
+  const absolutePath = path.join(pluginPath, ...relativePath);
+  if (
+    !fs.existsSync(absolutePath) ||
+    !fs.lstatSync(absolutePath).isDirectory()
+  ) {
     return [];
   }
 
-  const valhallaDirs = findValhallaDirs(filePath);
+  const valhallaDirs = findValhallaDirs(absolutePath);
   let allResults: string[] = [];
 
   for (const dir of valhallaDirs) {

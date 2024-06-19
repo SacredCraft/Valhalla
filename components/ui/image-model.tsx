@@ -39,7 +39,7 @@ export function ImageModel({ children, src }: ImageModelProps) {
         closeClassName="bg-accent p-1 transition-all"
       >
         {isPending ? (
-          <div>123</div>
+          <div>Loading...</div>
         ) : (
           <Image
             src={content}

@@ -3,11 +3,11 @@
 import { File as FileIcon, Folder } from "lucide-react";
 
 import { File } from "@/app/actions";
-import { Plugin, Template } from "@/config/types";
+import { Template } from "@/config/types";
 import { ColumnDef, RowData } from "@tanstack/react-table";
 
-import { FilesTableColumnHeader } from "@/components/plugin/files/files-table-column-header";
-import { FilesTableRowActions } from "@/components/plugin/files/files-table-row-actions";
+import { FilesTableColumnHeader } from "@/components/plugin/browser/files-table-column-header";
+import { FilesTableRowActions } from "@/components/plugin/browser/files-table-row-actions";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 
@@ -126,8 +126,6 @@ export const filesTableColumns: ColumnDef<FileCol>[] = [
 declare module "@tanstack/react-table" {
   interface TableMeta<TData extends RowData> {
     setData: (data: TData[]) => void;
-    getPlugin: () => Plugin;
-    getPath: () => string[];
     refresh: () => void;
   }
 }

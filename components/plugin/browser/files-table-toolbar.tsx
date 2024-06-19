@@ -1,32 +1,29 @@
 import _ from "lodash";
 
-import { findFileAttributes } from "@/config/utils";
+import { useBrowserContext } from "@/app/plugins/[plugin]/browser/layout.client";
 import { Cross2Icon } from "@radix-ui/react-icons";
 
-import { useFilesTableContext } from "@/components/plugin/files/files-table";
-import { FilesTableFacetedFilter } from "@/components/plugin/files/files-table-faceted-filter";
+import { FilesTableFacetedFilter } from "@/components/plugin/browser/files-table-faceted-filter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { FilesTableViewOptions } from "./files-table-view-options";
 
 export function FilesTableToolbar() {
-  const { table } = useFilesTableContext();
+  const { table } = useBrowserContext();
+
+  if (!table) {
+    throw new Error("FilesTableToolbar must be used within a FilesTable");
+  }
 
   const isFiltered = table.getState().columnFilters.length > 0;
 
   const templates = _.uniqBy(
     table.options.data.map((row) => {
-      const plugin = table.options.meta?.getPlugin()!!;
-      const path = table.options.meta?.getPath()!!;
-      const attributes = findFileAttributes(
-        plugin.files,
-        [...path, row.name],
-        row.name,
-      );
+      const name = row.template?.name ?? "None";
       return {
-        value: attributes?.template?.name ?? "None",
-        label: attributes?.template?.name ?? "None",
+        value: name,
+        label: name,
       };
     }),
     "value",

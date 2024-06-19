@@ -4,7 +4,7 @@ import { deleteFile } from "@/app/actions";
 import { moveToTrash } from "@/lib/core";
 import { Row, Table } from "@tanstack/react-table";
 
-import { FileCol } from "@/components/plugin/files/files-table-columns";
+import { FileCol } from "@/components/plugin/browser/files-table-columns";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

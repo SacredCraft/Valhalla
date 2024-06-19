@@ -1,0 +1,45 @@
+import { useBrowserContext } from "@/app/plugins/[plugin]/browser/layout.client";
+
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+export function TrashBin() {
+  const { trash, plugin } = useBrowserContext();
+
+  return (
+    <div className="px-2 flex flex-col gap-2">
+      {trash?.length ? (
+        <div className="border rounded-lg">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>File Name</TableHead>
+                <TableHead>Deleted By</TableHead>
+                <TableHead>Deleted At</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {trash.map((file) => (
+                <TableRow key={file.fileName}>
+                  <TableCell>{file.fileName}</TableCell>
+                  <TableCell>{file.operator}</TableCell>
+                  <TableCell>{file.deletedAt}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      ) : (
+        <div className="text-center text-muted-foreground">
+          No files in trash bin
+        </div>
+      )}
+    </div>
+  );
+}

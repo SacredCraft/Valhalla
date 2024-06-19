@@ -3,7 +3,7 @@
 import { Code, CodeXml, TrashIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 
-import { useEditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
+import { useEditorContext } from "@/app/plugins/[plugin]/editor/[...path]/page.client";
 import {
   getFormValue,
   isFormDeletableValue,

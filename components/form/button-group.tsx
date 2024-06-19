@@ -2,7 +2,7 @@
 
 import React, { forwardRef } from "react";
 
-import { useEditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
+import { useEditorContext } from "@/app/plugins/[plugin]/editor/[...path]/page.client";
 import { getFormValue } from "@/lib/form";
 import { useControllableState } from "@radix-ui/react-use-controllable-state";
 

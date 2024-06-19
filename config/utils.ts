@@ -8,13 +8,13 @@ export function getPlugin(id: string) {
 
 export function findFileAttributes(
   files: PluginFile[],
-  path: string[],
+  relativePath: string[],
   filename: string,
   parentTemplates?: Template[],
   parentActions?: React.ReactNode,
 ): { template?: Template; actions?: React.ReactNode } {
-  const currentName = path[0];
-  const restPath = path.slice(1);
+  const currentName = relativePath[0];
+  const restPath = relativePath.slice(1);
 
   for (const file of files) {
     if (file.name === currentName) {

@@ -1,7 +1,6 @@
 export type Plugin = {
   id: string;
   name: string;
-  icon: React.ElementType;
   files: PluginFile[];
 };
 

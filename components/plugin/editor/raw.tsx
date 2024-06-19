@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
-import { useEditorContext } from "@/app/[plugin]/editor/[...path]/page.client";
+import { useEditorContext } from "@/app/plugins/[plugin]/editor/[...path]/page.client";
 import { setConfigurationJson } from "@/lib/core";
 import {
   convertConfigurationToJson,

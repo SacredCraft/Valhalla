@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { renameFile } from "@/app/actions";
 import { Row, Table } from "@tanstack/react-table";
 
-import { FileCol } from "@/components/plugin/files/files-table-columns";
+import { FileCol } from "@/components/plugin/browser/files-table-columns";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

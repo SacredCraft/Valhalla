@@ -2,12 +2,13 @@
 
 import { Star } from "lucide-react";
 
+import { useBrowserContext } from "@/app/plugins/[plugin]/browser/layout.client";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row, Table } from "@tanstack/react-table";
 
-import { Delete } from "@/components/plugin/files/delete";
-import { FileCol } from "@/components/plugin/files/files-table-columns";
-import { Rename } from "@/components/plugin/files/rename";
+import { Delete } from "@/components/plugin/browser/delete";
+import { FileCol } from "@/components/plugin/browser/files-table-columns";
+import { Rename } from "@/components/plugin/browser/rename";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -32,10 +33,8 @@ export function FilesTableRowActions({
   row,
   table,
 }: FilesTableRowActionsProps) {
-  const relativePath = [
-    ...(table.options.meta?.getPath() ?? []),
-    row.original.name,
-  ];
+  const { relativePath: relativeFolderPath } = useBrowserContext();
+  const relativePath = [...relativeFolderPath!!, row.original.name];
   return (
     <div className="flex items-center gap-2">
       <Tooltip>
@@ -70,7 +69,9 @@ export function FilesTableRowActions({
           <Rename row={row} table={table} />
           <DropdownMenuItem
             onClick={() =>
-              navigator.clipboard.writeText(relativePath.join("/"))
+              navigator.clipboard.writeText(
+                relativePath.map((i) => decodeURIComponent(i)).join("/"),
+              )
             }
           >
             Copy path

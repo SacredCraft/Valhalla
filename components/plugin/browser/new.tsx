@@ -14,8 +14,8 @@ export function New() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Button variant="outline" size="sm" className="h-8">
-          <Plus className="mr-2 h-4 w-4" />
+        <Button variant="outline" size="sm" className="h-7 px-2">
+          <Plus className="mr-1 h-4 w-4" />
           New
         </Button>
       </DropdownMenuTrigger>

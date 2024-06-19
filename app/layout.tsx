@@ -2,8 +2,9 @@ import localFont from "next/font/local";
 
 import type { Metadata } from "next";
 
+import { RootClientLayout } from "@/app/layout.client";
+
 import { Aside } from "@/components/layout/aside";
-import { Header } from "@/components/layout/header";
 
 import "./globals.css";
 import Providers from "./providers";
@@ -33,12 +34,7 @@ export default function RootLayout({
         <Providers>
           <div className="flex min-h-screen w-full flex-col bg-muted/40 font-sans">
             <Aside />
-            <div className="flex flex-1 flex-col sm:gap-4 sm:py-4 sm:pl-14">
-              <Header />
-              <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-                {children}
-              </main>
-            </div>
+            <RootClientLayout>{children}</RootClientLayout>
           </div>
         </Providers>
       </body>
