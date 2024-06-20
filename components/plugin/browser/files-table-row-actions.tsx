@@ -3,6 +3,7 @@
 import { Star } from "lucide-react";
 
 import { useBrowserContext } from "@/app/plugins/[plugin]/browser/layout.client";
+import { usePluginContext } from "@/app/plugins/[plugin]/layout.client";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row, Table } from "@tanstack/react-table";
 
@@ -33,8 +34,30 @@ export function FilesTableRowActions({
   row,
   table,
 }: FilesTableRowActionsProps) {
+  const { plugin } = usePluginContext();
   const { relativePath: relativeFolderPath } = useBrowserContext();
   const relativePath = [...relativeFolderPath!!, row.original.name];
+
+  const handleDownload = () => {
+    fetch(
+      `/api/files?${new URLSearchParams({ relativePath: relativePath.join("/"), pluginId: plugin.id }).toString()}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    ).then((res) => {
+      res.blob().then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = row.original.name;
+        a.click();
+      });
+    });
+  };
+
   return (
     <div className="flex items-center gap-2">
       <Tooltip>
@@ -67,6 +90,12 @@ export function FilesTableRowActions({
           onClick={(e) => e.stopPropagation()}
         >
           <Rename row={row} table={table} />
+          {row.original.type === "file" && (
+            <DropdownMenuItem onClick={() => handleDownload()}>
+              Download
+              <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem
             onClick={() =>
               navigator.clipboard.writeText(
