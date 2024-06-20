@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { uploadFile } from "@/app/actions";
 import { useBrowserContext } from "@/app/plugins/[plugin]/browser/layout.client";
 import { usePluginContext } from "@/app/plugins/[plugin]/layout.client";
 import { UploadIcon } from "@radix-ui/react-icons";
@@ -35,20 +34,29 @@ export function Upload() {
 
   const handleUpload = () => {
     const formData = new FormData();
-    formData.append("file", files[files.length - 1] as File);
-    uploadFile(
-      plugin.id,
-      relativePath?.join("/") ?? "",
-      files[files.length - 1].name,
-      formData,
-    ).then((res) => {
-      table?.options.meta?.refresh();
-      if (res) {
-        toast.success("File uploaded successfully");
-      } else {
-        toast.error("Failed to upload file");
-      }
+    formData.append("pluginId", plugin.id);
+    formData.append("relativePath", relativePath?.join("/") || "");
+    files.forEach((file) => {
+      formData.append("files", file);
     });
+
+    fetch("/api/files", {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res;
+        }
+        return Promise.reject("Failed to upload file");
+      })
+      .then(() => {
+        table?.options.meta?.refresh();
+        toast.success("File uploaded successfully");
+      })
+      .catch(() => {
+        toast.error("Failed to upload file");
+      });
   };
 
   return (
