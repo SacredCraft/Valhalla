@@ -1,7 +1,6 @@
 "use server";
 
 import fs from "fs";
-import { flatMap } from "lodash";
 import path from "path";
 
 import { getPluginPath } from "@/lib/cookies";
@@ -239,38 +238,15 @@ function setValhallaFileContent(filePath: string[], content: string) {
   );
 }
 
-function mapRelationsValueToConfiguration(
-  pluginPath: string,
-  value: any,
-  filePath: string[],
-) {
-  let res: ConfigurationResult[] = [];
-  if (value.type === "file") {
-    flatMap(value.ids, (id: string) => {
-      getConfigurationJson([pluginPath, id]).then((configuration) => {
-        res.push(configuration);
-      });
-    });
-  } else {
-    flatMap(value.ids, (id: string) => {
-      flatMap(fs.readdirSync(path.join(pluginPath, id)), (file) => {
-        if (file === ".DS_Store" || file === ".valhalla") {
-          return;
-        }
-        getConfigurationJson([pluginPath, id, file]).then((configuration) => {
-          if (configuration.path.slice(1).join("/") !== filePath.join("/")) {
-            res.push(configuration);
-          }
-        });
-      });
-    });
-  }
-  return res;
-}
-
 export async function getConfigurationJson(
-  filePath: string[],
-): Promise<ConfigurationResult> {
+  pluginId: string,
+  relativePath: string[],
+): Promise<ConfigurationResult | null> {
+  const pluginPath = await getPluginPath(pluginId);
+  if (!pluginPath) {
+    return null;
+  }
+  const filePath = [pluginPath, ...relativePath];
   const fileName = filePath[filePath.length - 1];
   if (!fs.existsSync(path.join(...filePath))) {
     return { path: filePath, name: fileName };
@@ -306,10 +282,16 @@ export async function getConfigurationJson(
 }
 
 export async function setConfigurationJson(
-  filePath: string[],
+  pluginId: string,
+  relativePath: string[],
   cache: any,
   content: any,
 ) {
+  const pluginPath = await getPluginPath(pluginId);
+  if (!pluginPath) {
+    return;
+  }
+  const filePath = [pluginPath, ...relativePath];
   const fileName = filePath[filePath.length - 1];
   const folder = filePath.slice(0, -1);
   let actualCacheFileName = fileName.endsWith(".json")

@@ -1,5 +1,11 @@
+import React from "react";
+
 import { getPluginFiles } from "@/app/actions";
 import { ExploreClientLayout } from "@/app/plugins/[plugin]/browser/explore/[[...path]]/layout.client";
+
+import { BrowserHeader } from "@/components/plugin/browser/browser-header";
+import { BrowserTabs } from "@/components/plugin/browser/browser-tabs";
+import { New } from "@/components/plugin/browser/new";
 
 type BrowserLayoutProps = {
   params: {
@@ -17,6 +23,8 @@ export default async function ExploreLayout({
 
   return (
     <ExploreClientLayout relativePath={relativePath} files={files}>
+      <BrowserHeader />
+      <BrowserTabs actions={<New />} />
       {children}
     </ExploreClientLayout>
   );

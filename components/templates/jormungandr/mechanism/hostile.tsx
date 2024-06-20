@@ -1,4 +1,4 @@
-import { useEditorContext } from "@/app/plugins/[plugin]/editor/[...path]/page.client";
+import { useFilesEditorContext } from "@/app/plugins/[plugin]/files/editor/[...path]/layout.client";
 
 import { Enum } from "@/components/form/enum";
 import { Node, useNode } from "@/components/form/node";
@@ -30,7 +30,7 @@ export function Hostile({}: MechanismProps) {
 }
 
 function Parameters() {
-  const { form } = useEditorContext();
+  const { form } = useFilesEditorContext();
   const { node } = useNode();
   const alert = form.watch(`${node}.alert`);
 

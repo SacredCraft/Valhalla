@@ -4,11 +4,8 @@ import React, { useEffect, useMemo } from "react";
 
 import { File } from "@/app/actions";
 import { useBrowserContext } from "@/app/plugins/[plugin]/browser/layout.client";
+import { usePluginContext } from "@/app/plugins/[plugin]/layout.client";
 import { findFileAttributes } from "@/config/utils";
-
-import { BrowserHeader } from "@/components/plugin/browser/browser-header";
-import { BrowserTabs } from "@/components/plugin/browser/browser-tabs";
-import { New } from "@/components/plugin/browser/new";
 
 type BrowserClientLayoutProps = {
   files: File[];
@@ -21,7 +18,8 @@ export function ExploreClientLayout({
   children,
   relativePath,
 }: BrowserClientLayoutProps) {
-  const { setFiles, plugin, setRelativePath } = useBrowserContext();
+  const { setFiles, setRelativePath } = useBrowserContext();
+  const { plugin } = usePluginContext();
 
   const realFiles = useMemo(
     () =>
@@ -52,11 +50,5 @@ export function ExploreClientLayout({
     setFiles?.(realFiles);
   }, [realFiles, setFiles]);
 
-  return (
-    <>
-      <BrowserHeader />
-      <BrowserTabs actions={<New />} />
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }

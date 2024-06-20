@@ -24,7 +24,7 @@ export const plugins = [
         templates: [
           {
             name: "JormungandrDefault",
-            value: () => JormungandrDefault,
+            value: JormungandrDefault,
             regex: ".*\\.ya?ml$",
           },
         ],

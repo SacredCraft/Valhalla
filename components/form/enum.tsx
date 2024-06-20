@@ -2,7 +2,7 @@
 
 import { KeyboardEvent, useEffect, useState } from "react";
 
-import { useEditorContext } from "@/app/plugins/[plugin]/editor/[...path]/page.client";
+import { useFilesEditorContext } from "@/app/plugins/[plugin]/files/editor/[...path]/layout.client";
 import { getFormValue, isFormDeletableValue } from "@/lib/form";
 import { cn } from "@/lib/utils";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
@@ -52,7 +52,7 @@ export function Enum({
   const [items, setItems] =
     useState<{ label: string; value: string }[]>(originItems);
   const [inputValue, setInputValue] = useState<string>("");
-  const { form } = useEditorContext();
+  const { form } = useFilesEditorContext();
   const { node } = useNode();
 
   useEffect(() => {

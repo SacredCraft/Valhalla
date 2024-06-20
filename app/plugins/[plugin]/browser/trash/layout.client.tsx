@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import { toast } from "sonner";
 
 import { useBrowserContext } from "@/app/plugins/[plugin]/browser/layout.client";
+import { usePluginContext } from "@/app/plugins/[plugin]/layout.client";
 import { Trash, emptyTrash } from "@/lib/core";
 
 import { BrowserHeader } from "@/components/plugin/browser/browser-header";
@@ -17,7 +18,8 @@ type TrashClientLayoutProps = {
 };
 
 export function TrashClientLayout({ trash, children }: TrashClientLayoutProps) {
-  const { setTrash, plugin, setRelativePath } = useBrowserContext();
+  const { setTrash, setRelativePath } = useBrowserContext();
+  const { plugin } = usePluginContext();
 
   useEffect(() => {
     setTrash?.(trash);

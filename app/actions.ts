@@ -57,10 +57,15 @@ export async function getPluginFiles(
 }
 
 export async function getFile(
-  pluginPath: string,
-  filePath: string,
-): Promise<File & { ext?: string }> {
-  const stats = fs.statSync(path.join(pluginPath, filePath));
+  pluginId: string,
+  relativePath: string,
+): Promise<(File & { ext?: string }) | null> {
+  const pluginPath = await getPluginPath(pluginId);
+  if (!pluginPath) {
+    return null;
+  }
+  const filePath = path.join(pluginPath, relativePath);
+  const stats = fs.statSync(filePath);
 
   return {
     type: stats.isDirectory() ? "dir" : "file",

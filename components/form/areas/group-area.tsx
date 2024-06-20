@@ -69,9 +69,17 @@ export function GroupArea({
         }}
       >
         <AccordionItem value="item" className="space-y-4" asChild>
-          <Card className={cn("h-fit", classNames?.card)}>
+          <Card
+            className={cn(
+              "h-fit bg-transparent rounded-none border-t-0 border-x-0",
+              classNames?.card,
+            )}
+          >
             <CardContent
-              className={cn("p-0 grid py-0 text-sm", classNames?.cardContent)}
+              className={cn(
+                "p-0 grid py-1 text-sm px-2",
+                classNames?.cardContent,
+              )}
             >
               <AccordionTrigger
                 classNames={{

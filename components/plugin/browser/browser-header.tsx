@@ -5,6 +5,7 @@ import Link from "next/link";
 import React, { Fragment } from "react";
 
 import { useBrowserContext } from "@/app/plugins/[plugin]/browser/layout.client";
+import { usePluginContext } from "@/app/plugins/[plugin]/layout.client";
 
 import {
   Breadcrumb,
@@ -16,7 +17,8 @@ import {
 } from "@/components/ui/breadcrumb";
 
 export function BrowserHeader() {
-  const { relativePath, plugin } = useBrowserContext();
+  const { plugin } = usePluginContext();
+  const { relativePath } = useBrowserContext();
 
   return (
     <header className="h-12 border-b flex px-2 items-center">

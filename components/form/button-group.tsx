@@ -2,7 +2,7 @@
 
 import React, { forwardRef } from "react";
 
-import { useEditorContext } from "@/app/plugins/[plugin]/editor/[...path]/page.client";
+import { useFilesEditorContext } from "@/app/plugins/[plugin]/files/editor/[...path]/layout.client";
 import { getFormValue } from "@/lib/form";
 import { useControllableState } from "@radix-ui/react-use-controllable-state";
 
@@ -33,7 +33,7 @@ export function ButtonGroup({
   className,
   ...rest
 }: ButtonGroupProps) {
-  const { form } = useEditorContext();
+  const { form } = useFilesEditorContext();
   const { node } = useNode();
 
   if (!node) {

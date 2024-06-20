@@ -1,24 +1,14 @@
 "use client";
 
-import React, {
-  Dispatch,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  useTransition,
-} from "react";
+import React, { Dispatch, createContext, useContext, useState } from "react";
 
 import { File } from "@/app/actions";
-import { Plugin } from "@/config/types";
-import { getPlugin } from "@/config/utils";
 import { Trash } from "@/lib/core";
 import { useReactTable } from "@tanstack/react-table";
 
 import { FileCol } from "@/components/plugin/browser/files-table-columns";
 
-type ContextType = Omit<BrowserClientLayoutProps, "pluginId"> & {
-  plugin: Plugin;
+type ContextType = {
   relativePath?: string[];
   files?: FileCol[];
   trash?: Trash[];
@@ -40,36 +30,19 @@ export const useBrowserContext = () => {
 };
 
 type BrowserClientLayoutProps = {
-  pluginId: string;
   children?: React.ReactNode;
 };
 
-export function BrowserClientLayout({
-  pluginId,
-  children,
-}: BrowserClientLayoutProps) {
-  const [plugin, setPlugin] = useState<Plugin>();
+export function BrowserClientLayout({ children }: BrowserClientLayoutProps) {
   const [table, setTable] =
     useState<ReturnType<typeof useReactTable<FileCol>>>();
-  const [isPending, startTransition] = useTransition();
   const [files, setFiles] = useState<FileCol[]>();
   const [trash, setTrash] = useState<Trash[]>();
   const [relativePath, setRelativePath] = useState<string[]>();
 
-  useEffect(() => {
-    startTransition(() => {
-      setPlugin(getPlugin(pluginId));
-    });
-  }, [pluginId]);
-
-  if (isPending || !plugin) {
-    return null;
-  }
-
   return (
     <BrowserContext.Provider
       value={{
-        plugin,
         relativePath,
         files,
         trash,

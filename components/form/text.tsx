@@ -1,6 +1,6 @@
 "use client";
 
-import { useEditorContext } from "@/app/plugins/[plugin]/editor/[...path]/page.client";
+import { useFilesEditorContext } from "@/app/plugins/[plugin]/files/editor/[...path]/layout.client";
 import { getFormValue } from "@/lib/form";
 
 import { useNode } from "@/components/form/node";
@@ -26,7 +26,7 @@ export function Text({
   className,
   ...rest
 }: TextProps) {
-  const { form } = useEditorContext();
+  const { form } = useFilesEditorContext();
   const { node } = useNode();
 
   if (!node) {

@@ -7,11 +7,6 @@ type BrowserLayoutProps = {
   children: React.ReactNode;
 };
 
-export default async function BrowserLayout({
-  params: { plugin: pluginId },
-  children,
-}: BrowserLayoutProps) {
-  return (
-    <BrowserClientLayout pluginId={pluginId}>{children}</BrowserClientLayout>
-  );
+export default async function BrowserLayout({ children }: BrowserLayoutProps) {
+  return <BrowserClientLayout>{children}</BrowserClientLayout>;
 }

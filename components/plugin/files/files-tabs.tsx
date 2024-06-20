@@ -7,23 +7,24 @@ import { useMemo } from "react";
 
 import { Button } from "@/components/ui/button";
 
-type BrowserTabsProps = {
+type FilesTabsProps = {
   actions?: React.ReactNode;
 };
 
-export function BrowserTabs({ actions }: BrowserTabsProps) {
+export function FilesTabs({ actions }: FilesTabsProps) {
   return (
     <div className="border-b h-12 flex px-2 justify-between items-center relative">
       <div>{actions}</div>
       <nav className="flex items-center justify-center gap-2 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <BrowserTab value="explore" label="Files" />
-        <BrowserTab value="trash" label="Trash" />
+        <FilesTab value="info" label="Info" />
+        <FilesTab value="editor" label="Editor" />
+        <FilesTab value="raw" label="Raw" />
       </nav>
     </div>
   );
 }
 
-function BrowserTab({ value, label }: { value: string; label: string }) {
+function FilesTab({ value, label }: { value: string; label: string }) {
   const pathname = usePathname();
   const pathnameSliced = useMemo(() => pathname.split("/"), [pathname]);
   const isActive = useMemo(
@@ -39,13 +40,7 @@ function BrowserTab({ value, label }: { value: string; label: string }) {
       asChild
     >
       <Link
-        href={
-          value === "explore"
-            ? isActive
-              ? pathname
-              : `/plugins/${pathnameSliced[2]}/browser/explore`
-            : `/plugins/${pathnameSliced[2]}/browser/${value}`
-        }
+        href={`/plugins/${pathnameSliced[2]}/files/${value}/${pathnameSliced.slice(5).join("/")}`}
       >
         {label}
       </Link>

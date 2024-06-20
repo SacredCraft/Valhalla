@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 
 import { revalidate } from "@/app/actions";
 import { useBrowserContext } from "@/app/plugins/[plugin]/browser/layout.client";
+import { usePluginContext } from "@/app/plugins/[plugin]/layout.client";
 import { cn } from "@/lib/utils";
 import {
   ColumnFiltersState,
@@ -36,7 +37,8 @@ import {
 import { FileCol, filesTableColumns } from "./files-table-columns";
 
 export function FilesTable() {
-  const { plugin, relativePath, trash, files, setTable } = useBrowserContext();
+  const { plugin, setOpenedFiles, openedFiles } = usePluginContext();
+  const { relativePath, trash, files, setTable } = useBrowserContext();
 
   if (!relativePath || !files) {
     throw new Error("relativePath and files are required");
@@ -120,8 +122,22 @@ export function FilesTable() {
                       `/plugins/${plugin.id}/browser/explore/${relativePath.join("/")}/${row.original.name}`,
                     );
                   } else {
+                    // 判断文件是否已经打开
+                    const exist = openedFiles.find(
+                      (file) =>
+                        file.path.join("/") === row.original.path.join("/"),
+                    );
+                    if (!exist) {
+                      setOpenedFiles([
+                        ...openedFiles,
+                        {
+                          name: row.original.name,
+                          path: row.original.path,
+                        },
+                      ]);
+                    }
                     router.push(
-                      `/plugins/${plugin.id}/editor/explore/${relativePath.join("/")}`,
+                      `/plugins/${plugin.id}/files/${relativePath.join("/")}/${row.original.name}`,
                     );
                   }
                 }}

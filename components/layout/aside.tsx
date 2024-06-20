@@ -14,11 +14,12 @@ import { cn } from "@/lib/utils";
 import { AnimatedItem } from "@/components/layout/animated-item";
 
 type ContextType = {
-  collapsed?: boolean;
+  collapsed: boolean;
   setCollapsed: (collapsed: boolean) => void;
 };
 
 export const AsideContext = createContext<ContextType>({
+  collapsed: false,
   setCollapsed: () => {},
 });
 
@@ -90,10 +91,7 @@ export function Aside() {
         <AnimatedItem
           className="h-9 w-9"
           icon={<PanelRight className="size-5" />}
-          onClick={() => {
-            setCollapsed(!collapsed);
-            localStorage.setItem("aside-collapsed", String(!collapsed));
-          }}
+          onClick={() => setCollapsed(!collapsed)}
         />
       </motion.nav>
     </motion.aside>

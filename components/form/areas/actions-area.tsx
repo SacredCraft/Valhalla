@@ -3,7 +3,7 @@
 import { Code, CodeXml, TrashIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 
-import { useEditorContext } from "@/app/plugins/[plugin]/editor/[...path]/page.client";
+import { useFilesEditorContext } from "@/app/plugins/[plugin]/files/editor/[...path]/layout.client";
 import {
   getFormValue,
   isFormDeletableValue,
@@ -32,7 +32,7 @@ export function ActionsArea({
   className,
   ...rest
 }: ActionsAreaProps) {
-  const { form } = useEditorContext();
+  const { form } = useFilesEditorContext();
   const { nodes } = useNode();
 
   const [hover, setHover] = useState(false);

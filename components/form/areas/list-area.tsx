@@ -11,7 +11,7 @@ import {
   useState,
 } from "react";
 
-import { useEditorContext } from "@/app/plugins/[plugin]/editor/[...path]/page.client";
+import { useFilesEditorContext } from "@/app/plugins/[plugin]/files/editor/[...path]/layout.client";
 import { isFormDeletableValue } from "@/lib/form";
 import { cn } from "@/lib/utils";
 
@@ -59,7 +59,7 @@ export function ListArea({
   footer,
   itemKeys,
 }: ListAreaProps) {
-  const { form } = useEditorContext();
+  const { form } = useFilesEditorContext();
   const { node } = useNode();
 
   const originalItems = (form.watch(node!!) ?? []) as unknown as any[];

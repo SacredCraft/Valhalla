@@ -2,20 +2,27 @@
 
 import React, {
   Dispatch,
+  SetStateAction,
   createContext,
   useContext,
   useEffect,
   useState,
+  useTransition,
 } from "react";
 
-type OpenedFile = {
+import { Plugin } from "@/config/types";
+import { getPlugin } from "@/config/utils";
+
+export type OpenedFile = {
   name: string;
   path: string[];
+  tabValue?: string;
 };
 
 type ContextType = {
+  plugin: Plugin;
   openedFiles: OpenedFile[];
-  setOpenedFiles: Dispatch<OpenedFile[]>;
+  setOpenedFiles: Dispatch<SetStateAction<OpenedFile[] | undefined>>;
 };
 
 const PluginContext = createContext<ContextType | undefined>(undefined);
@@ -28,42 +35,49 @@ export const usePluginContext = () => {
   return context;
 };
 
-type ContentProps = React.PropsWithChildren<{
+type PluginProps = React.PropsWithChildren<{
   pluginId: string;
 }>;
 
-export function PluginClientLayout({ children, pluginId }: ContentProps) {
-  const [openedFiles, setOpenedFiles] = useState<OpenedFile[]>([
-    {
-      name: "def.yml",
-      path: ["item", "def.yml"],
-    },
-    {
-      name: "def.yml",
-      path: ["display", "def.yml"],
-    },
-    {
-      name: "config.yml",
-      path: [],
-    },
-  ]);
+export function PluginClientLayout({ children, pluginId }: PluginProps) {
+  const [isPending, startTransition] = useTransition();
+  const [plugin, setPlugin] = useState<Plugin>();
+  const [openedFiles, setOpenedFiles] = useState<OpenedFile[]>();
 
   useEffect(() => {
-    const cache = JSON.parse(
-      localStorage.getItem(`${pluginId}-opened-files`) || "[]",
-    );
-    setOpenedFiles(cache);
+    startTransition(() => {
+      setPlugin(getPlugin(pluginId));
+    });
   }, [pluginId]);
 
   useEffect(() => {
-    localStorage.setItem(
-      `${pluginId}-opened-files`,
-      JSON.stringify(openedFiles),
-    );
+    if (!openedFiles) {
+      const cache = JSON.parse(
+        localStorage.getItem(`${pluginId}-opened-files`) || "[]",
+      );
+      setOpenedFiles(cache);
+    }
   }, [openedFiles, pluginId]);
 
+  useEffect(() => {
+    if (openedFiles) {
+      localStorage.setItem(
+        `${pluginId}-opened-files`,
+        JSON.stringify(openedFiles),
+      );
+    }
+  }, [openedFiles, pluginId]);
+
+  if (isPending || !plugin) {
+    return null;
+  }
+
+  if (!openedFiles) {
+    return null;
+  }
+
   return (
-    <PluginContext.Provider value={{ openedFiles, setOpenedFiles }}>
+    <PluginContext.Provider value={{ openedFiles, setOpenedFiles, plugin }}>
       {children}
     </PluginContext.Provider>
   );

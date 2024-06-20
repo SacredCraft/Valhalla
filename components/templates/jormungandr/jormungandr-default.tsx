@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label";
 
 export function JormungandrDefault() {
   return (
-    <div className="space-y-4">
+    <div>
       <GroupArea
         title="Basic Configuration"
         description="Configure the basic information of the item."

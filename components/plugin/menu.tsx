@@ -24,6 +24,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function Menu() {
   const { openedFiles } = usePluginContext();
@@ -83,24 +84,26 @@ export function Menu() {
         <p className="text-muted-foreground text-xs font-semibold uppercase px-3 mb-1 mt-2">
           Files
         </p>
-        {openedFiles?.map((file, index, array) => {
-          // 统计文件名在数组中出现的次数
-          const duplicateCount = array.filter(
-            (f) => f.name === file.name,
-          ).length;
-          // 如果文件名重复，显示路径
-          const label =
-            duplicateCount > 1
-              ? `${file.name} (${file.path.join("/")})`
-              : file.name;
-          return (
-            <Item
-              key={file.path.join("/")}
-              value={`editor/${file.path}`}
-              label={label}
-            />
-          );
-        })}
+        <ScrollArea>
+          {openedFiles?.map((file, _index, array) => {
+            // 统计文件名在数组中出现的次数
+            const duplicateCount = array.filter(
+              (f) => f.name === file.name,
+            ).length;
+            // 如果文件名重复，显示路径
+            const label =
+              duplicateCount > 1
+                ? `${file.name} (${file.path.join("/")})`
+                : file.name;
+            return (
+              <Item
+                key={file.path.join("/")}
+                value={`files/${file.path.join("/")}`}
+                label={label}
+              />
+            );
+          })}
+        </ScrollArea>
       </nav>
     </aside>
   );
@@ -108,8 +111,13 @@ export function Menu() {
 
 function Item({ value, label }: { value: string; label: string }) {
   const pathname = usePathname();
+
   const isActive = useMemo(
-    () => pathname.split("/")[3] === value,
+    () =>
+      value.includes("files")
+        ? pathname.includes(value.split("/")[0]) &&
+          pathname.includes(value.split("/").slice(1).join("/"))
+        : pathname.split("/")[3] === value,
     [pathname, value],
   );
 
@@ -120,7 +128,9 @@ function Item({ value, label }: { value: string; label: string }) {
       className="w-full justify-start h-7"
       asChild
     >
-      <Link href={`/plugins/${pathname.split("/")[2]}/${value}`}>{label}</Link>
+      <Link href={`/plugins/${pathname.split("/")[2]}/${value}`}>
+        {decodeURIComponent(label)}
+      </Link>
     </Button>
   );
 }
