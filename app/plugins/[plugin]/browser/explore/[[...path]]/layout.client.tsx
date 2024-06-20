@@ -2,13 +2,13 @@
 
 import React, { useEffect, useMemo } from "react";
 
-import { File } from "@/app/actions";
+import { ValhallaFile } from "@/app/actions";
 import { useBrowserContext } from "@/app/plugins/[plugin]/browser/layout.client";
 import { usePluginContext } from "@/app/plugins/[plugin]/layout.client";
 import { findFileAttributes } from "@/config/utils";
 
 type BrowserClientLayoutProps = {
-  files: File[];
+  files: ValhallaFile[];
   children?: React.ReactNode;
   relativePath: string[];
 };

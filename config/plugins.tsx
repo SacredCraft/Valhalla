@@ -1,6 +1,6 @@
 import { JormungandrDefault } from "@/components/templates/jormungandr/jormungandr-default";
 
-import { Plugin } from "./types";
+import { ValhallaPlugin } from "./types";
 
 export const plugins = [
   {
@@ -32,4 +32,4 @@ export const plugins = [
       },
     ],
   },
-] as Plugin[];
+] as ValhallaPlugin[];

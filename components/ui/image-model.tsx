@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useState, useTransition } from "react";
 
 import { getFileContent } from "@/app/actions";
+import { usePluginContext } from "@/app/plugins/[plugin]/layout.client";
 
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
@@ -14,6 +15,7 @@ type ImageModelProps = {
 };
 
 export function ImageModel({ children, src }: ImageModelProps) {
+  const { plugin } = usePluginContext();
   const [file, setFile] = useState<string>();
   const [isPending, startTransition] = useTransition();
   const fileExt = src.split(".").pop();
@@ -25,11 +27,11 @@ export function ImageModel({ children, src }: ImageModelProps) {
 
   useEffect(() => {
     startTransition(() => {
-      getFileContent(src, "base64").then((content) => {
+      getFileContent(plugin.id, src, "base64").then((content) => {
         setFile(content);
       });
     });
-  }, [src, startTransition]);
+  }, [plugin.id, src, startTransition]);
 
   return (
     <Dialog>

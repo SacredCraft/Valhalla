@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { File } from "@/app/actions";
+import { ValhallaFile } from "@/app/actions";
 import { useFilesContext } from "@/app/plugins/[plugin]/files/layout.client";
 import { usePluginContext } from "@/app/plugins/[plugin]/layout.client";
 import { ConfigurationResult } from "@/lib/core";
@@ -12,7 +12,7 @@ import { Form } from "@/components/ui/form";
 
 type ContextType = {
   form: ReturnType<typeof useForm>;
-  file: File;
+  file: ValhallaFile;
   configuration: ConfigurationResult;
   setConfiguration: (configuration: ConfigurationResult) => void;
 };
@@ -30,7 +30,7 @@ export const useFilesEditorContext = () => {
 };
 
 type FilesEditorClientLayoutProps = {
-  file: File;
+  file: ValhallaFile;
   children?: React.ReactNode;
   configuration: ConfigurationResult;
   relativePath: string[];

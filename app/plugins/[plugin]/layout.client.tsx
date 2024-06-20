@@ -10,7 +10,7 @@ import React, {
   useTransition,
 } from "react";
 
-import { Plugin } from "@/config/types";
+import { ValhallaPlugin } from "@/config/types";
 import { getPlugin } from "@/config/utils";
 
 export type OpenedFile = {
@@ -20,7 +20,7 @@ export type OpenedFile = {
 };
 
 type ContextType = {
-  plugin: Plugin;
+  plugin: ValhallaPlugin;
   openedFiles: OpenedFile[];
   setOpenedFiles: Dispatch<SetStateAction<OpenedFile[] | undefined>>;
 };
@@ -41,7 +41,7 @@ type PluginProps = React.PropsWithChildren<{
 
 export function PluginClientLayout({ children, pluginId }: PluginProps) {
   const [isPending, startTransition] = useTransition();
-  const [plugin, setPlugin] = useState<Plugin>();
+  const [plugin, setPlugin] = useState<ValhallaPlugin>();
   const [openedFiles, setOpenedFiles] = useState<OpenedFile[]>();
 
   useEffect(() => {

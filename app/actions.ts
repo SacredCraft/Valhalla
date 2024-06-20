@@ -7,7 +7,7 @@ import path from "path";
 
 import { getPluginPath, setPluginPath } from "@/lib/cookies";
 
-export type File = {
+export type ValhallaFile = {
   type: "dir" | "file";
   name: string;
   path: string[];
@@ -19,7 +19,7 @@ export type File = {
 export async function getPluginFiles(
   pluginId: string,
   relativePath: string[],
-): Promise<File[] | undefined> {
+): Promise<ValhallaFile[] | undefined> {
   const pluginPath = await getPluginPath(pluginId);
   const absolutePath = pluginPath ? [pluginPath, ...relativePath] : [];
   try {
@@ -39,7 +39,7 @@ export async function getPluginFiles(
           createdAt: stats.birthtime.toLocaleString(),
           updatedAt: stats.mtime.toLocaleString(),
           size: stats.size,
-        } as File;
+        } as ValhallaFile;
       });
 
     const files = await Promise.all(mappedFiles);
@@ -61,7 +61,7 @@ export async function getPluginFiles(
 export async function getFile(
   pluginId: string,
   relativePath: string,
-): Promise<(File & { ext?: string }) | null> {
+): Promise<(ValhallaFile & { ext?: string }) | null> {
   const pluginPath = await getPluginPath(pluginId);
   if (!pluginPath) {
     return null;
@@ -78,6 +78,38 @@ export async function getFile(
     size: stats.size,
     ext: path.extname(filePath).slice(1),
   };
+}
+
+export async function uploadFile(
+  pluginId: string,
+  relativePath: string,
+  fileName: string,
+  formData: FormData,
+): Promise<boolean> {
+  const pluginPath = await getPluginPath(pluginId);
+  if (!pluginPath) {
+    return false;
+  }
+
+  const filePath = path.join(pluginPath, relativePath);
+
+  try {
+    const file = formData.get("file") as File;
+    // 创建目录，如果已存在则忽略
+    fs.mkdirSync(filePath, { recursive: true });
+
+    const fileData = await file.arrayBuffer();
+    const fileBuffer = Buffer.from(fileData);
+    const fileDest = path.join(filePath, fileName);
+
+    // 写入文件到指定路径
+    fs.writeFileSync(fileDest, fileBuffer);
+
+    return true;
+  } catch (error) {
+    console.error("Error uploading files:", error);
+    return false;
+  }
 }
 
 export async function savePath(formData: FormData) {
@@ -148,7 +180,8 @@ export async function saveFile(
 }
 
 export async function getFileContent(
-  path: string,
+  pluginId: string,
+  relativePath: string,
   options:
     | {
         encoding: BufferEncoding;
@@ -156,7 +189,11 @@ export async function getFileContent(
       }
     | BufferEncoding,
 ) {
-  return fs.readFileSync(path, options);
+  const pluginPath = await getPluginPath(pluginId);
+  if (!pluginPath) {
+    return;
+  }
+  return fs.readFileSync(path.join(pluginPath, relativePath), options);
 }
 
 export async function revalidate(path: string) {

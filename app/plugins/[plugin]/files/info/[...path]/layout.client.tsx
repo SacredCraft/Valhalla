@@ -2,11 +2,11 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-import { File } from "@/app/actions";
+import { ValhallaFile } from "@/app/actions";
 import { useFilesContext } from "@/app/plugins/[plugin]/files/layout.client";
 
 type ContextType = {
-  file: File;
+  file: ValhallaFile;
 };
 
 const FilesInfoContext = createContext<ContextType | undefined>(undefined);
@@ -23,7 +23,7 @@ export const useFilesInfoContext = () => {
 
 type FilesInfoClientLayoutProps = {
   template?: React.ReactNode;
-  file: File;
+  file: ValhallaFile;
   children?: React.ReactNode;
   relativePath: string[];
 };

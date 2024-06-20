@@ -2,7 +2,7 @@
 
 import { File as FileIcon, Folder } from "lucide-react";
 
-import { File } from "@/app/actions";
+import { ValhallaFile } from "@/app/actions";
 import { Template } from "@/config/types";
 import { ColumnDef, RowData } from "@tanstack/react-table";
 
@@ -11,7 +11,7 @@ import { FilesTableRowActions } from "@/components/plugin/browser/files-table-ro
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 
-export type FileCol = File & { template?: Template };
+export type FileCol = ValhallaFile & { template?: Template };
 
 export const filesTableColumns: ColumnDef<FileCol>[] = [
   {

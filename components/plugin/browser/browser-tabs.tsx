@@ -14,7 +14,7 @@ type BrowserTabsProps = {
 export function BrowserTabs({ actions }: BrowserTabsProps) {
   return (
     <div className="border-b h-12 flex px-2 justify-between items-center relative">
-      <div>{actions}</div>
+      <div className="flex gap-2">{actions}</div>
       <nav className="flex items-center justify-center gap-2 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         <BrowserTab value="explore" label="Files" />
         <BrowserTab value="trash" label="Trash" />

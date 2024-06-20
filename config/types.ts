@@ -1,4 +1,4 @@
-export type Plugin = {
+export type ValhallaPlugin = {
   id: string;
   name: string;
   files: PluginFile[];

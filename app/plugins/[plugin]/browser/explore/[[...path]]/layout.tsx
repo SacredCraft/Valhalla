@@ -6,6 +6,8 @@ import { ExploreClientLayout } from "@/app/plugins/[plugin]/browser/explore/[[..
 import { BrowserHeader } from "@/components/plugin/browser/browser-header";
 import { BrowserTabs } from "@/components/plugin/browser/browser-tabs";
 import { New } from "@/components/plugin/browser/new";
+import { Upload } from "@/components/plugin/browser/upload";
+import { FileUploader } from "@/components/ui/file-uploader";
 
 type BrowserLayoutProps = {
   params: {
@@ -24,7 +26,14 @@ export default async function ExploreLayout({
   return (
     <ExploreClientLayout relativePath={relativePath} files={files}>
       <BrowserHeader />
-      <BrowserTabs actions={<New />} />
+      <BrowserTabs
+        actions={
+          <>
+            <New />
+            <Upload />
+          </>
+        }
+      />
       {children}
     </ExploreClientLayout>
   );

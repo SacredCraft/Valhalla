@@ -2,7 +2,7 @@
 
 import React, { Dispatch, createContext, useContext, useState } from "react";
 
-import { File } from "@/app/actions";
+import { ValhallaFile } from "@/app/actions";
 import { Trash } from "@/lib/core";
 import { useReactTable } from "@tanstack/react-table";
 
@@ -14,7 +14,7 @@ type ContextType = {
   trash?: Trash[];
   table?: ReturnType<typeof useReactTable<FileCol>>;
   setTable?: Dispatch<ReturnType<typeof useReactTable<FileCol>>>;
-  setFiles?: Dispatch<File[]>;
+  setFiles?: Dispatch<ValhallaFile[]>;
   setTrash?: Dispatch<Trash[]>;
   setRelativePath?: Dispatch<string[] | undefined>;
 };
