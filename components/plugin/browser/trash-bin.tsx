@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 
 export function TrashBin() {
-  const { trash, plugin } = useBrowserContext();
+  const { trash } = useBrowserContext();
 
   return (
     <div className="px-2 flex flex-col gap-2">

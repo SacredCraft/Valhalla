@@ -33,7 +33,9 @@ export async function getPluginFiles(
         return {
           type: stats.isDirectory() ? "dir" : "file",
           name: file,
-          path: `${relativePath.join(path.sep)}/${file}`.split(path.sep),
+          path: `${relativePath.length !== 0 ? `${relativePath.join(path.sep)}/` : ``}${file}`.split(
+            path.sep,
+          ),
           createdAt: stats.birthtime.toLocaleString(),
           updatedAt: stats.mtime.toLocaleString(),
           size: stats.size,
@@ -70,7 +72,7 @@ export async function getFile(
   return {
     type: stats.isDirectory() ? "dir" : "file",
     name: path.basename(filePath),
-    path: filePath.split("/"),
+    path: relativePath.split(path.sep),
     createdAt: stats.birthtime.toLocaleString(),
     updatedAt: stats.mtime.toLocaleString(),
     size: stats.size,
@@ -85,17 +87,56 @@ export async function savePath(formData: FormData) {
   await setPluginPath(pluginId, path);
 }
 
-export async function deleteFile(filePath: string): Promise<boolean> {
+export async function deleteFile(
+  pluginId: string,
+  relativePath: string,
+): Promise<boolean> {
+  const pluginPath = await getPluginPath(pluginId);
+  if (!pluginPath) {
+    return false;
+  }
   try {
-    fs.unlinkSync(filePath);
+    fs.unlinkSync(path.join(pluginPath, relativePath));
     return true;
   } catch (error) {
     return false;
   }
 }
 
-export async function renameFile(oldPath: string, newPath: string) {
-  fs.renameSync(oldPath, newPath);
+export async function renameFile(
+  pluginId: string,
+  oldPath: string,
+  newPath: string,
+) {
+  const pluginPath = await getPluginPath(pluginId);
+  if (!pluginPath) {
+    return;
+  }
+  fs.renameSync(path.join(pluginPath, oldPath), path.join(pluginPath, newPath));
+}
+
+export async function createFile(
+  pluginId: string,
+  relativePath: string,
+  type: "file" | "dir",
+  content?: string,
+) {
+  const pluginPath = await getPluginPath(pluginId);
+  if (!pluginPath) {
+    return false;
+  }
+  const filePath = path.join(pluginPath, relativePath);
+  try {
+    if (type === "dir") {
+      fs.mkdirSync(filePath);
+    } else {
+      fs.writeFileSync(filePath, content || "");
+    }
+    return true;
+  } catch (error) {
+    console.log(relativePath);
+    return false;
+  }
 }
 
 export async function saveFile(

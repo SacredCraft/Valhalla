@@ -20,7 +20,19 @@ export type Trash = {
   type: "json" | "base64";
 };
 
-export async function moveToTrash(filePath: string[], operator: string) {
+export async function moveToTrash(
+  pluginId: string,
+  relativePath: string[],
+  operator: string,
+) {
+  const pluginPath = await getPluginPath(pluginId);
+  if (!pluginPath) {
+    return;
+  }
+
+  const filePath = path
+    .join(pluginPath, relativePath.join(path.sep))
+    .split(path.sep);
   const fileName = filePath[filePath.length - 1];
   const folder = filePath.slice(0, -1);
   const trashFileName = fileName + ".deleted";

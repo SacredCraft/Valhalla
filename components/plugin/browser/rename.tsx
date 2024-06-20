@@ -2,25 +2,26 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { renameFile } from "@/app/actions";
+import { usePluginContext } from "@/app/plugins/[plugin]/layout.client";
 import { Row, Table } from "@tanstack/react-table";
 
 import { FileCol } from "@/components/plugin/browser/files-table-columns";
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
   DropdownMenuItem,
   DropdownMenuShortcut,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 interface RenameProps {
   row: Row<FileCol>;
@@ -28,45 +29,51 @@ interface RenameProps {
 }
 
 export function Rename({ row, table }: RenameProps) {
-  const [name, setName] = useState(row.original.name);
+  const { plugin } = usePluginContext();
+  const [path, setPath] = useState(
+    row.original.path.map((i) => `/${i}`).join(""),
+  );
 
   const handleRename = () => {
-    const newPath = row.original.path
-      .join("/")
-      .replace(row.original.name, name);
-    renameFile(row.original.path.join("/"), newPath).then(() => {
+    renameFile(
+      plugin.id,
+      row.original.path.map((i) => `/${i}`).join(""),
+      path,
+    ).then(() => {
       table.options.meta?.refresh();
       toast.success("File renamed");
     });
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
+    <Sheet>
+      <SheetTrigger asChild>
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-          Rename
+          Rename & Move
           <DropdownMenuShortcut>⌘R</DropdownMenuShortcut>
         </DropdownMenuItem>
-      </DialogTrigger>
-      <DialogContent onClick={(e) => e.stopPropagation()}>
-        <DialogHeader>
-          <DialogTitle>Rename file</DialogTitle>
-          <DialogDescription>
+      </SheetTrigger>
+      <SheetContent onClick={(e) => e.stopPropagation()}>
+        <SheetHeader>
+          <SheetTitle>Rename or move file</SheetTitle>
+          <SheetDescription>
             Please enter a new name for the file.
-          </DialogDescription>
-        </DialogHeader>
-        <Input value={name} onChange={(value) => setName(String(value))} />
-        <DialogFooter>
-          <DialogClose>
-            <Button variant="outline">No</Button>
-          </DialogClose>
-          <DialogClose>
+          </SheetDescription>
+        </SheetHeader>
+        <form className="my-4">
+          <Input value={path} onChange={(value) => setPath(String(value))} />
+        </form>
+        <SheetFooter>
+          <SheetClose>
+            <Button variant="outline">Cancel</Button>
+          </SheetClose>
+          <SheetClose>
             <Button variant="default" onClick={handleRename}>
-              Rename
+              Save
             </Button>
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          </SheetClose>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   );
 }

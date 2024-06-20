@@ -1,25 +1,26 @@
 import { toast } from "sonner";
 
 import { deleteFile } from "@/app/actions";
+import { usePluginContext } from "@/app/plugins/[plugin]/layout.client";
 import { moveToTrash } from "@/lib/core";
 import { Row, Table } from "@tanstack/react-table";
 
 import { FileCol } from "@/components/plugin/browser/files-table-columns";
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
   DropdownMenuItem,
   DropdownMenuShortcut,
 } from "@/components/ui/dropdown-menu";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 interface DeleteProps {
   row: Row<FileCol>;
@@ -27,61 +28,67 @@ interface DeleteProps {
 }
 
 export function Delete({ row, table }: DeleteProps) {
+  const { plugin } = usePluginContext();
+
   return (
-    <Dialog>
-      <DialogTrigger asChild>
+    <Sheet>
+      <SheetTrigger asChild>
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
           Delete
           <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
         </DropdownMenuItem>
-      </DialogTrigger>
-      <DialogContent onClick={(e) => e.stopPropagation()}>
-        <DialogHeader>
-          <DialogTitle>Are you sure you want to delete this file?</DialogTitle>
-          <DialogDescription>This action cannot be undone.</DialogDescription>
-        </DialogHeader>
-        <DialogFooter className="flex flex-col sm:flex-row sm:justify-between gap-y-2">
+      </SheetTrigger>
+      <SheetContent onClick={(e) => e.stopPropagation()}>
+        <SheetHeader>
+          <SheetTitle>Are you sure you want to delete this file?</SheetTitle>
+          <SheetDescription>This action cannot be undone.</SheetDescription>
+        </SheetHeader>
+        <SheetFooter className="flex flex-col sm:flex-row sm:justify-between gap-y-2 mt-4">
           {row.original.type === "file" && (
-            <DialogClose>
+            <SheetClose>
               <Button
                 variant="default"
                 onClick={() => {
-                  moveToTrash(row.original.path, "admin").then(() => {
-                    toast.success("File moved to trash bin");
-                    table.options.meta?.refresh();
-                  });
+                  moveToTrash(plugin.id, row.original.path, "admin").then(
+                    () => {
+                      toast.success("File moved to trash bin");
+                      table.options.meta?.refresh();
+                    },
+                  );
                 }}
               >
                 Move it to Trash Bin
               </Button>
-            </DialogClose>
+            </SheetClose>
           )}
           <div className="flex gap-2 sm:ml-auto">
-            <DialogClose>
+            <SheetClose>
               <Button variant="outline" className="w-full sm:w-fit">
                 No
               </Button>
-            </DialogClose>
-            <DialogClose>
+            </SheetClose>
+            <SheetClose>
               <Button
                 className="w-full sm:w-fit"
                 variant="destructive"
                 onClick={() => {
-                  deleteFile(row.original.path.join("/")).then((res) => {
-                    if (!res) {
-                      toast.error("Failed to delete the file");
-                    } else {
-                      table.options.meta?.refresh();
-                    }
-                  });
+                  deleteFile(plugin.id, row.original.path.join("/")).then(
+                    (res) => {
+                      if (!res) {
+                        toast.error("Failed to delete the file");
+                      } else {
+                        table.options.meta?.refresh();
+                      }
+                    },
+                  );
                 }}
               >
                 Yes
               </Button>
-            </DialogClose>
+            </SheetClose>
           </div>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   );
 }

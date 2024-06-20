@@ -53,7 +53,7 @@ export function FilesHeader() {
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
                 <Link
-                  href={`/plugins/${plugin.id}/files/${currentPage.value}/${relativePath}`}
+                  href={`/plugins/${plugin.id}/files/${currentPage.value}/${relativePath.join("/")}`}
                 >
                   {currentPage.label}
                 </Link>
