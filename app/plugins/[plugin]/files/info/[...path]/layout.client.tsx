@@ -38,7 +38,7 @@ export default function FilesInfoClientLayout({
   const [tabValue, setTabValue] = useState(template ? "edit" : "raw");
 
   useEffect(() => {
-    setRelativePath?.(relativePath);
+    setRelativePath?.(relativePath.map((i) => decodeURIComponent(i)));
   }, [relativePath, setRelativePath]);
 
   return (

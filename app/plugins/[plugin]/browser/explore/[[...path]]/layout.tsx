@@ -5,9 +5,10 @@ import { ExploreClientLayout } from "@/app/plugins/[plugin]/browser/explore/[[..
 
 import { BrowserHeader } from "@/components/plugin/browser/browser-header";
 import { BrowserTabs } from "@/components/plugin/browser/browser-tabs";
+import { CopyCurrentPath } from "@/components/plugin/browser/copy-current-path";
+import { PasteAction } from "@/components/plugin/browser/copy-cut";
 import { New } from "@/components/plugin/browser/new";
 import { Upload } from "@/components/plugin/browser/upload";
-import { FileUploader } from "@/components/ui/file-uploader";
 
 type BrowserLayoutProps = {
   params: {
@@ -27,10 +28,16 @@ export default async function ExploreLayout({
     <ExploreClientLayout relativePath={relativePath} files={files}>
       <BrowserHeader />
       <BrowserTabs
-        actions={
+        left={
           <>
             <New />
             <Upload />
+            <PasteAction />
+          </>
+        }
+        right={
+          <>
+            <CopyCurrentPath />
           </>
         }
       />

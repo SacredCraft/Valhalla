@@ -11,12 +11,16 @@ import { FileCol } from "@/components/plugin/browser/files-table-columns";
 type ContextType = {
   relativePath?: string[];
   files?: FileCol[];
+  copyFiles?: string[];
+  cutFiles?: string[];
   trash?: Trash[];
   table?: ReturnType<typeof useReactTable<FileCol>>;
   setTable?: Dispatch<ReturnType<typeof useReactTable<FileCol>>>;
   setFiles?: Dispatch<ValhallaFile[]>;
   setTrash?: Dispatch<Trash[]>;
   setRelativePath?: Dispatch<string[] | undefined>;
+  setCopyFiles?: Dispatch<string[] | undefined>;
+  setCutFiles?: Dispatch<string[] | undefined>;
 };
 
 const BrowserContext = createContext<ContextType | undefined>(undefined);
@@ -37,6 +41,8 @@ export function BrowserClientLayout({ children }: BrowserClientLayoutProps) {
   const [table, setTable] =
     useState<ReturnType<typeof useReactTable<FileCol>>>();
   const [files, setFiles] = useState<FileCol[]>();
+  const [copyFiles, setCopyFiles] = useState<string[]>();
+  const [cutFiles, setCutFiles] = useState<string[]>();
   const [trash, setTrash] = useState<Trash[]>();
   const [relativePath, setRelativePath] = useState<string[]>();
 
@@ -45,12 +51,16 @@ export function BrowserClientLayout({ children }: BrowserClientLayoutProps) {
       value={{
         relativePath,
         files,
+        copyFiles,
+        cutFiles,
         trash,
         table,
         setTable,
         setFiles,
         setTrash,
         setRelativePath,
+        setCopyFiles,
+        setCutFiles,
       }}
     >
       {children}

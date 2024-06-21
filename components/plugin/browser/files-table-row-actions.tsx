@@ -7,9 +7,10 @@ import { usePluginContext } from "@/app/plugins/[plugin]/layout.client";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row, Table } from "@tanstack/react-table";
 
+import { CopyCutRowAction } from "@/components/plugin/browser/copy-cut";
 import { Delete } from "@/components/plugin/browser/delete";
 import { FileCol } from "@/components/plugin/browser/files-table-columns";
-import { Rename } from "@/components/plugin/browser/rename";
+import { RenameMove } from "@/components/plugin/browser/rename-move";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -89,7 +90,8 @@ export function FilesTableRowActions({
           className="w-[160px]"
           onClick={(e) => e.stopPropagation()}
         >
-          <Rename row={row} table={table} />
+          <RenameMove row={row} table={table} />
+          <CopyCutRowAction row={row} table={table} />
           {row.original.type === "file" && (
             <DropdownMenuItem onClick={() => handleDownload()}>
               Download
@@ -98,9 +100,7 @@ export function FilesTableRowActions({
           )}
           <DropdownMenuItem
             onClick={() =>
-              navigator.clipboard.writeText(
-                relativePath.map((i) => decodeURIComponent(i)).join("/"),
-              )
+              navigator.clipboard.writeText(relativePath.join("/"))
             }
           >
             Copy path

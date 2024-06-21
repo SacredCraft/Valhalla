@@ -23,12 +23,12 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-interface RenameProps {
+interface RenameMoveProps {
   row: Row<FileCol>;
   table: Table<FileCol>;
 }
 
-export function Rename({ row, table }: RenameProps) {
+export function RenameMove({ row, table }: RenameMoveProps) {
   const { plugin } = usePluginContext();
   const [path, setPath] = useState(
     row.original.path.map((i) => `/${i}`).join(""),

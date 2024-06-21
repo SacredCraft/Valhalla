@@ -60,7 +60,7 @@ export const filesTableColumns: ColumnDef<FileCol>[] = [
     ),
     cell: ({ row }) => {
       const name = row.original.name;
-      return <span className="font-semibold">{name}</span>;
+      return <span className="font-semibold truncate">{name}</span>;
     },
   },
   {

@@ -52,7 +52,7 @@ export default function FilesEditorClientLayout({
   });
 
   useEffect(() => {
-    setRelativePath?.(relativePath);
+    setRelativePath?.(relativePath.map((i) => decodeURIComponent(i)));
   }, [relativePath, setRelativePath]);
 
   return (

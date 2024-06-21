@@ -74,7 +74,7 @@ export function Upload() {
             Upload a file to the current directory.
           </SheetDescription>
         </SheetHeader>
-        <div className="my-4 h-fit">
+        <div className="grid gap-4 py-4 h-fit">
           <FileUploader value={files} onValueChange={setFiles} multiple />
         </div>
         <SheetFooter>

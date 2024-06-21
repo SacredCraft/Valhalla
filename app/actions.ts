@@ -16,6 +16,66 @@ export type ValhallaFile = {
   updatedAt: string;
 };
 
+export async function copyFile(
+  pluginId: string,
+  source: string,
+  destination: string,
+  cut: boolean = false,
+): Promise<boolean | "exist"> {
+  const pluginPath = await getPluginPath(pluginId);
+  if (!pluginPath) {
+    return false;
+  }
+
+  const sourceFile = path.join(pluginPath, source);
+  const destinationFile = path.join(
+    pluginPath,
+    destination,
+    path.basename(source),
+  );
+
+  let result: boolean | "exist" = false;
+
+  console.log(sourceFile, destinationFile);
+
+  try {
+    fs.accessSync(destinationFile, fs.constants.F_OK);
+    result = "exist";
+  } catch (error) {
+    try {
+      fs.copyFileSync(sourceFile, destinationFile);
+      if (cut) {
+        fs.unlinkSync(sourceFile);
+      }
+      result = true;
+    } catch (error) {
+      result = false;
+    }
+  }
+
+  return result;
+}
+
+export async function replaceFile(
+  pluginId: string,
+  source: string,
+  destination: string,
+): Promise<boolean> {
+  const pluginPath = await getPluginPath(pluginId);
+  if (!pluginPath) {
+    return false;
+  }
+
+  const sourceFile = path.join(pluginPath, source);
+  const destinationFile = path.join(pluginPath, destination);
+  try {
+    fs.copyFileSync(sourceFile, destinationFile);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
 export async function getPluginFiles(
   pluginId: string,
   relativePath: string[],
@@ -134,17 +194,8 @@ export async function createFile(
     }
     return true;
   } catch (error) {
-    console.log(relativePath);
     return false;
   }
-}
-
-export async function saveFile(
-  pluginPath: string,
-  filePath: string,
-  content: string,
-) {
-  fs.writeFileSync(path.join(pluginPath, filePath), content);
 }
 
 export async function getFileContent(

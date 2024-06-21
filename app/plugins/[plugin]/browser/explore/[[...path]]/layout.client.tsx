@@ -7,6 +7,8 @@ import { useBrowserContext } from "@/app/plugins/[plugin]/browser/layout.client"
 import { usePluginContext } from "@/app/plugins/[plugin]/layout.client";
 import { findFileAttributes } from "@/config/utils";
 
+type ContextType = {};
+
 type BrowserClientLayoutProps = {
   files: ValhallaFile[];
   children?: React.ReactNode;
@@ -43,7 +45,7 @@ export function ExploreClientLayout({
   );
 
   useEffect(() => {
-    setRelativePath?.(relativePath);
+    setRelativePath?.(relativePath.map((i) => decodeURIComponent(i)));
   }, [relativePath, setRelativePath]);
 
   useEffect(() => {

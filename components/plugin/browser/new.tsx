@@ -58,16 +58,18 @@ export function New() {
   });
 
   const handleCreate = (data: z.infer<typeof FormSchema>) => {
-    createFile(plugin.id, [relativePath, data.name].join("/"), data.type).then(
-      (success) => {
-        table?.options.meta?.refresh();
-        if (success) {
-          toast.success("File created");
-        } else {
-          toast.error("Failed to create file");
-        }
-      },
-    );
+    createFile(
+      plugin.id,
+      [relativePath?.join("/"), data.name].join("/"),
+      data.type,
+    ).then((success) => {
+      table?.options.meta?.refresh();
+      if (success) {
+        toast.success("File created");
+      } else {
+        toast.error("Failed to create file");
+      }
+    });
   };
 
   return (
@@ -87,7 +89,7 @@ export function New() {
         </SheetHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleCreate)}>
-            <div className="grid gap-4 my-4">
+            <div className="grid gap-4 py-4">
               <FormField
                 control={form.control}
                 name="type"
