@@ -4,9 +4,9 @@ import { ClipboardPaste } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
+import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
+import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
 import { copyFile, replaceFile } from "@/app/actions";
-import { useBrowserContext } from "@/app/plugins/[plugin]/browser/layout.client";
-import { usePluginContext } from "@/app/plugins/[plugin]/layout.client";
 import { Row, Table } from "@tanstack/react-table";
 
 import { FileCol } from "@/components/plugin/browser/files-table-columns";
@@ -23,7 +23,6 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet";
 
 interface CopyCutRowActionProps {

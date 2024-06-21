@@ -4,8 +4,8 @@ import Link from "next/link";
 
 import React, { Fragment } from "react";
 
-import { useBrowserContext } from "@/app/plugins/[plugin]/browser/layout.client";
-import { usePluginContext } from "@/app/plugins/[plugin]/layout.client";
+import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
+import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
 
 import {
   Breadcrumb,

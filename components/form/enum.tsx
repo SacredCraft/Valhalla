@@ -2,7 +2,7 @@
 
 import { KeyboardEvent, useEffect, useState } from "react";
 
-import { useFilesEditorContext } from "@/app/plugins/[plugin]/files/editor/[...path]/layout.client";
+import { useFilesEditorContext } from "@/app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
 import { getFormValue, isFormDeletableValue } from "@/lib/form";
 import { cn } from "@/lib/utils";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";

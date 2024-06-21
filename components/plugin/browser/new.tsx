@@ -5,9 +5,9 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
+import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
 import { createFile } from "@/app/actions";
-import { useBrowserContext } from "@/app/plugins/[plugin]/browser/layout.client";
-import { usePluginContext } from "@/app/plugins/[plugin]/layout.client";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";

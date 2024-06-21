@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
+import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
 import { renameFile } from "@/app/actions";
-import { usePluginContext } from "@/app/plugins/[plugin]/layout.client";
 import { Row, Table } from "@tanstack/react-table";
 
 import { FileCol } from "@/components/plugin/browser/files-table-columns";

@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { useMemo } from "react";
 
-import { usePluginContext } from "@/app/plugins/[plugin]/layout.client";
+import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
 import { plugins } from "@/config/plugins";
 import { cn } from "@/lib/utils";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";

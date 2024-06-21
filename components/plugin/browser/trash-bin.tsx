@@ -1,4 +1,4 @@
-import { useBrowserContext } from "@/app/plugins/[plugin]/browser/layout.client";
+import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
 
 import {
   Table,

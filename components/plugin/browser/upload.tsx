@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { useBrowserContext } from "@/app/plugins/[plugin]/browser/layout.client";
-import { usePluginContext } from "@/app/plugins/[plugin]/layout.client";
+import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
+import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
 import { UploadIcon } from "@radix-ui/react-icons";
 
 import { Button } from "@/components/ui/button";

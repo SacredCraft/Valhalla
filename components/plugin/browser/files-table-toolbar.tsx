@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-import { useBrowserContext } from "@/app/plugins/[plugin]/browser/layout.client";
+import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
 import { Cross2Icon } from "@radix-ui/react-icons";
 
 import { FilesTableFacetedFilter } from "@/components/plugin/browser/files-table-faceted-filter";

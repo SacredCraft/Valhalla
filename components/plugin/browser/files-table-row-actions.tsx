@@ -2,8 +2,8 @@
 
 import { Star } from "lucide-react";
 
-import { useBrowserContext } from "@/app/plugins/[plugin]/browser/layout.client";
-import { usePluginContext } from "@/app/plugins/[plugin]/layout.client";
+import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
+import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row, Table } from "@tanstack/react-table";
 

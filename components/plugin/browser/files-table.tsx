@@ -4,9 +4,9 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { useEffect, useState } from "react";
 
+import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
+import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
 import { revalidate } from "@/app/actions";
-import { useBrowserContext } from "@/app/plugins/[plugin]/browser/layout.client";
-import { usePluginContext } from "@/app/plugins/[plugin]/layout.client";
 import { cn } from "@/lib/utils";
 import {
   ColumnFiltersState,

@@ -3,7 +3,7 @@
 import { Copy } from "lucide-react";
 import { toast } from "sonner";
 
-import { useBrowserContext } from "@/app/plugins/[plugin]/browser/layout.client";
+import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
 
 import { Button } from "@/components/ui/button";
 

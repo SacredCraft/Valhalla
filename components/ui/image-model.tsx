@@ -4,8 +4,8 @@ import Image from "next/image";
 
 import { useEffect, useMemo, useState, useTransition } from "react";
 
+import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
 import { getFileContent } from "@/app/actions";
-import { usePluginContext } from "@/app/plugins/[plugin]/layout.client";
 
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 

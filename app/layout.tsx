@@ -2,10 +2,6 @@ import localFont from "next/font/local";
 
 import type { Metadata } from "next";
 
-import { RootClientLayout } from "@/app/layout.client";
-
-import { Aside } from "@/components/layout/aside";
-
 import "./globals.css";
 import Providers from "./providers";
 
@@ -33,8 +29,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Providers>
           <div className="flex min-h-screen w-full flex-col bg-muted/40 font-sans">
-            <Aside />
-            <RootClientLayout>{children}</RootClientLayout>
+            {children}
           </div>
         </Providers>
       </body>

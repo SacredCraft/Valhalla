@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 
 import React, { Fragment, useMemo } from "react";
 
-import { useFilesContext } from "@/app/plugins/[plugin]/files/layout.client";
-import { usePluginContext } from "@/app/plugins/[plugin]/layout.client";
+import { useFilesContext } from "@/app/(main)/plugins/[plugin]/files/layout.client";
+import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
 
 import {
   Breadcrumb,
