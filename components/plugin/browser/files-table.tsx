@@ -129,11 +129,11 @@ export function FilesTable() {
                     );
                     if (!exist) {
                       setOpenedFiles([
-                        ...openedFiles,
                         {
                           name: row.original.name,
                           path: row.original.path,
                         },
+                        ...openedFiles,
                       ]);
                     }
                     router.push(
