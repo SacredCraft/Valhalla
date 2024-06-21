@@ -1,11 +1,32 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { isRedirectError } from "next/dist/client/components/redirect";
 
 import fs from "fs";
 import path from "path";
 
+import { signIn } from "@/auth";
 import { getPluginPath, setPluginPath } from "@/lib/cookies";
+
+export async function signInAction(
+  username: string,
+  password: string,
+): Promise<boolean> {
+  const formData = new FormData();
+  formData.append("username", username);
+  formData.append("password", password);
+  try {
+    await signIn("credentials", formData);
+    return true;
+  } catch (error) {
+    if (isRedirectError(error)) {
+      return true;
+    }
+
+    return false;
+  }
+}
 
 export type ValhallaFile = {
   type: "dir" | "file";

@@ -1,7 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { Metadata } from "next";
+
+import { auth } from "@/auth";
 
 import { UserAuthForm } from "@/components/auth/user-auth-form";
 
@@ -10,7 +13,10 @@ export const metadata: Metadata = {
   description: "Authentication page for Valhalla Hub",
 };
 
-export default function AuthenticationPage() {
+export default async function AuthenticationPage() {
+  const session = await auth();
+  if (!session) redirect("/");
+
   return (
     <div className="container relative h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">

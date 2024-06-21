@@ -10,7 +10,7 @@ import { Aside, AsideContext } from "@/components/layout/aside";
 
 type ContentProps = React.PropsWithChildren<{}>;
 
-const collapsedAtom = atomWithStorage<boolean>("aside-collapsed", false);
+const collapsedAtom = atomWithStorage<boolean>("aside-collapsed", true);
 
 export function MainClientLayout({ children }: ContentProps) {
   const [collapsed, setCollapsed] = useAtom(collapsedAtom);
