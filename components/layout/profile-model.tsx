@@ -178,6 +178,7 @@ function Information() {
               <FormDescription>Click to upload a new avatar</FormDescription>
             </div>
           </div>
+          <Input className="hidden" name="username" autoComplete="username" />
           <FormField
             control={form.control}
             name="password"
