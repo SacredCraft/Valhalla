@@ -29,10 +29,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  callbacks: {
+    jwt({ token, user }) {
+      if (user) {
+        token.username = user.username;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      session.user.username = token.username as string;
+      return session;
+    },
+  },
 });
 
 declare module "next-auth" {
   interface User {
-    username: string | null;
+    username: string;
   }
 }

@@ -1,17 +1,20 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { motion } from "framer-motion";
-import { Blocks, PanelRight, Settings, User } from "lucide-react";
+import { Blocks, PanelRight, Settings, User, Users } from "lucide-react";
 import React, { createContext, useContext, useMemo } from "react";
 
 import { plugins } from "@/config/plugins";
 import { cn } from "@/lib/utils";
 
 import { AnimatedItem } from "@/components/layout/animated-item";
+import { Profile } from "@/components/layout/profile";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type ContextType = {
   collapsed: boolean;
@@ -33,6 +36,7 @@ export const useAside = () => {
 
 export function Aside() {
   const { collapsed, setCollapsed } = useAside();
+  const session = useSession();
 
   return (
     <motion.aside
@@ -73,26 +77,35 @@ export function Aside() {
 
         <Item value="plugins" label="Plugins" Icon={Blocks} />
 
-        <Item value="users" label="Users" Icon={User} />
+        <Item value="users" label="Users" Icon={Users} />
       </motion.nav>
       <motion.nav
         layout="position"
-        className={cn(
-          "mt-auto flex items-center gap-2 px-2 py-4",
-          collapsed && "flex-col",
-        )}
+        className={cn("mt-auto flex flex-col items-center gap-2 px-2 py-4")}
       >
-        <Link href="/settings" className={collapsed ? undefined : "w-full"}>
-          <AnimatedItem icon={<Settings className="size-5" />}>
-            Settings
-          </AnimatedItem>
-        </Link>
-
-        <AnimatedItem
-          className="h-9 w-9"
-          icon={<PanelRight className="size-5" />}
-          onClick={() => setCollapsed(!collapsed)}
+        <Profile
+          username={session.data?.user?.username!!}
+          role="USER"
+          url="https://github.com/shadcn.png"
+          fallback={session.data?.user?.username}
         />
+        <div
+          className={cn(
+            "flex w-full items-center gap-2",
+            collapsed && "flex-col",
+          )}
+        >
+          <Link href="/settings" className={collapsed ? undefined : "w-full"}>
+            <AnimatedItem icon={<Settings className="size-5" />}>
+              Settings
+            </AnimatedItem>
+          </Link>
+          <AnimatedItem
+            className="h-9 w-9"
+            icon={<PanelRight className="size-5" />}
+            onClick={() => setCollapsed(!collapsed)}
+          />
+        </div>
       </motion.nav>
     </motion.aside>
   );

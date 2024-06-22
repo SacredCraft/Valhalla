@@ -20,7 +20,6 @@ export async function POST(request: Request) {
   try {
     fs.mkdirSync(filePath, { recursive: true });
     for (const file of files) {
-      console.log(file);
       const fileData = await file.arrayBuffer();
       const fileBuffer = Buffer.from(fileData);
       const fileDest = path.join(filePath, file.name);

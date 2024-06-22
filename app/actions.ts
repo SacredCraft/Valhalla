@@ -57,8 +57,6 @@ export async function copyFile(
 
   let result: boolean | "exist" = false;
 
-  console.log(sourceFile, destinationFile);
-
   try {
     fs.accessSync(destinationFile, fs.constants.F_OK);
     result = "exist";
