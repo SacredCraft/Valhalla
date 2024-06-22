@@ -1,7 +1,5 @@
 "use client";
 
-import theme from "tailwindcss/defaultTheme";
-
 import { motion } from "framer-motion";
 import { createContext, useContext, useState } from "react";
 

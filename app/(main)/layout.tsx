@@ -1,6 +1,6 @@
 import { MainClientLayout } from "@/app/(main)/layout.client";
 import { logout } from "@/app/actions";
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
 import { getUserById } from "@/service/user";
 
 export default async function MainLayout({

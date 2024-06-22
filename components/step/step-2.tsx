@@ -2,29 +2,12 @@
 
 import { useRouter } from "next/navigation";
 
-import { Circle, LoaderCircle } from "lucide-react";
-import { useEffect, useState } from "react";
 import * as React from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+import { useEffect } from "react";
 
 import { useSetupContext } from "@/app/(empty)/setup/[step]/layout.client";
-import { signInSchema } from "@/lib/zod";
-import { createAdminUser } from "@/service/user";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 
 export function Step2() {
   const { setName } = useSetupContext();

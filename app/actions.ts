@@ -8,7 +8,6 @@ import path from "path";
 
 import { signIn, signOut } from "@/auth";
 import { getPluginPath, setPluginPath } from "@/lib/cookies";
-import { updateLastLogin } from "@/service/user";
 
 export async function logout() {
   await signOut();
