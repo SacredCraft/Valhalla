@@ -1,7 +1,13 @@
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
-import { plugins } from "@/config/plugins";
+import { getOwnedResources } from "@/service/resource";
 
-export default function PluginsPage() {
-  redirect(`/plugins/${plugins[0].id}`);
+export default async function PluginsPage() {
+  const ownedPluginIds = await getOwnedResources();
+
+  if (ownedPluginIds.length === 0) {
+    return notFound();
+  }
+
+  redirect(`/plugins/${ownedPluginIds[0]}`);
 }

@@ -26,11 +26,14 @@ import {
 } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-export function Menu() {
+export function PluginMenu({ ownedPluginIds }: { ownedPluginIds: string[] }) {
   const { openedFiles } = usePluginContext();
   const pathname = usePathname();
   const plugin = useMemo(() => pathname.split("/")[2], [pathname]);
   const router = useRouter();
+  const ownedPlugins = useMemo(() => {
+    return plugins.filter((plugin) => ownedPluginIds.includes(plugin.id));
+  }, [ownedPluginIds]);
 
   return (
     <div className="w-[220px]">
@@ -56,7 +59,7 @@ export function Menu() {
                 <CommandList>
                   <CommandEmpty>No plugin found.</CommandEmpty>
                   <CommandGroup>
-                    {plugins.map((item) => (
+                    {ownedPlugins.map((item) => (
                       <CommandItem
                         value={item.id}
                         key={item.id}

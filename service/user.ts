@@ -10,6 +10,25 @@ const updateSchema = z.object({
   password: z.string().min(8).max(32).optional(),
 });
 
+export async function checkRole(role: string, id: string) {
+  return ((await getUserById(id))?.role ?? "USER") === role;
+}
+
+export async function isAdmin(id: string) {
+  return checkRole("ADMIN", id);
+}
+
+export async function updateLastLogin(username: string) {
+  return prisma.user.update({
+    where: {
+      username,
+    },
+    data: {
+      lastLogin: new Date(),
+    },
+  });
+}
+
 export async function updateUserById(id: string, data: any) {
   const session = await auth();
 
@@ -17,10 +36,7 @@ export async function updateUserById(id: string, data: any) {
 
   const sessionId = session.user.id!!;
 
-  if (
-    sessionId !== id ||
-    ((await getUserById(sessionId))?.role ?? "USER") !== "ADMIN"
-  ) {
+  if (sessionId !== id && !(await isAdmin(sessionId))) {
     return null;
   }
 
@@ -88,6 +104,15 @@ export async function getUserByUsernameAndPassword(
 }
 
 export async function createAdminUser(username: string, password: string) {
+  const session = await auth();
+
+  if (
+    (!session || !session.user || !(await isAdmin(session.user.id!!))) &&
+    (await prisma.user.count()) > 0
+  ) {
+    return false;
+  }
+
   const salt = genSaltSync(10);
   const hashedPassword = hashSync(password, salt);
 
@@ -106,6 +131,16 @@ export async function createAdminUser(username: string, password: string) {
 }
 
 export async function createUser(username: string, password: string) {
+  const session = await auth();
+
+  if (!session || !session.user) return false;
+
+  const sessionId = session.user.id!!;
+
+  if (!(await isAdmin(sessionId))) {
+    return false;
+  }
+
   const salt = genSaltSync(10);
   const hashedPassword = hashSync(password, salt);
 

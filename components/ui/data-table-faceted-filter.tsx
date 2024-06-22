@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 
-interface FilesTableFacetedFilterProps<TData, TValue> {
+interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
   title?: string;
   options: {
@@ -32,11 +32,11 @@ interface FilesTableFacetedFilterProps<TData, TValue> {
   }[];
 }
 
-export function FilesTableFacetedFilter<TData, TValue>({
+export function DataTableFacetedFilter<TData, TValue>({
   column,
   title,
   options,
-}: FilesTableFacetedFilterProps<TData, TValue>) {
+}: DataTableFacetedFilterProps<TData, TValue>) {
   const facets = column?.getFacetedUniqueValues();
   const selectedValues = new Set(column?.getFilterValue() as string[]);
 

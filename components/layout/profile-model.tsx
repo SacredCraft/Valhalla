@@ -1,3 +1,4 @@
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 import React, { useCallback, useState } from "react";
@@ -94,6 +95,11 @@ function Information() {
       updateUserById(id, data).then((res) => {
         if (res) {
           toast.success("Profile updated");
+          if (data.password) {
+            signOut().then((r) => {
+              toast.success("Password updated, please sign in again");
+            });
+          }
           router.refresh();
         } else {
           toast.error("Profile update failed");
@@ -175,7 +181,9 @@ function Information() {
                   </div>
                 )}
               </Dropzone>
-              <FormDescription>Click to upload a new avatar</FormDescription>
+              <FormDescription>
+                Click or drag to upload a new avatar
+              </FormDescription>
             </div>
           </div>
           <Input className="hidden" name="username" autoComplete="username" />

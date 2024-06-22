@@ -8,6 +8,7 @@ import path from "path";
 
 import { signIn, signOut } from "@/auth";
 import { getPluginPath, setPluginPath } from "@/lib/cookies";
+import { updateLastLogin } from "@/service/user";
 
 export async function logout() {
   await signOut();
@@ -24,11 +25,7 @@ export async function signInAction(
     await signIn("credentials", formData);
     return true;
   } catch (error) {
-    if (isRedirectError(error)) {
-      return true;
-    }
-
-    return false;
+    return !!isRedirectError(error);
   }
 }
 

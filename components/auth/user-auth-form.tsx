@@ -11,6 +11,7 @@ import { z } from "zod";
 import { signInAction } from "@/app/actions";
 import { cn } from "@/lib/utils";
 import { signInSchema } from "@/lib/zod";
+import { updateLastLogin } from "@/service/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
@@ -47,6 +48,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       setIsLoading(false);
       if (res) {
         toast.success("Sign in successfully");
+        updateLastLogin(values.username).then(() => {});
         router.push("/");
       } else {
         toast.error("Invalid username or password");

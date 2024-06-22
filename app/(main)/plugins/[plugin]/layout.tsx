@@ -1,6 +1,9 @@
-import { PluginClientLayout } from "@/app/(main)/plugins/[plugin]/layout.client";
+import { notFound } from "next/navigation";
 
-import { Menu } from "@/components/plugin/menu";
+import { PluginClientLayout } from "@/app/(main)/plugins/[plugin]/layout.client";
+import { getOwnedResources } from "@/service/resource";
+
+import { PluginMenu } from "@/components/plugin/plugin-menu";
 
 type PluginProps = {
   params: {
@@ -9,14 +12,19 @@ type PluginProps = {
   children: React.ReactNode;
 };
 
-export default function PluginLayout({
+export default async function PluginLayout({
   children,
   params: { plugin: pluginId },
 }: PluginProps) {
+  const ownedPluginIds = await getOwnedResources();
+  if (!ownedPluginIds.includes(pluginId)) {
+    return notFound();
+  }
+
   return (
     <div className="flex w-full h-full overflow-hidden">
       <PluginClientLayout pluginId={pluginId}>
-        <Menu />
+        <PluginMenu ownedPluginIds={ownedPluginIds} />
         <div className="flex-1">{children}</div>
       </PluginClientLayout>
     </div>

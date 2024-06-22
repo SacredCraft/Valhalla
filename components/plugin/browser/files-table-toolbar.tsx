@@ -3,11 +3,10 @@ import _ from "lodash";
 import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
 import { Cross2Icon } from "@radix-ui/react-icons";
 
-import { FilesTableFacetedFilter } from "@/components/plugin/browser/files-table-faceted-filter";
 import { Button } from "@/components/ui/button";
+import { DataTableFacetedFilter } from "@/components/ui/data-table-faceted-filter";
+import { DataTableViewOptions } from "@/components/ui/data-table-view-options";
 import { Input } from "@/components/ui/input";
-
-import { FilesTableViewOptions } from "./files-table-view-options";
 
 export function FilesTableToolbar() {
   const { table } = useBrowserContext();
@@ -49,14 +48,14 @@ export function FilesTableToolbar() {
           className="h-8 w-[150px] lg:w-[250px]"
         />
         {table.getColumn("type") && (
-          <FilesTableFacetedFilter
+          <DataTableFacetedFilter
             column={table.getColumn("type")}
             title="Type"
             options={types}
           />
         )}
         {table.getColumn("template") && (
-          <FilesTableFacetedFilter
+          <DataTableFacetedFilter
             column={table.getColumn("template")}
             title="Templates"
             options={templates}
@@ -73,7 +72,7 @@ export function FilesTableToolbar() {
           </Button>
         )}
       </div>
-      <FilesTableViewOptions table={table} />
+      <DataTableViewOptions table={table} />
     </div>
   );
 }

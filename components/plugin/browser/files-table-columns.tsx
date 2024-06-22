@@ -6,10 +6,10 @@ import { ValhallaFile } from "@/app/actions";
 import { Template } from "@/config/types";
 import { ColumnDef, RowData } from "@tanstack/react-table";
 
-import { FilesTableColumnHeader } from "@/components/plugin/browser/files-table-column-header";
 import { FilesTableRowActions } from "@/components/plugin/browser/files-table-row-actions";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 
 export type FileCol = ValhallaFile & { template?: Template };
 
@@ -42,7 +42,7 @@ export const filesTableColumns: ColumnDef<FileCol>[] = [
   {
     accessorKey: "type",
     header: ({ column }) => (
-      <FilesTableColumnHeader column={column} title="Type" />
+      <DataTableColumnHeader column={column} title="Type" />
     ),
     filterFn: (row, _id, value) => value.includes(row.original.type),
     cell: ({ row }) => {
@@ -56,7 +56,7 @@ export const filesTableColumns: ColumnDef<FileCol>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => (
-      <FilesTableColumnHeader column={column} title="Name" />
+      <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: ({ row }) => {
       const name = row.original.name;
@@ -69,7 +69,7 @@ export const filesTableColumns: ColumnDef<FileCol>[] = [
       value.includes(row.original.template?.name ?? "None") &&
       row.original.type !== "dir",
     header: ({ column }) => (
-      <FilesTableColumnHeader column={column} title="Template" />
+      <DataTableColumnHeader column={column} title="Template" />
     ),
     cell: ({ row }) => {
       if (row.original.type === "dir") {
@@ -85,7 +85,7 @@ export const filesTableColumns: ColumnDef<FileCol>[] = [
   {
     accessorKey: "size",
     header: ({ column }) => (
-      <FilesTableColumnHeader column={column} title="Size" />
+      <DataTableColumnHeader column={column} title="Size" />
     ),
     cell: ({ row }) => {
       const size = row.original.size;
@@ -103,19 +103,19 @@ export const filesTableColumns: ColumnDef<FileCol>[] = [
   {
     accessorKey: "createdAt",
     header: ({ column }) => (
-      <FilesTableColumnHeader column={column} title="Created At" />
+      <DataTableColumnHeader column={column} title="Created At" />
     ),
   },
   {
     accessorKey: "updatedAt",
     header: ({ column }) => (
-      <FilesTableColumnHeader column={column} title="Updated At" />
+      <DataTableColumnHeader column={column} title="Updated At" />
     ),
   },
   {
     accessorKey: "actions",
     header: ({ column }) => (
-      <FilesTableColumnHeader column={column} title="Actions" />
+      <DataTableColumnHeader column={column} title="Actions" />
     ),
     cell: ({ row, table }) => <FilesTableRowActions row={row} table={table} />,
     enableSorting: false,

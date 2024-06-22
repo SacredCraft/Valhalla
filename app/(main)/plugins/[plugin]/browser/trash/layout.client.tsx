@@ -33,7 +33,7 @@ export function TrashClientLayout({ trash, children }: TrashClientLayoutProps) {
     <>
       <BrowserHeader />
       <BrowserTabs
-        actions={
+        left={
           <Button
             size="sm"
             variant="destructive"

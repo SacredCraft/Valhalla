@@ -22,8 +22,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { FilesTablePagination } from "@/components/plugin/browser/files-table-pagination";
 import { FilesTableToolbar } from "@/components/plugin/browser/files-table-toolbar";
+import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import { ImageModel } from "@/components/ui/image-model";
 import {
   Table,
@@ -196,7 +196,7 @@ function Template({ children }: { children: React.ReactNode }) {
           {children}
         </Table>
       </div>
-      {table && <FilesTablePagination table={table} />}
+      {table && <DataTablePagination table={table} />}
     </div>
   );
 }
