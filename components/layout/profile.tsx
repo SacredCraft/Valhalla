@@ -3,14 +3,25 @@ import Link from "next/link";
 
 import { motion } from "framer-motion";
 import { Ellipsis } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 
+import { useProfile } from "@/app/(main)/layout.client";
 import { cn } from "@/lib/utils";
 
 import { useAside } from "@/components/layout/aside";
+import { ProfileModel } from "@/components/layout/profile-model";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,20 +33,12 @@ import {
 
 type AvatarProps = {
   className?: string;
-  url?: string;
-  fallback?: string;
-  username: string;
-  role: "ADMIN" | "USER";
 };
 
-export function Profile({
-  className,
-  url,
-  fallback,
-  username,
-  role,
-}: AvatarProps) {
+export function Profile({ className }: AvatarProps) {
   const { collapsed } = useAside();
+  const { avatar: url, username, role } = useProfile();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -57,8 +60,8 @@ export function Profile({
           >
             <Avatar className={cn(collapsed ? "size-full" : "size-12")} asChild>
               <motion.span layout="position">
-                <AvatarImage src={url} />
-                <AvatarFallback>{fallback?.slice(0, 2)}</AvatarFallback>
+                <AvatarImage src={url ?? ""} alt={username} />
+                <AvatarFallback>{username?.slice(0, 2)}</AvatarFallback>
               </motion.span>
             </Avatar>
             <motion.div
@@ -93,9 +96,7 @@ export function Profile({
       <DropdownMenuContent side="right" sideOffset={6}>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link href="/profile">Profile</Link>
-        </DropdownMenuItem>
+        <ProfileModel />
         <DropdownMenuItem onClick={() => signOut()}>Log out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

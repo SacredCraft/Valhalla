@@ -6,8 +6,12 @@ import { isRedirectError } from "next/dist/client/components/redirect";
 import fs from "fs";
 import path from "path";
 
-import { signIn } from "@/auth";
+import { signIn, signOut } from "@/auth";
 import { getPluginPath, setPluginPath } from "@/lib/cookies";
+
+export async function logout() {
+  await signOut();
+}
 
 export async function signInAction(
   username: string,

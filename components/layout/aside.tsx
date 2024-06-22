@@ -1,20 +1,19 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { motion } from "framer-motion";
-import { Blocks, PanelRight, Settings, User, Users } from "lucide-react";
+import { Blocks, PanelRight, Settings, ShieldHalf } from "lucide-react";
 import React, { createContext, useContext, useMemo } from "react";
 
+import { useProfile } from "@/app/(main)/layout.client";
 import { plugins } from "@/config/plugins";
 import { cn } from "@/lib/utils";
 
 import { AnimatedItem } from "@/components/layout/animated-item";
 import { Profile } from "@/components/layout/profile";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type ContextType = {
   collapsed: boolean;
@@ -36,7 +35,7 @@ export const useAside = () => {
 
 export function Aside() {
   const { collapsed, setCollapsed } = useAside();
-  const session = useSession();
+  const { role } = useProfile();
 
   return (
     <motion.aside
@@ -77,18 +76,15 @@ export function Aside() {
 
         <Item value="plugins" label="Plugins" Icon={Blocks} />
 
-        <Item value="users" label="Users" Icon={Users} />
+        {role === "ADMIN" && (
+          <Item value="admin" label="Admin Panel" Icon={ShieldHalf} />
+        )}
       </motion.nav>
       <motion.nav
         layout="position"
         className={cn("mt-auto flex flex-col items-center gap-2 px-2 py-4")}
       >
-        <Profile
-          username={session.data?.user?.username!!}
-          role="USER"
-          url="https://github.com/shadcn.png"
-          fallback={session.data?.user?.username}
-        />
+        <Profile />
         <div
           className={cn(
             "flex w-full items-center gap-2",

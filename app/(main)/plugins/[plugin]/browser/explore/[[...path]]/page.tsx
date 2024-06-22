@@ -12,7 +12,7 @@ export default function ExplorePage() {
   }
 
   return (
-    <div className="mt-2">
+    <div className="my-2">
       <FilesTable />
     </div>
   );

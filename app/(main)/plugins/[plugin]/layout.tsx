@@ -14,7 +14,7 @@ export default function PluginLayout({
   params: { plugin: pluginId },
 }: PluginProps) {
   return (
-    <div className="flex w-full h-full">
+    <div className="flex w-full h-full overflow-hidden">
       <PluginClientLayout pluginId={pluginId}>
         <Menu />
         <div className="flex-1">{children}</div>
