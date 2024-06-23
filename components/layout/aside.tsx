@@ -5,8 +5,22 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { motion } from "framer-motion";
-import { Blocks, PanelRight, Settings, ShieldHalf } from "lucide-react";
-import React, { createContext, useContext, useMemo } from "react";
+import {
+  Blocks,
+  Moon,
+  PanelRight,
+  ShieldHalf,
+  Sun,
+  SunMoon,
+} from "lucide-react";
+import { useTheme } from "next-themes";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import { useProfile } from "@/app/(main)/layout.client";
 import { plugins } from "@/config/plugins";
@@ -36,6 +50,12 @@ export const useAside = () => {
 export function Aside() {
   const { collapsed, setCollapsed } = useAside();
   const { role } = useProfile();
+  const { setTheme, theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <motion.aside
@@ -68,7 +88,7 @@ export function Aside() {
               width={0}
               height={0}
               sizes="100vw"
-              className="w-full h-auto text-center font-mono tracking-widest transition-all hover:scale-110"
+              className="w-full h-auto text-center font-mono tracking-widest transition-all hover:scale-110 dark:invert"
               priority
             />
             <span className="sr-only">Valhalla</span>
@@ -92,11 +112,29 @@ export function Aside() {
             collapsed && "flex-col",
           )}
         >
-          <Link href="/settings" className={collapsed ? undefined : "w-full"}>
-            <AnimatedItem icon={<Settings className="size-5" />}>
-              Settings
-            </AnimatedItem>
-          </Link>
+          <AnimatedItem
+            onClick={() =>
+              setTheme(
+                theme === "light"
+                  ? "dark"
+                  : theme === "dark"
+                    ? "system"
+                    : "light",
+              )
+            }
+            icon={
+              mounted &&
+              (theme === "dark" ? (
+                <Moon className="size-5" />
+              ) : theme === "light" ? (
+                <Sun className="size-5" />
+              ) : (
+                <SunMoon className="size-5" />
+              ))
+            }
+          >
+            {mounted && <span className="capitalize">{theme}</span>}
+          </AnimatedItem>
           <AnimatedItem
             className="h-9 w-9"
             icon={<PanelRight className="size-5" />}

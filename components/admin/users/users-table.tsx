@@ -21,6 +21,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
+import { UsersEdit } from "@/components/admin/users/users-edit";
 import {
   UserCol,
   usersTableColumns,
@@ -93,9 +94,7 @@ export function UsersTable({ users }: { users: UserCol[] }) {
               data-state={row.getIsSelected() && "selected"}
             >
               {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
+                <UsersEdit key={cell.id} cell={cell} />
               ))}
             </TableRow>
           ))

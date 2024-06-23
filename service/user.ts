@@ -103,7 +103,7 @@ export async function getUserByUsernameAndPassword(
     : null;
 }
 
-export async function createAdminUser(username: string, password: string) {
+export async function setupAdminUser(username: string, password: string) {
   const session = await auth();
 
   if (
@@ -130,7 +130,12 @@ export async function createAdminUser(username: string, password: string) {
   }
 }
 
-export async function createUser(username: string, password: string) {
+export async function createUser(
+  username: string,
+  password: string,
+  role: "ADMIN" | "USER",
+  avatar: string | ArrayBuffer | null,
+) {
   const session = await auth();
 
   if (!session || !session.user) return false;
@@ -149,6 +154,8 @@ export async function createUser(username: string, password: string) {
       data: {
         username,
         password: hashedPassword,
+        avatar: avatar ? (avatar as string) : undefined,
+        role,
       },
     });
     return true;

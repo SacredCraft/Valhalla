@@ -1,9 +1,8 @@
 import { signOut } from "next-auth/react";
-import Link from "next/link";
 
 import { motion } from "framer-motion";
 import { Ellipsis } from "lucide-react";
-import React, { useState } from "react";
+import React from "react";
 
 import { useProfile } from "@/app/(main)/layout.client";
 import { cn } from "@/lib/utils";
@@ -13,15 +12,6 @@ import { ProfileModel } from "@/components/layout/profile-model";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,

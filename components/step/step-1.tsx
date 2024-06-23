@@ -11,7 +11,7 @@ import { z } from "zod";
 
 import { useSetupContext } from "@/app/(empty)/setup/[step]/layout.client";
 import { signInSchema } from "@/lib/zod";
-import { createAdminUser } from "@/service/user";
+import { setupAdminUser } from "@/service/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
@@ -42,7 +42,7 @@ export function Step1() {
   function onSubmit(values: z.infer<typeof signInSchema>) {
     setIsLoading(true);
 
-    createAdminUser(values.username, values.password).then((res) => {
+    setupAdminUser(values.username, values.password).then((res) => {
       setIsLoading(false);
       if (res) {
         toast.success("Account created successfully");
