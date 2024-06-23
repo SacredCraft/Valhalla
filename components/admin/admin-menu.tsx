@@ -20,6 +20,12 @@ export function AdminMenu() {
           </p>
           <Item value="users" label="Users" />
         </nav>
+        <nav className="flex flex-col gap-1 px-2">
+          <p className="text-muted-foreground text-xs font-semibold uppercase px-3 mb-1 mt-2">
+            Settings
+          </p>
+          <Item value="plugin-path" label="Plugin Path" />
+        </nav>
       </div>
     </div>
   );

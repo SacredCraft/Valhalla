@@ -17,7 +17,7 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0
       "@prisma/client":
-        specifier: ^5.15.1
+        specifier: 5.15.1
         version: 5.15.1(prisma@5.15.1)
       "@radix-ui/react-accordion":
         specifier: ^1.2.0

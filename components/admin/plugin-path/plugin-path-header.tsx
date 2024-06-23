@@ -11,7 +11,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-export const UsersHeader = () => {
+export const PluginPathHeader = () => {
   return (
     <header className="h-12 border-b flex px-2 items-center">
       <Breadcrumb className="hidden md:flex">
@@ -22,7 +22,7 @@ export const UsersHeader = () => {
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
-          <BreadcrumbPage>Users</BreadcrumbPage>
+          <BreadcrumbPage>Plugin Path</BreadcrumbPage>
         </BreadcrumbList>
       </Breadcrumb>
     </header>

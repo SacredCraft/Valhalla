@@ -13,7 +13,7 @@
     "@codemirror/lang-yaml": "^6.1.1",
     "@hookform/resolvers": "^3.6.0",
     "@lezer/highlight": "^1.2.0",
-    "@prisma/client": "^5.15.1",
+    "@prisma/client": "5.15.1",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-checkbox": "^1.1.0",

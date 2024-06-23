@@ -123,14 +123,17 @@ export function Aside() {
               )
             }
             icon={
-              mounted &&
-              (theme === "dark" ? (
-                <Moon className="size-5" />
-              ) : theme === "light" ? (
-                <Sun className="size-5" />
+              mounted ? (
+                theme === "dark" ? (
+                  <Moon className="size-5" />
+                ) : theme === "light" ? (
+                  <Sun className="size-5" />
+                ) : (
+                  <SunMoon className="size-5" />
+                )
               ) : (
                 <SunMoon className="size-5" />
-              ))
+              )
             }
           >
             {mounted && <span className="capitalize">{theme}</span>}

@@ -7,7 +7,52 @@ import fs from "fs";
 import path from "path";
 
 import { signIn, signOut } from "@/auth";
-import { getPluginPath, setPluginPath } from "@/lib/cookies";
+import prisma from "@/lib/prisma";
+
+export async function getAllPluginPaths(): Promise<Map<string, string>> {
+  const paths = new Map<string, string>();
+
+  const res = await prisma.pluginPath.findMany();
+
+  if (!res) {
+    return paths;
+  }
+
+  for (const path of res) {
+    paths.set(path.pluginId, path.path);
+  }
+
+  return paths;
+}
+
+export async function getPluginPath(id: string): Promise<string | null> {
+  const res = await prisma.pluginPath.findUnique({
+    where: {
+      pluginId: id,
+    },
+  });
+
+  if (!res) {
+    return null;
+  }
+
+  return res.path;
+}
+
+export async function setPluginPath(id: string, path: string) {
+  await prisma.pluginPath.upsert({
+    where: {
+      pluginId: id,
+    },
+    update: {
+      path,
+    },
+    create: {
+      pluginId: id,
+      path,
+    },
+  });
+}
 
 export async function logout() {
   await signOut();
