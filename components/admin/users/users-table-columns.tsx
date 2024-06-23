@@ -67,6 +67,7 @@ export const usersTableColumns: ColumnDef<UserCol>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Role" />
     ),
+    filterFn: (row, _id, value) => value.includes(row.original.role),
     cell: ({ row }) =>
       row.original.role === "ADMIN" ? (
         <Badge>Admin</Badge>

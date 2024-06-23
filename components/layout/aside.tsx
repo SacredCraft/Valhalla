@@ -63,12 +63,13 @@ export function Aside() {
             className={collapsed ? "w-8" : "w-20"}
           >
             <Image
-              src="/icon.png"
+              src="/pure-icon.png"
               alt="Valhalla"
               width={0}
               height={0}
               sizes="100vw"
               className="w-full h-auto text-center font-mono tracking-widest transition-all hover:scale-110"
+              priority
             />
             <span className="sr-only">Valhalla</span>
           </motion.div>

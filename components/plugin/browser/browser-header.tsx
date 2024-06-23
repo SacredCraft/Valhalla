@@ -79,7 +79,6 @@ export function BrowserHeader() {
           )}
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="ml-auto flex-1 md:grow-0 flex gap-4"></div>
     </header>
   );
 }

@@ -4,6 +4,7 @@ import { Dispatch, createContext, useContext, useState } from "react";
 
 import { useReactTable } from "@tanstack/react-table";
 
+import { UsersHeader } from "@/components/admin/users/users-header";
 import { UserCol } from "@/components/admin/users/users-table-columns";
 
 type ContextType = {
@@ -31,7 +32,7 @@ export function UsersClientLayout({ children }: UsersClientLayoutProps) {
 
   return (
     <UsersContext.Provider value={{ table, setTable }}>
-      <div className="h-12 border-b" />
+      <UsersHeader />
       {children}
     </UsersContext.Provider>
   );

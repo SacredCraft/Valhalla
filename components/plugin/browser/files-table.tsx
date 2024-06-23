@@ -111,6 +111,7 @@ export function FilesTable() {
               </ImageModel>
             ) : (
               <TableRow
+                key={row.id}
                 className={cn(
                   "h-12 cursor-pointer",
                   row.original.type === "dir" &&
