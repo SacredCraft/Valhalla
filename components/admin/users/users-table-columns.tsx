@@ -36,6 +36,7 @@ export const usersTableColumns: ColumnDef<UserCol>[] = [
       <Checkbox
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
+        onClick={(e) => e.stopPropagation()}
         aria-label="Select row"
         className="translate-y-[2px]"
       />

@@ -30,8 +30,8 @@ export const filesTableColumns: ColumnDef<FileCol>[] = [
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}
-        onClick={(e) => e.stopPropagation()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
+        onClick={(e) => e.stopPropagation()}
         aria-label="Select row"
         className="translate-y-[2px]"
       />
