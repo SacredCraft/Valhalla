@@ -45,7 +45,7 @@ export const AvatarUploader = ({
       }
     },
 
-    [file, setFile],
+    [setFile],
   );
 
   return (
