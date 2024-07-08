@@ -26,10 +26,13 @@ const AccordionTrigger = React.forwardRef<
     icon?: boolean | React.ReactNode;
     classNames?: {
       trigger?: string;
+      header?: string;
     };
   }
 >(({ classNames, children, icon, ...props }, ref) => (
-  <AccordionPrimitive.Header className="flex px-3 py-4">
+  <AccordionPrimitive.Header
+    className={cn("flex px-3 py-4", classNames?.header)}
+  >
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(

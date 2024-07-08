@@ -8,18 +8,20 @@ import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 
 type FilesTabsProps = {
-  actions?: React.ReactNode;
+  left?: React.ReactNode;
+  right?: React.ReactNode;
 };
 
-export function FilesTabs({ actions }: FilesTabsProps) {
+export function FilesTabs({ left, right }: FilesTabsProps) {
   return (
     <div className="border-b h-12 flex px-2 justify-between items-center relative">
-      <div>{actions}</div>
+      <div className="flex gap-2">{left}</div>
       <nav className="flex items-center justify-center gap-2 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         <FilesTab value="info" label="Info" />
         <FilesTab value="editor" label="Editor" />
         <FilesTab value="raw" label="Raw" />
       </nav>
+      <div className="flex gap-2">{right}</div>
     </div>
   );
 }

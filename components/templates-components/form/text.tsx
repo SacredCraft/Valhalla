@@ -3,7 +3,7 @@
 import { useFilesEditorContext } from "@/app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
 import { getFormValue } from "@/lib/form";
 
-import { useNode } from "@/components/form/node";
+import { useNode } from "@/components/templates-components/form/node";
 import {
   FormControl,
   FormDescription,

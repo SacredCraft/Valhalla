@@ -15,8 +15,8 @@ import { useFilesEditorContext } from "@/app/(main)/plugins/[plugin]/files/edito
 import { isFormDeletableValue } from "@/lib/form";
 import { cn } from "@/lib/utils";
 
-import { GroupArea } from "@/components/form/areas/group-area";
-import { Node, useNode } from "@/components/form/node";
+import { VisibleArea } from "@/components/templates-components/areas/visible-area";
+import { Node, useNode } from "@/components/templates-components/form/node";
 
 type ContextProps = {
   items: ListItem[];
@@ -128,7 +128,7 @@ export function ListArea({
                 whileDrag={{ scale: 0.95, opacity: 0.8 }}
               >
                 <Node node={String(item.id)}>
-                  <GroupArea
+                  <VisibleArea
                     title={item.text}
                     collapsed={getCollapsed(item.id)}
                     onValueChange={(collapsed) => {
@@ -162,7 +162,7 @@ export function ListArea({
                     }
                   >
                     {children && children({ item })}
-                  </GroupArea>
+                  </VisibleArea>
                 </Node>
               </Reorder.Item>
             );

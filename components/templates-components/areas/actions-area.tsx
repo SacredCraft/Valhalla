@@ -11,7 +11,7 @@ import {
 } from "@/lib/form";
 import { cn } from "@/lib/utils";
 
-import { useNode } from "@/components/form/node";
+import { useNode } from "@/components/templates-components/form/node";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,

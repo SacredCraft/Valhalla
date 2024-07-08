@@ -7,7 +7,7 @@ import { getFormValue, isFormDeletableValue } from "@/lib/form";
 import { cn } from "@/lib/utils";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 
-import { useNode } from "@/components/form/node";
+import { useNode } from "@/components/templates-components/form/node";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -87,7 +87,7 @@ export function Enum({
       defaultValue={defaultValue}
       render={({ field }) => (
         <FormItem className={cn(className, "flex flex-col")}>
-          {label && <FormLabel>{label}</FormLabel>}
+          {label && <FormLabel className="w-fit">{label}</FormLabel>}
           <Popover>
             <PopoverTrigger asChild>
               <FormControl>

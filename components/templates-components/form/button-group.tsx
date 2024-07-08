@@ -6,7 +6,7 @@ import { useFilesEditorContext } from "@/app/(main)/plugins/[plugin]/files/edito
 import { getFormValue } from "@/lib/form";
 import { useControllableState } from "@radix-ui/react-use-controllable-state";
 
-import { useNode } from "@/components/form/node";
+import { useNode } from "@/components/templates-components/form/node";
 import { Button } from "@/components/ui/button";
 import {
   FormControl,

@@ -6,6 +6,7 @@ import FilesEditorClientLayout from "@/app/(main)/plugins/[plugin]/files/editor/
 import { getFile } from "@/app/actions";
 import { ConfigurationResult, getConfigurationJson } from "@/lib/core";
 
+import { ActionSave } from "@/components/plugin/files/action-save";
 import { FilesHeader } from "@/components/plugin/files/files-header";
 import { FilesTabs } from "@/components/plugin/files/files-tabs";
 
@@ -48,7 +49,7 @@ export default async function FilesInfoLayout({
       configuration={initialConfiguration}
     >
       <FilesHeader />
-      <FilesTabs />
+      <FilesTabs right={<ActionSave />} />
       {children}
     </FilesEditorClientLayout>
   );

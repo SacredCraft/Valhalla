@@ -18,7 +18,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-type GroupAreaProps = {
+type VisibleAreaProps = {
   title?: string;
   description?: string;
   children?: React.ReactNode;
@@ -35,7 +35,7 @@ type GroupAreaProps = {
   };
 };
 
-export function GroupArea({
+export function VisibleArea({
   title,
   description,
   children,
@@ -45,7 +45,7 @@ export function GroupArea({
   icon = true,
   onValueChange,
   collapsed: propsCollapsed,
-}: GroupAreaProps) {
+}: VisibleAreaProps) {
   const [collapsed, setCollapsed] = useControllableState<boolean>({
     prop: propsCollapsed,
     defaultProp: defaultCollapsed,
@@ -71,32 +71,32 @@ export function GroupArea({
         <AccordionItem value="item" className="space-y-4" asChild>
           <Card
             className={cn(
-              "h-fit bg-transparent rounded-none border-t-0 border-x-0",
+              "h-fit bg-transparent rounded-lg my-2",
               classNames?.card,
             )}
           >
             <CardContent
-              className={cn(
-                "p-0 grid py-1 text-sm px-2",
-                classNames?.cardContent,
-              )}
+              className={cn("p-2 grid py-1 text-sm", classNames?.cardContent)}
             >
               <AccordionTrigger
                 classNames={{
                   trigger: classNames?.trigger,
+                  header: "px-0",
                 }}
                 icon={icon}
               >
                 {(title || description) && (
                   <div className="flex flex-col items-start space-y-1.5 text-start">
-                    {title && <CardTitle>{title}</CardTitle>}
+                    {title && <CardTitle className="px-0">{title}</CardTitle>}
                     {description && (
                       <CardDescription>{description}</CardDescription>
                     )}
                   </div>
                 )}
               </AccordionTrigger>
-              <AccordionContent className={cn("px-3", classNames?.content)}>
+              <AccordionContent
+                className={cn("overflow-visible", classNames?.content)}
+              >
                 {children}
               </AccordionContent>
               {collapsed && !opened && <div className="hidden">{children}</div>}
@@ -106,4 +106,16 @@ export function GroupArea({
       </Accordion>
     );
   }
+}
+
+export function RootVisibleArea({ classNames, ...props }: VisibleAreaProps) {
+  return (
+    <VisibleArea
+      classNames={{
+        card: cn("border-t-0 my-0 rounded-none border-x-0", classNames?.card),
+        cardContent: cn("px-2", classNames?.cardContent),
+      }}
+      {...props}
+    />
+  );
 }

@@ -1,11 +1,10 @@
 import { useFilesEditorContext } from "@/app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
 
-import { Enum } from "@/components/form/enum";
-import { Node, useNode } from "@/components/form/node";
-import { Text } from "@/components/form/text";
-import { MechanismProps } from "@/components/templates/jormungandr/jormungandr-default";
+import { Enum } from "@/components/templates-components/form/enum";
+import { Node, useNode } from "@/components/templates-components/form/node";
+import { Text } from "@/components/templates-components/form/text";
 
-export function Hostile({}: MechanismProps) {
+export function Hostile() {
   return (
     <div className="space-y-2">
       <Node node="alert">

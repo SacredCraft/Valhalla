@@ -22,15 +22,14 @@ export function FilesHeader() {
   const { relativePath } = useFilesContext();
   const pathname = usePathname();
 
-  const isInfo = pathname.split("/")[4] === "info";
-  const isEditor = pathname.split("/")[4] === "editor";
+  const currentPageName = pathname.split("/")[4];
 
   const currentPage = useMemo(
     () => ({
-      value: isInfo ? "info" : isEditor ? "editor" : null,
-      label: isInfo ? "Info" : isEditor ? "Editor" : null,
+      value: currentPageName,
+      label: currentPageName.charAt(0).toUpperCase() + currentPageName.slice(1),
     }),
-    [isEditor, isInfo],
+    [currentPageName],
   );
 
   return (
