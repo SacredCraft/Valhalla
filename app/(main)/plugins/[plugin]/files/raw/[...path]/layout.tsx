@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import React from "react";
 
@@ -25,8 +25,8 @@ export default async function FilesRawLayout({
     relativePath.map((i) => decodeURIComponent(i)).join("/"),
   );
 
-  if (!file) {
-    return notFound();
+  if (!file || file.type === "dir") {
+    redirect(`/plugins/${pluginId}/browser/explore/${relativePath.join("/")}`);
   }
 
   return (
