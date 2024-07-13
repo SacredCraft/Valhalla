@@ -1,4 +1,6 @@
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+
+import { getFile } from "@/app/actions";
 
 type BrowserProps = {
   params: {
@@ -7,9 +9,20 @@ type BrowserProps = {
   };
 };
 
-export default function Browser({ params: { plugin, path } }: BrowserProps) {
-  if (!path) {
-    redirect(`/plugins/${plugin}/browser/explore`);
+export default async function Browser({
+  params: { plugin: pluginId, path: relativePath },
+}: BrowserProps) {
+  if (!relativePath) {
+    redirect(`/plugins/${pluginId}/browser/explore`);
   }
-  redirect(`/plugins/${plugin}/files/info/${path.join("/")}`);
+  const file = await getFile(
+    pluginId,
+    relativePath.map((i) => decodeURIComponent(i)).join("/"),
+  );
+
+  if (!file || file.type === "dir") {
+    notFound();
+  }
+
+  redirect(`/plugins/${pluginId}/files/info/${relativePath.join("/")}`);
 }

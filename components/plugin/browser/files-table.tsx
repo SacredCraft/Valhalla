@@ -38,7 +38,7 @@ import { FileCol, filesTableColumns } from "./files-table-columns";
 
 export function FilesTable() {
   const { plugin, setOpenedFiles, openedFiles } = usePluginContext();
-  const { relativePath, trash, files, setTable } = useBrowserContext();
+  const { relativePath, files, setTable } = useBrowserContext();
 
   if (!relativePath || !files) {
     throw new Error("relativePath and files are required");
@@ -197,7 +197,7 @@ function Template({ children }: { children: React.ReactNode }) {
           {children}
         </Table>
       </div>
-      {table && <DataTablePagination table={table} />}
+      {table && <DataTablePagination persist name="explore" table={table} />}
     </div>
   );
 }
