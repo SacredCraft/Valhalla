@@ -20,43 +20,72 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-function generateDataUrl(file: File, callback: (imageUrl: string) => void) {
-  const reader = new FileReader();
-  reader.onload = () => callback(reader.result as string);
-  reader.readAsDataURL(file);
-}
-
 export function Upload() {
   const { plugin } = usePluginContext();
   const { relativePath, table } = useBrowserContext();
+  const [isUploading, setIsUploading] = useState<boolean>(false);
 
   const [files, setFiles] = useState<File[]>([]);
 
-  const handleUpload = () => {
-    const formData = new FormData();
-    formData.append("pluginId", plugin.id);
-    formData.append("relativePath", relativePath?.join("/") || "");
-    files.forEach((file) => {
-      formData.append("files", file);
-    });
+  const [progresses, setProgresses] = useState<
+    Record<string, number> | undefined
+  >();
 
-    fetch("/api/files", {
-      method: "POST",
-      body: formData,
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res;
+  const handleUpload = () => {
+    setIsUploading(true);
+    let uploadedCount = 0;
+    const errors: string[] = [];
+    files.forEach((file) => {
+      const formData = new FormData();
+      formData.append("pluginId", plugin.id);
+      formData.append("relativePath", relativePath?.join("/") || "");
+      formData.append("files", file);
+
+      const xhr = new XMLHttpRequest();
+
+      // 监听上传进度事件
+      xhr.upload.addEventListener("progress", (event) => {
+        if (event.lengthComputable) {
+          const percentComplete = (event.loaded / event.total) * 100;
+          setProgresses((progresses) => {
+            const newProgresses = { ...progresses };
+            newProgresses[file.name] = percentComplete;
+            return newProgresses;
+          });
         }
-        return Promise.reject("Failed to upload file");
-      })
-      .then(() => {
-        table?.options.meta?.refresh();
-        toast.success("File uploaded successfully");
-      })
-      .catch(() => {
+      });
+
+      xhr.addEventListener("load", () => {
+        if (xhr.status === 200) {
+          table?.options.meta?.refresh();
+          setProgresses((progresses) => {
+            const newProgresses = { ...progresses };
+            delete newProgresses[file.name];
+            return newProgresses;
+          });
+          setFiles((files) => {
+            return files.filter((f) => f.name !== file.name);
+          });
+        } else {
+          errors.push(file.name);
+          toast.error(`Failed to upload file: ${file.name}`);
+        }
+        uploadedCount++;
+        if (uploadedCount === files.length) {
+          setIsUploading(false);
+          if (errors.length === 0) {
+            toast.success("Files uploaded successfully");
+          }
+        }
+      });
+
+      xhr.addEventListener("error", () => {
         toast.error("Failed to upload file");
       });
+
+      xhr.open("POST", "/api/files");
+      xhr.send(formData);
+    });
   };
 
   return (
@@ -74,16 +103,21 @@ export function Upload() {
             Upload a file to the current directory.
           </SheetDescription>
         </SheetHeader>
-        <div className="grid gap-4 py-4 h-fit">
-          <FileUploader value={files} onValueChange={setFiles} multiple />
+        <div className="grid gap-4 py-4 h-fit overflow-scroll">
+          <FileUploader
+            value={files}
+            onValueChange={setFiles}
+            multiple
+            progresses={progresses}
+          />
         </div>
         <SheetFooter>
           <SheetClose>
             <Button variant="outline">Cancel</Button>
           </SheetClose>
-          <SheetClose>
-            <Button onClick={() => handleUpload()}>Upload</Button>
-          </SheetClose>
+          <Button disabled={isUploading} onClick={() => handleUpload()}>
+            Upload
+          </Button>
         </SheetFooter>
       </SheetContent>
     </Sheet>

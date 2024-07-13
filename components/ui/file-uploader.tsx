@@ -249,6 +249,7 @@ function FileCard({ file, progress, onRemove }: FileCardProps) {
           variant="outline"
           size="icon"
           className="size-7"
+          disabled={progress !== undefined}
           onClick={onRemove}
         >
           <Cross2Icon className="size-4 " aria-hidden="true" />
