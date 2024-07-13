@@ -1,6 +1,7 @@
 "use client";
 
 import { Star } from "lucide-react";
+import { toast } from "sonner";
 
 import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
 import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
@@ -100,7 +101,9 @@ export function FilesTableRowActions({
           )}
           <DropdownMenuItem
             onClick={() =>
-              navigator.clipboard.writeText(relativePath.join("/"))
+              navigator.clipboard.writeText(relativePath.join("/")).then(() => {
+                toast.success("Path copied to clipboard");
+              })
             }
           >
             Copy path

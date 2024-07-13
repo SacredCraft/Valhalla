@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect } from "react";
 
 import { useFilesContext } from "@/app/(main)/plugins/[plugin]/files/layout.client";
 import { ValhallaFile } from "@/app/actions";
@@ -29,13 +29,11 @@ type FilesInfoClientLayoutProps = {
 };
 
 export default function FilesInfoClientLayout({
-  template,
   file,
   children,
   relativePath,
 }: FilesInfoClientLayoutProps) {
   const { setRelativePath } = useFilesContext();
-  const [tabValue, setTabValue] = useState(template ? "edit" : "raw");
 
   useEffect(() => {
     setRelativePath?.(relativePath.map((i) => decodeURIComponent(i)));

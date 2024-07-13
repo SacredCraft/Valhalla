@@ -8,7 +8,7 @@ import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.
 import { Button } from "@/components/ui/button";
 
 export function CopyCurrentPath() {
-  const { relativePath, table } = useBrowserContext();
+  const { relativePath } = useBrowserContext();
 
   return (
     <Button

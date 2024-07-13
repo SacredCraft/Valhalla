@@ -41,6 +41,10 @@ export async function moveToTrash(
     return;
   }
 
+  if (!fs.existsSync(getValhallaDir(folder))) {
+    createValhallaDir(folder);
+  }
+
   fs.renameSync(
     [...folder, fileName].join("/"),
     [getValhallaDir(folder), trashFileName].join("/"),

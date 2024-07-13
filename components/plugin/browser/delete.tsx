@@ -28,7 +28,7 @@ interface DeleteProps {
 }
 
 export function Delete({ row, table }: DeleteProps) {
-  const { plugin } = usePluginContext();
+  const { plugin, setOpenedFiles } = usePluginContext();
 
   return (
     <Sheet>
@@ -51,6 +51,13 @@ export function Delete({ row, table }: DeleteProps) {
                 onClick={() => {
                   moveToTrash(plugin.id, row.original.path, "admin").then(
                     () => {
+                      setOpenedFiles((prev) => {
+                        if (!prev) return prev;
+                        return prev.filter(
+                          (file) =>
+                            file.path.join("/") !== row.original.path.join("/"),
+                        );
+                      });
                       toast.success("File moved to trash bin");
                       table.options.meta?.refresh();
                     },
@@ -77,6 +84,14 @@ export function Delete({ row, table }: DeleteProps) {
                       if (!res) {
                         toast.error("Failed to delete the file");
                       } else {
+                        setOpenedFiles((prev) => {
+                          if (!prev) return prev;
+                          return prev.filter(
+                            (file) =>
+                              file.path.join("/") !==
+                              row.original.path.join("/"),
+                          );
+                        });
                         table.options.meta?.refresh();
                       }
                     },

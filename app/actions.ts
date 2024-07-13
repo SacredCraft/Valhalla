@@ -191,17 +191,21 @@ export async function getFile(
     return null;
   }
   const filePath = path.join(pluginPath, relativePath);
-  const stats = fs.statSync(filePath);
+  try {
+    const stats = fs.statSync(filePath);
 
-  return {
-    type: stats.isDirectory() ? "dir" : "file",
-    name: path.basename(filePath),
-    path: relativePath.split(path.sep),
-    createdAt: stats.birthtime.toLocaleString(),
-    updatedAt: stats.mtime.toLocaleString(),
-    size: stats.size,
-    ext: path.extname(filePath).slice(1),
-  };
+    return {
+      type: stats.isDirectory() ? "dir" : "file",
+      name: path.basename(filePath),
+      path: relativePath.split(path.sep),
+      createdAt: stats.birthtime.toLocaleString(),
+      updatedAt: stats.mtime.toLocaleString(),
+      size: stats.size,
+      ext: path.extname(filePath).slice(1),
+    };
+  } catch (error) {
+    return null;
+  }
 }
 
 export async function savePath(formData: FormData) {

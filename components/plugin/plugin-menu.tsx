@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
+import { Reorder } from "framer-motion";
+import { X } from "lucide-react";
 import { useMemo } from "react";
 
 import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
@@ -27,7 +29,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function PluginMenu({ ownedPluginIds }: { ownedPluginIds: string[] }) {
-  const { openedFiles } = usePluginContext();
+  const { openedFiles, setOpenedFiles } = usePluginContext();
   const pathname = usePathname();
   const plugin = useMemo(() => pathname.split("/")[2], [pathname]);
   const router = useRouter();
@@ -81,35 +83,42 @@ export function PluginMenu({ ownedPluginIds }: { ownedPluginIds: string[] }) {
           </Popover>
         </div>
         <nav className="flex flex-col gap-1 px-2">
-          <p className="text-muted-foreground text-xs font-semibold uppercase px-3 mb-1 mt-2">
+          <p className="text-muted-foreground text-xs font-semibold uppercase px-2 mb-1 mt-2">
             Functions
           </p>
           <Item value="browser" label="Files Browser" />
-          <Item value="settings" label="Plugin Settings" />
         </nav>
-        <nav className="flex flex-col gap-1 px-2">
-          <p className="text-muted-foreground text-xs font-semibold uppercase px-3 mb-1 mt-2">
+        <nav className="flex flex-col gap-1 px-2 flex-1">
+          <p className="text-muted-foreground text-xs font-semibold uppercase px-2 mb-1 mt-2">
             Files
           </p>
-          <ScrollArea>
-            {openedFiles?.map((file, _index, array) => {
-              // 统计文件名在数组中出现的次数
-              const duplicateCount = array.filter(
-                (f) => f.name === file.name,
-              ).length;
-              // 如果文件名重复，显示路径
-              const label =
-                duplicateCount > 1
-                  ? `${file.name} (${file.path.join("/")})`
-                  : file.name;
-              return (
-                <Item
-                  key={file.path.join("/")}
-                  value={`files/${file.path.join("/")}`}
-                  label={label}
-                />
-              );
-            })}
+          <ScrollArea className="flex-1">
+            <Reorder.Group
+              axis="y"
+              values={openedFiles}
+              onReorder={setOpenedFiles}
+            >
+              {openedFiles?.map((file, index, array) => {
+                // 统计文件名在数组中出现的次数
+                const duplicateCount = array.filter(
+                  (f) => f.name === file.name,
+                ).length;
+                // 如果文件名重复，显示路径
+                const label =
+                  duplicateCount > 1
+                    ? `${file.name} (${file.path.join("/")})`
+                    : file.name;
+                return (
+                  <Reorder.Item key={file.path.join("/")} value={file}>
+                    <Item
+                      index={index}
+                      value={`files/${file.path.join("/")}`}
+                      label={label}
+                    />
+                  </Reorder.Item>
+                );
+              })}
+            </Reorder.Group>
           </ScrollArea>
         </nav>
       </div>
@@ -117,7 +126,16 @@ export function PluginMenu({ ownedPluginIds }: { ownedPluginIds: string[] }) {
   );
 }
 
-function Item({ value, label }: { value: string; label: string }) {
+function Item({
+  value,
+  label,
+  index,
+}: {
+  value: string;
+  label: string;
+  index?: number;
+}) {
+  const { setOpenedFiles } = usePluginContext();
   const pathname = usePathname();
 
   const isActive = useMemo(
@@ -133,11 +151,26 @@ function Item({ value, label }: { value: string; label: string }) {
     <Button
       size="sm"
       variant={isActive ? "secondary" : "ghost"}
-      className="w-full justify-start h-7"
+      className="w-full justify-start h-7 group px-2"
       asChild
     >
-      <Link href={`/plugins/${pathname.split("/")[2]}/${value}`}>
+      <Link
+        href={`/plugins/${pathname.split("/")[2]}/${value}`}
+        draggable={false}
+      >
         {decodeURIComponent(label)}
+        {index !== undefined && (
+          <span
+            className="ml-auto group-hover:opacity-100 opacity-0 transition-all rounded-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 p-1"
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              setOpenedFiles((prev) => prev?.filter((_, i) => i !== index));
+            }}
+          >
+            <X className="size-3" />
+          </span>
+        )}
       </Link>
     </Button>
   );

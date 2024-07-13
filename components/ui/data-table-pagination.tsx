@@ -1,3 +1,8 @@
+import { atomWithStorage } from "jotai/utils";
+
+import { useAtom } from "jotai";
+import { useEffect, useMemo, useState } from "react";
+
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -17,11 +22,37 @@ import {
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
+  persist?: boolean;
+  name?: string;
 }
 
 export function DataTablePagination<TData>({
   table,
+  persist,
+  name,
 }: DataTablePaginationProps<TData>) {
+  const tableState = table.getState().pagination.pageSize;
+
+  const [localPageSize, setLocalPageSize] = useState<number>(() => {
+    const local = localStorage.getItem(`pagination-size-${name}`);
+    return local ? Number(local) : tableState;
+  });
+
+  const pageSize = useMemo(() => {
+    if (persist) {
+      return localPageSize;
+    } else {
+      return tableState;
+    }
+  }, [localPageSize, persist, tableState]);
+
+  useEffect(() => {
+    if (persist) {
+      table.setPageSize(pageSize);
+      localStorage.setItem(`pagination-size-${name}`, pageSize.toString());
+    }
+  }, [name, pageSize, persist, table]);
+
   return (
     <div className="flex items-center justify-between px-2 w-full">
       <div className="flex-1 text-sm text-muted-foreground">
@@ -32,9 +63,13 @@ export function DataTablePagination<TData>({
         <div className="flex items-center space-x-2">
           <p className="text-sm font-medium">Rows per page</p>
           <Select
-            value={`${table.getState().pagination.pageSize}`}
+            value={`${pageSize}`}
             onValueChange={(value) => {
-              table.setPageSize(Number(value));
+              if (persist) {
+                setLocalPageSize(Number(value));
+              } else {
+                table.setPageSize(Number(value));
+              }
             }}
           >
             <SelectTrigger className="h-8 w-[70px]">
