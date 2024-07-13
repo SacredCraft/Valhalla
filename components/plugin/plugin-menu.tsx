@@ -141,8 +141,10 @@ function Item({
   const isActive = useMemo(
     () =>
       value.includes("files")
-        ? pathname.includes(value.split("/")[0]) &&
-          pathname.includes(value.split("/").slice(1).join("/"))
+        ? decodeURIComponent(pathname).includes(value.split("/")[0]) &&
+          decodeURIComponent(pathname).includes(
+            value.split("/").slice(1).join("/"),
+          )
         : pathname.split("/")[3] === value,
     [pathname, value],
   );
