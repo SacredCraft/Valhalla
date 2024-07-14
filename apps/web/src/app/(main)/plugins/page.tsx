@@ -1,9 +1,9 @@
 import { notFound, redirect } from "next/navigation";
 
-import { getOwnedResources } from "@/server/service/resource";
+import { api } from "@/trpc/server";
 
 export default async function PluginsPage() {
-  const ownedPluginIds = await getOwnedResources();
+  const ownedPluginIds = await api.resources.getOwnedResources();
 
   if (ownedPluginIds.length === 0) {
     return notFound();

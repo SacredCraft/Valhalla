@@ -19,9 +19,12 @@ import {
 import { Input } from "@/app/_components/ui/input";
 import { cn } from "@/lib/utils";
 import { signInSchema } from "@/lib/zod";
+import { db } from "@/server/db";
+import { signIn } from "@/server/service/auth";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
+import { useMutation } from "@tanstack/react-query";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -37,23 +40,18 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     },
   });
 
-  const signIn = api.users.signIn.useMutation({
-    onSuccess: () => {
-      toast.success("Sign in successfully");
-      router.push("/");
-    },
-    onError: () => {
-      toast.error("Invalid username or password");
-    },
-    onSettled: () => {
-      setIsLoading(false);
-    },
-  });
-
   function onSubmit(values: z.infer<typeof signInSchema>) {
     setIsLoading(true);
 
-    signIn.mutate(values);
+    signIn(values.username, values.password).then((success) => {
+      if (success) {
+        toast.success("Sign in successfully");
+        router.push("/");
+      } else {
+        toast.error("Sign in failed");
+      }
+      setIsLoading(false);
+    });
   }
 
   return (
@@ -71,6 +69,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                     <Input
                       placeholder="LioRael"
                       disabled={isLoading}
+                      autoComplete="username"
                       {...field}
                     />
                   </FormControl>
@@ -89,6 +88,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                       placeholder="••••••••"
                       type="password"
                       disabled={isLoading}
+                      autoComplete="current-password"
                       {...field}
                     />
                   </FormControl>

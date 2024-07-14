@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 
 import Providers from "@/app/_components/providers";
 import "@/styles/globals.css";
+import { HydrateClient } from "@/trpc/server";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
   description: "开拓者资源管理平台（Valhalla Hub）",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -29,7 +30,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} h-full bg-muted/40 font-sans`}
       >
         <Providers>
-          <div className="flex min-h-full flex-col">{children}</div>
+          <HydrateClient>
+            <div className="flex min-h-full flex-col">{children}</div>
+          </HydrateClient>
         </Providers>
       </body>
     </html>

@@ -1,5 +1,4 @@
-import { compareSync, genSaltSync, hashSync } from "bcrypt-ts";
-import { isRedirectError } from "next/dist/client/components/redirect";
+import { genSaltSync, hashSync } from "bcrypt-ts";
 import { z } from "zod";
 
 import {
@@ -8,7 +7,7 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
-import { signIn } from "@/server/auth";
+import { getUserByUsernameAndPassword, signIn } from "@/server/service/auth";
 import { TRPCError } from "@trpc/server";
 
 const updateSchema = z.object({
@@ -16,34 +15,6 @@ const updateSchema = z.object({
 });
 
 export const userRouter = createTRPCRouter({
-  signIn: publicProcedure
-    .input(z.object({ username: z.string(), password: z.string() }))
-    .mutation(async ({ input, ctx }) => {
-      const formData = new FormData();
-      formData.append("username", input.username);
-      formData.append("password", input.password);
-
-      try {
-        await signIn("credentials", formData);
-      } catch (error) {
-        if (!isRedirectError(error)) {
-          throw new TRPCError({
-            code: "UNAUTHORIZED",
-            message: "Invalid credentials",
-          });
-        }
-      }
-
-      ctx.db.user.update({
-        where: {
-          username: input.username,
-        },
-        data: {
-          lastLogin: new Date(),
-        },
-      });
-    }),
-
   setupAdminUser: publicProcedure
     .input(
       z.object({
@@ -116,27 +87,11 @@ export const userRouter = createTRPCRouter({
       }),
     )
     .query(async ({ input, ctx }) => {
-      const user = await ctx.db.user.findFirst({
-        where: {
-          username: input.username,
-        },
-        select: {
-          id: true,
-          username: true,
-          password: true,
-        },
-      });
-
-      if (!user) {
-        return null;
-      }
-
-      return compareSync(input.password, user.password)
-        ? {
-            ...user,
-            password: undefined,
-          }
-        : null;
+      return getUserByUsernameAndPassword(
+        input.username,
+        input.password,
+        ctx.db,
+      );
     }),
 
   getUserById: protectedProcedure
@@ -146,20 +101,27 @@ export const userRouter = createTRPCRouter({
       }),
     )
     .query(async ({ input, ctx }) => {
-      return ctx.db.user.findFirst({
-        where: {
-          id: input.id,
-        },
-        select: {
-          id: true,
-          bio: true,
-          username: true,
-          role: true,
-          avatar: true,
-          password: false,
-          UserResourceRole: true,
-        },
-      });
+      try {
+        return ctx.db.user.findFirst({
+          where: {
+            id: input.id,
+          },
+          select: {
+            id: true,
+            bio: true,
+            username: true,
+            role: true,
+            avatar: true,
+            password: false,
+            UserResourceRole: true,
+          },
+        });
+      } catch (e) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to get user",
+        });
+      }
     }),
 
   updateUserById: adminProcedure
@@ -167,9 +129,9 @@ export const userRouter = createTRPCRouter({
       z.object({
         id: z.string(),
         data: z.object({
-          username: z.string(),
+          username: z.string().optional(),
           password: z.string().optional(),
-          role: z.enum(["ADMIN", "USER"]),
+          role: z.enum(["ADMIN", "USER"]).optional(),
           bio: z.string().optional(),
           avatar: z.union([z.string(), z.null()]),
         }),

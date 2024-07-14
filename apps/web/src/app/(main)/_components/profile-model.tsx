@@ -84,6 +84,7 @@ function Information() {
     },
   });
   const router = useRouter();
+
   const updateUserById = api.users.updateUserById.useMutation({
     onSuccess: (data) => {
       toast.success("Profile updated");
