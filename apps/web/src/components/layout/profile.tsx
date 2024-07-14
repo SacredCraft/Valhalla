@@ -33,8 +33,8 @@ export function Profile({ className }: AvatarProps) {
         <Button
           variant="secondary"
           className={cn(
-            "flex h-9 w-9 items-center justify-start rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 gap-2",
-            collapsed ? "md:w-8 md:h-8 p-0" : "p-2 md:h-16 md:w-full",
+            "text-muted-foreground hover:text-foreground flex h-9 w-9 items-center justify-start gap-2 rounded-lg transition-colors md:h-8",
+            collapsed ? "p-0 md:h-8 md:w-8" : "p-2 md:h-16 md:w-full",
             className,
           )}
           asChild
@@ -54,7 +54,7 @@ export function Profile({ className }: AvatarProps) {
             </Avatar>
             <motion.div
               className={cn(
-                "flex-col items-start justify-between h-full",
+                "h-full flex-col items-start justify-between",
                 collapsed ? "hidden" : "flex",
               )}
             >
@@ -64,7 +64,7 @@ export function Profile({ className }: AvatarProps) {
                 {username}
               </motion.span>
               <Badge
-                className="py-[1px] px-1.5"
+                className="px-1.5 py-[1px]"
                 variant={role === "ADMIN" ? "default" : "outline"}
               >
                 {role}
@@ -72,7 +72,7 @@ export function Profile({ className }: AvatarProps) {
             </motion.div>
             <motion.div
               className={cn(
-                "items-center h-full ml-auto",
+                "ml-auto h-full items-center",
                 collapsed ? "hidden" : "flex",
               )}
             >

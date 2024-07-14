@@ -28,7 +28,7 @@ export const useProfile = () => {
   return context;
 };
 
-type MainClientProps = PropsWithChildren;
+type MainClientProps = PropsWithChildren<ContextType>;
 
 const collapsedAtom = atomWithStorage<boolean>("aside-collapsed", true);
 
@@ -44,7 +44,7 @@ export function MainClientLayout({ children, ...rest }: MainClientProps) {
             <motion.main
               layout
               layoutDependency={collapsed}
-              className="flex-1 grid items-start gap-4 sm:py-0 md:gap-8"
+              className="grid flex-1 items-start gap-4 sm:py-0 md:gap-8"
               style={{
                 marginLeft: collapsed ? "3.5rem" : "13rem",
               }}

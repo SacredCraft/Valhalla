@@ -21,7 +21,7 @@ export default async function PluginLayout({
   }
 
   return (
-    <div className="flex w-full h-full overflow-hidden">
+    <div className="flex h-full w-full overflow-hidden">
       <PluginClientLayout pluginId={pluginId}>
         <PluginMenu ownedPluginIds={ownedPluginIds} />
         <div className="flex-1">{children}</div>

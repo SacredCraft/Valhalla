@@ -43,10 +43,10 @@ export const PluginPathForm = ({ pluginPaths }: { pluginPaths: Map }) => {
   return (
     <Form {...form}>
       <form className="grid" onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="border-b h-12 flex px-2 justify-between items-center relative">
+        <div className="relative flex h-12 items-center justify-between border-b px-2">
           <div className="flex gap-2">
             <Button type="submit" size="sm" className="h-7 px-2">
-              <SaveIcon className="mr-1 w-4 h-4" />
+              <SaveIcon className="mr-1 h-4 w-4" />
               Save
             </Button>
           </div>

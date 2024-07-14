@@ -46,7 +46,7 @@ export const filesTableColumns: ColumnDef[] = [
     filterFn: (row, _id, value) => value.includes(row.original.type),
     cell: ({ row }) => {
       return row.getValue("type") === "dir" ? (
-        <Folder className="fill-current text-primary" />
+        <Folder className="text-primary fill-current" />
       ) : (
         <FileIcon />
       );
@@ -59,7 +59,7 @@ export const filesTableColumns: ColumnDef[] = [
     ),
     cell: ({ row }) => {
       const name = row.original.name;
-      return <span className="font-semibold truncate">{name}</span>;
+      return <span className="truncate font-semibold">{name}</span>;
     },
   },
   {

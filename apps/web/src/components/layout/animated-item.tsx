@@ -21,7 +21,7 @@ export function AnimatedItem({
     <Button
       variant="outline"
       className={cn(
-        "flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 p-0 gap-2",
+        "text-muted-foreground hover:text-foreground flex h-9 w-9 items-center justify-center gap-2 rounded-lg p-0 transition-colors md:h-8",
         collapsed ? "md:w-8" : "w-full",
         className,
       )}

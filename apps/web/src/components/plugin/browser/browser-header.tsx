@@ -19,7 +19,7 @@ export function BrowserHeader() {
   const { relativePath } = useBrowserContext();
 
   return (
-    <header className="h-12 border-b flex px-2 items-center">
+    <header className="flex h-12 items-center border-b px-2">
       <Breadcrumb className="hidden md:flex">
         <BreadcrumbList>
           <BreadcrumbItem>

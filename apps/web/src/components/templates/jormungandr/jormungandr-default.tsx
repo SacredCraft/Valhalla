@@ -70,11 +70,11 @@ export function JormungandrDefault() {
             <div className="space-y-2">
               <div className="space-y-1">
                 <Label className="text-base">Misc Options</Label>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Edit the misc options of the item.
                 </p>
               </div>
-              <div className="flex md:flex-row flex-col w-full md:items-center items-start md:space-x-4 md:space-y-2 space-y-4">
+              <div className="flex w-full flex-col items-start space-y-4 md:flex-row md:items-center md:space-x-4 md:space-y-2">
                 <Node node="display-name">
                   <Text
                     label="Display Name"
@@ -119,7 +119,7 @@ export function JormungandrDefault() {
           <div className="space-y-2">
             <div className="space-y-1">
               <Label className="text-base">Model Options</Label>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 Edit the model options of the item.
               </p>
             </div>
@@ -127,7 +127,7 @@ export function JormungandrDefault() {
               node="model-options"
               nodes={["model-options.nametag", "model-options.state-machine"]}
             >
-              <ActionsArea className="flex md:flex-row flex-col md:items-center items-start md:space-x-4 md:space-y-0 space-y-4">
+              <ActionsArea className="flex flex-col items-start space-y-4 md:flex-row md:items-center md:space-x-4 md:space-y-0">
                 <Node node="nametag">
                   <Text
                     label="Nametag"
@@ -218,7 +218,7 @@ export const MatchedMechanism = ({ path }: { path: TreeLikePath[] }) => {
 
   if (path.length === 0) {
     return (
-      <div className="h-36 flex justify-center items-center text-muted-foreground">
+      <div className="text-muted-foreground flex h-36 items-center justify-center">
         Select a mechanism to edit its properties.
       </div>
     );
@@ -239,7 +239,7 @@ export function getMatchedMechanism({ item }: { item: any }): React.ReactNode {
       return <Hostile />;
     default:
       return (
-        <div className="h-36 flex justify-center items-center text-muted-foreground">
+        <div className="text-muted-foreground flex h-36 items-center justify-center">
           No mechanism matched.
         </div>
       );

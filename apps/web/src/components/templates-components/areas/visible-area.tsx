@@ -70,12 +70,12 @@ export function VisibleArea({
         <AccordionItem value="item" className="space-y-4" asChild>
           <Card
             className={cn(
-              "h-fit bg-transparent rounded-lg my-2",
+              "my-2 h-fit rounded-lg bg-transparent",
               classNames?.card,
             )}
           >
             <CardContent
-              className={cn("p-2 grid py-1 text-sm", classNames?.cardContent)}
+              className={cn("grid p-2 py-1 text-sm", classNames?.cardContent)}
             >
               <AccordionTrigger
                 classNames={{

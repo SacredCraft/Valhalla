@@ -25,7 +25,7 @@ export default async function SetupPage({
           <h1 className="text-2xl font-semibold tracking-tight">
             Welcome to Valhalla
           </h1>
-          <p className="text-sm text-muted-foreground mx-auto max-w-[300px]">
+          <p className="text-muted-foreground mx-auto max-w-[300px] text-sm">
             Now that you have the platform installed, let&apos;s get you set up
             with your account..
           </p>

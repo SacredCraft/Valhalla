@@ -12,9 +12,9 @@ export function TrashBin() {
   const { trash } = useBrowserContext();
 
   return (
-    <div className="px-2 flex flex-col gap-2">
+    <div className="flex flex-col gap-2 px-2">
       {trash?.length ? (
-        <div className="border rounded-lg">
+        <div className="rounded-lg border">
           <Table>
             <TableHeader>
               <TableRow>
@@ -35,7 +35,7 @@ export function TrashBin() {
           </Table>
         </div>
       ) : (
-        <div className="text-center text-muted-foreground">
+        <div className="text-muted-foreground text-center">
           No files in trash bin
         </div>
       )}

@@ -56,7 +56,7 @@ export function Step1() {
   }, [setName]);
 
   return (
-    <div className="flex flex-col space-y-6 text-center w-72">
+    <div className="flex w-72 flex-col space-y-6 text-center">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid gap-2 text-start">

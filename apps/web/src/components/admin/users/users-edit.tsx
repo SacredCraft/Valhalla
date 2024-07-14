@@ -198,7 +198,7 @@ export const UsersEdit = ({ cell }: { cell: Cell }) => {
                           <FormControl>
                             <RadioGroupItem disabled={updating} value="ADMIN" />
                           </FormControl>
-                          <FormLabel className="font-normal space-y-1">
+                          <FormLabel className="space-y-1 font-normal">
                             <span>Admin</span>
                             <FormDescription>
                               Admins have access to all features.
@@ -209,7 +209,7 @@ export const UsersEdit = ({ cell }: { cell: Cell }) => {
                           <FormControl>
                             <RadioGroupItem disabled={updating} value="USER" />
                           </FormControl>
-                          <FormLabel className="font-normal space-y-1">
+                          <FormLabel className="space-y-1 font-normal">
                             <span>User</span>
                             <FormDescription>
                               Users have limited access to features.

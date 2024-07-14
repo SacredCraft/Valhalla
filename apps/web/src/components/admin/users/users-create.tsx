@@ -159,7 +159,7 @@ export const UsersCreate = () => {
                           <FormControl>
                             <RadioGroupItem disabled={creating} value="ADMIN" />
                           </FormControl>
-                          <FormLabel className="font-normal space-y-1">
+                          <FormLabel className="space-y-1 font-normal">
                             <span>Admin</span>
                             <FormDescription>
                               Admins have access to all features.
@@ -170,7 +170,7 @@ export const UsersCreate = () => {
                           <FormControl>
                             <RadioGroupItem disabled={creating} value="USER" />
                           </FormControl>
-                          <FormLabel className="font-normal space-y-1">
+                          <FormLabel className="space-y-1 font-normal">
                             <span>User</span>
                             <FormDescription>
                               Users have limited access to features.

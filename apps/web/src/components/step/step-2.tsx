@@ -16,21 +16,21 @@ export function Step2() {
   }, [setName]);
 
   return (
-    <div className="flex flex-col space-y-6 text-center w-80">
+    <div className="flex w-80 flex-col space-y-6 text-center">
       <h1 className="text-2xl font-semibold tracking-tight">
         What&apos;s next?
       </h1>
-      <p className="text-sm text-muted-foreground">
+      <p className="text-muted-foreground text-sm">
         Tips to help you get started with Valhalla.
       </p>
-      <ul className="flex flex-col space-y-4 text-start list-disc list-inside">
-        <li className="text-sm text-muted-foreground">
+      <ul className="flex list-inside list-disc flex-col space-y-4 text-start">
+        <li className="text-muted-foreground text-sm">
           Create an account to get started with Valhalla.
         </li>
-        <li className="text-sm text-muted-foreground">
+        <li className="text-muted-foreground text-sm">
           Add your first project to start managing your resources.
         </li>
-        <li className="text-sm text-muted-foreground">
+        <li className="text-muted-foreground text-sm">
           Invite your team to collaborate on projects.
         </li>
       </ul>

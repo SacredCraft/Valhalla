@@ -177,12 +177,12 @@ export function PasteAction() {
           <div className="grid gap-4 py-4">
             {exists.length > 0 && (
               <div>
-                <h3 className="font-semibold mb-2">File(s) already exist</h3>
+                <h3 className="mb-2 font-semibold">File(s) already exist</h3>
                 <ul className="grid gap-2">
                   {exists.map((file) => (
                     <li
                       key={file}
-                      className="bg-secondary text-secondary-foreground p-2 rounded-lg"
+                      className="bg-secondary text-secondary-foreground rounded-lg p-2"
                     >
                       {file}
                     </li>
@@ -192,12 +192,12 @@ export function PasteAction() {
             )}
             {failed.length > 0 && (
               <div>
-                <h3 className="font-semibold mb-2">Failed to paste file(s)</h3>
+                <h3 className="mb-2 font-semibold">Failed to paste file(s)</h3>
                 <ul className="grid gap-2">
                   {failed.map((file) => (
                     <li
                       key={file}
-                      className="bg-secondary text-secondary-foreground p-2 rounded-lg"
+                      className="bg-secondary text-secondary-foreground rounded-lg p-2"
                     >
                       {file}
                     </li>

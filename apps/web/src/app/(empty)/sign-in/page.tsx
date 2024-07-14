@@ -16,17 +16,17 @@ export default async function AuthenticationPage() {
   if (session) redirect("/");
 
   return (
-    <div className="container relative h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-      <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
+    <div className="container relative grid h-screen flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0">
+      <div className="bg-muted relative hidden h-full flex-col p-10 text-white lg:flex dark:border-r">
         <div className="absolute inset-0 bg-zinc-900" />
-        <div className="relative z-20 flex items-center text-lg font-medium w-24">
+        <div className="relative z-20 flex w-24 items-center text-lg font-medium">
           <Image
             src="/logo.png"
             alt="Valhalla"
             width={0}
             height={0}
             sizes="100vw"
-            className="w-full h-auto invert"
+            className="h-auto w-full invert"
           />
         </div>
         <div className="relative z-20 mt-auto">
@@ -46,23 +46,23 @@ export default async function AuthenticationPage() {
             <h1 className="text-2xl font-semibold tracking-tight">
               Sign in to Valhalla
             </h1>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Enter your username and password to access your account.
             </p>
           </div>
           <UserAuthForm />
-          <p className="px-8 text-center text-sm text-muted-foreground">
+          <p className="text-muted-foreground px-8 text-center text-sm">
             By clicking continue, you agree to our{" "}
             <Link
               href="/terms"
-              className="underline underline-offset-4 hover:text-primary"
+              className="hover:text-primary underline underline-offset-4"
             >
               Terms of Service
             </Link>{" "}
             and{" "}
             <Link
               href="/privacy"
-              className="underline underline-offset-4 hover:text-primary"
+              className="hover:text-primary underline underline-offset-4"
             >
               Privacy Policy
             </Link>

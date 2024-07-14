@@ -65,7 +65,7 @@ export function FilesTableRowActions({
         <TooltipTrigger asChild>
           <Button
             variant="outline"
-            className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+            className="data-[state=open]:bg-muted flex h-8 w-8 p-0"
             onClick={(e) => e.stopPropagation()}
           >
             <Star className="size-4" />
@@ -78,7 +78,7 @@ export function FilesTableRowActions({
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
-            className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+            className="data-[state=open]:bg-muted flex h-8 w-8 p-0"
             onClick={(e) => e.stopPropagation()}
           >
             <DotsHorizontalIcon className="h-4 w-4" />

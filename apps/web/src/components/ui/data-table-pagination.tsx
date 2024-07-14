@@ -52,8 +52,8 @@ export function DataTablePagination<TData>({
   }, [name, pageSize, persist, table]);
 
   return (
-    <div className="flex items-center justify-between px-2 w-full">
-      <div className="flex-1 text-sm text-muted-foreground">
+    <div className="flex w-full items-center justify-between px-2">
+      <div className="text-muted-foreground flex-1 text-sm">
         {table.getFilteredSelectedRowModel().rows.length} of{" "}
         {table.getFilteredRowModel().rows.length} row(s) selected.
       </div>

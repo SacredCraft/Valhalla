@@ -115,9 +115,9 @@ function Template({ children }: { children: React.ReactNode }) {
   const { table } = useUsersContext();
 
   return (
-    <div className="px-2 flex flex-col gap-2">
+    <div className="flex flex-col gap-2 px-2">
       {table && <UsersTableToolbar />}
-      <div className="border rounded-lg">
+      <div className="rounded-lg border">
         <Table>
           <TableHeader>
             {table &&

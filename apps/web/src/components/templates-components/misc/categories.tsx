@@ -53,8 +53,8 @@ export const CategoriesRoot = ({ children }: { children: React.ReactNode }) => {
 
 export const Categories = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="border-b h-12 flex px-2 justify-between items-center relative">
-      <nav className="flex items-center justify-center gap-2 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+    <div className="relative flex h-12 items-center justify-between border-b px-2">
+      <nav className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-2">
         {children}
       </nav>
     </div>
@@ -89,7 +89,7 @@ export const Category = ({
     <Button
       size="sm"
       variant={currentCategory === category ? "secondary" : "ghost"}
-      className="w-full justify-start h-7"
+      className="h-7 w-full justify-start"
       onClick={() => setCurrentCategory(category)}
     >
       {children}
@@ -117,7 +117,7 @@ export const CategoryContent = ({
   return currentCategory === category ? (
     <>
       {(title || description || icon) && (
-        <div className="border-b flex p-2 items-center space-x-2">
+        <div className="flex items-center space-x-2 border-b p-2">
           {icon}
           <div className="space-y-1">
             <h3 className="text-base font-medium">{title}</h3>

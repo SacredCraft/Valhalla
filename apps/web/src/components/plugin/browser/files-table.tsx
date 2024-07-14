@@ -113,7 +113,7 @@ export function FilesTable() {
                 className={cn(
                   "h-12 cursor-pointer",
                   row.original.type === "dir" &&
-                    "bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700",
+                    "bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700",
                 )}
                 onClick={() => {
                   if (row.original.type === "dir") {
@@ -169,9 +169,9 @@ function Template({ children }: { children: React.ReactNode }) {
   const { table } = useBrowserContext();
 
   return (
-    <div className="px-2 flex flex-col gap-2">
+    <div className="flex flex-col gap-2 px-2">
       {table && <FilesTableToolbar />}
-      <div className="border rounded-lg">
+      <div className="rounded-lg border">
         <Table>
           <TableHeader>
             {table &&

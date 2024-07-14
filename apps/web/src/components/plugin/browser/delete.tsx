@@ -42,7 +42,7 @@ export function Delete({ row, table }: DeleteProps) {
           <SheetTitle>Are you sure you want to delete this file?</SheetTitle>
           <SheetDescription>This action cannot be undone.</SheetDescription>
         </SheetHeader>
-        <SheetFooter className="flex flex-col sm:flex-row sm:justify-between gap-y-2 mt-4">
+        <SheetFooter className="mt-4 flex flex-col gap-y-2 sm:flex-row sm:justify-between">
           {row.original.type === "file" && (
             <SheetClose>
               <Button

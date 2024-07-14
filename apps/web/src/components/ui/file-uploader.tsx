@@ -145,8 +145,8 @@ export function FileUploader(props: FileUploaderProps) {
           <div
             {...getRootProps()}
             className={cn(
-              "group relative grid h-52 w-full cursor-pointer place-items-center rounded-lg border-2 border-dashed border-muted-foreground/25 px-5 py-2.5 text-center transition hover:bg-muted/25",
-              "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+              "border-muted-foreground/25 hover:bg-muted/25 group relative grid h-52 w-full cursor-pointer place-items-center rounded-lg border-2 border-dashed px-5 py-2.5 text-center transition",
+              "ring-offset-background focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
               isDragActive && "border-muted-foreground/50",
               isDisabled && "pointer-events-none opacity-60",
               className,
@@ -158,11 +158,11 @@ export function FileUploader(props: FileUploaderProps) {
               <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
                 <div className="rounded-full border border-dashed p-3">
                   <UploadIcon
-                    className="size-7 text-muted-foreground"
+                    className="text-muted-foreground size-7"
                     aria-hidden="true"
                   />
                 </div>
-                <p className="font-medium text-muted-foreground">
+                <p className="text-muted-foreground font-medium">
                   Drop the files here
                 </p>
               </div>
@@ -170,15 +170,15 @@ export function FileUploader(props: FileUploaderProps) {
               <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
                 <div className="rounded-full border border-dashed p-3">
                   <UploadIcon
-                    className="size-7 text-muted-foreground"
+                    className="text-muted-foreground size-7"
                     aria-hidden="true"
                   />
                 </div>
                 <div className="space-y-px">
-                  <p className="font-medium text-muted-foreground">
+                  <p className="text-muted-foreground font-medium">
                     Drag {`'n'`} drop files here, or click to select files
                   </p>
-                  <p className="text-sm text-muted-foreground/70">
+                  <p className="text-muted-foreground/70 text-sm">
                     You can upload everything you want
                   </p>
                 </div>
@@ -225,16 +225,16 @@ function FileCard({ file, progress, onRemove }: FileCardProps) {
             className="aspect-square shrink-0 rounded-md object-cover"
           />
         ) : (
-          <div className="aspect-square shrink-0 rounded-md bg-muted-foreground/10 h-12 w-12 flex items-center justify-center">
+          <div className="bg-muted-foreground/10 flex aspect-square h-12 w-12 shrink-0 items-center justify-center rounded-md">
             <FileIcon />
           </div>
         )}
         <div className="flex w-full flex-col gap-2">
           <div className="space-y-px">
-            <p className="line-clamp-1 text-sm font-medium text-foreground/80">
+            <p className="text-foreground/80 line-clamp-1 text-sm font-medium">
               {file.name}
             </p>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               {formatBytes(file.size)}
             </p>
           </div>
@@ -250,7 +250,7 @@ function FileCard({ file, progress, onRemove }: FileCardProps) {
           disabled={progress !== undefined}
           onClick={onRemove}
         >
-          <Cross2Icon className="size-4 " aria-hidden="true" />
+          <Cross2Icon className="size-4" aria-hidden="true" />
           <span className="sr-only">Remove file</span>
         </Button>
       </div>

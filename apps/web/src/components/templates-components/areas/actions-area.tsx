@@ -93,7 +93,7 @@ export function ActionsArea({
       data-delete-temp-hover={deleteTempHover}
     >
       {children}
-      <div className="absolute right-2 top-2 hidden gap-2 animate-in fade-in group-hover:flex">
+      <div className="animate-in fade-in absolute right-2 top-2 hidden gap-2 group-hover:flex">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button

@@ -200,14 +200,14 @@ export const TreeLikeAreaNodes = ({ classNames }: TreeLikeAreaNodesProps) => {
 
   return (
     <ScrollArea className={cn("w-56", classNames?.scrollArea)}>
-      <div className={cn("gap-y-2 flex flex-col size-full", classNames?.nodes)}>
+      <div className={cn("flex size-full flex-col gap-y-2", classNames?.nodes)}>
         {currentNodes.map((n, i) => {
           const isGroupFirst =
             i === 0 || n._group !== currentNodes[i - 1]._group;
           return (
             <Fragment key={i}>
               {isGroupFirst && n._group && (
-                <Label className="text-xs text-gray-500 px-2">{n._group}</Label>
+                <Label className="px-2 text-xs text-gray-500">{n._group}</Label>
               )}
               <TreeLikeAreaNode
                 key={i}
@@ -241,7 +241,7 @@ export const TreeLikeAreaNode = ({
   return (
     <button
       className={cn(
-        "flex items-center space-x-2 bg-zinc-100 p-2 rounded-md hover:bg-zinc-200 transition-colors",
+        "flex items-center space-x-2 rounded-md bg-zinc-100 p-2 transition-colors hover:bg-zinc-200",
         className,
       )}
       onClick={() => setPath([...currentPath, path])}
@@ -416,7 +416,7 @@ export const TreeLikeAreaContentHeader = ({
   className?: string;
 }) => {
   return (
-    <div className={cn("flex px-2 bg-zinc-100 rounded-md", className)}>
+    <div className={cn("flex rounded-md bg-zinc-100 px-2", className)}>
       {children}
     </div>
   );

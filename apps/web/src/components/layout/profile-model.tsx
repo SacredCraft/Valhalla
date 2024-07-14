@@ -42,8 +42,8 @@ export function ProfileModel() {
         </DropdownMenuItem>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[900px]">
-        <div className="flex gap-4 h-[480px]">
-          <aside className="flex flex-col items-center w-48 gap-2">
+        <div className="flex h-[480px] gap-4">
+          <aside className="flex w-48 flex-col items-center gap-2">
             <Item
               value="information"
               label="Information"
@@ -123,7 +123,7 @@ function Information() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-4 h-full"
+        className="flex h-full flex-col gap-4"
       >
         <DialogHeader>
           <DialogTitle>Information</DialogTitle>
@@ -205,7 +205,7 @@ function Item({
       size="sm"
       variant={tab === value ? "secondary" : "ghost"}
       onClick={() => setTab(value)}
-      className="w-full h-7"
+      className="h-7 w-full"
     >
       {label}
     </Button>

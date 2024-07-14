@@ -47,7 +47,7 @@ export function ImageModel({ children, src }: ImageModelProps) {
             width={0}
             height={0}
             sizes="100vw"
-            className="w-full h-auto"
+            className="h-auto w-full"
           />
         )}
       </DialogContent>

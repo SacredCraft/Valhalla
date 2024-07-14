@@ -100,7 +100,7 @@ export function Upload() {
             Upload a file to the current directory.
           </SheetDescription>
         </SheetHeader>
-        <div className="grid gap-4 py-4 h-fit overflow-scroll">
+        <div className="grid h-fit gap-4 overflow-scroll py-4">
           <FileUploader
             value={files}
             onValueChange={setFiles}

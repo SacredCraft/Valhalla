@@ -37,8 +37,8 @@ export function PluginMenu({ ownedPluginIds }: { ownedPluginIds: string[] }) {
 
   return (
     <div className="w-[220px]">
-      <div className="bg-background sm:flex border-e sm:flex-col gap-y-2 min-h-screen h-full">
-        <div className="h-12 flex items-center justify-center border-b">
+      <div className="bg-background h-full min-h-screen gap-y-2 border-e sm:flex sm:flex-col">
+        <div className="flex h-12 items-center justify-center border-b">
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -81,13 +81,13 @@ export function PluginMenu({ ownedPluginIds }: { ownedPluginIds: string[] }) {
           </Popover>
         </div>
         <nav className="flex flex-col gap-1 px-2">
-          <p className="text-muted-foreground text-xs font-semibold uppercase px-2 mb-1 mt-2">
+          <p className="text-muted-foreground mb-1 mt-2 px-2 text-xs font-semibold uppercase">
             Functions
           </p>
           <Item value="browser" label="Files Browser" />
         </nav>
-        <nav className="flex flex-col gap-1 px-2 flex-1">
-          <p className="text-muted-foreground text-xs font-semibold uppercase px-2 mb-1 mt-2">
+        <nav className="flex flex-1 flex-col gap-1 px-2">
+          <p className="text-muted-foreground mb-1 mt-2 px-2 text-xs font-semibold uppercase">
             Files
           </p>
           <ScrollArea className="flex-1">
@@ -151,7 +151,7 @@ function Item({
     <Button
       size="sm"
       variant={isActive ? "secondary" : "ghost"}
-      className="w-full justify-start h-7 group px-2"
+      className="group h-7 w-full justify-start px-2"
       asChild
     >
       <Link
@@ -161,7 +161,7 @@ function Item({
         {decodeURIComponent(label)}
         {index !== undefined && (
           <span
-            className="ml-auto group-hover:opacity-100 opacity-0 transition-all rounded-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 p-1"
+            className="ml-auto rounded-sm p-1 opacity-0 transition-all hover:bg-zinc-200 group-hover:opacity-100 dark:hover:bg-zinc-700"
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();

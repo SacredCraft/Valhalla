@@ -8,7 +8,7 @@ import path from "path";
 import prisma from "@/lib/prisma";
 import { signIn, signOut } from "@/server/auth";
 
-export async function getAllPluginPaths(): Promise {
+export async function getAllPluginPaths(): Promise<Map<string, string>> {
   const paths = new Map<string, string>();
 
   const res = await prisma.pluginPath.findMany();
@@ -24,7 +24,7 @@ export async function getAllPluginPaths(): Promise {
   return paths;
 }
 
-export async function getPluginPath(id: string): Promise {
+export async function getPluginPath(id: string): Promise<string | null> {
   const res = await prisma.pluginPath.findUnique({
     where: {
       pluginId: id,
@@ -60,7 +60,7 @@ export async function logout() {
 export async function signInAction(
   username: string,
   password: string,
-): Promise {
+): Promise<boolean> {
   const formData = new FormData();
   formData.append("username", username);
   formData.append("password", password);
@@ -86,7 +86,7 @@ export async function copyFile(
   source: string,
   destination: string,
   cut: boolean = false,
-): Promise {
+): Promise<boolean | "exist"> {
   const pluginPath = await getPluginPath(pluginId);
   if (!pluginPath) {
     return false;
@@ -123,7 +123,7 @@ export async function replaceFile(
   pluginId: string,
   source: string,
   destination: string,
-): Promise {
+): Promise<boolean> {
   const pluginPath = await getPluginPath(pluginId);
   if (!pluginPath) {
     return false;
@@ -142,7 +142,7 @@ export async function replaceFile(
 export async function getPluginFiles(
   pluginId: string,
   relativePath: string[],
-): Promise {
+): Promise<ValhallaFile[] | undefined> {
   const pluginPath = await getPluginPath(pluginId);
   const absolutePath = pluginPath ? [pluginPath, ...relativePath] : [];
   try {
@@ -181,7 +181,10 @@ export async function getPluginFiles(
   }
 }
 
-export async function getFile(pluginId: string, relativePath: string): Promise {
+export async function getFile(
+  pluginId: string,
+  relativePath: string,
+): Promise<(ValhallaFile & { ext?: string }) | null> {
   const pluginPath = await getPluginPath(pluginId);
   if (!pluginPath) {
     return null;
@@ -214,7 +217,7 @@ export async function savePath(formData: FormData) {
 export async function deleteFile(
   pluginId: string,
   relativePath: string,
-): Promise {
+): Promise<boolean> {
   const pluginPath = await getPluginPath(pluginId);
   if (!pluginPath) {
     return false;
