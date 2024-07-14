@@ -108,6 +108,7 @@ function Information() {
     const data: any = {
       password: values.password === "" ? undefined : values.password,
       bio: values.bio,
+      avatar: null,
     };
 
     if (file) {

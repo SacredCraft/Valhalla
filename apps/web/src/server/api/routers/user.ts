@@ -146,12 +146,13 @@ export const userRouter = createTRPCRouter({
         });
       }
 
-      ctx.db.user.update({
+      await ctx.db.user.update({
         where: {
           id: input.id,
         },
         data: {
           ...input.data,
+          avatar: input.data.avatar === null ? undefined : input.data.avatar,
           password: input.data.password
             ? hashSync(input.data.password, genSaltSync(10))
             : undefined,

@@ -79,7 +79,7 @@ export const UsersEdit = ({ cell }: { cell: Cell<UserCol, any> }) => {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     setUpdating(true);
-    const update = (fileData?: string | null) => {
+    const update = (fileData: string | null) => {
       updateUserById.mutate({
         id: cell.row.original.id,
         data: {
@@ -99,7 +99,7 @@ export const UsersEdit = ({ cell }: { cell: Cell<UserCol, any> }) => {
       };
       reader.readAsDataURL(file);
     } else {
-      update();
+      update(null);
     }
   }
 
