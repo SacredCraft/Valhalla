@@ -33,7 +33,7 @@ export async function moveToTrash(
   const filePath = path
     .join(pluginPath, relativePath.join(path.sep))
     .split(path.sep);
-  const fileName = filePath[filePath.length - 1];
+  const fileName = filePath[filePath.length - 1]!!;
   const folder = filePath.slice(0, -1);
   const trashFileName = fileName + ".deleted";
 
@@ -147,7 +147,7 @@ function emptyTrashRecursive(dir: string) {
 export async function getDeletedFiles(
   pluginId: string,
   relativePath: string[],
-): Promise {
+): Promise<Trash[]> {
   const pluginPath = await getPluginPath(pluginId);
   if (!pluginPath) {
     return [];
@@ -233,7 +233,7 @@ function deleteAllValhallaDirs(filePath: string[]) {
 }
 
 function getValhallaFileContent(filePath: string[]) {
-  const fileName = filePath[filePath.length - 1];
+  const fileName = filePath[filePath.length - 1]!!;
   const folder = filePath.slice(0, -1);
   if (!fs.existsSync(getValhallaDir(folder))) {
     return null;
@@ -242,7 +242,7 @@ function getValhallaFileContent(filePath: string[]) {
 }
 
 function setValhallaFileContent(filePath: string[], content: string) {
-  const fileName = filePath[filePath.length - 1];
+  const fileName = filePath[filePath.length - 1]!!;
   const folder = filePath.slice(0, -1);
   if (!fs.existsSync(getValhallaDir(folder))) {
     createValhallaDir(folder);
@@ -257,13 +257,13 @@ function setValhallaFileContent(filePath: string[], content: string) {
 export async function getConfigurationJson(
   pluginId: string,
   relativePath: string[],
-): Promise {
+): Promise<ConfigurationResult | null> {
   const pluginPath = await getPluginPath(pluginId);
   if (!pluginPath) {
     return null;
   }
   const filePath = [pluginPath, ...relativePath];
-  const fileName = filePath[filePath.length - 1];
+  const fileName = filePath[filePath.length - 1]!!;
   if (!fs.existsSync(path.join(...filePath))) {
     return { path: filePath, name: fileName };
   }
@@ -308,7 +308,7 @@ export async function setConfigurationJson(
     return;
   }
   const filePath = [pluginPath, ...relativePath];
-  const fileName = filePath[filePath.length - 1];
+  const fileName = filePath[filePath.length - 1]!!;
   const folder = filePath.slice(0, -1);
   let actualCacheFileName = fileName.endsWith(".json")
     ? fileName
