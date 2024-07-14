@@ -42,7 +42,7 @@ export function PluginMenu({ ownedPluginIds }: { ownedPluginIds: string[] }) {
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
       layout
       layoutDependency={collapsed}
-      className="w-[220px] fixed left-[var(--aside-width)]"
+      className="w-[220px] fixed left-[var(--aside-width)] h-screen"
     >
       <div className="bg-background sm:flex border-e sm:flex-col gap-y-2 min-h-screen h-full">
         <div className="h-12 flex items-center justify-center border-b">
