@@ -3,15 +3,16 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { useFilesContext } from "@//app/(main)/plugins/[plugin]/files/layout.client";
-import { usePluginContext } from "@//app/(main)/plugins/[plugin]/layout.client";
-import { ValhallaFile } from "@//app/actions";
-import { Form } from "@//components/ui/form";
+import { useFilesContext } from "@/app/(main)/plugins/[plugin]/files/layout.client";
+import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
+import { ValhallaFile } from "@/app/actions";
 import { ConfigurationResult, setConfigurationJson } from "@/lib/core";
 import { getContent } from "@/lib/core-utils";
 
+import { Form } from "@/components/ui/form";
+
 type ContextType = {
-  form: ReturnType;
+  form: ReturnType<typeof useForm>;
   file: ValhallaFile;
   configuration: ConfigurationResult;
   setConfiguration: (configuration: ConfigurationResult) => void;

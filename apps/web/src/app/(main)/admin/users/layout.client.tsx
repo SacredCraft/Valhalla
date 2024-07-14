@@ -2,14 +2,15 @@
 
 import { Dispatch, createContext, useContext, useState } from "react";
 
-import { UsersHeader } from "@//components/admin/users/users-header";
-import { UserCol } from "@//components/admin/users/users-table-columns";
-import { UsersToolbar } from "@//components/admin/users/users-toolbar";
 import { useReactTable } from "@tanstack/react-table";
 
+import { UsersHeader } from "@/components/admin/users/users-header";
+import { UserCol } from "@/components/admin/users/users-table-columns";
+import { UsersToolbar } from "@/components/admin/users/users-toolbar";
+
 type ContextType = {
-  table?: ReturnType;
-  setTable: Dispatch;
+  table?: ReturnType<typeof useReactTable<UserCol>>;
+  setTable: Dispatch<ReturnType<typeof useReactTable<UserCol>>>;
 };
 
 const UsersContext = createContext<ContextType | undefined>(undefined);
@@ -27,7 +28,8 @@ type UsersClientLayoutProps = {
 };
 
 export function UsersClientLayout({ children }: UsersClientLayoutProps) {
-  const [table, setTable] = useState<ReturnType>();
+  const [table, setTable] =
+    useState<ReturnType<typeof useReactTable<UserCol>>>();
 
   return (
     <UsersContext.Provider value={{ table, setTable }}>

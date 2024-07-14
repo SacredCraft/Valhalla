@@ -1,10 +1,11 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@//components/ui/avatar";
-import { Badge } from "@//components/ui/badge";
-import { Checkbox } from "@//components/ui/checkbox";
-import { DataTableColumnHeader } from "@//components/ui/data-table-column-header";
 import { ColumnDef } from "@tanstack/react-table";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 
 export type UserCol = {
   id: string;
@@ -17,7 +18,7 @@ export type UserCol = {
   lastLogin: Date | null;
 };
 
-export const usersTableColumns: ColumnDef[] = [
+export const usersTableColumns: ColumnDef<UserCol>[] = [
   {
     id: "select",
     header: ({ table }) => (

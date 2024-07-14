@@ -11,11 +11,12 @@ import {
   useState,
 } from "react";
 
-import { useFilesEditorContext } from "@//app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
-import { VisibleArea } from "@//components/templates-components/areas/visible-area";
-import { Node, useNode } from "@//components/templates-components/form/node";
+import { useFilesEditorContext } from "@/app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
 import { isFormDeletableValue } from "@/lib/form";
 import { cn } from "@/lib/utils";
+
+import { VisibleArea } from "@/components/templates-components/areas/visible-area";
+import { Node, useNode } from "@/components/templates-components/form/node";
 
 type ContextProps = {
   items: ListItem[];
@@ -152,7 +153,7 @@ export function ListArea({
                     icon={
                       <GripVertical
                         className={cn(
-                          "animate-in fade-in invisible size-4",
+                          "size-4 invisible animate-in fade-in",
                           draggable && getCollapsed(item.id)
                             ? "group-hover:visible"
                             : undefined,

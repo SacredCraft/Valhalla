@@ -8,7 +8,9 @@ import { TRPCReactProvider } from "@/trpc/react";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
 
-export default function Providers({ children }: Readonly) {
+export default function Providers({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <TRPCReactProvider>
       <JotaiProvider>

@@ -3,9 +3,10 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState, useTransition } from "react";
 
-import { usePluginContext } from "@//app/(main)/plugins/[plugin]/layout.client";
-import { getFileContent } from "@//app/actions";
-import { Dialog, DialogContent, DialogTrigger } from "@//components/ui/dialog";
+import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
+import { getFileContent } from "@/app/actions";
+
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 type ImageModelProps = {
   children: React.ReactNode;
@@ -47,7 +48,7 @@ export function ImageModel({ children, src }: ImageModelProps) {
             width={0}
             height={0}
             sizes="100vw"
-            className="h-auto w-full"
+            className="w-full h-auto"
           />
         )}
       </DialogContent>

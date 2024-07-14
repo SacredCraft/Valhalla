@@ -1,7 +1,8 @@
-import { useFilesEditorContext } from "@//app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
-import { Enum } from "@//components/templates-components/form/enum";
-import { Node, useNode } from "@//components/templates-components/form/node";
-import { Text } from "@//components/templates-components/form/text";
+import { useFilesEditorContext } from "@/app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
+
+import { Enum } from "@/components/templates-components/form/enum";
+import { Node, useNode } from "@/components/templates-components/form/node";
+import { Text } from "@/components/templates-components/form/text";
 
 export function Hostile() {
   return (

@@ -3,8 +3,9 @@
 import Link from "next/link";
 import React, { Fragment } from "react";
 
-import { useBrowserContext } from "@//app/(main)/plugins/[plugin]/browser/layout.client";
-import { usePluginContext } from "@//app/(main)/plugins/[plugin]/layout.client";
+import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
+import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,14 +13,14 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@//components/ui/breadcrumb";
+} from "@/components/ui/breadcrumb";
 
 export function BrowserHeader() {
   const { plugin } = usePluginContext();
   const { relativePath } = useBrowserContext();
 
   return (
-    <header className="flex h-12 items-center border-b px-2">
+    <header className="h-12 border-b flex px-2 items-center">
       <Breadcrumb className="hidden md:flex">
         <BreadcrumbList>
           <BreadcrumbItem>

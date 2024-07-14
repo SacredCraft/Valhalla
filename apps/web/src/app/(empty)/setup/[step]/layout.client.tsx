@@ -34,7 +34,7 @@ export function SetupClientLayout({
     <SetupContext.Provider value={{ step, name, setName }}>
       <motion.main
         className={cn(
-          "text-foreground absolute inset-0 items-center justify-center",
+          "absolute inset-0 items-center justify-center text-foreground",
           step > 0 ? "dark bg-zinc-900" : undefined,
         )}
         layoutId="main"
@@ -44,7 +44,7 @@ export function SetupClientLayout({
       >
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           {step > 0 && (
-            <div className="absolute -top-1/2 left-1/2 w-64 -translate-x-1/2">
+            <div className="absolute left-1/2 -translate-x-1/2 -top-1/2 w-64">
               <motion.nav
                 className="z-10"
                 layoutId="nav"
@@ -52,11 +52,11 @@ export function SetupClientLayout({
                 initial={{ y: -100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
               >
-                <div className="flex items-center justify-between rounded-full bg-zinc-800 p-4">
+                <div className="flex items-center justify-between p-4 rounded-full bg-zinc-800">
                   <motion.div
                     layoutId="step-1"
                     className={cn(
-                      "h-8 w-8 rounded-full",
+                      "w-8 h-8 rounded-full",
                       step === 1 ? "bg-primary" : "bg-zinc-700",
                     )}
                     animate={{
@@ -66,14 +66,14 @@ export function SetupClientLayout({
                   />
                   <motion.h1
                     layoutId="title"
-                    className="mx-2 text-lg font-semibold"
+                    className="text-lg font-semibold mx-2"
                   >
                     {name}
                   </motion.h1>
                   <motion.div
                     layoutId="step-2"
                     className={cn(
-                      "h-8 w-8 rounded-full",
+                      "w-8 h-8 rounded-full",
                       step === 2 ? "bg-primary" : "bg-zinc-700",
                     )}
                     animate={{ scale: [1, 1.2, 1] }}

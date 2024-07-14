@@ -3,13 +3,16 @@
 import { Star } from "lucide-react";
 import { toast } from "sonner";
 
-import { useBrowserContext } from "@//app/(main)/plugins/[plugin]/browser/layout.client";
-import { usePluginContext } from "@//app/(main)/plugins/[plugin]/layout.client";
-import { CopyCutRowAction } from "@//components/plugin/browser/copy-cut";
-import { Delete } from "@//components/plugin/browser/delete";
-import { FileCol } from "@//components/plugin/browser/files-table-columns";
-import { RenameMove } from "@//components/plugin/browser/rename-move";
-import { Button } from "@//components/ui/button";
+import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
+import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { Row, Table } from "@tanstack/react-table";
+
+import { CopyCutRowAction } from "@/components/plugin/browser/copy-cut";
+import { Delete } from "@/components/plugin/browser/delete";
+import { FileCol } from "@/components/plugin/browser/files-table-columns";
+import { RenameMove } from "@/components/plugin/browser/rename-move";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,18 +20,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "@//components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@//components/ui/tooltip";
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { Row, Table } from "@tanstack/react-table";
+} from "@/components/ui/tooltip";
 
 interface FilesTableRowActionsProps {
-  row: Row;
-  table: Table;
+  row: Row<FileCol>;
+  table: Table<FileCol>;
 }
 
 export function FilesTableRowActions({
@@ -65,7 +66,7 @@ export function FilesTableRowActions({
         <TooltipTrigger asChild>
           <Button
             variant="outline"
-            className="data-[state=open]:bg-muted flex h-8 w-8 p-0"
+            className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
             onClick={(e) => e.stopPropagation()}
           >
             <Star className="size-4" />
@@ -78,7 +79,7 @@ export function FilesTableRowActions({
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
-            className="data-[state=open]:bg-muted flex h-8 w-8 p-0"
+            className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
             onClick={(e) => e.stopPropagation()}
           >
             <DotsHorizontalIcon className="h-4 w-4" />

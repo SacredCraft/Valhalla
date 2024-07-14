@@ -2,10 +2,11 @@ import React, { useCallback } from "react";
 import Dropzone, { type FileRejection } from "react-dropzone";
 import { toast } from "sonner";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@//components/ui/avatar";
-import { FormDescription, FormLabel } from "@//components/ui/form";
 import { cn } from "@/lib/utils";
 import { useControllableState } from "@radix-ui/react-use-controllable-state";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { FormDescription, FormLabel } from "@/components/ui/form";
 
 type AvatarUploaderProps = {
   fallback?: string;
@@ -51,7 +52,7 @@ export const AvatarUploader = ({
     <div className="flex flex-col gap-2">
       <FormLabel>Avatar</FormLabel>
       <div className="relative flex flex-col gap-2">
-        <Avatar className="absolute size-16">
+        <Avatar className="size-16 absolute">
           <AvatarImage
             src={file ? URL.createObjectURL(file) : (avatar ?? "")}
             alt={fallback}
@@ -68,8 +69,8 @@ export const AvatarUploader = ({
             <div
               {...getRootProps()}
               className={cn(
-                "border-muted-foreground/25 hover:bg-muted/25 group relative grid size-16 cursor-pointer place-items-center rounded-full border-2 border-dashed text-center transition",
-                "ring-offset-background focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+                "group relative grid size-16 cursor-pointer place-items-center rounded-full border-2 border-dashed border-muted-foreground/25 text-center transition hover:bg-muted/25",
+                "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                 isDragActive && "border-muted-foreground/50",
               )}
             >

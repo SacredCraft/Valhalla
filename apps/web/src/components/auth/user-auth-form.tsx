@@ -7,8 +7,14 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { signInAction } from "@//app/actions";
-import { Button } from "@//components/ui/button";
+import { signInAction } from "@/app/actions";
+import { cn } from "@/lib/utils";
+import { signInSchema } from "@/lib/zod";
+import { updateLastLogin } from "@/server/service/user";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
+
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -16,21 +22,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@//components/ui/form";
-import { Input } from "@//components/ui/input";
-import { cn } from "@/lib/utils";
-import { signInSchema } from "@/lib/zod";
-import { updateLastLogin } from "@/server/service/user";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { GitHubLogoIcon } from "@radix-ui/react-icons";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
-interface UserAuthFormProps extends React.HTMLAttributes {}
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const router = useRouter();
 
-  const form = useForm<z.infer>({
+  const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
       username: "",
@@ -38,7 +39,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     },
   });
 
-  function onSubmit(values: z.infer) {
+  function onSubmit(values: z.infer<typeof signInSchema>) {
     setIsLoading(true);
 
     signInAction(values.username, values.password).then((res) => {
@@ -107,7 +108,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background text-muted-foreground px-2">
+          <span className="bg-background px-2 text-muted-foreground">
             Or continue with
           </span>
         </div>

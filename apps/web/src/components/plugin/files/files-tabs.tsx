@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 
-import { Button } from "@//components/ui/button";
+import { Button } from "@/components/ui/button";
 
 type FilesTabsProps = {
   left?: React.ReactNode;
@@ -13,9 +13,9 @@ type FilesTabsProps = {
 
 export function FilesTabs({ left, right }: FilesTabsProps) {
   return (
-    <div className="relative flex h-12 items-center justify-between border-b px-2">
+    <div className="border-b h-12 flex px-2 justify-between items-center relative">
       <div className="flex gap-2">{left}</div>
-      <nav className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-2">
+      <nav className="flex items-center justify-center gap-2 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         <FilesTab value="info" label="Info" />
         <FilesTab value="editor" label="Editor" />
         <FilesTab value="raw" label="Raw" />
@@ -37,7 +37,7 @@ function FilesTab({ value, label }: { value: string; label: string }) {
     <Button
       size="sm"
       variant={isActive ? "default" : "ghost"}
-      className="h-7 w-full justify-start"
+      className="w-full justify-start h-7"
       asChild
     >
       <Link

@@ -5,8 +5,12 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { AvatarUploader } from "@//components/ui/avatar-uploader";
-import { Button } from "@//components/ui/button";
+import { createUserSchema } from "@/lib/zod";
+import { createUser } from "@/server/service/user";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { AvatarUploader } from "@/components/ui/avatar-uploader";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -15,9 +19,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@//components/ui/form";
-import { Input } from "@//components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@//components/ui/radio-group";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Sheet,
   SheetClose,
@@ -27,17 +31,14 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@//components/ui/sheet";
-import { createUserSchema } from "@/lib/zod";
-import { createUser } from "@/server/service/user";
-import { zodResolver } from "@hookform/resolvers/zod";
+} from "@/components/ui/sheet";
 
 export const UsersCreate = () => {
   const [file, setFile] = useState<File>();
   const [creating, setCreating] = useState(false);
   const router = useRouter();
 
-  const form = useForm<z.infer>({
+  const form = useForm<z.infer<typeof createUserSchema>>({
     resolver: zodResolver(createUserSchema),
     defaultValues: {
       username: "",
@@ -45,7 +46,7 @@ export const UsersCreate = () => {
     },
   });
 
-  function onSubmit(values: z.infer) {
+  function onSubmit(values: z.infer<typeof createUserSchema>) {
     setCreating(true);
     const create = (fileData?: string | ArrayBuffer | null) => {
       createUser(
@@ -159,7 +160,7 @@ export const UsersCreate = () => {
                           <FormControl>
                             <RadioGroupItem disabled={creating} value="ADMIN" />
                           </FormControl>
-                          <FormLabel className="space-y-1 font-normal">
+                          <FormLabel className="font-normal space-y-1">
                             <span>Admin</span>
                             <FormDescription>
                               Admins have access to all features.
@@ -170,7 +171,7 @@ export const UsersCreate = () => {
                           <FormControl>
                             <RadioGroupItem disabled={creating} value="USER" />
                           </FormControl>
-                          <FormLabel className="space-y-1 font-normal">
+                          <FormLabel className="font-normal space-y-1">
                             <span>User</span>
                             <FormDescription>
                               Users have limited access to features.

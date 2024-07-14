@@ -1,8 +1,9 @@
 import { notFound, redirect } from "next/navigation";
 
-import { AdminMenu } from "@//components/admin/admin-menu";
 import { auth } from "@/server/auth";
 import { isAdmin } from "@/server/service/user";
+
+import { AdminMenu } from "@/components/admin/admin-menu";
 
 export default async function AdminLayout({
   children,
@@ -22,7 +23,7 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="flex h-full w-full overflow-hidden">
+    <div className="flex w-full h-full overflow-hidden">
       <AdminMenu />
       <div className="flex-1">{children}</div>
     </div>

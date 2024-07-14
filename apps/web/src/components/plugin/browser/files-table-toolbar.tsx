@@ -1,11 +1,12 @@
 import _ from "lodash";
 
-import { useBrowserContext } from "@//app/(main)/plugins/[plugin]/browser/layout.client";
-import { Button } from "@//components/ui/button";
-import { DataTableFacetedFilter } from "@//components/ui/data-table-faceted-filter";
-import { DataTableViewOptions } from "@//components/ui/data-table-view-options";
-import { Input } from "@//components/ui/input";
+import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
 import { Cross2Icon } from "@radix-ui/react-icons";
+
+import { Button } from "@/components/ui/button";
+import { DataTableFacetedFilter } from "@/components/ui/data-table-faceted-filter";
+import { DataTableViewOptions } from "@/components/ui/data-table-view-options";
+import { Input } from "@/components/ui/input";
 
 export function FilesTableToolbar() {
   const { table } = useBrowserContext();

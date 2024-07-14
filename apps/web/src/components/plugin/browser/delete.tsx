@@ -1,13 +1,16 @@
 import { toast } from "sonner";
 
-import { usePluginContext } from "@//app/(main)/plugins/[plugin]/layout.client";
-import { deleteFile } from "@//app/actions";
-import { FileCol } from "@//components/plugin/browser/files-table-columns";
-import { Button } from "@//components/ui/button";
+import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
+import { deleteFile } from "@/app/actions";
+import { moveToTrash } from "@/lib/core";
+import { Row, Table } from "@tanstack/react-table";
+
+import { FileCol } from "@/components/plugin/browser/files-table-columns";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenuItem,
   DropdownMenuShortcut,
-} from "@//components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 import {
   Sheet,
   SheetClose,
@@ -17,13 +20,11 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@//components/ui/sheet";
-import { moveToTrash } from "@/lib/core";
-import { Row, Table } from "@tanstack/react-table";
+} from "@/components/ui/sheet";
 
 interface DeleteProps {
-  row: Row;
-  table: Table;
+  row: Row<FileCol>;
+  table: Table<FileCol>;
 }
 
 export function Delete({ row, table }: DeleteProps) {
@@ -42,7 +43,7 @@ export function Delete({ row, table }: DeleteProps) {
           <SheetTitle>Are you sure you want to delete this file?</SheetTitle>
           <SheetDescription>This action cannot be undone.</SheetDescription>
         </SheetHeader>
-        <SheetFooter className="mt-4 flex flex-col gap-y-2 sm:flex-row sm:justify-between">
+        <SheetFooter className="flex flex-col sm:flex-row sm:justify-between gap-y-2 mt-4">
           {row.original.type === "file" && (
             <SheetClose>
               <Button

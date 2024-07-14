@@ -2,20 +2,21 @@
 
 import { useState } from "react";
 
+import { cn } from "@/lib/utils";
+import { useControllableState } from "@radix-ui/react-use-controllable-state";
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@//components/ui/accordion";
+} from "@/components/ui/accordion";
 import {
   Card,
   CardContent,
   CardDescription,
   CardTitle,
-} from "@//components/ui/card";
-import { cn } from "@/lib/utils";
-import { useControllableState } from "@radix-ui/react-use-controllable-state";
+} from "@/components/ui/card";
 
 type VisibleAreaProps = {
   title?: string;
@@ -70,12 +71,12 @@ export function VisibleArea({
         <AccordionItem value="item" className="space-y-4" asChild>
           <Card
             className={cn(
-              "my-2 h-fit rounded-lg bg-transparent",
+              "h-fit bg-transparent rounded-lg my-2",
               classNames?.card,
             )}
           >
             <CardContent
-              className={cn("grid p-2 py-1 text-sm", classNames?.cardContent)}
+              className={cn("p-2 grid py-1 text-sm", classNames?.cardContent)}
             >
               <AccordionTrigger
                 classNames={{

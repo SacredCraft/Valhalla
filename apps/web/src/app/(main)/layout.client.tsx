@@ -6,8 +6,9 @@ import { atomWithStorage } from "jotai/utils";
 import { SessionProvider } from "next-auth/react";
 import React, { PropsWithChildren, createContext, useContext } from "react";
 
-import { Aside, AsideContext } from "@//components/layout/aside";
 import { Role } from "@prisma/client";
+
+import { Aside, AsideContext } from "@/components/layout/aside";
 
 type ContextType = {
   id: string;
@@ -44,7 +45,7 @@ export function MainClientLayout({ children, ...rest }: MainClientProps) {
             <motion.main
               layout
               layoutDependency={collapsed}
-              className="grid flex-1 items-start gap-4 sm:py-0 md:gap-8"
+              className="flex-1 grid items-start gap-4 sm:py-0 md:gap-8"
               style={{
                 marginLeft: collapsed ? "3.5rem" : "13rem",
               }}

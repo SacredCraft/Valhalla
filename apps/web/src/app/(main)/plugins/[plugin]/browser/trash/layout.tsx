@@ -1,4 +1,4 @@
-import { TrashClientLayout } from "@//app/(main)/plugins/[plugin]/browser/trash/layout.client";
+import { TrashClientLayout } from "@/app/(main)/plugins/[plugin]/browser/trash/layout.client";
 import { getDeletedFiles } from "@/lib/core";
 
 type TrashLayoutProps = {

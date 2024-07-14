@@ -1,4 +1,4 @@
-import { SetupClientLayout } from "@//app/(empty)/setup/[step]/layout.client";
+import { SetupClientLayout } from "@/app/(empty)/setup/[step]/layout.client";
 
 export default function SetupLayout({
   children,

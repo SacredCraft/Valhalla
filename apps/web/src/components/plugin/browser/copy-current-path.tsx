@@ -3,8 +3,9 @@
 import { Copy } from "lucide-react";
 import { toast } from "sonner";
 
-import { useBrowserContext } from "@//app/(main)/plugins/[plugin]/browser/layout.client";
-import { Button } from "@//components/ui/button";
+import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
+
+import { Button } from "@/components/ui/button";
 
 export function CopyCurrentPath() {
   const { relativePath } = useBrowserContext();

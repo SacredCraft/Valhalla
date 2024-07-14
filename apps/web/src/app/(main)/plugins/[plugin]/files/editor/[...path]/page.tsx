@@ -1,8 +1,8 @@
 "use client";
 
-import { useFilesContext } from "@//app/(main)/plugins/[plugin]/files/layout.client";
-import { usePluginContext } from "@//app/(main)/plugins/[plugin]/layout.client";
-import { findFileAttributes } from "@//server/config/utils";
+import { useFilesContext } from "@/app/(main)/plugins/[plugin]/files/layout.client";
+import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
+import { findFileAttributes } from "@/server/config/utils";
 
 export default function EditorPage() {
   const { plugin } = usePluginContext();

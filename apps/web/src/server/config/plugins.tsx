@@ -1,4 +1,4 @@
-import { JormungandrDefault } from "@//components/templates/jormungandr/jormungandr-default";
+import { JormungandrDefault } from "@/components/templates/jormungandr/jormungandr-default";
 
 import { ValhallaPlugin } from "./types";
 

@@ -8,14 +8,15 @@ import React, {
   useEffect,
 } from "react";
 
-import { Button } from "@//components/ui/button";
 import { cn } from "@/lib/utils";
+
+import { Button } from "@/components/ui/button";
 
 type ContextType = {
   categories: string[];
   currentCategory: string | null;
-  setCategories: Dispatch;
-  setCurrentCategory: Dispatch;
+  setCategories: Dispatch<SetStateAction<string[]>>;
+  setCurrentCategory: Dispatch<SetStateAction<string | null>>;
 };
 
 export const CategoriesContext = createContext<ContextType>({
@@ -25,7 +26,9 @@ export const CategoriesContext = createContext<ContextType>({
   setCurrentCategory: () => {},
 });
 
-export const CategoriesProvider: React.FC = ({ children }) => {
+export const CategoriesProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [currentCategory, setCurrentCategory] = React.useState<string | null>(
     null,
   );
@@ -53,8 +56,8 @@ export const CategoriesRoot = ({ children }: { children: React.ReactNode }) => {
 
 export const Categories = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="relative flex h-12 items-center justify-between border-b px-2">
-      <nav className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-2">
+    <div className="border-b h-12 flex px-2 justify-between items-center relative">
+      <nav className="flex items-center justify-center gap-2 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         {children}
       </nav>
     </div>
@@ -89,7 +92,7 @@ export const Category = ({
     <Button
       size="sm"
       variant={currentCategory === category ? "secondary" : "ghost"}
-      className="h-7 w-full justify-start"
+      className="w-full justify-start h-7"
       onClick={() => setCurrentCategory(category)}
     >
       {children}
@@ -117,7 +120,7 @@ export const CategoryContent = ({
   return currentCategory === category ? (
     <>
       {(title || description || icon) && (
-        <div className="flex items-center space-x-2 border-b p-2">
+        <div className="border-b flex p-2 items-center space-x-2">
           {icon}
           <div className="space-y-1">
             <h3 className="text-base font-medium">{title}</h3>

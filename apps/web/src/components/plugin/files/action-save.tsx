@@ -3,8 +3,9 @@
 import { SaveIcon } from "lucide-react";
 import React from "react";
 
-import { useFilesEditorContext } from "@//app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
-import { Button } from "@//components/ui/button";
+import { useFilesEditorContext } from "@/app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
+
+import { Button } from "@/components/ui/button";
 
 export const ActionSave = () => {
   const { modified } = useFilesEditorContext();

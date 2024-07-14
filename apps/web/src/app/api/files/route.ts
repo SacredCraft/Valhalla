@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-import { getPluginPath } from "@//app/actions";
+import { getPluginPath } from "@/app/actions";
 
 export async function POST(request: Request) {
   const formData = await request.formData();

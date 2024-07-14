@@ -5,10 +5,12 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { useBrowserContext } from "@//app/(main)/plugins/[plugin]/browser/layout.client";
-import { usePluginContext } from "@//app/(main)/plugins/[plugin]/layout.client";
-import { createFile } from "@//app/actions";
-import { Button } from "@//components/ui/button";
+import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
+import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
+import { createFile } from "@/app/actions";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -17,15 +19,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@//components/ui/form";
-import { Input } from "@//components/ui/input";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@//components/ui/select";
+} from "@/components/ui/select";
 import {
   Sheet,
   SheetClose,
@@ -35,8 +37,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@//components/ui/sheet";
-import { zodResolver } from "@hookform/resolvers/zod";
+} from "@/components/ui/sheet";
 
 const FormSchema = z.object({
   name: z.string({
@@ -49,14 +50,14 @@ export function New() {
   const { plugin } = usePluginContext();
   const { relativePath, table } = useBrowserContext();
 
-  const form = useForm<z.infer>({
+  const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       name: "",
     },
   });
 
-  const handleCreate = (data: z.infer) => {
+  const handleCreate = (data: z.infer<typeof FormSchema>) => {
     createFile(
       plugin.id,
       [relativePath?.join("/"), data.name].join("/"),

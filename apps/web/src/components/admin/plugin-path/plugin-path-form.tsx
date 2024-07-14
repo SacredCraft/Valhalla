@@ -5,8 +5,10 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { setPluginPath } from "@//app/actions";
-import { Button } from "@//components/ui/button";
+import { setPluginPath } from "@/app/actions";
+import { plugins } from "@/server/config/plugins";
+
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -15,11 +17,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@//components/ui/form";
-import { Input } from "@//components/ui/input";
-import { plugins } from "@//server/config/plugins";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
-export const PluginPathForm = ({ pluginPaths }: { pluginPaths: Map }) => {
+export const PluginPathForm = ({
+  pluginPaths,
+}: {
+  pluginPaths: Map<string, string>;
+}) => {
   const form = useForm({
     defaultValues: Object.fromEntries(
       Array.from(pluginPaths.entries()).map(([id, path]) => [id, path]),
@@ -43,10 +48,10 @@ export const PluginPathForm = ({ pluginPaths }: { pluginPaths: Map }) => {
   return (
     <Form {...form}>
       <form className="grid" onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="relative flex h-12 items-center justify-between border-b px-2">
+        <div className="border-b h-12 flex px-2 justify-between items-center relative">
           <div className="flex gap-2">
             <Button type="submit" size="sm" className="h-7 px-2">
-              <SaveIcon className="mr-1 h-4 w-4" />
+              <SaveIcon className="mr-1 w-4 h-4" />
               Save
             </Button>
           </div>

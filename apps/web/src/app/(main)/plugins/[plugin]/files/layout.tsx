@@ -1,6 +1,6 @@
 import React from "react";
 
-import { FilesClientLayout } from "@//app/(main)/plugins/[plugin]/files/layout.client";
+import { FilesClientLayout } from "@/app/(main)/plugins/[plugin]/files/layout.client";
 
 type FilesLayoutProps = {
   params: {

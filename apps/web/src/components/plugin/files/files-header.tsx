@@ -4,8 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { Fragment, useMemo } from "react";
 
-import { useFilesContext } from "@//app/(main)/plugins/[plugin]/files/layout.client";
-import { usePluginContext } from "@//app/(main)/plugins/[plugin]/layout.client";
+import { useFilesContext } from "@/app/(main)/plugins/[plugin]/files/layout.client";
+import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,7 +14,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@//components/ui/breadcrumb";
+} from "@/components/ui/breadcrumb";
 
 export function FilesHeader() {
   const { plugin } = usePluginContext();
@@ -31,7 +32,7 @@ export function FilesHeader() {
   );
 
   return (
-    <header className="flex h-12 items-center border-b px-2">
+    <header className="h-12 border-b flex px-2 items-center">
       <Breadcrumb className="hidden md:flex">
         <BreadcrumbList>
           <BreadcrumbItem>

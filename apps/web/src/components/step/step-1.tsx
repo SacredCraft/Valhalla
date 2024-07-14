@@ -8,8 +8,12 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { useSetupContext } from "@//app/(empty)/setup/[step]/layout.client";
-import { Button } from "@//components/ui/button";
+import { useSetupContext } from "@/app/(empty)/setup/[step]/layout.client";
+import { signInSchema } from "@/lib/zod";
+import { setupAdminUser } from "@/server/service/user";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -18,18 +22,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@//components/ui/form";
-import { Input } from "@//components/ui/input";
-import { signInSchema } from "@/lib/zod";
-import { setupAdminUser } from "@/server/service/user";
-import { zodResolver } from "@hookform/resolvers/zod";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 export function Step1() {
   const { setName } = useSetupContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
-  const form = useForm<z.infer>({
+  const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
       username: "",
@@ -37,7 +38,7 @@ export function Step1() {
     },
   });
 
-  function onSubmit(values: z.infer) {
+  function onSubmit(values: z.infer<typeof signInSchema>) {
     setIsLoading(true);
 
     setupAdminUser(values.username, values.password).then((res) => {
@@ -56,7 +57,7 @@ export function Step1() {
   }, [setName]);
 
   return (
-    <div className="flex w-72 flex-col space-y-6 text-center">
+    <div className="flex flex-col space-y-6 text-center w-72">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid gap-2 text-start">

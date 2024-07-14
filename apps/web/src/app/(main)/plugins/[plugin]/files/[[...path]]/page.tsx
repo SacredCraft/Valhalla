@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 
-import { getFile } from "@//app/actions";
+import { getFile } from "@/app/actions";
 
 type BrowserProps = {
   params: {

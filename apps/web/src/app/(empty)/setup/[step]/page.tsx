@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { Step1 } from "@//components/step/step-1";
-import { Step2 } from "@//components/step/step-2";
-import { Button } from "@//components/ui/button";
 import prisma from "@/lib/prisma";
+
+import { Step1 } from "@/components/step/step-1";
+import { Step2 } from "@/components/step/step-2";
+import { Button } from "@/components/ui/button";
 
 export default async function SetupPage({
   params,
@@ -25,7 +26,7 @@ export default async function SetupPage({
           <h1 className="text-2xl font-semibold tracking-tight">
             Welcome to Valhalla
           </h1>
-          <p className="text-muted-foreground mx-auto max-w-[300px] text-sm">
+          <p className="text-sm text-muted-foreground mx-auto max-w-[300px]">
             Now that you have the platform installed, let&apos;s get you set up
             with your account..
           </p>

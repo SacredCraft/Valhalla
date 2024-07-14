@@ -4,15 +4,17 @@ import { ClipboardPaste } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import { useBrowserContext } from "@//app/(main)/plugins/[plugin]/browser/layout.client";
-import { usePluginContext } from "@//app/(main)/plugins/[plugin]/layout.client";
-import { copyFile, replaceFile } from "@//app/actions";
-import { FileCol } from "@//components/plugin/browser/files-table-columns";
-import { Button } from "@//components/ui/button";
+import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
+import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
+import { copyFile, replaceFile } from "@/app/actions";
+import { Row, Table } from "@tanstack/react-table";
+
+import { FileCol } from "@/components/plugin/browser/files-table-columns";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenuItem,
   DropdownMenuShortcut,
-} from "@//components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 import {
   Sheet,
   SheetClose,
@@ -21,12 +23,11 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-} from "@//components/ui/sheet";
-import { Row, Table } from "@tanstack/react-table";
+} from "@/components/ui/sheet";
 
 interface CopyCutRowActionProps {
-  row: Row;
-  table: Table;
+  row: Row<FileCol>;
+  table: Table<FileCol>;
 }
 
 export function CopyCutRowAction({ row, table }: CopyCutRowActionProps) {
@@ -177,12 +178,12 @@ export function PasteAction() {
           <div className="grid gap-4 py-4">
             {exists.length > 0 && (
               <div>
-                <h3 className="mb-2 font-semibold">File(s) already exist</h3>
+                <h3 className="font-semibold mb-2">File(s) already exist</h3>
                 <ul className="grid gap-2">
                   {exists.map((file) => (
                     <li
                       key={file}
-                      className="bg-secondary text-secondary-foreground rounded-lg p-2"
+                      className="bg-secondary text-secondary-foreground p-2 rounded-lg"
                     >
                       {file}
                     </li>
@@ -192,12 +193,12 @@ export function PasteAction() {
             )}
             {failed.length > 0 && (
               <div>
-                <h3 className="mb-2 font-semibold">Failed to paste file(s)</h3>
+                <h3 className="font-semibold mb-2">Failed to paste file(s)</h3>
                 <ul className="grid gap-2">
                   {failed.map((file) => (
                     <li
                       key={file}
-                      className="bg-secondary text-secondary-foreground rounded-lg p-2"
+                      className="bg-secondary text-secondary-foreground p-2 rounded-lg"
                     >
                       {file}
                     </li>

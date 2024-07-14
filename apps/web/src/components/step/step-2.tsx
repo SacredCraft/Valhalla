@@ -4,8 +4,9 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useEffect } from "react";
 
-import { useSetupContext } from "@//app/(empty)/setup/[step]/layout.client";
-import { Button } from "@//components/ui/button";
+import { useSetupContext } from "@/app/(empty)/setup/[step]/layout.client";
+
+import { Button } from "@/components/ui/button";
 
 export function Step2() {
   const { setName } = useSetupContext();
@@ -16,21 +17,21 @@ export function Step2() {
   }, [setName]);
 
   return (
-    <div className="flex w-80 flex-col space-y-6 text-center">
+    <div className="flex flex-col space-y-6 text-center w-80">
       <h1 className="text-2xl font-semibold tracking-tight">
         What&apos;s next?
       </h1>
-      <p className="text-muted-foreground text-sm">
+      <p className="text-sm text-muted-foreground">
         Tips to help you get started with Valhalla.
       </p>
-      <ul className="flex list-inside list-disc flex-col space-y-4 text-start">
-        <li className="text-muted-foreground text-sm">
+      <ul className="flex flex-col space-y-4 text-start list-disc list-inside">
+        <li className="text-sm text-muted-foreground">
           Create an account to get started with Valhalla.
         </li>
-        <li className="text-muted-foreground text-sm">
+        <li className="text-sm text-muted-foreground">
           Add your first project to start managing your resources.
         </li>
-        <li className="text-muted-foreground text-sm">
+        <li className="text-sm text-muted-foreground">
           Invite your team to collaborate on projects.
         </li>
       </ul>

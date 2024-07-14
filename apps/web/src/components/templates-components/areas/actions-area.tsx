@@ -3,14 +3,7 @@
 import { Code, CodeXml, TrashIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 
-import { useFilesEditorContext } from "@//app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
-import { useNode } from "@//components/templates-components/form/node";
-import { Button } from "@//components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@//components/ui/tooltip";
+import { useFilesEditorContext } from "@/app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
 import {
   getFormValue,
   isFormDeletableValue,
@@ -18,11 +11,19 @@ import {
 } from "@/lib/form";
 import { cn } from "@/lib/utils";
 
+import { useNode } from "@/components/templates-components/form/node";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 type ActionsAreaProps = {
   onDelete?: (nodes: string[]) => void;
   onTempDelete?: (nodes: string[]) => void;
   children?: React.ReactNode;
-} & React.HTMLProps;
+} & React.HTMLProps<HTMLDivElement>;
 
 export function ActionsArea({
   onDelete,
@@ -93,7 +94,7 @@ export function ActionsArea({
       data-delete-temp-hover={deleteTempHover}
     >
       {children}
-      <div className="animate-in fade-in absolute right-2 top-2 hidden gap-2 group-hover:flex">
+      <div className="absolute right-2 top-2 hidden gap-2 animate-in fade-in group-hover:flex">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button

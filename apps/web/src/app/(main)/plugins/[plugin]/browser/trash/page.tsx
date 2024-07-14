@@ -1,7 +1,8 @@
 "use client";
 
-import { useBrowserContext } from "@//app/(main)/plugins/[plugin]/browser/layout.client";
-import { TrashBin } from "@//components/plugin/browser/trash-bin";
+import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
+
+import { TrashBin } from "@/components/plugin/browser/trash-bin";
 
 export default function TrashPage() {
   const { trash } = useBrowserContext();

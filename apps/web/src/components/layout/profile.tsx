@@ -3,12 +3,14 @@ import { Ellipsis } from "lucide-react";
 import { signOut } from "next-auth/react";
 import React from "react";
 
-import { useProfile } from "@//app/(main)/layout.client";
-import { useAside } from "@//components/layout/aside";
-import { ProfileModel } from "@//components/layout/profile-model";
-import { Avatar, AvatarFallback, AvatarImage } from "@//components/ui/avatar";
-import { Badge } from "@//components/ui/badge";
-import { Button } from "@//components/ui/button";
+import { useProfile } from "@/app/(main)/layout.client";
+import { cn } from "@/lib/utils";
+
+import { useAside } from "@/components/layout/aside";
+import { ProfileModel } from "@/components/layout/profile-model";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,8 +18,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@//components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
+} from "@/components/ui/dropdown-menu";
 
 type AvatarProps = {
   className?: string;
@@ -33,8 +34,8 @@ export function Profile({ className }: AvatarProps) {
         <Button
           variant="secondary"
           className={cn(
-            "text-muted-foreground hover:text-foreground flex h-9 w-9 items-center justify-start gap-2 rounded-lg transition-colors md:h-8",
-            collapsed ? "p-0 md:h-8 md:w-8" : "p-2 md:h-16 md:w-full",
+            "flex h-9 w-9 items-center justify-start rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 gap-2",
+            collapsed ? "md:w-8 md:h-8 p-0" : "p-2 md:h-16 md:w-full",
             className,
           )}
           asChild
@@ -54,7 +55,7 @@ export function Profile({ className }: AvatarProps) {
             </Avatar>
             <motion.div
               className={cn(
-                "h-full flex-col items-start justify-between",
+                "flex-col items-start justify-between h-full",
                 collapsed ? "hidden" : "flex",
               )}
             >
@@ -64,7 +65,7 @@ export function Profile({ className }: AvatarProps) {
                 {username}
               </motion.span>
               <Badge
-                className="px-1.5 py-[1px]"
+                className="py-[1px] px-1.5"
                 variant={role === "ADMIN" ? "default" : "outline"}
               >
                 {role}
@@ -72,7 +73,7 @@ export function Profile({ className }: AvatarProps) {
             </motion.div>
             <motion.div
               className={cn(
-                "ml-auto h-full items-center",
+                "items-center h-full ml-auto",
                 collapsed ? "hidden" : "flex",
               )}
             >

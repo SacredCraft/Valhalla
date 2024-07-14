@@ -1,9 +1,10 @@
-import { useUsersContext } from "@//app/(main)/admin/users/layout.client";
-import { Button } from "@//components/ui/button";
-import { DataTableFacetedFilter } from "@//components/ui/data-table-faceted-filter";
-import { DataTableViewOptions } from "@//components/ui/data-table-view-options";
-import { Input } from "@//components/ui/input";
+import { useUsersContext } from "@/app/(main)/admin/users/layout.client";
 import { Cross2Icon } from "@radix-ui/react-icons";
+
+import { Button } from "@/components/ui/button";
+import { DataTableFacetedFilter } from "@/components/ui/data-table-faceted-filter";
+import { DataTableViewOptions } from "@/components/ui/data-table-view-options";
+import { Input } from "@/components/ui/input";
 
 export function UsersTableToolbar() {
   const { table } = useUsersContext();

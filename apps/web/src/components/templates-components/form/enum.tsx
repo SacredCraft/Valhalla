@@ -2,9 +2,13 @@
 
 import { KeyboardEvent, useEffect, useState } from "react";
 
-import { useFilesEditorContext } from "@//app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
-import { useNode } from "@//components/templates-components/form/node";
-import { Button } from "@//components/ui/button";
+import { useFilesEditorContext } from "@/app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
+import { getFormValue, isFormDeletableValue } from "@/lib/form";
+import { cn } from "@/lib/utils";
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+
+import { useNode } from "@/components/templates-components/form/node";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -13,22 +17,19 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@//components/ui/command";
+} from "@/components/ui/command";
 import {
   FormControl,
   FormDescription,
   FormField,
   FormItem,
   FormLabel,
-} from "@//components/ui/form";
+} from "@/components/ui/form";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@//components/ui/popover";
-import { getFormValue, isFormDeletableValue } from "@/lib/form";
-import { cn } from "@/lib/utils";
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+} from "@/components/ui/popover";
 
 type EnumProps = {
   label?: React.ReactNode;
@@ -37,7 +38,7 @@ type EnumProps = {
   defaultValue?: string;
   clearable?: boolean;
   creatable?: boolean;
-} & React.HTMLProps;
+} & React.HTMLProps<HTMLDivElement>;
 
 export function Enum({
   description,
@@ -58,7 +59,7 @@ export function Enum({
     setItems(originItems);
   }, [originItems]);
 
-  const handleKeyDown = (event: KeyboardEvent) => {
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && creatable) {
       event.preventDefault();
       if (inputValue && node && !items.find((i) => i.value === inputValue)) {

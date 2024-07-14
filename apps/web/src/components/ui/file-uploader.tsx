@@ -6,14 +6,15 @@ import * as React from "react";
 import Dropzone, { type FileRejection } from "react-dropzone";
 import { toast } from "sonner";
 
-import { Button } from "@//components/ui/button";
-import { Progress } from "@//components/ui/progress";
-import { ScrollArea } from "@//components/ui/scroll-area";
 import { cn, formatBytes } from "@/lib/utils";
 import { Cross2Icon, UploadIcon } from "@radix-ui/react-icons";
 import { useControllableState } from "@radix-ui/react-use-controllable-state";
 
-interface FileUploaderProps extends React.HTMLAttributes {
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
+interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * Value of the uploader.
    * @type File[]
@@ -28,7 +29,7 @@ interface FileUploaderProps extends React.HTMLAttributes {
    * @default undefined
    * @example onValueChange={(files) => setFiles(files)}
    */
-  onValueChange?: React.Dispatch;
+  onValueChange?: React.Dispatch<React.SetStateAction<File[]>>;
 
   /**
    * Function to be called when files are uploaded.
@@ -36,7 +37,7 @@ interface FileUploaderProps extends React.HTMLAttributes {
    * @default undefined
    * @example onUpload={(files) => uploadFiles(files)}
    */
-  onUpload?: (files: File[]) => Promise;
+  onUpload?: (files: File[]) => Promise<void>;
 
   /**
    * Progress of the uploaded files.
@@ -44,7 +45,7 @@ interface FileUploaderProps extends React.HTMLAttributes {
    * @default undefined
    * @example progresses={{ "file1.png": 50 }}
    */
-  progresses?: Record;
+  progresses?: Record<string, number>;
 
   /**
    * Whether the uploader should accept multiple files.
@@ -145,8 +146,8 @@ export function FileUploader(props: FileUploaderProps) {
           <div
             {...getRootProps()}
             className={cn(
-              "border-muted-foreground/25 hover:bg-muted/25 group relative grid h-52 w-full cursor-pointer place-items-center rounded-lg border-2 border-dashed px-5 py-2.5 text-center transition",
-              "ring-offset-background focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+              "group relative grid h-52 w-full cursor-pointer place-items-center rounded-lg border-2 border-dashed border-muted-foreground/25 px-5 py-2.5 text-center transition hover:bg-muted/25",
+              "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
               isDragActive && "border-muted-foreground/50",
               isDisabled && "pointer-events-none opacity-60",
               className,
@@ -158,11 +159,11 @@ export function FileUploader(props: FileUploaderProps) {
               <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
                 <div className="rounded-full border border-dashed p-3">
                   <UploadIcon
-                    className="text-muted-foreground size-7"
+                    className="size-7 text-muted-foreground"
                     aria-hidden="true"
                   />
                 </div>
-                <p className="text-muted-foreground font-medium">
+                <p className="font-medium text-muted-foreground">
                   Drop the files here
                 </p>
               </div>
@@ -170,15 +171,15 @@ export function FileUploader(props: FileUploaderProps) {
               <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
                 <div className="rounded-full border border-dashed p-3">
                   <UploadIcon
-                    className="text-muted-foreground size-7"
+                    className="size-7 text-muted-foreground"
                     aria-hidden="true"
                   />
                 </div>
                 <div className="space-y-px">
-                  <p className="text-muted-foreground font-medium">
+                  <p className="font-medium text-muted-foreground">
                     Drag {`'n'`} drop files here, or click to select files
                   </p>
-                  <p className="text-muted-foreground/70 text-sm">
+                  <p className="text-sm text-muted-foreground/70">
                     You can upload everything you want
                   </p>
                 </div>
@@ -225,16 +226,16 @@ function FileCard({ file, progress, onRemove }: FileCardProps) {
             className="aspect-square shrink-0 rounded-md object-cover"
           />
         ) : (
-          <div className="bg-muted-foreground/10 flex aspect-square h-12 w-12 shrink-0 items-center justify-center rounded-md">
+          <div className="aspect-square shrink-0 rounded-md bg-muted-foreground/10 h-12 w-12 flex items-center justify-center">
             <FileIcon />
           </div>
         )}
         <div className="flex w-full flex-col gap-2">
           <div className="space-y-px">
-            <p className="text-foreground/80 line-clamp-1 text-sm font-medium">
+            <p className="line-clamp-1 text-sm font-medium text-foreground/80">
               {file.name}
             </p>
-            <p className="text-muted-foreground text-xs">
+            <p className="text-xs text-muted-foreground">
               {formatBytes(file.size)}
             </p>
           </div>
@@ -250,7 +251,7 @@ function FileCard({ file, progress, onRemove }: FileCardProps) {
           disabled={progress !== undefined}
           onClick={onRemove}
         >
-          <Cross2Icon className="size-4" aria-hidden="true" />
+          <Cross2Icon className="size-4 " aria-hidden="true" />
           <span className="sr-only">Remove file</span>
         </Button>
       </div>

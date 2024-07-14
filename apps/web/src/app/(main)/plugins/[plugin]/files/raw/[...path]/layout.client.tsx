@@ -2,8 +2,8 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-import { useFilesContext } from "@//app/(main)/plugins/[plugin]/files/layout.client";
-import { ValhallaFile } from "@//app/actions";
+import { useFilesContext } from "@/app/(main)/plugins/[plugin]/files/layout.client";
+import { ValhallaFile } from "@/app/actions";
 
 type ContextType = {
   file: ValhallaFile;

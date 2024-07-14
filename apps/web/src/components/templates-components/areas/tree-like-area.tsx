@@ -3,16 +3,18 @@
 import React, { Fragment, createContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { useFilesEditorContext } from "@//app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
-import { Node } from "@//components/templates-components/form/node";
-import { useNode } from "@//components/templates-components/form/node";
+import { useFilesEditorContext } from "@/app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
+import { cn } from "@/lib/utils";
+
+import { Node } from "@/components/templates-components/form/node";
+import { useNode } from "@/components/templates-components/form/node";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from "@//components/ui/breadcrumb";
-import { Button, ButtonProps } from "@//components/ui/button";
+} from "@/components/ui/breadcrumb";
+import { Button, ButtonProps } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -20,17 +22,17 @@ import {
   FormField,
   FormItem,
   FormLabel,
-} from "@//components/ui/form";
-import { Input } from "@//components/ui/input";
-import { Label } from "@//components/ui/label";
-import { ScrollArea } from "@//components/ui/scroll-area";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@//components/ui/select";
+} from "@/components/ui/select";
 import {
   Sheet,
   SheetClose,
@@ -40,8 +42,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@//components/ui/sheet";
-import { cn } from "@/lib/utils";
+} from "@/components/ui/sheet";
 
 export type TreeLikePath = {
   label: string;
@@ -106,7 +107,7 @@ export const TreeLikeAreaProvider = ({
 type TreeLikeAreaProps = {
   children: React.ReactNode;
   className?: string;
-} & Omit;
+} & Omit<ContextType, "path" | "setPath" | "currentNodes" | "setCurrentNodes">;
 
 export const TreeLikeArea = ({
   children,
@@ -200,14 +201,14 @@ export const TreeLikeAreaNodes = ({ classNames }: TreeLikeAreaNodesProps) => {
 
   return (
     <ScrollArea className={cn("w-56", classNames?.scrollArea)}>
-      <div className={cn("flex size-full flex-col gap-y-2", classNames?.nodes)}>
+      <div className={cn("gap-y-2 flex flex-col size-full", classNames?.nodes)}>
         {currentNodes.map((n, i) => {
           const isGroupFirst =
             i === 0 || n._group !== currentNodes[i - 1]._group;
           return (
             <Fragment key={i}>
               {isGroupFirst && n._group && (
-                <Label className="px-2 text-xs text-gray-500">{n._group}</Label>
+                <Label className="text-xs text-gray-500 px-2">{n._group}</Label>
               )}
               <TreeLikeAreaNode
                 key={i}
@@ -241,7 +242,7 @@ export const TreeLikeAreaNode = ({
   return (
     <button
       className={cn(
-        "flex items-center space-x-2 rounded-md bg-zinc-100 p-2 transition-colors hover:bg-zinc-200",
+        "flex items-center space-x-2 bg-zinc-100 p-2 rounded-md hover:bg-zinc-200 transition-colors",
         className,
       )}
       onClick={() => setPath([...currentPath, path])}
@@ -416,7 +417,7 @@ export const TreeLikeAreaContentHeader = ({
   className?: string;
 }) => {
   return (
-    <div className={cn("flex rounded-md bg-zinc-100 px-2", className)}>
+    <div className={cn("flex px-2 bg-zinc-100 rounded-md", className)}>
       {children}
     </div>
   );

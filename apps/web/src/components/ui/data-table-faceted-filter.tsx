@@ -1,7 +1,11 @@
 import * as React from "react";
 
-import { Badge } from "@//components/ui/badge";
-import { Button } from "@//components/ui/button";
+import { cn } from "@/lib/utils";
+import { CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons";
+import { Column } from "@tanstack/react-table";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -10,24 +14,21 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@//components/ui/command";
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@//components/ui/popover";
-import { Separator } from "@//components/ui/separator";
-import { cn } from "@/lib/utils";
-import { CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons";
-import { Column } from "@tanstack/react-table";
+} from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
 
 interface DataTableFacetedFilterProps<TData, TValue> {
-  column?: Column;
+  column?: Column<TData, TValue>;
   title?: string;
   options: {
     label: string;
     value: string;
-    icon?: React.ComponentType;
+    icon?: React.ComponentType<{ className?: string }>;
   }[];
 }
 
@@ -35,7 +36,7 @@ export function DataTableFacetedFilter<TData, TValue>({
   column,
   title,
   options,
-}: DataTableFacetedFilterProps) {
+}: DataTableFacetedFilterProps<TData, TValue>) {
   const facets = column?.getFacetedUniqueValues();
   const selectedValues = new Set(column?.getFilterValue() as string[]);
 
@@ -105,7 +106,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                   >
                     <div
                       className={cn(
-                        "border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border",
+                        "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
                         isSelected
                           ? "bg-primary text-primary-foreground"
                           : "opacity-50 [&_svg]:invisible",
@@ -114,7 +115,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                       <CheckIcon className={cn("h-4 w-4")} />
                     </div>
                     {option.icon && (
-                      <option.icon className="text-muted-foreground mr-2 h-4 w-4" />
+                      <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
                     )}
                     <span>{option.label}</span>
                     {facets?.get(option.value) && (

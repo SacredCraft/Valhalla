@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
 import React from "react";
 
-import { useAside } from "@//components/layout/aside";
-import { Button, ButtonProps } from "@//components/ui/button";
 import { cn } from "@/lib/utils";
+
+import { useAside } from "@/components/layout/aside";
+import { Button, ButtonProps } from "@/components/ui/button";
 
 type AnimatedItemProps = {
   icon?: React.ReactNode;
@@ -21,7 +22,7 @@ export function AnimatedItem({
     <Button
       variant="outline"
       className={cn(
-        "text-muted-foreground hover:text-foreground flex h-9 w-9 items-center justify-center gap-2 rounded-lg p-0 transition-colors md:h-8",
+        "flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 p-0 gap-2",
         collapsed ? "md:w-8" : "w-full",
         className,
       )}

@@ -2,18 +2,19 @@
 
 import React, { forwardRef } from "react";
 
-import { useFilesEditorContext } from "@//app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
-import { useNode } from "@//components/templates-components/form/node";
-import { Button } from "@//components/ui/button";
+import { useFilesEditorContext } from "@/app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
+import { getFormValue } from "@/lib/form";
+import { useControllableState } from "@radix-ui/react-use-controllable-state";
+
+import { useNode } from "@/components/templates-components/form/node";
+import { Button } from "@/components/ui/button";
 import {
   FormControl,
   FormDescription,
   FormField,
   FormItem,
   FormLabel,
-} from "@//components/ui/form";
-import { getFormValue } from "@/lib/form";
-import { useControllableState } from "@radix-ui/react-use-controllable-state";
+} from "@/components/ui/form";
 
 type ButtonGroupProps = {
   label?: React.ReactNode;
@@ -63,7 +64,10 @@ export function ButtonGroup({
   );
 }
 
-const ButtonGroupPrimitive = forwardRef<HTMLDivElement, Partial>(
+const ButtonGroupPrimitive = forwardRef<
+  HTMLDivElement,
+  Partial<ButtonGroupProps>
+>(
   (
     {
       children,

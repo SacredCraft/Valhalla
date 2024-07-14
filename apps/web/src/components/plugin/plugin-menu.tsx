@@ -6,8 +6,12 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useMemo } from "react";
 
-import { usePluginContext } from "@//app/(main)/plugins/[plugin]/layout.client";
-import { Button } from "@//components/ui/button";
+import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
+import { cn } from "@/lib/utils";
+import { plugins } from "@/server/config/plugins";
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -15,16 +19,13 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@//components/ui/command";
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@//components/ui/popover";
-import { ScrollArea } from "@//components/ui/scroll-area";
-import { plugins } from "@//server/config/plugins";
-import { cn } from "@/lib/utils";
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+} from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function PluginMenu({ ownedPluginIds }: { ownedPluginIds: string[] }) {
   const { openedFiles, setOpenedFiles } = usePluginContext();
@@ -37,8 +38,8 @@ export function PluginMenu({ ownedPluginIds }: { ownedPluginIds: string[] }) {
 
   return (
     <div className="w-[220px]">
-      <div className="bg-background h-full min-h-screen gap-y-2 border-e sm:flex sm:flex-col">
-        <div className="flex h-12 items-center justify-center border-b">
+      <div className="bg-background sm:flex border-e sm:flex-col gap-y-2 min-h-screen h-full">
+        <div className="h-12 flex items-center justify-center border-b">
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -81,13 +82,13 @@ export function PluginMenu({ ownedPluginIds }: { ownedPluginIds: string[] }) {
           </Popover>
         </div>
         <nav className="flex flex-col gap-1 px-2">
-          <p className="text-muted-foreground mb-1 mt-2 px-2 text-xs font-semibold uppercase">
+          <p className="text-muted-foreground text-xs font-semibold uppercase px-2 mb-1 mt-2">
             Functions
           </p>
           <Item value="browser" label="Files Browser" />
         </nav>
-        <nav className="flex flex-1 flex-col gap-1 px-2">
-          <p className="text-muted-foreground mb-1 mt-2 px-2 text-xs font-semibold uppercase">
+        <nav className="flex flex-col gap-1 px-2 flex-1">
+          <p className="text-muted-foreground text-xs font-semibold uppercase px-2 mb-1 mt-2">
             Files
           </p>
           <ScrollArea className="flex-1">
@@ -151,7 +152,7 @@ function Item({
     <Button
       size="sm"
       variant={isActive ? "secondary" : "ghost"}
-      className="group h-7 w-full justify-start px-2"
+      className="w-full justify-start h-7 group px-2"
       asChild
     >
       <Link
@@ -161,7 +162,7 @@ function Item({
         {decodeURIComponent(label)}
         {index !== undefined && (
           <span
-            className="ml-auto rounded-sm p-1 opacity-0 transition-all hover:bg-zinc-200 group-hover:opacity-100 dark:hover:bg-zinc-700"
+            className="ml-auto group-hover:opacity-100 opacity-0 transition-all rounded-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 p-1"
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();

@@ -2,17 +2,18 @@
 
 import { File as FileIcon, Folder } from "lucide-react";
 
-import { ValhallaFile } from "@//app/actions";
-import { FilesTableRowActions } from "@//components/plugin/browser/files-table-row-actions";
-import { Badge } from "@//components/ui/badge";
-import { Checkbox } from "@//components/ui/checkbox";
-import { DataTableColumnHeader } from "@//components/ui/data-table-column-header";
-import { Template } from "@//server/config/types";
+import { ValhallaFile } from "@/app/actions";
+import { Template } from "@/server/config/types";
 import { ColumnDef, RowData } from "@tanstack/react-table";
+
+import { FilesTableRowActions } from "@/components/plugin/browser/files-table-row-actions";
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 
 export type FileCol = ValhallaFile & { template?: Template };
 
-export const filesTableColumns: ColumnDef[] = [
+export const filesTableColumns: ColumnDef<FileCol>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -46,7 +47,7 @@ export const filesTableColumns: ColumnDef[] = [
     filterFn: (row, _id, value) => value.includes(row.original.type),
     cell: ({ row }) => {
       return row.getValue("type") === "dir" ? (
-        <Folder className="text-primary fill-current" />
+        <Folder className="fill-current text-primary" />
       ) : (
         <FileIcon />
       );
@@ -59,7 +60,7 @@ export const filesTableColumns: ColumnDef[] = [
     ),
     cell: ({ row }) => {
       const name = row.original.name;
-      return <span className="truncate font-semibold">{name}</span>;
+      return <span className="font-semibold truncate">{name}</span>;
     },
   },
   {

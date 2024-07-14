@@ -1,4 +1,4 @@
-import { UsersClientLayout } from "@//app/(main)/admin/users/layout.client";
+import { UsersClientLayout } from "@/app/(main)/admin/users/layout.client";
 
 export default function UsersLayout({
   children,

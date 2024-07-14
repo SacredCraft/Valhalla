@@ -3,10 +3,12 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { useBrowserContext } from "@//app/(main)/plugins/[plugin]/browser/layout.client";
-import { usePluginContext } from "@//app/(main)/plugins/[plugin]/layout.client";
-import { Button } from "@//components/ui/button";
-import { FileUploader } from "@//components/ui/file-uploader";
+import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
+import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
+import { UploadIcon } from "@radix-ui/react-icons";
+
+import { Button } from "@/components/ui/button";
+import { FileUploader } from "@/components/ui/file-uploader";
 import {
   Sheet,
   SheetClose,
@@ -16,8 +18,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@//components/ui/sheet";
-import { UploadIcon } from "@radix-ui/react-icons";
+} from "@/components/ui/sheet";
 
 export function Upload() {
   const { plugin } = usePluginContext();
@@ -26,7 +27,9 @@ export function Upload() {
 
   const [files, setFiles] = useState<File[]>([]);
 
-  const [progresses, setProgresses] = useState<Record | undefined>();
+  const [progresses, setProgresses] = useState<
+    Record<string, number> | undefined
+  >();
 
   const handleUpload = () => {
     setIsUploading(true);
@@ -100,7 +103,7 @@ export function Upload() {
             Upload a file to the current directory.
           </SheetDescription>
         </SheetHeader>
-        <div className="grid h-fit gap-4 overflow-scroll py-4">
+        <div className="grid gap-4 py-4 h-fit overflow-scroll">
           <FileUploader
             value={files}
             onValueChange={setFiles}

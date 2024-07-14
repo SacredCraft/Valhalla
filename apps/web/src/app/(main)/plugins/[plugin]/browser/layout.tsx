@@ -1,4 +1,4 @@
-import { BrowserClientLayout } from "@//app/(main)/plugins/[plugin]/browser/layout.client";
+import { BrowserClientLayout } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
 
 type BrowserLayoutProps = {
   params: {

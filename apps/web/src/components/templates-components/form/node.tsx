@@ -18,7 +18,7 @@ export const useNode = () => {
 export function Node({
   extended = true,
   ...props
-}: React.PropsWithChildren & { extended?: boolean }) {
+}: React.PropsWithChildren<ContextType> & { extended?: boolean }) {
   const { node, nodes } = useNode();
 
   if (!extended) {

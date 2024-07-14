@@ -1,7 +1,9 @@
 "use client";
 
-import { useFilesEditorContext } from "@//app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
-import { useNode } from "@//components/templates-components/form/node";
+import { useFilesEditorContext } from "@/app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
+import { getFormValue } from "@/lib/form";
+
+import { useNode } from "@/components/templates-components/form/node";
 import {
   FormControl,
   FormDescription,
@@ -9,14 +11,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@//components/ui/form";
-import { Input } from "@//components/ui/input";
-import { getFormValue } from "@/lib/form";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 type TextProps = {
   label?: React.ReactNode;
   description?: React.ReactNode;
-} & React.ComponentProps;
+} & React.ComponentProps<typeof Input>;
 
 export function Text({
   description,

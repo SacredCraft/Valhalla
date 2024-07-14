@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { usePluginContext } from "@//app/(main)/plugins/[plugin]/layout.client";
-import { renameFile } from "@//app/actions";
-import { FileCol } from "@//components/plugin/browser/files-table-columns";
-import { Button } from "@//components/ui/button";
+import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
+import { renameFile } from "@/app/actions";
+import { Row, Table } from "@tanstack/react-table";
+
+import { FileCol } from "@/components/plugin/browser/files-table-columns";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenuItem,
   DropdownMenuShortcut,
-} from "@//components/ui/dropdown-menu";
-import { Input } from "@//components/ui/input";
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
   Sheet,
   SheetClose,
@@ -19,12 +21,11 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@//components/ui/sheet";
-import { Row, Table } from "@tanstack/react-table";
+} from "@/components/ui/sheet";
 
 interface RenameMoveProps {
-  row: Row;
-  table: Table;
+  row: Row<FileCol>;
+  table: Table<FileCol>;
 }
 
 export function RenameMove({ row, table }: RenameMoveProps) {

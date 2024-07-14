@@ -4,9 +4,13 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { string, z } from "zod";
 
-import { UserCol } from "@//components/admin/users/users-table-columns";
-import { AvatarUploader } from "@//components/ui/avatar-uploader";
-import { Button } from "@//components/ui/button";
+import { updateUserById } from "@/server/service/user";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Cell, flexRender } from "@tanstack/react-table";
+
+import { UserCol } from "@/components/admin/users/users-table-columns";
+import { AvatarUploader } from "@/components/ui/avatar-uploader";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -15,9 +19,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@//components/ui/form";
-import { Input } from "@//components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@//components/ui/radio-group";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Sheet,
   SheetClose,
@@ -27,12 +31,9 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@//components/ui/sheet";
-import { TableCell } from "@//components/ui/table";
-import { Textarea } from "@//components/ui/textarea";
-import { updateUserById } from "@/server/service/user";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Cell, flexRender } from "@tanstack/react-table";
+} from "@/components/ui/sheet";
+import { TableCell } from "@/components/ui/table";
+import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
   username: string({ required_error: "Username is required" })
@@ -48,12 +49,12 @@ const formSchema = z.object({
   bio: z.string().optional(),
 });
 
-export const UsersEdit = ({ cell }: { cell: Cell }) => {
+export const UsersEdit = ({ cell }: { cell: Cell<UserCol, any> }) => {
   const [file, setFile] = useState<File>();
   const [updating, setUpdating] = useState(false);
   const router = useRouter();
 
-  const form = useForm<z.infer>({
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: cell.row.original.username,
@@ -63,7 +64,7 @@ export const UsersEdit = ({ cell }: { cell: Cell }) => {
     },
   });
 
-  function onSubmit(values: z.infer) {
+  function onSubmit(values: z.infer<typeof formSchema>) {
     setUpdating(true);
     const update = (fileData?: string | ArrayBuffer | null) => {
       updateUserById(cell.row.original.id, {
@@ -198,7 +199,7 @@ export const UsersEdit = ({ cell }: { cell: Cell }) => {
                           <FormControl>
                             <RadioGroupItem disabled={updating} value="ADMIN" />
                           </FormControl>
-                          <FormLabel className="space-y-1 font-normal">
+                          <FormLabel className="font-normal space-y-1">
                             <span>Admin</span>
                             <FormDescription>
                               Admins have access to all features.
@@ -209,7 +210,7 @@ export const UsersEdit = ({ cell }: { cell: Cell }) => {
                           <FormControl>
                             <RadioGroupItem disabled={updating} value="USER" />
                           </FormControl>
-                          <FormLabel className="space-y-1 font-normal">
+                          <FormLabel className="font-normal space-y-1">
                             <span>User</span>
                             <FormDescription>
                               Users have limited access to features.

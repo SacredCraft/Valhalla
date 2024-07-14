@@ -2,14 +2,6 @@ import { useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import { useEffect, useMemo, useState } from "react";
 
-import { Button } from "@//components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@//components/ui/select";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -18,8 +10,17 @@ import {
 } from "@radix-ui/react-icons";
 import { Table } from "@tanstack/react-table";
 
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 interface DataTablePaginationProps<TData> {
-  table: Table;
+  table: Table<TData>;
   persist?: boolean;
   name?: string;
 }
@@ -28,7 +29,7 @@ export function DataTablePagination<TData>({
   table,
   persist,
   name,
-}: DataTablePaginationProps) {
+}: DataTablePaginationProps<TData>) {
   const tableState = table.getState().pagination.pageSize;
 
   const [localPageSize, setLocalPageSize] = useState<number>(() => {
@@ -52,8 +53,8 @@ export function DataTablePagination<TData>({
   }, [name, pageSize, persist, table]);
 
   return (
-    <div className="flex w-full items-center justify-between px-2">
-      <div className="text-muted-foreground flex-1 text-sm">
+    <div className="flex items-center justify-between px-2 w-full">
+      <div className="flex-1 text-sm text-muted-foreground">
         {table.getFilteredSelectedRowModel().rows.length} of{" "}
         {table.getFilteredRowModel().rows.length} row(s) selected.
       </div>

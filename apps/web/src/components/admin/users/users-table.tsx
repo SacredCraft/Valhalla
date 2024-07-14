@@ -3,23 +3,8 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { useUsersContext } from "@//app/(main)/admin/users/layout.client";
-import { revalidate } from "@//app/actions";
-import { UsersEdit } from "@//components/admin/users/users-edit";
-import {
-  UserCol,
-  usersTableColumns,
-} from "@//components/admin/users/users-table-columns";
-import { UsersTableToolbar } from "@//components/admin/users/users-table-toolbar";
-import { DataTablePagination } from "@//components/ui/data-table-pagination";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@//components/ui/table";
+import { useUsersContext } from "@/app/(main)/admin/users/layout.client";
+import { revalidate } from "@/app/actions";
 import { cn } from "@/lib/utils";
 import {
   ColumnFiltersState,
@@ -34,6 +19,22 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+
+import { UsersEdit } from "@/components/admin/users/users-edit";
+import {
+  UserCol,
+  usersTableColumns,
+} from "@/components/admin/users/users-table-columns";
+import { UsersTableToolbar } from "@/components/admin/users/users-table-toolbar";
+import { DataTablePagination } from "@/components/ui/data-table-pagination";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export function UsersTable({ users }: { users: UserCol[] }) {
   const { setTable } = useUsersContext();
@@ -115,9 +116,9 @@ function Template({ children }: { children: React.ReactNode }) {
   const { table } = useUsersContext();
 
   return (
-    <div className="flex flex-col gap-2 px-2">
+    <div className="px-2 flex flex-col gap-2">
       {table && <UsersTableToolbar />}
-      <div className="rounded-lg border">
+      <div className="border rounded-lg">
         <Table>
           <TableHeader>
             {table &&

@@ -3,8 +3,10 @@
 import { Airplay, Annoyed, AppWindow } from "lucide-react";
 import React from "react";
 
-import { useFilesEditorContext } from "@//app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
-import { ActionsArea } from "@//components/templates-components/areas/actions-area";
+import { useFilesEditorContext } from "@/app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
+import { isFormDeletableValue } from "@/lib/form";
+
+import { ActionsArea } from "@/components/templates-components/areas/actions-area";
 import {
   TreeLikeArea,
   TreeLikeAreaAside,
@@ -17,22 +19,21 @@ import {
   TreeLikeAreaCreateSheet,
   TreeLikeAreaNodes,
   TreeLikePath,
-} from "@//components/templates-components/areas/tree-like-area";
-import { ButtonGroup } from "@//components/templates-components/form/button-group";
-import { Enum } from "@//components/templates-components/form/enum";
-import { Node, useNode } from "@//components/templates-components/form/node";
-import { Text } from "@//components/templates-components/form/text";
+} from "@/components/templates-components/areas/tree-like-area";
+import { ButtonGroup } from "@/components/templates-components/form/button-group";
+import { Enum } from "@/components/templates-components/form/enum";
+import { Node, useNode } from "@/components/templates-components/form/node";
+import { Text } from "@/components/templates-components/form/text";
 import {
   Categories,
   CategoriesRoot,
   Category,
   CategoryContent,
-} from "@//components/templates-components/misc/categories";
-import { BaseAttack } from "@//components/templates/jormungandr/mechanism/base-attack";
-import { Hostile } from "@//components/templates/jormungandr/mechanism/hostile";
-import { Button } from "@//components/ui/button";
-import { Label } from "@//components/ui/label";
-import { isFormDeletableValue } from "@/lib/form";
+} from "@/components/templates-components/misc/categories";
+import { BaseAttack } from "@/components/templates/jormungandr/mechanism/base-attack";
+import { Hostile } from "@/components/templates/jormungandr/mechanism/hostile";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
 export function JormungandrDefault() {
   return (
@@ -70,11 +71,11 @@ export function JormungandrDefault() {
             <div className="space-y-2">
               <div className="space-y-1">
                 <Label className="text-base">Misc Options</Label>
-                <p className="text-muted-foreground text-sm">
+                <p className="text-sm text-muted-foreground">
                   Edit the misc options of the item.
                 </p>
               </div>
-              <div className="flex w-full flex-col items-start space-y-4 md:flex-row md:items-center md:space-x-4 md:space-y-2">
+              <div className="flex md:flex-row flex-col w-full md:items-center items-start md:space-x-4 md:space-y-2 space-y-4">
                 <Node node="display-name">
                   <Text
                     label="Display Name"
@@ -119,7 +120,7 @@ export function JormungandrDefault() {
           <div className="space-y-2">
             <div className="space-y-1">
               <Label className="text-base">Model Options</Label>
-              <p className="text-muted-foreground text-sm">
+              <p className="text-sm text-muted-foreground">
                 Edit the model options of the item.
               </p>
             </div>
@@ -127,7 +128,7 @@ export function JormungandrDefault() {
               node="model-options"
               nodes={["model-options.nametag", "model-options.state-machine"]}
             >
-              <ActionsArea className="flex flex-col items-start space-y-4 md:flex-row md:items-center md:space-x-4 md:space-y-0">
+              <ActionsArea className="flex md:flex-row flex-col md:items-center items-start md:space-x-4 md:space-y-0 space-y-4">
                 <Node node="nametag">
                   <Text
                     label="Nametag"
@@ -218,7 +219,7 @@ export const MatchedMechanism = ({ path }: { path: TreeLikePath[] }) => {
 
   if (path.length === 0) {
     return (
-      <div className="text-muted-foreground flex h-36 items-center justify-center">
+      <div className="h-36 flex justify-center items-center text-muted-foreground">
         Select a mechanism to edit its properties.
       </div>
     );
@@ -239,7 +240,7 @@ export function getMatchedMechanism({ item }: { item: any }): React.ReactNode {
       return <Hostile />;
     default:
       return (
-        <div className="text-muted-foreground flex h-36 items-center justify-center">
+        <div className="h-36 flex justify-center items-center text-muted-foreground">
           No mechanism matched.
         </div>
       );

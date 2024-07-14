@@ -5,9 +5,12 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { useProfile } from "@//app/(main)/layout.client";
-import { AvatarUploader } from "@//components/ui/avatar-uploader";
-import { Button } from "@//components/ui/button";
+import { useProfile } from "@/app/(main)/layout.client";
+import { updateUserById } from "@/server/service/user";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { AvatarUploader } from "@/components/ui/avatar-uploader";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -16,8 +19,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@//components/ui/dialog";
-import { DropdownMenuItem } from "@//components/ui/dropdown-menu";
+} from "@/components/ui/dialog";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import {
   Form,
   FormControl,
@@ -26,11 +29,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@//components/ui/form";
-import { Input } from "@//components/ui/input";
-import { Textarea } from "@//components/ui/textarea";
-import { updateUserById } from "@/server/service/user";
-import { zodResolver } from "@hookform/resolvers/zod";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 export function ProfileModel() {
   const [tab, setTab] = useState<string>("information");
@@ -42,8 +43,8 @@ export function ProfileModel() {
         </DropdownMenuItem>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[900px]">
-        <div className="flex h-[480px] gap-4">
-          <aside className="flex w-48 flex-col items-center gap-2">
+        <div className="flex gap-4 h-[480px]">
+          <aside className="flex flex-col items-center w-48 gap-2">
             <Item
               value="information"
               label="Information"
@@ -76,7 +77,7 @@ function Information() {
   const { username, avatar, id, bio } = useProfile();
   const [file, setFile] = useState<File>();
   const [updating, setUpdating] = useState(false);
-  const form = useForm<z.infer>({
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       password: "",
@@ -85,7 +86,7 @@ function Information() {
   });
   const router = useRouter();
 
-  function onSubmit(values: z.infer) {
+  function onSubmit(values: z.infer<typeof formSchema>) {
     setUpdating(true);
     const data: any = {
       password: values.password === "" ? undefined : values.password,
@@ -123,7 +124,7 @@ function Information() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex h-full flex-col gap-4"
+        className="flex flex-col gap-4 h-full"
       >
         <DialogHeader>
           <DialogTitle>Information</DialogTitle>
@@ -198,14 +199,14 @@ function Item({
   value: string;
   label: string;
   tab: string;
-  setTab: React.Dispatch;
+  setTab: React.Dispatch<React.SetStateAction<string>>;
 }) {
   return (
     <Button
       size="sm"
       variant={tab === value ? "secondary" : "ghost"}
       onClick={() => setTab(value)}
-      className="h-7 w-full"
+      className="w-full h-7"
     >
       {label}
     </Button>

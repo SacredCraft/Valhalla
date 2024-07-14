@@ -21,11 +21,12 @@ import React, {
   useState,
 } from "react";
 
-import { useProfile } from "@//app/(main)/layout.client";
-import { AnimatedItem } from "@//components/layout/animated-item";
-import { Profile } from "@//components/layout/profile";
-import { plugins } from "@//server/config/plugins";
+import { useProfile } from "@/app/(main)/layout.client";
 import { cn } from "@/lib/utils";
+import { plugins } from "@/server/config/plugins";
+
+import { AnimatedItem } from "@/components/layout/animated-item";
+import { Profile } from "@/components/layout/profile";
 
 type ContextType = {
   collapsed: boolean;
@@ -60,7 +61,7 @@ export function Aside() {
       layout="size"
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
       className={cn(
-        "bg-background fixed inset-y-0 left-0 z-10 hidden flex-col border-e sm:flex md:h-dvh",
+        "fixed md:h-dvh border-e inset-y-0 left-0 z-10 hidden flex-col bg-background sm:flex",
         collapsed ? "w-14" : "w-52",
       )}
     >
@@ -71,7 +72,7 @@ export function Aside() {
         <Link
           href="#"
           className={cn(
-            "group mb-2 flex shrink-0 items-center justify-center gap-2 rounded-full text-lg font-semibold md:text-base",
+            "group flex shrink-0 items-center justify-center gap-2 rounded-full text-lg font-semibold md:text-base mb-2 ",
             !collapsed ? "w-32" : undefined,
           )}
         >
@@ -86,7 +87,7 @@ export function Aside() {
               width={0}
               height={0}
               sizes="100vw"
-              className="h-auto w-full text-center font-mono tracking-widest transition-all hover:scale-110 dark:invert"
+              className="w-full h-auto text-center font-mono tracking-widest transition-all hover:scale-110 dark:invert"
               priority
             />
             <span className="sr-only">Valhalla</span>
@@ -173,7 +174,7 @@ function Item({
         size="sm"
         variant={route === value ? "secondary" : "ghost"}
         className={cn(
-          "text-primary w-full gap-2",
+          "gap-2 w-full text-primary",
           collapsed ? undefined : "justify-start px-3",
         )}
         icon={Icon && <Icon className={cn(collapsed ? "size-5" : "size-4")} />}

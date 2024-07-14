@@ -3,20 +3,9 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { useBrowserContext } from "@//app/(main)/plugins/[plugin]/browser/layout.client";
-import { usePluginContext } from "@//app/(main)/plugins/[plugin]/layout.client";
-import { revalidate } from "@//app/actions";
-import { FilesTableToolbar } from "@//components/plugin/browser/files-table-toolbar";
-import { DataTablePagination } from "@//components/ui/data-table-pagination";
-import { ImageModel } from "@//components/ui/image-model";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@//components/ui/table";
+import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
+import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
+import { revalidate } from "@/app/actions";
 import { cn } from "@/lib/utils";
 import {
   ColumnFiltersState,
@@ -31,6 +20,18 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+
+import { FilesTableToolbar } from "@/components/plugin/browser/files-table-toolbar";
+import { DataTablePagination } from "@/components/ui/data-table-pagination";
+import { ImageModel } from "@/components/ui/image-model";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import { FileCol, filesTableColumns } from "./files-table-columns";
 
@@ -113,7 +114,7 @@ export function FilesTable() {
                 className={cn(
                   "h-12 cursor-pointer",
                   row.original.type === "dir" &&
-                    "bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700",
+                    "bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700",
                 )}
                 onClick={() => {
                   if (row.original.type === "dir") {
@@ -169,9 +170,9 @@ function Template({ children }: { children: React.ReactNode }) {
   const { table } = useBrowserContext();
 
   return (
-    <div className="flex flex-col gap-2 px-2">
+    <div className="px-2 flex flex-col gap-2">
       {table && <FilesTableToolbar />}
-      <div className="rounded-lg border">
+      <div className="border rounded-lg">
         <Table>
           <TableHeader>
             {table &&

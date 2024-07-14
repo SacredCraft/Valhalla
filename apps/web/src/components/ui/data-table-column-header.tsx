@@ -1,11 +1,3 @@
-import { Button } from "@//components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@//components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import {
   ArrowDownIcon,
@@ -15,9 +7,18 @@ import {
 } from "@radix-ui/react-icons";
 import { Column } from "@tanstack/react-table";
 
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 interface DataTableColumnHeaderProps<TData, TValue>
-  extends React.HTMLAttributes {
-  column: Column;
+  extends React.HTMLAttributes<HTMLDivElement> {
+  column: Column<TData, TValue>;
   title: string;
 }
 
@@ -25,7 +26,7 @@ export function DataTableColumnHeader<TData, TValue>({
   column,
   title,
   className,
-}: DataTableColumnHeaderProps) {
+}: DataTableColumnHeaderProps<TData, TValue>) {
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>;
   }
@@ -37,7 +38,7 @@ export function DataTableColumnHeader<TData, TValue>({
           <Button
             variant="ghost"
             size="sm"
-            className="data-[state=open]:bg-accent -ml-3 h-8"
+            className="-ml-3 h-8 data-[state=open]:bg-accent"
           >
             <span>{title}</span>
             {column.getIsSorted() === "desc" ? (
@@ -51,16 +52,16 @@ export function DataTableColumnHeader<TData, TValue>({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">
           <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
-            <ArrowUpIcon className="text-muted-foreground/70 mr-2 h-3.5 w-3.5" />
+            <ArrowUpIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             Asc
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
-            <ArrowDownIcon className="text-muted-foreground/70 mr-2 h-3.5 w-3.5" />
+            <ArrowDownIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             Desc
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
-            <EyeNoneIcon className="text-muted-foreground/70 mr-2 h-3.5 w-3.5" />
+            <EyeNoneIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             Hide
           </DropdownMenuItem>
         </DropdownMenuContent>

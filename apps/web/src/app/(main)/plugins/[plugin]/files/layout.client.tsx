@@ -4,7 +4,7 @@ import React, { Dispatch, createContext, useContext } from "react";
 
 type ContextType = {
   relativePath: string[];
-  setRelativePath: Dispatch;
+  setRelativePath: Dispatch<React.SetStateAction<string[]>>;
 };
 
 const FilesContext = createContext<ContextType | undefined>(undefined);

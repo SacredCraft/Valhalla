@@ -2,10 +2,11 @@
 
 import React, { Dispatch, createContext, useContext, useState } from "react";
 
-import { ValhallaFile } from "@//app/actions";
-import { FileCol } from "@//components/plugin/browser/files-table-columns";
+import { ValhallaFile } from "@/app/actions";
 import { Trash } from "@/lib/core";
 import { useReactTable } from "@tanstack/react-table";
+
+import { FileCol } from "@/components/plugin/browser/files-table-columns";
 
 type ContextType = {
   relativePath?: string[];
@@ -13,13 +14,13 @@ type ContextType = {
   copyFiles?: string[];
   cutFiles?: string[];
   trash?: Trash[];
-  table?: ReturnType;
-  setTable?: Dispatch;
-  setFiles?: Dispatch;
-  setTrash?: Dispatch;
-  setRelativePath?: Dispatch;
-  setCopyFiles?: Dispatch;
-  setCutFiles?: Dispatch;
+  table?: ReturnType<typeof useReactTable<FileCol>>;
+  setTable?: Dispatch<ReturnType<typeof useReactTable<FileCol>>>;
+  setFiles?: Dispatch<ValhallaFile[]>;
+  setTrash?: Dispatch<Trash[]>;
+  setRelativePath?: Dispatch<string[] | undefined>;
+  setCopyFiles?: Dispatch<string[] | undefined>;
+  setCutFiles?: Dispatch<string[] | undefined>;
 };
 
 const BrowserContext = createContext<ContextType | undefined>(undefined);
@@ -37,7 +38,8 @@ type BrowserClientLayoutProps = {
 };
 
 export function BrowserClientLayout({ children }: BrowserClientLayoutProps) {
-  const [table, setTable] = useState<ReturnType>();
+  const [table, setTable] =
+    useState<ReturnType<typeof useReactTable<FileCol>>>();
   const [files, setFiles] = useState<FileCol[]>();
   const [copyFiles, setCopyFiles] = useState<string[]>();
   const [cutFiles, setCutFiles] = useState<string[]>();

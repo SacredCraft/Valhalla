@@ -10,8 +10,8 @@ import React, {
   useTransition,
 } from "react";
 
-import { ValhallaPlugin } from "@//server/config/types";
-import { getPlugin } from "@//server/config/utils";
+import { ValhallaPlugin } from "@/server/config/types";
+import { getPlugin } from "@/server/config/utils";
 
 export type OpenedFile = {
   name: string;
@@ -22,7 +22,7 @@ export type OpenedFile = {
 type ContextType = {
   plugin: ValhallaPlugin;
   openedFiles: OpenedFile[];
-  setOpenedFiles: Dispatch;
+  setOpenedFiles: Dispatch<SetStateAction<OpenedFile[] | undefined>>;
 };
 
 const PluginContext = createContext<ContextType | undefined>(undefined);
@@ -35,7 +35,9 @@ export const usePluginContext = () => {
   return context;
 };
 
-type PluginProps = React.PropsWithChildren;
+type PluginProps = React.PropsWithChildren<{
+  pluginId: string;
+}>;
 
 export function PluginClientLayout({ children, pluginId }: PluginProps) {
   const [isPending, startTransition] = useTransition();

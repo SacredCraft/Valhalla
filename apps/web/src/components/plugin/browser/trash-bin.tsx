@@ -1,4 +1,5 @@
-import { useBrowserContext } from "@//app/(main)/plugins/[plugin]/browser/layout.client";
+import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
+
 import {
   Table,
   TableBody,
@@ -6,15 +7,15 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@//components/ui/table";
+} from "@/components/ui/table";
 
 export function TrashBin() {
   const { trash } = useBrowserContext();
 
   return (
-    <div className="flex flex-col gap-2 px-2">
+    <div className="px-2 flex flex-col gap-2">
       {trash?.length ? (
-        <div className="rounded-lg border">
+        <div className="border rounded-lg">
           <Table>
             <TableHeader>
               <TableRow>
@@ -35,7 +36,7 @@ export function TrashBin() {
           </Table>
         </div>
       ) : (
-        <div className="text-muted-foreground text-center">
+        <div className="text-center text-muted-foreground">
           No files in trash bin
         </div>
       )}
