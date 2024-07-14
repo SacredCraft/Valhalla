@@ -4,13 +4,12 @@ import { TrashIcon } from "lucide-react";
 import React, { useEffect } from "react";
 import { toast } from "sonner";
 
+import { BrowserHeader } from "@/app/(main)/plugins/[plugin]/browser/_components/browser-header";
+import { BrowserTabs } from "@/app/(main)/plugins/[plugin]/browser/_components/browser-tabs";
 import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
 import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
 import { Button } from "@/app/_components/ui/button";
 import { Trash, emptyTrash } from "@/lib/core";
-
-import { BrowserHeader } from "@/components/plugin/browser/browser-header";
-import { BrowserTabs } from "@/components/plugin/browser/browser-tabs";
 
 type TrashClientLayoutProps = {
   trash: Trash[];

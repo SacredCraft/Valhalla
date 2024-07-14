@@ -1,14 +1,13 @@
 import React from "react";
 
+import { BrowserHeader } from "@/app/(main)/plugins/[plugin]/browser/_components/browser-header";
+import { BrowserTabs } from "@/app/(main)/plugins/[plugin]/browser/_components/browser-tabs";
+import { CopyCurrentPath } from "@/app/(main)/plugins/[plugin]/browser/explore/[[...path]]/_components/copy-current-path";
+import { PasteAction } from "@/app/(main)/plugins/[plugin]/browser/explore/[[...path]]/_components/copy-cut";
+import { New } from "@/app/(main)/plugins/[plugin]/browser/explore/[[...path]]/_components/new";
+import { Upload } from "@/app/(main)/plugins/[plugin]/browser/explore/[[...path]]/_components/upload";
 import { ExploreClientLayout } from "@/app/(main)/plugins/[plugin]/browser/explore/[[...path]]/layout.client";
 import { getPluginFiles } from "@/app/actions";
-
-import { BrowserHeader } from "@/components/plugin/browser/browser-header";
-import { BrowserTabs } from "@/components/plugin/browser/browser-tabs";
-import { CopyCurrentPath } from "@/components/plugin/browser/copy-current-path";
-import { PasteAction } from "@/components/plugin/browser/copy-cut";
-import { New } from "@/components/plugin/browser/new";
-import { Upload } from "@/components/plugin/browser/upload";
 
 type BrowserLayoutProps = {
   params: {

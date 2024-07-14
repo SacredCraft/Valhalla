@@ -2,11 +2,10 @@
 
 import React, { Dispatch, createContext, useContext, useState } from "react";
 
+import { FileCol } from "@/app/(main)/plugins/[plugin]/browser/explore/[[...path]]/_components/files-table-columns";
 import { ValhallaFile } from "@/app/actions";
 import { Trash } from "@/lib/core";
 import { useReactTable } from "@tanstack/react-table";
-
-import { FileCol } from "@/components/plugin/browser/files-table-columns";
 
 type ContextType = {
   relativePath?: string[];

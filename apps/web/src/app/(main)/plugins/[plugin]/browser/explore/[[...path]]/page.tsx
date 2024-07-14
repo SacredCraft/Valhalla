@@ -1,8 +1,7 @@
 "use client";
 
+import { FilesTable } from "@/app/(main)/plugins/[plugin]/browser/explore/[[...path]]/_components/files-table";
 import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
-
-import { FilesTable } from "@/components/plugin/browser/files-table";
 
 export default function ExplorePage() {
   const { files, relativePath } = useBrowserContext();
