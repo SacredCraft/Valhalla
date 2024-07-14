@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { PluginClientLayout } from "@/app/(main)/plugins/[plugin]/layout.client";
-import { getOwnedResources } from "@/server/service/resource";
+import { api } from "@/trpc/server";
 
 type PluginProps = {
   params: {
@@ -14,7 +14,7 @@ export default async function PluginLayout({
   children,
   params: { plugin: pluginId },
 }: PluginProps) {
-  const ownedPluginIds = await getOwnedResources();
+  const ownedPluginIds = await api.resources.getOwnedResources();
   if (!ownedPluginIds.includes(pluginId)) {
     return notFound();
   }

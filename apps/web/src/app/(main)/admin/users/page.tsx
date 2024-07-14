@@ -1,9 +1,9 @@
 import { UsersTable } from "@/app/(main)/admin/users/_components/users-table";
 import { UserCol } from "@/app/(main)/admin/users/_components/users-table-columns";
-import prisma from "@/lib/prisma";
+import { db } from "@/server/db";
 
 export default async function UsersPage() {
-  const users: UserCol[] = (await prisma.user.findMany()).map((user) => ({
+  const users: UserCol[] = (await db.user.findMany()).map((user) => ({
     id: user.id,
     bio: user.bio,
     avatar: user.avatar,

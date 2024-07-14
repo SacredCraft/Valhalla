@@ -39,6 +39,24 @@ export const useProfile = () => {
 type MainClientProps = PropsWithChildren<ContextType>;
 
 export function MainClientLayout({ children, ...rest }: MainClientProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+  return (
+    <ProfileContext.Provider value={{ ...rest }}>
+      <SessionProvider>
+        <Content>{children}</Content>
+      </SessionProvider>
+    </ProfileContext.Provider>
+  );
+}
+
+function Content({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState<boolean>(() => {
     return localStorage.getItem("aside-collapsed") === "true";
   });
@@ -48,27 +66,23 @@ export function MainClientLayout({ children, ...rest }: MainClientProps) {
   }, [collapsed]);
 
   return (
-    <ProfileContext.Provider value={{ ...rest }}>
-      <SessionProvider>
-        <AsideContext.Provider value={{ collapsed, setCollapsed }}>
-          <Aside />
-          {collapsed !== undefined && (
-            <motion.main
-              layout
-              layoutDependency={collapsed}
-              className="flex-1 grid items-start gap-4 sm:py-0 md:gap-8"
-              style={
-                {
-                  "--aside-width": collapsed ? "3.5rem" : "13rem",
-                } as React.CSSProperties
-              }
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            >
-              {children}
-            </motion.main>
-          )}
-        </AsideContext.Provider>
-      </SessionProvider>
-    </ProfileContext.Provider>
+    <AsideContext.Provider value={{ collapsed, setCollapsed }}>
+      <Aside />
+      {collapsed !== undefined && (
+        <motion.main
+          layout
+          layoutDependency={collapsed}
+          className="flex-1 grid items-start gap-4 sm:py-0 md:gap-8"
+          style={
+            {
+              "--aside-width": collapsed ? "3.5rem" : "13rem",
+            } as React.CSSProperties
+          }
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        >
+          {children}
+        </motion.main>
+      )}
+    </AsideContext.Provider>
   );
 }

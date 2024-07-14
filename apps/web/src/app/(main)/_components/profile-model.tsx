@@ -29,7 +29,7 @@ import {
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
 import { Textarea } from "@/app/_components/ui/textarea";
-import { updateUserById } from "@/server/service/user";
+import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export function ProfileModel() {
@@ -84,6 +84,23 @@ function Information() {
     },
   });
   const router = useRouter();
+  const updateUserById = api.users.updateUserById.useMutation({
+    onSuccess: (data) => {
+      toast.success("Profile updated");
+      if (data.password) {
+        signOut().then((r) => {
+          toast.success("Password updated, please sign in again");
+        });
+      }
+      router.refresh();
+    },
+    onError: () => {
+      toast.error("Profile update failed");
+    },
+    onSettled: () => {
+      setUpdating(false);
+    },
+  });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     setUpdating(true);
@@ -91,31 +108,16 @@ function Information() {
       password: values.password === "" ? undefined : values.password,
       bio: values.bio,
     };
-    const update = () => {
-      updateUserById(id, data).then((res) => {
-        if (res) {
-          toast.success("Profile updated");
-          if (data.password) {
-            signOut().then((r) => {
-              toast.success("Password updated, please sign in again");
-            });
-          }
-          router.refresh();
-        } else {
-          toast.error("Profile update failed");
-        }
-        setUpdating(false);
-      });
-    };
+
     if (file) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
         data.avatar = reader.result;
-        update();
+        updateUserById.mutate({ id, data });
       };
     } else {
-      update();
+      updateUserById.mutate({ id, data });
     }
   }
 

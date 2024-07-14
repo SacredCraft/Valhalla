@@ -2,16 +2,15 @@
 
 import fs from "fs";
 import { revalidatePath } from "next/cache";
-import { isRedirectError } from "next/dist/client/components/redirect";
 import path from "path";
 
-import prisma from "@/lib/prisma";
-import { signIn, signOut } from "@/server/auth";
+import { signOut } from "@/server/auth";
+import { db } from "@/server/db";
 
 export async function getAllPluginPaths(): Promise<Map<string, string>> {
   const paths = new Map<string, string>();
 
-  const res = await prisma.pluginPath.findMany();
+  const res = await db.pluginPath.findMany();
 
   if (!res) {
     return paths;
@@ -25,7 +24,7 @@ export async function getAllPluginPaths(): Promise<Map<string, string>> {
 }
 
 export async function getPluginPath(id: string): Promise<string | null> {
-  const res = await prisma.pluginPath.findUnique({
+  const res = await db.pluginPath.findUnique({
     where: {
       pluginId: id,
     },
@@ -39,7 +38,7 @@ export async function getPluginPath(id: string): Promise<string | null> {
 }
 
 export async function setPluginPath(id: string, path: string) {
-  await prisma.pluginPath.upsert({
+  await db.pluginPath.upsert({
     where: {
       pluginId: id,
     },
@@ -55,21 +54,6 @@ export async function setPluginPath(id: string, path: string) {
 
 export async function logout() {
   await signOut();
-}
-
-export async function signInAction(
-  username: string,
-  password: string,
-): Promise<boolean> {
-  const formData = new FormData();
-  formData.append("username", username);
-  formData.append("password", password);
-  try {
-    await signIn("credentials", formData);
-    return true;
-  } catch (error) {
-    return !!isRedirectError(error);
-  }
 }
 
 export type ValhallaFile = {

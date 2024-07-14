@@ -1,6 +1,6 @@
-import { globalTemplates } from "@//server/config/global";
-import { plugins } from "@//server/config/plugins";
-import { PluginFile, Template } from "@//server/config/types";
+import { globalTemplates } from "@/server/config/global";
+import { plugins } from "@/server/config/plugins";
+import { PluginFile, Template } from "@/server/config/types";
 
 export function getPlugin(id: string) {
   return plugins.find((plugin) => plugin.id === id);

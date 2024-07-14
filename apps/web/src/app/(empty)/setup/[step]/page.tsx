@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { Step1 } from "@/app/(empty)/setup/[step]/_components/step-1";
 import { Step2 } from "@/app/(empty)/setup/[step]/_components/step-2";
 import { Button } from "@/app/_components/ui/button";
-import prisma from "@/lib/prisma";
+import { db } from "@/server/db";
 
 export default async function SetupPage({
   params,
@@ -12,7 +12,7 @@ export default async function SetupPage({
   params: { step: string };
 }) {
   const step = parseInt(params.step, 10);
-  const isEmpty = (await prisma.user.count()) === 0;
+  const isEmpty = (await db.user.count()) === 0;
 
   if (!isEmpty && step !== 2) {
     return redirect("/");

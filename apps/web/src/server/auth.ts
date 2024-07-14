@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
 import { signInSchema } from "@/lib/zod";
-import { getUserByUsernameAndPassword } from "@/server/service/user";
+import { api } from "@/trpc/server";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -17,7 +17,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const { username, password } =
           await signInSchema.parseAsync(credentials);
 
-        user = await getUserByUsernameAndPassword(username, password);
+        user = await api.users.getUserByUsernameAndPassword({
+          username,
+          password,
+        });
 
         if (!user) {
           throw new Error("User not found.");

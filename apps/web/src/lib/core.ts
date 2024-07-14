@@ -3,7 +3,7 @@
 import fs from "fs";
 import path from "path";
 
-import { getPluginPath } from "@//app/actions";
+import { getPluginPath } from "@/app/actions";
 import {
   cleanObject,
   convertConfigurationToJson,

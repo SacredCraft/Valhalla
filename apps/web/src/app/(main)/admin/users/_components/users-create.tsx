@@ -29,7 +29,7 @@ import {
   SheetTrigger,
 } from "@/app/_components/ui/sheet";
 import { createUserSchema } from "@/lib/zod";
-import { createUser } from "@/server/service/user";
+import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export const UsersCreate = () => {
@@ -45,24 +45,30 @@ export const UsersCreate = () => {
     },
   });
 
+  const createUser = api.users.createUser.useMutation({
+    onSuccess: () => {
+      toast.success("User created successfully!");
+      form.reset();
+      setFile(undefined);
+      router.refresh();
+    },
+    onError: () => {
+      toast.error("Failed to create user.");
+    },
+    onSettled: () => {
+      setCreating(false);
+    },
+  });
+
   function onSubmit(values: z.infer<typeof createUserSchema>) {
     setCreating(true);
-    const create = (fileData?: string | ArrayBuffer | null) => {
-      createUser(
-        values.username,
-        values.password,
-        values.role,
-        fileData ? fileData : null,
-      ).then((r) => {
-        if (r) {
-          toast.success("User created successfully!");
-          form.reset();
-          setFile(undefined);
-          router.refresh();
-        } else {
-          toast.error("Failed to create user.");
-        }
-        setCreating(false);
+
+    const create = (avatar: string | null) => {
+      createUser.mutate({
+        username: values.username,
+        password: values.password,
+        role: values.role,
+        avatar: avatar,
       });
     };
 
@@ -70,7 +76,9 @@ export const UsersCreate = () => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
-        create(reader.result);
+        if (typeof reader.result === "string" || reader.result === null) {
+          create(reader.result);
+        }
       };
     } else {
       create(null);

@@ -30,7 +30,7 @@ import {
 } from "@/app/_components/ui/sheet";
 import { TableCell } from "@/app/_components/ui/table";
 import { Textarea } from "@/app/_components/ui/textarea";
-import { updateUserById } from "@/server/service/user";
+import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Cell, flexRender } from "@tanstack/react-table";
 
@@ -53,6 +53,20 @@ export const UsersEdit = ({ cell }: { cell: Cell<UserCol, any> }) => {
   const [updating, setUpdating] = useState(false);
   const router = useRouter();
 
+  const updateUserById = api.users.updateUserById.useMutation({
+    onSuccess: () => {
+      toast.success("User updated successfully!");
+      setFile(undefined);
+      router.refresh();
+    },
+    onError: () => {
+      toast.error("Failed to update user.");
+    },
+    onSettled: () => {
+      setUpdating(false);
+    },
+  });
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -65,27 +79,23 @@ export const UsersEdit = ({ cell }: { cell: Cell<UserCol, any> }) => {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     setUpdating(true);
-    const update = (fileData?: string | ArrayBuffer | null) => {
-      updateUserById(cell.row.original.id, {
-        ...values,
-        password: values.password === "" ? undefined : values.password,
-        avatar: fileData ? fileData : cell.row.original.avatar,
-      }).then((r) => {
-        if (r) {
-          toast.success("User updated successfully!");
-          setFile(undefined);
-          router.refresh();
-        } else {
-          toast.error("Failed to update user.");
-        }
-        setUpdating(false);
+    const update = (fileData?: string | null) => {
+      updateUserById.mutate({
+        id: cell.row.original.id,
+        data: {
+          ...values,
+          password: values.password === "" ? undefined : values.password,
+          avatar: fileData ? fileData : cell.row.original.avatar,
+        },
       });
     };
 
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        update(reader.result);
+        if (typeof reader.result === "string" || reader.result === null) {
+          update(reader.result);
+        }
       };
       reader.readAsDataURL(file);
     } else {

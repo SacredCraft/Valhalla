@@ -9,7 +9,7 @@ const createPrismaClient = () =>
   });
 
 const globalForPrisma = globalThis as unknown as {
-  prisma: ReturnType | undefined;
+  prisma: ReturnType<typeof createPrismaClient> | undefined;
 };
 
 export const db = globalForPrisma.prisma ?? createPrismaClient();

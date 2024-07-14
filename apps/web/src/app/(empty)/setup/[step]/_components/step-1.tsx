@@ -21,7 +21,7 @@ import {
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
 import { signInSchema } from "@/lib/zod";
-import { setupAdminUser } from "@/server/service/user";
+import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export function Step1() {
@@ -37,18 +37,22 @@ export function Step1() {
     },
   });
 
+  const setupAdminUser = api.users.setupAdminUser.useMutation({
+    onSuccess: () => {
+      toast.success("Account created successfully");
+      router.push("/setup/2");
+    },
+    onError: () => {
+      toast.error("Failed to create account");
+    },
+    onSettled: () => {
+      setIsLoading(false);
+    },
+  });
+
   function onSubmit(values: z.infer<typeof signInSchema>) {
     setIsLoading(true);
-
-    setupAdminUser(values.username, values.password).then((res) => {
-      setIsLoading(false);
-      if (res) {
-        toast.success("Account created successfully");
-        router.push("/setup/2");
-      } else {
-        toast.error("Failed to create account");
-      }
-    });
+    setupAdminUser.mutate(values);
   }
 
   useEffect(() => {

@@ -17,10 +17,9 @@ import {
   FormMessage,
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
-import { signInAction } from "@/app/actions";
 import { cn } from "@/lib/utils";
 import { signInSchema } from "@/lib/zod";
-import { updateLastLogin } from "@/server/service/user";
+import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
@@ -38,19 +37,23 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     },
   });
 
+  const signIn = api.users.signIn.useMutation({
+    onSuccess: () => {
+      toast.success("Sign in successfully");
+      router.push("/");
+    },
+    onError: () => {
+      toast.error("Invalid username or password");
+    },
+    onSettled: () => {
+      setIsLoading(false);
+    },
+  });
+
   function onSubmit(values: z.infer<typeof signInSchema>) {
     setIsLoading(true);
 
-    signInAction(values.username, values.password).then((res) => {
-      setIsLoading(false);
-      if (res) {
-        toast.success("Sign in successfully");
-        updateLastLogin(values.username).then(() => {});
-        router.push("/");
-      } else {
-        toast.error("Invalid username or password");
-      }
-    });
+    signIn.mutate(values);
   }
 
   return (
