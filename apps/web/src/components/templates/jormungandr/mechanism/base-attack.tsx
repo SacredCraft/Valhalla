@@ -1,10 +1,11 @@
+import { Button } from "@/app/_components/ui/button";
+import { Label } from "@/app/_components/ui/label";
+
 import { ListArea } from "@/components/templates-components/areas/list-area";
 import { ButtonGroup } from "@/components/templates-components/form/button-group";
 import { Node } from "@/components/templates-components/form/node";
 import { Text } from "@/components/templates-components/form/text";
 import { getMatchedMechanism } from "@/components/templates/jormungandr/jormungandr-default";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 
 export function BaseAttack({}) {
   return (

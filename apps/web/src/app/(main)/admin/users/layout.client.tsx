@@ -2,11 +2,10 @@
 
 import { Dispatch, createContext, useContext, useState } from "react";
 
+import { UsersHeader } from "@/app/(main)/admin/users/_components/users-header";
+import { UserCol } from "@/app/(main)/admin/users/_components/users-table-columns";
+import { UsersToolbar } from "@/app/(main)/admin/users/_components/users-toolbar";
 import { useReactTable } from "@tanstack/react-table";
-
-import { UsersHeader } from "@/components/admin/users/users-header";
-import { UserCol } from "@/components/admin/users/users-table-columns";
-import { UsersToolbar } from "@/components/admin/users/users-toolbar";
 
 type ContextType = {
   table?: ReturnType<typeof useReactTable<UserCol>>;

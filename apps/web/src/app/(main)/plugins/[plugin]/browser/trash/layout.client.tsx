@@ -6,11 +6,11 @@ import { toast } from "sonner";
 
 import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
 import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
+import { Button } from "@/app/_components/ui/button";
 import { Trash, emptyTrash } from "@/lib/core";
 
 import { BrowserHeader } from "@/components/plugin/browser/browser-header";
 import { BrowserTabs } from "@/components/plugin/browser/browser-tabs";
-import { Button } from "@/components/ui/button";
 
 type TrashClientLayoutProps = {
   trash: Trash[];

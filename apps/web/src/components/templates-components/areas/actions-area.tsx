@@ -4,6 +4,12 @@ import { Code, CodeXml, TrashIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { useFilesEditorContext } from "@/app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
+import { Button } from "@/app/_components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/app/_components/ui/tooltip";
 import {
   getFormValue,
   isFormDeletableValue,
@@ -12,12 +18,6 @@ import {
 import { cn } from "@/lib/utils";
 
 import { useNode } from "@/components/templates-components/form/node";
-import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 type ActionsAreaProps = {
   onDelete?: (nodes: string[]) => void;

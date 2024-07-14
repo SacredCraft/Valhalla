@@ -3,9 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { UserAuthForm } from "@/app/(empty)/sign-in/_components/user-auth-form";
 import { auth } from "@/server/auth";
-
-import { UserAuthForm } from "@/components/auth/user-auth-form";
 
 export const metadata: Metadata = {
   title: "Valhalla | Authentication",

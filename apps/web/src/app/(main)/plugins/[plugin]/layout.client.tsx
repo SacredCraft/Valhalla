@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import React, {
   Dispatch,
   SetStateAction,
@@ -10,6 +11,8 @@ import React, {
   useTransition,
 } from "react";
 
+import { useAside } from "@/app/(main)/_components/aside";
+import { PluginMenu } from "@/app/(main)/plugins/[plugin]/_components/plugin-menu";
 import { ValhallaPlugin } from "@/server/config/types";
 import { getPlugin } from "@/server/config/utils";
 
@@ -37,9 +40,15 @@ export const usePluginContext = () => {
 
 type PluginProps = React.PropsWithChildren<{
   pluginId: string;
+  ownedPluginIds: string[];
 }>;
 
-export function PluginClientLayout({ children, pluginId }: PluginProps) {
+export function PluginClientLayout({
+  children,
+  pluginId,
+  ownedPluginIds,
+}: PluginProps) {
+  const { collapsed } = useAside();
   const [isPending, startTransition] = useTransition();
   const [plugin, setPlugin] = useState<ValhallaPlugin>();
   const [openedFiles, setOpenedFiles] = useState<OpenedFile[]>();
@@ -78,7 +87,15 @@ export function PluginClientLayout({ children, pluginId }: PluginProps) {
 
   return (
     <PluginContext.Provider value={{ openedFiles, setOpenedFiles, plugin }}>
-      {children}
+      <PluginMenu ownedPluginIds={ownedPluginIds} />
+      <motion.div
+        className="flex-1 ml-[calc(var(--aside-width)+220px)]"
+        layout
+        layoutDependency={collapsed}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      >
+        {children}
+      </motion.div>
     </PluginContext.Provider>
   );
 }

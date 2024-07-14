@@ -4,17 +4,13 @@ import React, { Fragment, createContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { useFilesEditorContext } from "@/app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
-import { cn } from "@/lib/utils";
-
-import { Node } from "@/components/templates-components/form/node";
-import { useNode } from "@/components/templates-components/form/node";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Button, ButtonProps } from "@/components/ui/button";
+} from "@/app/_components/ui/breadcrumb";
+import { Button, ButtonProps } from "@/app/_components/ui/button";
 import {
   Form,
   FormControl,
@@ -22,17 +18,17 @@ import {
   FormField,
   FormItem,
   FormLabel,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area";
+} from "@/app/_components/ui/form";
+import { Input } from "@/app/_components/ui/input";
+import { Label } from "@/app/_components/ui/label";
+import { ScrollArea } from "@/app/_components/ui/scroll-area";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/app/_components/ui/select";
 import {
   Sheet,
   SheetClose,
@@ -42,7 +38,11 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from "@/app/_components/ui/sheet";
+import { cn } from "@/lib/utils";
+
+import { Node } from "@/components/templates-components/form/node";
+import { useNode } from "@/components/templates-components/form/node";
 
 export type TreeLikePath = {
   label: string;

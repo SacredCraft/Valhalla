@@ -1,11 +1,10 @@
 import { notFound, redirect } from "next/navigation";
 import React from "react";
 
+import { FilesHeader } from "@/app/(main)/plugins/[plugin]/files/_components/files-header";
+import { FilesTabs } from "@/app/(main)/plugins/[plugin]/files/_components/files-tabs";
 import FilesInfoClientLayout from "@/app/(main)/plugins/[plugin]/files/info/[...path]/layout.client";
 import { getFile } from "@/app/actions";
-
-import { FilesHeader } from "@/components/plugin/files/files-header";
-import { FilesTabs } from "@/components/plugin/files/files-tabs";
 
 type FilesInfoLayoutProps = {
   params: {

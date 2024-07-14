@@ -3,12 +3,7 @@
 import { KeyboardEvent, useEffect, useState } from "react";
 
 import { useFilesEditorContext } from "@/app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
-import { getFormValue, isFormDeletableValue } from "@/lib/form";
-import { cn } from "@/lib/utils";
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
-
-import { useNode } from "@/components/templates-components/form/node";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/_components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -17,19 +12,24 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@/components/ui/command";
+} from "@/app/_components/ui/command";
 import {
   FormControl,
   FormDescription,
   FormField,
   FormItem,
   FormLabel,
-} from "@/components/ui/form";
+} from "@/app/_components/ui/form";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/app/_components/ui/popover";
+import { getFormValue, isFormDeletableValue } from "@/lib/form";
+import { cn } from "@/lib/utils";
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+
+import { useNode } from "@/components/templates-components/form/node";
 
 type EnumProps = {
   label?: React.ReactNode;

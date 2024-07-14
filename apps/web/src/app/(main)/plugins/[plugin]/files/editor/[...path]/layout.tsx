@@ -1,13 +1,12 @@
 import { notFound, redirect } from "next/navigation";
 import React from "react";
 
+import { ActionSave } from "@/app/(main)/plugins/[plugin]/files/_components/action-save";
+import { FilesHeader } from "@/app/(main)/plugins/[plugin]/files/_components/files-header";
+import { FilesTabs } from "@/app/(main)/plugins/[plugin]/files/_components/files-tabs";
 import FilesEditorClientLayout from "@/app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
 import { getFile } from "@/app/actions";
 import { ConfigurationResult, getConfigurationJson } from "@/lib/core";
-
-import { ActionSave } from "@/components/plugin/files/action-save";
-import { FilesHeader } from "@/components/plugin/files/files-header";
-import { FilesTabs } from "@/components/plugin/files/files-tabs";
 
 type FilesEditorLayoutProps = {
   params: {

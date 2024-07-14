@@ -8,9 +8,8 @@ import React, {
   useEffect,
 } from "react";
 
+import { Button } from "@/app/_components/ui/button";
 import { cn } from "@/lib/utils";
-
-import { Button } from "@/components/ui/button";
 
 type ContextType = {
   categories: string[];

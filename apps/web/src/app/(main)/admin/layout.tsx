@@ -3,7 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { auth } from "@/server/auth";
 import { isAdmin } from "@/server/service/user";
 
-import { AdminMenu } from "@/components/admin/admin-menu";
+import { AdminClientLayout } from "./layout.client";
 
 export default async function AdminLayout({
   children,
@@ -22,10 +22,5 @@ export default async function AdminLayout({
     return notFound();
   }
 
-  return (
-    <div className="flex w-full h-full overflow-hidden">
-      <AdminMenu />
-      <div className="flex-1">{children}</div>
-    </div>
-  );
+  return <AdminClientLayout>{children}</AdminClientLayout>;
 }

@@ -4,6 +4,8 @@ import { Airplay, Annoyed, AppWindow } from "lucide-react";
 import React from "react";
 
 import { useFilesEditorContext } from "@/app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
+import { Button } from "@/app/_components/ui/button";
+import { Label } from "@/app/_components/ui/label";
 import { isFormDeletableValue } from "@/lib/form";
 
 import { ActionsArea } from "@/components/templates-components/areas/actions-area";
@@ -32,8 +34,6 @@ import {
 } from "@/components/templates-components/misc/categories";
 import { BaseAttack } from "@/components/templates/jormungandr/mechanism/base-attack";
 import { Hostile } from "@/components/templates/jormungandr/mechanism/hostile";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 
 export function JormungandrDefault() {
   return (

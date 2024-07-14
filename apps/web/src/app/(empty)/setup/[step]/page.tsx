@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { Step1 } from "@/app/(empty)/setup/[step]/_components/step-1";
+import { Step2 } from "@/app/(empty)/setup/[step]/_components/step-2";
+import { Button } from "@/app/_components/ui/button";
 import prisma from "@/lib/prisma";
-
-import { Step1 } from "@/components/step/step-1";
-import { Step2 } from "@/components/step/step-2";
-import { Button } from "@/components/ui/button";
 
 export default async function SetupPage({
   params,

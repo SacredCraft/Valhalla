@@ -5,11 +5,10 @@ import { useForm } from "react-hook-form";
 
 import { useFilesContext } from "@/app/(main)/plugins/[plugin]/files/layout.client";
 import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
+import { Form } from "@/app/_components/ui/form";
 import { ValhallaFile } from "@/app/actions";
 import { ConfigurationResult, setConfigurationJson } from "@/lib/core";
 import { getContent } from "@/lib/core-utils";
-
-import { Form } from "@/components/ui/form";
 
 type ContextType = {
   form: ReturnType<typeof useForm>;

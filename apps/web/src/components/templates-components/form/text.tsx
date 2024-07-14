@@ -1,9 +1,6 @@
 "use client";
 
 import { useFilesEditorContext } from "@/app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
-import { getFormValue } from "@/lib/form";
-
-import { useNode } from "@/components/templates-components/form/node";
 import {
   FormControl,
   FormDescription,
@@ -11,8 +8,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@/app/_components/ui/form";
+import { Input } from "@/app/_components/ui/input";
+import { getFormValue } from "@/lib/form";
+
+import { useNode } from "@/components/templates-components/form/node";
 
 type TextProps = {
   label?: React.ReactNode;
