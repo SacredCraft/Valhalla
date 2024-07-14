@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 
 import { auth } from "@/server/auth";
-import { isAdmin } from "@/server/service/user";
+import { db } from "@/server/db";
 
 import { AdminClientLayout } from "./layout.client";
 
@@ -18,7 +18,11 @@ export default async function AdminLayout({
 
   const sessionId = session.user.id!!;
 
-  if (!(await isAdmin(sessionId))) {
+  const user = await db.user.findUnique({
+    where: { id: sessionId, role: "ADMIN" },
+  });
+
+  if (!user || user.role !== "ADMIN") {
     return notFound();
   }
 
