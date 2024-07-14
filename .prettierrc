@@ -4,6 +4,8 @@
     "@trivago/prettier-plugin-sort-imports"
   ],
   "importOrder": [
+    "^server-only$",
+    "^(?![@./]).*",
     "^[^@./]*$",
     "^@(?!/components/).*$",
     "^@/components/(.*)$",
