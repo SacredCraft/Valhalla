@@ -3,12 +3,12 @@
 import fs from "fs";
 import path from "path";
 
-import { getPluginPath } from "@/app/actions";
 import {
   cleanObject,
   convertConfigurationToJson,
   convertJsonToConfiguration,
 } from "@/lib/core-utils";
+import { api } from "@/trpc/server";
 
 export type Trash = {
   fileName: string;
@@ -25,7 +25,7 @@ export async function moveToTrash(
   relativePath: string[],
   operator: string,
 ) {
-  const pluginPath = await getPluginPath(pluginId);
+  const pluginPath = await api.pluginPaths.getPluginPath({ id: pluginId });
   if (!pluginPath) {
     return;
   }
@@ -112,7 +112,7 @@ function findValhallaDirs(dir: string): string[] {
 
 // 递归删除 valhalla 目录中以 ".deleted" 结尾的文件
 export async function emptyTrash(pluginId: string) {
-  const pluginPath = await getPluginPath(pluginId);
+  const pluginPath = await api.pluginPaths.getPluginPath({ id: pluginId });
 
   if (!pluginPath) {
     return;
@@ -148,7 +148,7 @@ export async function getDeletedFiles(
   pluginId: string,
   relativePath: string[],
 ): Promise<Trash[]> {
-  const pluginPath = await getPluginPath(pluginId);
+  const pluginPath = await api.pluginPaths.getPluginPath({ id: pluginId });
   if (!pluginPath) {
     return [];
   }
@@ -258,7 +258,7 @@ export async function getConfigurationJson(
   pluginId: string,
   relativePath: string[],
 ): Promise<ConfigurationResult | null> {
-  const pluginPath = await getPluginPath(pluginId);
+  const pluginPath = await api.pluginPaths.getPluginPath({ id: pluginId });
   if (!pluginPath) {
     return null;
   }
@@ -303,7 +303,7 @@ export async function setConfigurationJson(
   cache: any,
   content: any,
 ) {
-  const pluginPath = await getPluginPath(pluginId);
+  const pluginPath = await api.pluginPaths.getPluginPath({ id: pluginId });
   if (!pluginPath) {
     return;
   }

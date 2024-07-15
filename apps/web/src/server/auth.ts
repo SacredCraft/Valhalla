@@ -7,6 +7,9 @@ import { db } from "./db";
 import { getUserByUsernameAndPassword } from "./service/auth";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  session: {
+    strategy: "jwt",
+  },
   providers: [
     Credentials({
       credentials: {

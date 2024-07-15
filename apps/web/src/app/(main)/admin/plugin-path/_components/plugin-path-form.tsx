@@ -16,8 +16,8 @@ import {
   FormMessage,
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
-import { setPluginPath } from "@/app/actions";
 import { plugins } from "@/server/config/plugins";
+import { api } from "@/trpc/react";
 
 export const PluginPathForm = ({
   pluginPaths,
@@ -32,16 +32,27 @@ export const PluginPathForm = ({
 
   const router = useRouter();
 
+  const setPluginPath = api.pluginPaths.setPluginPath.useMutation({
+    onSuccess: () => {
+      toast.success("Plugin path updated.");
+      router.refresh();
+    },
+    onError: () => {
+      toast.error("Failed to update the plugin path.");
+    },
+  });
+
   function onSubmit(values: any) {
     for (const plugin of plugins) {
       const path = values[plugin.id];
       if (!path) {
         continue;
       }
-      setPluginPath(plugin.id, path).then(() => {});
+      setPluginPath.mutate({
+        id: plugin.id,
+        path,
+      });
     }
-    router.refresh();
-    toast.success("Plugin paths updated.");
   }
 
   return (

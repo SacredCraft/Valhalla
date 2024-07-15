@@ -1,5 +1,3 @@
-import { useAtom } from "jotai";
-import { atomWithStorage } from "jotai/utils";
 import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "@/app/_components/ui/button";

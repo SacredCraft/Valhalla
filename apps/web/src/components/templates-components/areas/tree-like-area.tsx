@@ -289,7 +289,7 @@ export const TreeLikeAreaContent = ({
     if (path.length === 0) return children(path);
     if (index >= path.length) return null;
 
-    const node = path[index];
+    const node = path[index]!!;
 
     return (
       <Node node={node.value} key={node.value}>

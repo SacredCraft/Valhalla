@@ -1,5 +1,6 @@
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 
+import { filesRouter } from "./routers/files";
 import { pluginPathsRouter } from "./routers/plugin-paths";
 import { resourceRouter } from "./routers/resource";
 import { userRouter } from "./routers/user";
@@ -13,6 +14,7 @@ export const appRouter = createTRPCRouter({
   users: userRouter,
   resources: resourceRouter,
   pluginPaths: pluginPathsRouter,
+  files: filesRouter,
 });
 
 // export type definition of API

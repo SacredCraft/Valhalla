@@ -19,7 +19,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/app/_components/ui/sheet";
-import { renameFile } from "@/app/actions";
+import { api } from "@/trpc/react";
 import { Row, Table } from "@tanstack/react-table";
 
 interface RenameMoveProps {
@@ -33,14 +33,23 @@ export function RenameMove({ row, table }: RenameMoveProps) {
     row.original.path.map((i) => `/${i}`).join(""),
   );
 
-  const handleRename = () => {
-    renameFile(
-      plugin.id,
-      row.original.path.map((i) => `/${i}`).join(""),
-      path,
-    ).then(() => {
+  const renameFile = api.files.renamePluginFile.useMutation({
+    onSuccess: () => {
       table.options.meta?.refresh();
       toast.success("File renamed");
+    },
+    onError: (error) => {
+      console.log(error);
+
+      toast.error("Failed to rename the file");
+    },
+  });
+
+  const handleRename = () => {
+    renameFile.mutate({
+      id: plugin.id,
+      oldRelativePath: row.original.path,
+      newRelativePath: path.split("/").filter((i) => i),
     });
   };
 

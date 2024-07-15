@@ -151,22 +151,6 @@ export async function savePath(formData: FormData) {
   });
 }
 
-export async function deleteFile(
-  pluginId: string,
-  relativePath: string,
-): Promise<boolean> {
-  const pluginPath = await api.pluginPaths.getPluginPath({ id: pluginId });
-  if (!pluginPath) {
-    return false;
-  }
-  try {
-    fs.unlinkSync(path.join(pluginPath, relativePath));
-    return true;
-  } catch (error) {
-    return false;
-  }
-}
-
 export async function renameFile(
   pluginId: string,
   oldPath: string,

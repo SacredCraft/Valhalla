@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-import { getPluginPath } from "@/app/actions";
+import { api } from "@/trpc/server";
 
 export async function POST(request: Request) {
   const formData = await request.formData();
@@ -10,7 +10,7 @@ export async function POST(request: Request) {
   const relativePath = formData.get("relativePath") as string;
   const files = formData.getAll("files") as File[];
 
-  const pluginPath = await getPluginPath(pluginId);
+  const pluginPath = await api.pluginPaths.getPluginPath({ id: pluginId });
   if (!pluginPath) {
     return new Response(null, { status: 404 });
   }
@@ -35,10 +35,15 @@ export async function POST(request: Request) {
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
+
   const relativePath = searchParams.get("relativePath") as string;
   const pluginId = searchParams.get("pluginId") as string;
 
-  const pluginPath = await getPluginPath(pluginId);
+  if (!relativePath || !pluginId) {
+    return new Response(null, { status: 400 });
+  }
+
+  const pluginPath = await api.pluginPaths.getPluginPath({ id: pluginId });
   if (!pluginPath) {
     return new Response(null, { status: 404 });
   }

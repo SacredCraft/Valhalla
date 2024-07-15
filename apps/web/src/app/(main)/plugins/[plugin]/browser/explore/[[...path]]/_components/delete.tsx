@@ -17,8 +17,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/app/_components/ui/sheet";
-import { deleteFile } from "@/app/actions";
 import { moveToTrash } from "@/lib/core";
+import { api } from "@/trpc/react";
 import { Row, Table } from "@tanstack/react-table";
 
 interface DeleteProps {
@@ -28,6 +28,29 @@ interface DeleteProps {
 
 export function Delete({ row, table }: DeleteProps) {
   const { plugin, setOpenedFiles } = usePluginContext();
+
+  const deleteFile = api.files.deletePluginFile.useMutation({
+    onSuccess: () => {
+      setOpenedFiles((prev) => {
+        if (!prev) return prev;
+        return prev.filter(
+          (file) => file.path.join("/") !== row.original.path.join("/"),
+        );
+      });
+      toast.success("File deleted");
+      table.options.meta?.refresh();
+    },
+    onError: () => {
+      toast.error("Failed to delete the file");
+    },
+  });
+
+  const handleDelete = () => {
+    deleteFile.mutate({
+      id: plugin.id,
+      relativePath: row.original.path,
+    });
+  };
 
   return (
     <Sheet>
@@ -77,25 +100,7 @@ export function Delete({ row, table }: DeleteProps) {
               <Button
                 className="w-full sm:w-fit"
                 variant="destructive"
-                onClick={() => {
-                  deleteFile(plugin.id, row.original.path.join("/")).then(
-                    (res) => {
-                      if (!res) {
-                        toast.error("Failed to delete the file");
-                      } else {
-                        setOpenedFiles((prev) => {
-                          if (!prev) return prev;
-                          return prev.filter(
-                            (file) =>
-                              file.path.join("/") !==
-                              row.original.path.join("/"),
-                          );
-                        });
-                        table.options.meta?.refresh();
-                      }
-                    },
-                  );
-                }}
+                onClick={() => handleDelete()}
               >
                 Yes
               </Button>

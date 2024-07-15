@@ -10,7 +10,7 @@ export default function EditorPage() {
   const attributes = findFileAttributes(
     plugin.files,
     relativePath,
-    relativePath[relativePath.length - 1],
+    relativePath[relativePath.length - 1]!!,
   );
 
   let Template: React.ElementType | undefined;
