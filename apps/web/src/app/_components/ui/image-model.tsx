@@ -10,6 +10,7 @@ import {
   DialogTrigger,
 } from "@/app/_components/ui/dialog";
 import { getFileContent } from "@/app/actions";
+import { api } from "@/trpc/react";
 
 type ImageModelProps = {
   children: React.ReactNode;
@@ -18,22 +19,17 @@ type ImageModelProps = {
 
 export function ImageModel({ children, src }: ImageModelProps) {
   const { plugin } = usePluginContext();
-  const [file, setFile] = useState<string>();
-  const [isPending, startTransition] = useTransition();
+  const { data, isPending } = api.files.readPluginFile.useQuery({
+    id: plugin.id,
+    relativePath: src.split("/"),
+    options: "base64",
+  });
   const fileExt = src.split(".").pop();
 
   const content = useMemo(
-    () => `data:image/${fileExt};base64,${file}` || src,
-    [file, fileExt, src],
+    () => `data:image/${fileExt};base64,${data}` || src,
+    [data, fileExt, src],
   );
-
-  useEffect(() => {
-    startTransition(() => {
-      getFileContent(plugin.id, src, "base64").then((content) => {
-        setFile(content);
-      });
-    });
-  }, [plugin.id, src, startTransition]);
 
   return (
     <Dialog>

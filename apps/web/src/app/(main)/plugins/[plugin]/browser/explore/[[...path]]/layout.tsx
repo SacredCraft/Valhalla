@@ -7,7 +7,7 @@ import { PasteAction } from "@/app/(main)/plugins/[plugin]/browser/explore/[[...
 import { New } from "@/app/(main)/plugins/[plugin]/browser/explore/[[...path]]/_components/new";
 import { Upload } from "@/app/(main)/plugins/[plugin]/browser/explore/[[...path]]/_components/upload";
 import { ExploreClientLayout } from "@/app/(main)/plugins/[plugin]/browser/explore/[[...path]]/layout.client";
-import { getPluginFiles } from "@/app/actions";
+import { api } from "@/trpc/server";
 
 type BrowserLayoutProps = {
   params: {
@@ -21,7 +21,11 @@ export default async function ExploreLayout({
   params: { plugin: pluginId, path: relativePath = [] },
   children,
 }: BrowserLayoutProps) {
-  const files = (await getPluginFiles(pluginId, relativePath)) ?? [];
+  const files =
+    (await api.files.getPluginFiles({
+      id: pluginId,
+      relativePath: relativePath.map((i) => decodeURIComponent(i)),
+    })) ?? [];
 
   return (
     <ExploreClientLayout relativePath={relativePath} files={files}>

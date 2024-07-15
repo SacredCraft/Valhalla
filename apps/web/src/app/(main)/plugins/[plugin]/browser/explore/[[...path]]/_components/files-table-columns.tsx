@@ -7,6 +7,7 @@ import { Badge } from "@/app/_components/ui/badge";
 import { Checkbox } from "@/app/_components/ui/checkbox";
 import { DataTableColumnHeader } from "@/app/_components/ui/data-table-column-header";
 import { ValhallaFile } from "@/app/actions";
+import { formatBytes } from "@/lib/utils";
 import { Template } from "@/server/config/types";
 import { ColumnDef, RowData } from "@tanstack/react-table";
 
@@ -88,15 +89,7 @@ export const filesTableColumns: ColumnDef<FileCol>[] = [
     ),
     cell: ({ row }) => {
       const size = row.original.size;
-      return (
-        <span>
-          {size > 1024 * 1024
-            ? `${(size / (1024 * 1024)).toFixed(2)} MB`
-            : size > 1024
-              ? `${(size / 1024).toFixed(2)} KB`
-              : `${size} B`}
-        </span>
-      );
+      return <span>{formatBytes(size)}</span>;
     },
   },
   {

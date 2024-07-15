@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 
-import { getFile } from "@/app/actions";
+import { api } from "@/trpc/server";
 
 type BrowserProps = {
   params: {
@@ -15,10 +15,10 @@ export default async function Browser({
   if (!relativePath) {
     redirect(`/plugins/${pluginId}/browser/explore`);
   }
-  const file = await getFile(
-    pluginId,
-    relativePath.map((i) => decodeURIComponent(i)).join("/"),
-  );
+  const file = await api.files.getPluginFile({
+    id: pluginId,
+    relativePath: relativePath.map((i) => decodeURIComponent(i)),
+  });
 
   if (!file || file.type === "dir") {
     notFound();

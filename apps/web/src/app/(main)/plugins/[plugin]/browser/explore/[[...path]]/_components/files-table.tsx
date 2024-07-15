@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { FilesTableToolbar } from "@/app/(main)/plugins/[plugin]/browser/explore/[[...path]]/_components/files-table-toolbar";
@@ -16,7 +16,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/app/_components/ui/table";
-import { revalidate } from "@/app/actions";
 import { cn } from "@/lib/utils";
 import {
   ColumnFiltersState,
@@ -49,7 +48,6 @@ export function FilesTable() {
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const router = useRouter();
-  const pathname = usePathname();
 
   const table = useReactTable({
     data,
@@ -73,7 +71,7 @@ export function FilesTable() {
     getFacetedUniqueValues: getFacetedUniqueValues(),
     meta: {
       setData,
-      refresh: () => revalidate(pathname),
+      refresh: () => router.refresh(),
     },
   });
 

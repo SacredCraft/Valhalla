@@ -202,4 +202,83 @@ export const filesRouter = createTRPCRouter({
         });
       }
     }),
+
+  copyFile: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        source: z.array(z.string()),
+        destination: z.array(z.string()),
+        cut: z.boolean().optional(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const pluginPath = await getPluginPath({ id: input.id });
+      if (!pluginPath) {
+        throw PluginPathNotFound;
+      }
+
+      const sourceFile = path.join(pluginPath, input.source.join(path.sep));
+      const destinationFile = path.join(
+        pluginPath,
+        input.destination.join(path.sep),
+        path.basename(input.source.join(path.sep)),
+      );
+
+      try {
+        fs.accessSync(destinationFile, fs.constants.F_OK);
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "Destination file already exists",
+        });
+      } catch (error) {
+        if (error instanceof TRPCError && error.code === "CONFLICT") {
+          throw new TRPCError({
+            code: "CONFLICT",
+            message: "Destination file already exists",
+          });
+        }
+        try {
+          fs.copyFileSync(sourceFile, destinationFile);
+          if (input.cut) {
+            fs.unlinkSync(sourceFile);
+          }
+        } catch (error) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Failed to copy file",
+          });
+        }
+      }
+    }),
+
+  replaceFile: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        source: z.array(z.string()),
+        destination: z.array(z.string()),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const pluginPath = await getPluginPath({ id: input.id });
+      if (!pluginPath) {
+        throw PluginPathNotFound;
+      }
+
+      const sourceFile = path.join(pluginPath, input.source.join(path.sep));
+      const destinationFile = path.join(
+        pluginPath,
+        input.destination.join(path.sep),
+      );
+
+      try {
+        fs.copyFileSync(sourceFile, destinationFile);
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to replace file",
+        });
+      }
+    }),
 });

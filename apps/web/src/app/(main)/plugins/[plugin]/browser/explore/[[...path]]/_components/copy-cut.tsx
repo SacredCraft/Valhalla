@@ -21,7 +21,8 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/app/_components/ui/sheet";
-import { copyFile, replaceFile } from "@/app/actions";
+import { api } from "@/trpc/react";
+import { useMutation, useQueries } from "@tanstack/react-query";
 import { Row, Table } from "@tanstack/react-table";
 
 interface CopyCutRowActionProps {
@@ -83,27 +84,44 @@ export function PasteAction() {
   const show = copyFiles?.length || cutFiles?.length;
   const length = copyFiles?.length || cutFiles?.length;
 
-  const paste = () => {
+  const copyFile = api.files.copyFile.useMutation();
+  const replaceFile = api.files.replaceFile.useMutation();
+
+  const handlePaste = () => {
     if (relativePath) {
-      let exists: string[] = [];
-      let failed: string[] = [];
       const files = cutFiles || copyFiles || [];
-      const copyAll = async () => {
-        for (const file of files) {
-          const result = await copyFile(
-            plugin.id,
-            decodeURIComponent(file),
-            relativePath.join("/"),
-            cutFiles ? cutFiles.length > 0 : false,
-          );
-          if (result === "exist") {
-            exists.push(file);
-          } else if (!result) {
-            failed.push(file);
-          }
-        }
+      const exists: string[] = [];
+      const failed: string[] = [];
+      const paste = async () => {
+        const pastePromises = files.map((file) => {
+          return new Promise<void>((resolve) => {
+            copyFile.mutate(
+              {
+                id: plugin.id,
+                source: [decodeURIComponent(file)],
+                destination: relativePath || [],
+                cut: Boolean(cutFiles && cutFiles.length > 0),
+              },
+              {
+                onError: (error) => {
+                  if (error.data?.code === "CONFLICT") {
+                    exists.push(file);
+                  } else {
+                    failed.push(file);
+                  }
+                  resolve();
+                },
+                onSuccess: () => {
+                  resolve();
+                },
+              },
+            );
+          });
+        });
+
+        await Promise.all(pastePromises);
       };
-      copyAll().then(() => {
+      paste().then(() => {
         if (exists.length || failed.length) {
           setExists(exists);
           setFailed(failed);
@@ -123,26 +141,23 @@ export function PasteAction() {
   };
 
   const handleReplace = () => {
-    let success = true;
     if (relativePath) {
-      for (const exist of exists) {
-        replaceFile(
-          plugin.id,
-          decodeURIComponent(exist),
-          relativePath.join("/"),
-        ).then((result) => {
-          if (!result) {
-            success = false;
-          }
-        });
-      }
-    }
-    if (success) {
-      toast.success("File(s) replaced");
-      setExists([]);
-      setOpenedSheet(false);
-    } else {
-      toast.error("Failed to replace file(s)");
+      const files = exists;
+      const replace = async () => {
+        for (const file of files) {
+          replaceFile.mutate({
+            id: plugin.id,
+            source: [file],
+            destination: relativePath || [],
+          });
+        }
+      };
+      replace().then(() => {
+        setExists([]);
+        setOpenedSheet(false);
+        table?.options.meta?.refresh();
+        toast.success("File(s) replaced");
+      });
     }
   };
 
@@ -160,7 +175,7 @@ export function PasteAction() {
           variant="outline"
           size="sm"
           className="h-7 px-2"
-          onClick={paste}
+          onClick={handlePaste}
         >
           <ClipboardPaste className="mr-1 h-4 w-4" />
           Paste ({length})

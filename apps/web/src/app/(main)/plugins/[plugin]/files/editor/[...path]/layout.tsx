@@ -5,8 +5,8 @@ import { ActionSave } from "@/app/(main)/plugins/[plugin]/files/_components/acti
 import { FilesHeader } from "@/app/(main)/plugins/[plugin]/files/_components/files-header";
 import { FilesTabs } from "@/app/(main)/plugins/[plugin]/files/_components/files-tabs";
 import FilesEditorClientLayout from "@/app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
-import { getFile } from "@/app/actions";
 import { ConfigurationResult, getConfigurationJson } from "@/lib/core";
+import { api } from "@/trpc/server";
 
 type FilesEditorLayoutProps = {
   params: {
@@ -20,10 +20,10 @@ export default async function FilesInfoLayout({
   params: { plugin: pluginId, path: relativePath = [] },
   children,
 }: FilesEditorLayoutProps) {
-  const file = await getFile(
-    pluginId,
-    relativePath.map((i) => decodeURIComponent(i)).join("/"),
-  );
+  const file = await api.files.getPluginFile({
+    id: pluginId,
+    relativePath: relativePath.map((i) => decodeURIComponent(i)),
+  });
 
   let initialConfiguration: ConfigurationResult | null;
 

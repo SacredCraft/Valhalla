@@ -35,7 +35,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/app/_components/ui/sheet";
-import { createFile } from "@/app/actions";
+import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const FormSchema = z.object({
@@ -56,18 +56,22 @@ export function New() {
     },
   });
 
-  const handleCreate = (data: z.infer<typeof FormSchema>) => {
-    createFile(
-      plugin.id,
-      [relativePath?.join("/"), data.name].join("/"),
-      data.type,
-    ).then((success) => {
+  const createFile = api.files.createPluginFile.useMutation({
+    onSuccess: () => {
+      toast.success("File created");
+      form.reset();
       table?.options.meta?.refresh();
-      if (success) {
-        toast.success("File created");
-      } else {
-        toast.error("Failed to create file");
-      }
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const handleCreate = (data: z.infer<typeof FormSchema>) => {
+    createFile.mutate({
+      id: plugin.id,
+      relativePath: [...relativePath!!, data.name],
+      type: data.type,
     });
   };
 

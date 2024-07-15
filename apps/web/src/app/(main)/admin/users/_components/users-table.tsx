@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { UsersEdit } from "@/app/(main)/admin/users/_components/users-edit";
@@ -19,7 +19,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/app/_components/ui/table";
-import { revalidate } from "@/app/actions";
 import { cn } from "@/lib/utils";
 import {
   ColumnFiltersState,
@@ -44,7 +43,6 @@ export function UsersTable({ users }: { users: UserCol[] }) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const router = useRouter();
-  const pathname = usePathname();
 
   const table = useReactTable({
     data,
@@ -68,7 +66,7 @@ export function UsersTable({ users }: { users: UserCol[] }) {
     getFacetedUniqueValues: getFacetedUniqueValues(),
     meta: {
       setData,
-      refresh: () => revalidate(pathname),
+      refresh: () => router.refresh(),
     },
   });
 
