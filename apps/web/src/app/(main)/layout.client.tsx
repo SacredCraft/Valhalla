@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider, signOut } from "next-auth/react";
 import React, {
   PropsWithChildren,
   createContext,
@@ -36,19 +36,28 @@ export const useProfile = () => {
   return context;
 };
 
-type MainClientProps = PropsWithChildren<ContextType>;
+type MainClientProps = PropsWithChildren<{ user: ContextType | null }>;
 
-export function MainClientLayout({ children, ...rest }: MainClientProps) {
+export function MainClientLayout({ children, user }: MainClientProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  if (!user) {
+    try {
+      signOut();
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
+  }
+
   if (!mounted) return null;
 
   return (
-    <ProfileContext.Provider value={{ ...rest }}>
+    <ProfileContext.Provider value={{ ...user }}>
       <SessionProvider>
         <Content>{children}</Content>
       </SessionProvider>
