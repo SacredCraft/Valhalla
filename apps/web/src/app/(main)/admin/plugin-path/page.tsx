@@ -1,9 +1,9 @@
 import { PluginPathForm } from "@/app/(main)/admin/plugin-path/_components/plugin-path-form";
 import { PluginPathHeader } from "@/app/(main)/admin/plugin-path/_components/plugin-path-header";
-import { getAllPluginPaths } from "@/app/actions";
+import { api } from "@/trpc/server";
 
 export default async function PluginPath() {
-  const pluginPaths = await getAllPluginPaths();
+  const pluginPaths = await api.pluginPaths.getPluginPaths();
 
   return (
     <>

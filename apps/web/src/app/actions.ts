@@ -4,57 +4,7 @@ import fs from "fs";
 import { revalidatePath } from "next/cache";
 import path from "path";
 
-import { signOut } from "@/server/auth";
-import { db } from "@/server/db";
-
-export async function getAllPluginPaths(): Promise<Map<string, string>> {
-  const paths = new Map<string, string>();
-
-  const res = await db.pluginPath.findMany();
-
-  if (!res) {
-    return paths;
-  }
-
-  for (const path of res) {
-    paths.set(path.pluginId, path.path);
-  }
-
-  return paths;
-}
-
-export async function getPluginPath(id: string): Promise<string | null> {
-  const res = await db.pluginPath.findUnique({
-    where: {
-      pluginId: id,
-    },
-  });
-
-  if (!res) {
-    return null;
-  }
-
-  return res.path;
-}
-
-export async function setPluginPath(id: string, path: string) {
-  await db.pluginPath.upsert({
-    where: {
-      pluginId: id,
-    },
-    update: {
-      path,
-    },
-    create: {
-      pluginId: id,
-      path,
-    },
-  });
-}
-
-export async function logout() {
-  await signOut();
-}
+import { api } from "@/trpc/server";
 
 export type ValhallaFile = {
   type: "dir" | "file";
@@ -71,7 +21,7 @@ export async function copyFile(
   destination: string,
   cut: boolean = false,
 ): Promise<boolean | "exist"> {
-  const pluginPath = await getPluginPath(pluginId);
+  const pluginPath = await api.pluginPaths.getPluginPath({ id: pluginId });
   if (!pluginPath) {
     return false;
   }
@@ -108,7 +58,7 @@ export async function replaceFile(
   source: string,
   destination: string,
 ): Promise<boolean> {
-  const pluginPath = await getPluginPath(pluginId);
+  const pluginPath = await api.pluginPaths.getPluginPath({ id: pluginId });
   if (!pluginPath) {
     return false;
   }
@@ -127,7 +77,7 @@ export async function getPluginFiles(
   pluginId: string,
   relativePath: string[],
 ): Promise<ValhallaFile[] | undefined> {
-  const pluginPath = await getPluginPath(pluginId);
+  const pluginPath = await api.pluginPaths.getPluginPath({ id: pluginId });
   const absolutePath = pluginPath ? [pluginPath, ...relativePath] : [];
   try {
     const mappedFiles = fs
@@ -169,7 +119,7 @@ export async function getFile(
   pluginId: string,
   relativePath: string,
 ): Promise<(ValhallaFile & { ext?: string }) | null> {
-  const pluginPath = await getPluginPath(pluginId);
+  const pluginPath = await api.pluginPaths.getPluginPath({ id: pluginId });
   if (!pluginPath) {
     return null;
   }
@@ -195,14 +145,17 @@ export async function savePath(formData: FormData) {
   const path = formData.get("path") as string;
   const pluginId = formData.get("pluginId") as string;
 
-  await setPluginPath(pluginId, path);
+  await api.pluginPaths.setPluginPath({
+    id: pluginId,
+    path,
+  });
 }
 
 export async function deleteFile(
   pluginId: string,
   relativePath: string,
 ): Promise<boolean> {
-  const pluginPath = await getPluginPath(pluginId);
+  const pluginPath = await api.pluginPaths.getPluginPath({ id: pluginId });
   if (!pluginPath) {
     return false;
   }
@@ -219,7 +172,7 @@ export async function renameFile(
   oldPath: string,
   newPath: string,
 ) {
-  const pluginPath = await getPluginPath(pluginId);
+  const pluginPath = await api.pluginPaths.getPluginPath({ id: pluginId });
   if (!pluginPath) {
     return;
   }
@@ -232,7 +185,7 @@ export async function createFile(
   type: "file" | "dir",
   content?: string,
 ) {
-  const pluginPath = await getPluginPath(pluginId);
+  const pluginPath = await api.pluginPaths.getPluginPath({ id: pluginId });
   if (!pluginPath) {
     return false;
   }
@@ -259,7 +212,7 @@ export async function getFileContent(
       }
     | BufferEncoding,
 ) {
-  const pluginPath = await getPluginPath(pluginId);
+  const pluginPath = await api.pluginPaths.getPluginPath({ id: pluginId });
   if (!pluginPath) {
     return;
   }
