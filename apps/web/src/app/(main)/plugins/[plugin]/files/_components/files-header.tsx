@@ -22,17 +22,6 @@ export function FilesHeader() {
 
   const currentPageName = pathname.split("/")[4];
 
-  const currentPage = useMemo(
-    () => ({
-      value: currentPageName,
-      label:
-        currentPageName?.charAt(0).toUpperCase() ??
-        "" + currentPageName?.slice(1) ??
-        "",
-    }),
-    [currentPageName],
-  );
-
   return (
     <header className="h-12 border-b flex px-2 items-center">
       <Breadcrumb className="hidden md:flex">
@@ -49,13 +38,14 @@ export function FilesHeader() {
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
-          {currentPage.value && currentPage.label && (
+          {currentPageName && (
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
                 <Link
-                  href={`/plugins/${plugin.id}/files/${currentPage.value}/${relativePath.join("/")}`}
+                  className="capitalize"
+                  href={`/plugins/${plugin.id}/files/${currentPageName}/${relativePath.join("/")}`}
                 >
-                  {currentPage.label}
+                  {currentPageName}
                 </Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -73,7 +63,7 @@ export function FilesHeader() {
                   <BreadcrumbItem>
                     <BreadcrumbLink asChild>
                       <Link
-                        href={`/plugins/${plugin.id}/files/${currentPage.value}/${[
+                        href={`/plugins/${plugin.id}/files/${currentPageName}/${[
                           ...relativePath.slice(0, index + 1),
                         ].join("/")}`}
                       >
