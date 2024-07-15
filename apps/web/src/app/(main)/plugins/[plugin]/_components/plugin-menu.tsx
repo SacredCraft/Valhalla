@@ -22,7 +22,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/app/_components/ui/popover";
-import { ScrollArea } from "@/app/_components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { plugins } from "@/server/config/plugins";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
@@ -93,38 +92,37 @@ export function PluginMenu({ ownedPluginIds }: { ownedPluginIds: string[] }) {
           </p>
           <Item value="browser" label="Files Browser" />
         </nav>
-        <nav className="flex flex-col gap-1 px-2 flex-1">
+        <nav className="flex flex-col gap-1 px-2 flex-1 overflow-y-scroll">
           <p className="text-muted-foreground text-xs font-semibold uppercase px-2 mb-1 mt-2">
             Files
           </p>
-          <ScrollArea className="flex-1">
-            <Reorder.Group
-              axis="y"
-              values={openedFiles}
-              onReorder={setOpenedFiles}
-            >
-              {openedFiles?.map((file, index, array) => {
-                // 统计文件名在数组中出现的次数
-                const duplicateCount = array.filter(
-                  (f) => f.name === file.name,
-                ).length;
-                // 如果文件名重复，显示路径
-                const label =
-                  duplicateCount > 1
-                    ? `${file.name} (${file.path.join("/")})`
-                    : file.name;
-                return (
-                  <Reorder.Item key={file.path.join("/")} value={file}>
-                    <Item
-                      index={index}
-                      value={`files/${file.path.join("/")}`}
-                      label={label}
-                    />
-                  </Reorder.Item>
-                );
-              })}
-            </Reorder.Group>
-          </ScrollArea>
+          <Reorder.Group
+            className="overflow-scroll no-scrollbar flex-1"
+            axis="y"
+            values={openedFiles}
+            onReorder={setOpenedFiles}
+          >
+            {openedFiles?.map((file, index, array) => {
+              // 统计文件名在数组中出现的次数
+              const duplicateCount = array.filter(
+                (f) => f.name === file.name,
+              ).length;
+              // 如果文件名重复，显示路径
+              const label =
+                duplicateCount > 1
+                  ? `${file.name} (${file.path.join("/")})`
+                  : file.name;
+              return (
+                <Reorder.Item key={file.path.join("/")} value={file}>
+                  <Item
+                    index={index}
+                    value={`files/${file.path.join("/")}`}
+                    label={label}
+                  />
+                </Reorder.Item>
+              );
+            })}
+          </Reorder.Group>
         </nav>
       </div>
     </motion.div>
