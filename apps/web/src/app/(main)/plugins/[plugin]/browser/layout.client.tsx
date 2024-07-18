@@ -3,8 +3,8 @@
 import React, { Dispatch, createContext, useContext, useState } from "react";
 
 import { FileCol } from "@/app/(main)/plugins/[plugin]/browser/explore/[[...path]]/_components/files-table-columns";
-import { ValhallaFile } from "@/app/actions";
 import { Trash } from "@/lib/core";
+import { FileMeta } from "@/server/api/routers/files";
 import { useReactTable } from "@tanstack/react-table";
 
 type ContextType = {
@@ -15,7 +15,7 @@ type ContextType = {
   trash?: Trash[];
   table?: ReturnType<typeof useReactTable<FileCol>>;
   setTable?: Dispatch<ReturnType<typeof useReactTable<FileCol>>>;
-  setFiles?: Dispatch<ValhallaFile[]>;
+  setFiles?: Dispatch<FileMeta[]>;
   setTrash?: Dispatch<Trash[]>;
   setRelativePath?: Dispatch<string[] | undefined>;
   setCopyFiles?: Dispatch<string[] | undefined>;

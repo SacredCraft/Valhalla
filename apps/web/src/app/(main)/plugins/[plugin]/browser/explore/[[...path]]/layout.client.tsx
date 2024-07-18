@@ -4,13 +4,13 @@ import React, { useEffect, useMemo } from "react";
 
 import { useBrowserContext } from "@/app/(main)/plugins/[plugin]/browser/layout.client";
 import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
-import { ValhallaFile } from "@/app/actions";
+import { FileMeta } from "@/server/api/routers/files";
 import { findFileAttributes } from "@/server/config/utils";
 
 type ContextType = {};
 
 type BrowserClientLayoutProps = {
-  files: ValhallaFile[];
+  files: FileMeta[];
   children?: React.ReactNode;
   relativePath: string[];
 };

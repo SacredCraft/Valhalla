@@ -9,7 +9,6 @@ import {
   DialogContent,
   DialogTrigger,
 } from "@/app/_components/ui/dialog";
-import { getFileContent } from "@/app/actions";
 import { api } from "@/trpc/react";
 
 type ImageModelProps = {

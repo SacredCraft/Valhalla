@@ -6,12 +6,12 @@ import { FilesTableRowActions } from "@/app/(main)/plugins/[plugin]/browser/expl
 import { Badge } from "@/app/_components/ui/badge";
 import { Checkbox } from "@/app/_components/ui/checkbox";
 import { DataTableColumnHeader } from "@/app/_components/ui/data-table-column-header";
-import { ValhallaFile } from "@/app/actions";
 import { formatBytes } from "@/lib/utils";
+import { FileMeta } from "@/server/api/routers/files";
 import { Template } from "@/server/config/types";
 import { ColumnDef, RowData } from "@tanstack/react-table";
 
-export type FileCol = ValhallaFile & { template?: Template };
+export type FileCol = FileMeta & { template?: Template };
 
 export const filesTableColumns: ColumnDef<FileCol>[] = [
   {

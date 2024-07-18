@@ -1,3 +1,9 @@
+import { Editor } from "./_components/editor";
+
 export default async function RawPage() {
-  return <div className="p-2"></div>;
+  return (
+    <div className="">
+      <Editor defaultLanguage="yaml" />
+    </div>
+  );
 }

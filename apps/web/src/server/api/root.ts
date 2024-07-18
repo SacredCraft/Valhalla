@@ -4,6 +4,7 @@ import { filesRouter } from "./routers/files";
 import { pluginPathsRouter } from "./routers/plugin-paths";
 import { resourceRouter } from "./routers/resource";
 import { userRouter } from "./routers/user";
+import { viewFilesRouter } from "./routers/view-file";
 
 /**
  * This is the primary router for your server.
@@ -15,6 +16,7 @@ export const appRouter = createTRPCRouter({
   resources: resourceRouter,
   pluginPaths: pluginPathsRouter,
   files: filesRouter,
+  viewFiles: viewFilesRouter,
 });
 
 // export type definition of API

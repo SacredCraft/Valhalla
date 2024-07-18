@@ -1,4 +1,4 @@
-import _, { isObject } from "lodash";
+import _ from "lodash";
 
 import { isFormDeletableValue } from "@/lib/form";
 import { fromJson, fromString } from "@/lib/yaml";
@@ -93,7 +93,7 @@ export function cleanObject(obj: any): any {
       }
       return acc;
     }, [] as any[]);
-  } else if (isObject(obj) && obj !== null) {
+  } else if (_.isObject(obj) && obj !== null) {
     return _.reduce(
       obj,
       (result, value, key) => {

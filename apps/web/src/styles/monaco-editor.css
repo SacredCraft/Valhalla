@@ -1,0 +1,17 @@
+.monaco-editor,
+.monaco-editor-background {
+  background-color: transparent !important;
+  color: var(--foreground) !important;
+}
+
+.monaco-editor .margin {
+  background-color: transparent !important;
+}
+
+.monaco-editor .minimap {
+  background-color: transparent !important;
+}
+
+.monaco-editor .quick-input-widget {
+  margin-top: 12px !important;
+}

@@ -12,6 +12,8 @@ import { ZodError } from "zod";
 import { auth } from "@/server/auth";
 import { db } from "@/server/db";
 import { TRPCError, initTRPC } from "@trpc/server";
+import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
+import type { CreateWSSContextFnOptions } from "@trpc/server/adapters/ws";
 
 /**
  * 1. CONTEXT
@@ -25,7 +27,12 @@ import { TRPCError, initTRPC } from "@trpc/server";
  *
  * @see https://trpc.io/docs/server/context
  */
-export const createTRPCContext = async (opts: { headers: Headers }) => {
+export const createTRPCContext = async (
+  opts:
+    | CreateNextContextOptions
+    | CreateWSSContextFnOptions
+    | { headers: Headers },
+) => {
   const session = await auth();
 
   return {
@@ -85,6 +92,11 @@ export const createTRPCRouter = t.router;
  * are logged in.
  */
 export const publicProcedure = t.procedure;
+
+/**
+ * @link https://trpc.io/docs/v11/merging-routers
+ */
+export const mergeRouters = t.mergeRouters;
 
 /**
  * Protected (authenticated) procedure
