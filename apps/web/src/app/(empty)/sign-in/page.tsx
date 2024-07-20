@@ -1,10 +1,11 @@
 import { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { UserAuthForm } from "@/app/(empty)/sign-in/_components/user-auth-form";
 import { auth } from "@/server/auth";
+
+import { UserAuthLogo } from "./_components/user-auth-logo";
 
 export const metadata: Metadata = {
   title: "Valhalla | Authentication",
@@ -20,14 +21,7 @@ export default async function AuthenticationPage() {
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
         <div className="absolute inset-0 bg-zinc-900" />
         <div className="relative z-20 flex items-center text-lg font-medium w-24">
-          <Image
-            src="/logo.png"
-            alt="Valhalla"
-            width={0}
-            height={0}
-            sizes="100vw"
-            className="w-full h-auto invert"
-          />
+          <UserAuthLogo />
         </div>
         <div className="relative z-20 mt-auto">
           <blockquote className="space-y-2">

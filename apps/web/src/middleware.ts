@@ -8,7 +8,9 @@ export default auth((req) => {
 });
 
 function matchUnprotected(url: URL) {
-  return ["/sign-in", "/setup"].some((path) => url.pathname.startsWith(path));
+  return ["/sign-in", "/setup", "/logo.png"].some((path) =>
+    url.pathname.startsWith(path),
+  );
 }
 
 export const config = {
