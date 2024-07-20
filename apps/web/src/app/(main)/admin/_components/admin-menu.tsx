@@ -31,7 +31,7 @@ export function AdminMenu() {
           <p className="text-muted-foreground text-xs font-semibold uppercase px-2 mb-1 mt-2">
             Settings
           </p>
-          <Item value="plugin-path" label="Plugin Path" />
+          <Item value="resource-path" label="Resource Path" />
         </nav>
       </div>
     </motion.div>

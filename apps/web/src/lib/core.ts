@@ -21,17 +21,19 @@ export type Trash = {
 };
 
 export async function moveToTrash(
-  pluginId: string,
+  resource: string,
   relativePath: string[],
   operator: string,
 ) {
-  const pluginPath = await api.pluginPaths.getPluginPath({ id: pluginId });
-  if (!pluginPath) {
+  const resourcePath = await api.resourcePaths.getResourcePath({
+    name: resource,
+  });
+  if (!resourcePath) {
     return;
   }
 
   const filePath = path
-    .join(pluginPath, relativePath.join(path.sep))
+    .join(resourcePath, relativePath.join(path.sep))
     .split(path.sep);
   const fileName = filePath[filePath.length - 1]!!;
   const folder = filePath.slice(0, -1);
@@ -111,18 +113,23 @@ function findValhallaDirs(dir: string): string[] {
 }
 
 // 递归删除 valhalla 目录中以 ".deleted" 结尾的文件
-export async function emptyTrash(pluginId: string) {
-  const pluginPath = await api.pluginPaths.getPluginPath({ id: pluginId });
+export async function emptyTrash(resource: string) {
+  const resourcePath = await api.resourcePaths.getResourcePath({
+    name: resource,
+  });
 
-  if (!pluginPath) {
+  if (!resourcePath) {
     return;
   }
 
-  if (!fs.existsSync(pluginPath) || !fs.lstatSync(pluginPath).isDirectory()) {
+  if (
+    !fs.existsSync(resourcePath) ||
+    !fs.lstatSync(resourcePath).isDirectory()
+  ) {
     return;
   }
 
-  const valhallaDirs = findValhallaDirs(pluginPath);
+  const valhallaDirs = findValhallaDirs(resourcePath);
 
   for (const dir of valhallaDirs) {
     emptyTrashRecursive(dir);
@@ -145,14 +152,16 @@ function emptyTrashRecursive(dir: string) {
 
 // 递归查找 valhalla 目录中以 ".deleted" 结尾的文件
 export async function getDeletedFiles(
-  pluginId: string,
+  resource: string,
   relativePath: string[],
 ): Promise<Trash[]> {
-  const pluginPath = await api.pluginPaths.getPluginPath({ id: pluginId });
-  if (!pluginPath) {
+  const resourcePath = await api.resourcePaths.getResourcePath({
+    name: resource,
+  });
+  if (!resourcePath) {
     return [];
   }
-  const absolutePath = path.join(pluginPath, ...relativePath);
+  const absolutePath = path.join(resourcePath, ...relativePath);
   if (
     !fs.existsSync(absolutePath) ||
     !fs.lstatSync(absolutePath).isDirectory()
@@ -255,14 +264,16 @@ function setValhallaFileContent(filePath: string[], content: string) {
 }
 
 export async function getConfigurationJson(
-  pluginId: string,
+  resource: string,
   relativePath: string[],
 ): Promise<ConfigurationResult | null> {
-  const pluginPath = await api.pluginPaths.getPluginPath({ id: pluginId });
-  if (!pluginPath) {
+  const resourcePath = await api.resourcePaths.getResourcePath({
+    name: resource,
+  });
+  if (!resourcePath) {
     return null;
   }
-  const filePath = [pluginPath, ...relativePath];
+  const filePath = [resourcePath, ...relativePath];
   const fileName = filePath[filePath.length - 1]!!;
   if (!fs.existsSync(path.join(...filePath))) {
     return { path: filePath, name: fileName };
@@ -298,16 +309,18 @@ export async function getConfigurationJson(
 }
 
 export async function setConfigurationJson(
-  pluginId: string,
+  resource: string,
   relativePath: string[],
   cache: any,
   content: any,
 ) {
-  const pluginPath = await api.pluginPaths.getPluginPath({ id: pluginId });
-  if (!pluginPath) {
+  const resourcePath = await api.resourcePaths.getResourcePath({
+    name: resource,
+  });
+  if (!resourcePath) {
     return;
   }
-  const filePath = [pluginPath, ...relativePath];
+  const filePath = [resourcePath, ...relativePath];
   const fileName = filePath[filePath.length - 1]!!;
   const folder = filePath.slice(0, -1);
   let actualCacheFileName = fileName.endsWith(".json")

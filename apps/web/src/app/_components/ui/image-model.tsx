@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState, useTransition } from "react";
 
-import { usePluginContext } from "@/app/(main)/plugins/[plugin]/layout.client";
+import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
 import {
   Dialog,
   DialogContent,
@@ -17,9 +17,9 @@ type ImageModelProps = {
 };
 
 export function ImageModel({ children, src }: ImageModelProps) {
-  const { plugin } = usePluginContext();
-  const { data, isPending } = api.files.readPluginFile.useQuery({
-    id: plugin.id,
+  const { resource } = useResourceContext();
+  const { data, isPending } = api.files.readResourceFile.useQuery({
+    name: resource.name,
     relativePath: src.split("/"),
     options: "base64",
   });

@@ -5,7 +5,7 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { getPluginPath } from "./plugin-paths";
+import { getResourcePath } from "./resource-paths";
 
 export type FileMeta = {
   type: "file" | "dir";
@@ -18,9 +18,9 @@ export type FileMeta = {
   [key: string]: any;
 };
 
-export const PluginPathNotFound = new TRPCError({
+export const resourcePathNotFound = new TRPCError({
   code: "NOT_FOUND",
-  message: "Plugin path not found",
+  message: "Resource path not found",
 });
 
 const bufferEncodingSchema = z.union([
@@ -36,12 +36,12 @@ const bufferEncodingSchema = z.union([
 ]);
 
 export const filesRouter = createTRPCRouter({
-  getPluginFiles: protectedProcedure
-    .input(z.object({ id: z.string(), relativePath: z.array(z.string()) }))
+  getResourceFiles: protectedProcedure
+    .input(z.object({ name: z.string(), relativePath: z.array(z.string()) }))
     .query(async ({ input }): Promise<FileMeta[] | null> => {
-      const pluginPath = await getPluginPath({ id: input.id });
-      const absolutePath = pluginPath
-        ? [pluginPath, ...input.relativePath]
+      const resourcePath = await getResourcePath({ name: input.name });
+      const absolutePath = resourcePath
+        ? [resourcePath, ...input.relativePath]
         : [];
       try {
         const mappedFiles = fs
@@ -79,14 +79,17 @@ export const filesRouter = createTRPCRouter({
       }
     }),
 
-  getPluginFile: protectedProcedure
-    .input(z.object({ id: z.string(), relativePath: z.array(z.string()) }))
+  getResourceFile: protectedProcedure
+    .input(z.object({ name: z.string(), relativePath: z.array(z.string()) }))
     .query(async ({ input }) => {
-      const pluginPath = await getPluginPath({ id: input.id });
-      if (!pluginPath) {
+      const resourcePath = await getResourcePath({ name: input.name });
+      if (!resourcePath) {
         return null;
       }
-      const filePath = path.join(pluginPath, input.relativePath.join(path.sep));
+      const filePath = path.join(
+        resourcePath,
+        input.relativePath.join(path.sep),
+      );
       try {
         const stats = fs.statSync(filePath);
 
@@ -104,10 +107,10 @@ export const filesRouter = createTRPCRouter({
       }
     }),
 
-  readPluginFile: protectedProcedure
+  readResourceFile: protectedProcedure
     .input(
       z.object({
-        id: z.string(),
+        name: z.string(),
         relativePath: z.array(z.string()),
         options: z
           .union([
@@ -121,25 +124,27 @@ export const filesRouter = createTRPCRouter({
       }),
     )
     .query(async ({ input }): Promise<string | Buffer | null> => {
-      const pluginPath = await getPluginPath({ id: input.id });
-      if (!pluginPath) {
+      const resourcePath = await getResourcePath({ name: input.name });
+      if (!resourcePath) {
         return null;
       }
       return fs.readFileSync(
-        path.join(pluginPath, input.relativePath.join(path.sep)),
+        path.join(resourcePath, input.relativePath.join(path.sep)),
         input.options,
       );
     }),
 
-  deletePluginFile: protectedProcedure
-    .input(z.object({ id: z.string(), relativePath: z.array(z.string()) }))
+  deleteResourceFile: protectedProcedure
+    .input(z.object({ name: z.string(), relativePath: z.array(z.string()) }))
     .mutation(async ({ input }) => {
-      const pluginPath = await getPluginPath({ id: input.id });
-      if (!pluginPath) {
-        throw PluginPathNotFound;
+      const resourcePath = await getResourcePath({ name: input.name });
+      if (!resourcePath) {
+        throw resourcePathNotFound;
       }
       try {
-        fs.unlinkSync(path.join(pluginPath, input.relativePath.join(path.sep)));
+        fs.unlinkSync(
+          path.join(resourcePath, input.relativePath.join(path.sep)),
+        );
       } catch (error) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
@@ -148,23 +153,23 @@ export const filesRouter = createTRPCRouter({
       }
     }),
 
-  renamePluginFile: protectedProcedure
+  renameResourceFile: protectedProcedure
     .input(
       z.object({
-        id: z.string(),
+        name: z.string(),
         oldRelativePath: z.array(z.string()),
         newRelativePath: z.array(z.string()),
       }),
     )
     .mutation(async ({ input }) => {
-      const pluginPath = await getPluginPath({ id: input.id });
-      if (!pluginPath) {
-        throw PluginPathNotFound;
+      const resourcePath = await getResourcePath({ name: input.name });
+      if (!resourcePath) {
+        throw resourcePathNotFound;
       }
       try {
         fs.renameSync(
-          path.join(pluginPath, input.oldRelativePath.join(path.sep)),
-          path.join(pluginPath, input.newRelativePath.join(path.sep)),
+          path.join(resourcePath, input.oldRelativePath.join(path.sep)),
+          path.join(resourcePath, input.newRelativePath.join(path.sep)),
         );
       } catch (error) {
         throw new TRPCError({
@@ -174,21 +179,24 @@ export const filesRouter = createTRPCRouter({
       }
     }),
 
-  createPluginFile: protectedProcedure
+  createResourceFile: protectedProcedure
     .input(
       z.object({
-        id: z.string(),
+        name: z.string(),
         relativePath: z.array(z.string()),
         type: z.enum(["file", "dir"]),
         content: z.string().optional(),
       }),
     )
     .mutation(async ({ input }) => {
-      const pluginPath = await getPluginPath({ id: input.id });
-      if (!pluginPath) {
-        throw PluginPathNotFound;
+      const resourcePath = await getResourcePath({ name: input.name });
+      if (!resourcePath) {
+        throw resourcePathNotFound;
       }
-      const filePath = path.join(pluginPath, input.relativePath.join(path.sep));
+      const filePath = path.join(
+        resourcePath,
+        input.relativePath.join(path.sep),
+      );
       try {
         if (input.type === "dir") {
           fs.mkdirSync(filePath);
@@ -203,24 +211,24 @@ export const filesRouter = createTRPCRouter({
       }
     }),
 
-  copyFile: protectedProcedure
+  copyResourceFile: protectedProcedure
     .input(
       z.object({
-        id: z.string(),
+        name: z.string(),
         source: z.array(z.string()),
         destination: z.array(z.string()),
         cut: z.boolean().optional(),
       }),
     )
     .mutation(async ({ input }) => {
-      const pluginPath = await getPluginPath({ id: input.id });
-      if (!pluginPath) {
-        throw PluginPathNotFound;
+      const resourcePath = await getResourcePath({ name: input.name });
+      if (!resourcePath) {
+        throw resourcePathNotFound;
       }
 
-      const sourceFile = path.join(pluginPath, input.source.join(path.sep));
+      const sourceFile = path.join(resourcePath, input.source.join(path.sep));
       const destinationFile = path.join(
-        pluginPath,
+        resourcePath,
         input.destination.join(path.sep),
         path.basename(input.source.join(path.sep)),
       );
@@ -252,23 +260,23 @@ export const filesRouter = createTRPCRouter({
       }
     }),
 
-  replaceFile: protectedProcedure
+  replaceResourceFile: protectedProcedure
     .input(
       z.object({
-        id: z.string(),
+        name: z.string(),
         source: z.array(z.string()),
         destination: z.array(z.string()),
       }),
     )
     .mutation(async ({ input }) => {
-      const pluginPath = await getPluginPath({ id: input.id });
-      if (!pluginPath) {
-        throw PluginPathNotFound;
+      const resourcePath = await getResourcePath({ name: input.name });
+      if (!resourcePath) {
+        throw resourcePathNotFound;
       }
 
-      const sourceFile = path.join(pluginPath, input.source.join(path.sep));
+      const sourceFile = path.join(resourcePath, input.source.join(path.sep));
       const destinationFile = path.join(
-        pluginPath,
+        resourcePath,
         input.destination.join(path.sep),
       );
 

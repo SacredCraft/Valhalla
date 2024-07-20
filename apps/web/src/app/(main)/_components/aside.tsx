@@ -25,7 +25,7 @@ import { AnimatedItem } from "@/app/(main)/_components/animated-item";
 import { Profile } from "@/app/(main)/_components/profile";
 import { useProfile } from "@/app/(main)/layout.client";
 import { cn } from "@/lib/utils";
-import { plugins } from "@/server/config/plugins";
+import { resources } from "@/valhalla";
 
 type ContextType = {
   collapsed: boolean;
@@ -93,7 +93,7 @@ export function Aside() {
           </motion.div>
         </Link>
 
-        <Item value="plugins" label="Plugins" Icon={Blocks} />
+        <Item value="resources" label="Resources" Icon={Blocks} />
 
         {role === "ADMIN" && (
           <Item value="admin" label="Admin Panel" Icon={ShieldHalf} />
@@ -160,7 +160,8 @@ function Item({
   const pathnameSplit = useMemo(() => pathname.split("/").slice(1), [pathname]);
   const route = useMemo(() => pathnameSplit[0], [pathnameSplit]);
   const href = useMemo(
-    () => (value === "plugins" ? `/plugins/${plugins[0]?.id}` : `/${value}`),
+    () =>
+      value === "resources" ? `/resources/${resources[0]?.name}` : `/${value}`,
     [value],
   );
   const { collapsed } = useAside();

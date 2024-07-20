@@ -1,4 +1,4 @@
-import { plugins } from "@/server/config/plugins";
+import { resources } from "@/valhalla";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -28,13 +28,13 @@ export const resourceRouter = createTRPCRouter({
 
     if (user) {
       if (user.role === "ADMIN") {
-        return plugins.map((plugin) => plugin.id);
+        return resources.map((resource) => resource.name);
       }
-      const resources = user.UserResourceRole.flatMap(
+      const filteredResources = user.UserResourceRole.flatMap(
         (userResourceRole) => userResourceRole.resourceRole.resources,
       );
 
-      return Array.from(new Set(resources));
+      return Array.from(new Set(filteredResources));
     }
 
     return [];

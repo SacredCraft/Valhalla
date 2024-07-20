@@ -11,7 +11,7 @@ import {
   useState,
 } from "react";
 
-import { useFilesEditorContext } from "@/app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
+import { useFilesEditorContext } from "@/app/(main)/resources/[resource]/files/editor/[...path]/layout.client";
 import { isFormDeletableValue } from "@/lib/form";
 import { cn } from "@/lib/utils";
 

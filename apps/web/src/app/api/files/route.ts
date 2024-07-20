@@ -6,16 +6,18 @@ import { api } from "@/trpc/server";
 export async function POST(request: Request) {
   const formData = await request.formData();
 
-  const pluginId = formData.get("pluginId") as string;
+  const resource = formData.get("resource") as string;
   const relativePath = formData.get("relativePath") as string;
   const files = formData.getAll("files") as File[];
 
-  const pluginPath = await api.pluginPaths.getPluginPath({ id: pluginId });
-  if (!pluginPath) {
+  const resourcePath = await api.resourcePaths.getResourcePath({
+    name: resource,
+  });
+  if (!resourcePath) {
     return new Response(null, { status: 404 });
   }
 
-  const filePath = path.join(pluginPath, relativePath);
+  const filePath = path.join(resourcePath, relativePath);
 
   try {
     fs.mkdirSync(filePath, { recursive: true });
@@ -37,18 +39,20 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
   const relativePath = searchParams.get("relativePath") as string;
-  const pluginId = searchParams.get("pluginId") as string;
+  const resource = searchParams.get("resource") as string;
 
-  if (!relativePath || !pluginId) {
+  if (!relativePath || !resource) {
     return new Response(null, { status: 400 });
   }
 
-  const pluginPath = await api.pluginPaths.getPluginPath({ id: pluginId });
-  if (!pluginPath) {
+  const resourcePath = await api.resourcePaths.getResourcePath({
+    name: resource,
+  });
+  if (!resourcePath) {
     return new Response(null, { status: 404 });
   }
 
-  const filePath = path.join(pluginPath, relativePath);
+  const filePath = path.join(resourcePath, relativePath);
   if (!fs.existsSync(filePath)) {
     return new Response(null, { status: 404 });
   }

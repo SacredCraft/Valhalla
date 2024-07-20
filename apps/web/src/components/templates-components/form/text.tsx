@@ -1,6 +1,6 @@
 "use client";
 
-import { useFilesEditorContext } from "@/app/(main)/plugins/[plugin]/files/editor/[...path]/layout.client";
+import { useFilesEditorContext } from "@/app/(main)/resources/[resource]/files/editor/[...path]/layout.client";
 import {
   FormControl,
   FormDescription,

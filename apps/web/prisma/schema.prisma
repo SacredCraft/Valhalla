@@ -41,10 +41,10 @@ model UserResourceRole {
   resourceRoleId Int
 }
 
-model PluginPath {
-  id       Int    @id @default(autoincrement())
-  pluginId String @unique
-  path     String
+model ResourcePath {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  path String
 }
 
 model Log {
