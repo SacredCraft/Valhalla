@@ -24,7 +24,9 @@ export function BrowserHeader() {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link href={`/resources/${resource.name}`}>{resource.name}</Link>
+              <Link href={`/resources/${resource.name}`} className="capitalize">
+                {resource.name}
+              </Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
