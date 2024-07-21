@@ -20,6 +20,15 @@ export type FileMeta = {
   [key: string]: any;
 };
 
+export type Trash = {
+  path: string[];
+  originName: string;
+  trashName: string;
+  size: number;
+  operator: string | User;
+  timestamp: string;
+};
+
 export const resourcePathNotFound = new TRPCError({
   code: "NOT_FOUND",
   message: "Resource path not found",
@@ -36,15 +45,6 @@ const bufferEncodingSchema = z.union([
   z.literal("binary"),
   z.literal("hex"),
 ]);
-
-export type Trash = {
-  path: string[];
-  originName: string;
-  trashName: string;
-  size: number;
-  operator: string | User;
-  timestamp: string;
-};
 
 export const filesRouter = createTRPCRouter({
   getResourceFiles: protectedProcedure
