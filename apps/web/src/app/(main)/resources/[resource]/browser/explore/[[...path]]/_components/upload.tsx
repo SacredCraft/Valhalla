@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { toast } from "sonner";
 
 import { useBrowserContext } from "@/app/(main)/resources/[resource]/browser/layout.client";
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
-import { Button } from "@/app/_components/ui/button";
-import { FileUploader } from "@/app/_components/ui/file-uploader";
+import { UploadIcon } from "@radix-ui/react-icons";
 import {
+  Button,
+  FileUploader,
   Sheet,
   SheetClose,
   SheetContent,
@@ -16,8 +16,8 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/app/_components/ui/sheet";
-import { UploadIcon } from "@radix-ui/react-icons";
+  toast,
+} from "@sacred-craft/valhalla-components";
 
 export function Upload() {
   const { resource } = useResourceContext();

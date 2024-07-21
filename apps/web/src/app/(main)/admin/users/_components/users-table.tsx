@@ -10,16 +10,16 @@ import {
 } from "@/app/(main)/admin/users/_components/users-table-columns";
 import { UsersTableToolbar } from "@/app/(main)/admin/users/_components/users-table-toolbar";
 import { useUsersContext } from "@/app/(main)/admin/users/layout.client";
-import { DataTablePagination } from "@/app/_components/ui/data-table-pagination";
 import {
+  DataTablePagination,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-} from "@/app/_components/ui/table";
-import { cn } from "@/lib/utils";
+  cn,
+} from "@sacred-craft/valhalla-components";
 import {
   ColumnFiltersState,
   SortingState,

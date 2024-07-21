@@ -2,15 +2,12 @@
 
 import { useTheme } from "next-themes";
 import React, { useEffect } from "react";
-import { MonacoBinding } from "y-monaco";
-import * as Y from "yjs";
 
 import { api } from "@/trpc/react";
 import {
   EditorProps,
   Monaco,
   Editor as MonacoEditor,
-  loader,
   useMonaco,
 } from "@monaco-editor/react";
 
@@ -43,7 +40,6 @@ export const Editor = (editorProps: EditorProps) => {
   }, [monaco]);
 
   const beforeMount = (monaco: Monaco) => {
-    const ydoc = new Y.Doc();
     console.log("beforeMount");
   };
 

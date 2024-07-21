@@ -1,7 +1,6 @@
 "use client";
 
 import { Star } from "lucide-react";
-import { toast } from "sonner";
 
 import { CopyCutRowAction } from "@/app/(main)/resources/[resource]/browser/explore/[[...path]]/_components/copy-cut";
 import { Delete } from "@/app/(main)/resources/[resource]/browser/explore/[[...path]]/_components/delete";
@@ -9,21 +8,20 @@ import { FileCol } from "@/app/(main)/resources/[resource]/browser/explore/[[...
 import { RenameMove } from "@/app/(main)/resources/[resource]/browser/explore/[[...path]]/_components/rename-move";
 import { useBrowserContext } from "@/app/(main)/resources/[resource]/browser/layout.client";
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
-import { Button } from "@/app/_components/ui/button";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import {
+  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "@/app/_components/ui/dropdown-menu";
-import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/app/_components/ui/tooltip";
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+  toast,
+} from "@sacred-craft/valhalla-components";
 import { Row, Table } from "@tanstack/react-table";
 
 interface FilesTableRowActionsProps {

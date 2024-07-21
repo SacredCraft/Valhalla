@@ -6,7 +6,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/app/_components/ui/table";
+} from "@sacred-craft/valhalla-components";
 
 export function TrashBin() {
   const { trash } = useBrowserContext();

@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { createContext, useContext, useState } from "react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@sacred-craft/valhalla-components";
 
 type ContextType = {
   step: number;

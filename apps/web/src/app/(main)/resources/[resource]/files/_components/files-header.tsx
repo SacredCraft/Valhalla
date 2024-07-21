@@ -13,7 +13,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/app/_components/ui/breadcrumb";
+} from "@sacred-craft/valhalla-components";
 
 export function FilesHeader() {
   const { resource } = useResourceContext();

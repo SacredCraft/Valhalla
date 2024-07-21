@@ -8,23 +8,21 @@ import { useMemo } from "react";
 
 import { useAside } from "@/app/(main)/_components/aside";
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
-import { Button } from "@/app/_components/ui/button";
+import valhallaConfig from "@/valhalla";
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import {
+  Button,
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/app/_components/ui/command";
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/app/_components/ui/popover";
-import { cn } from "@/lib/utils";
-import valhallaConfig from "@/valhalla";
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+  cn,
+} from "@sacred-craft/valhalla-components";
 
 export function ResourceMenu({
   ownedResources: ownedResourcesNames,

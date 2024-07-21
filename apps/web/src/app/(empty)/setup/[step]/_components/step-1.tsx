@@ -5,12 +5,14 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
 
 import { useSetupContext } from "@/app/(empty)/setup/[step]/layout.client";
-import { Button } from "@/app/_components/ui/button";
+import { signInSchema } from "@/lib/zod";
+import { api } from "@/trpc/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  Button,
   Form,
   FormControl,
   FormDescription,
@@ -18,11 +20,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/app/_components/ui/form";
-import { Input } from "@/app/_components/ui/input";
-import { signInSchema } from "@/lib/zod";
-import { api } from "@/trpc/react";
-import { zodResolver } from "@hookform/resolvers/zod";
+  Input,
+  toast,
+} from "@sacred-craft/valhalla-components";
 
 export function Step1() {
   const { setName } = useSetupContext();

@@ -5,7 +5,7 @@ import * as React from "react";
 import { useEffect } from "react";
 
 import { useSetupContext } from "@/app/(empty)/setup/[step]/layout.client";
-import { Button } from "@/app/_components/ui/button";
+import { Button } from "@sacred-craft/valhalla-components";
 
 export function Step2() {
   const { setName } = useSetupContext();

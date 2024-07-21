@@ -8,7 +8,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/app/_components/ui/breadcrumb";
+} from "@sacred-craft/valhalla-components";
 
 export const UsersHeader = () => {
   return (

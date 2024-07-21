@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 
 import { useAside } from "@/app/(main)/_components/aside";
-import { Button } from "@/app/_components/ui/button";
+import { Button } from "@sacred-craft/valhalla-components";
 
 export function AdminMenu() {
   const { collapsed } = useAside();

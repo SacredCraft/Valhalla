@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 
-import { Button } from "@/app/_components/ui/button";
+import { Button } from "@sacred-craft/valhalla-components";
 
 type BrowserTabsProps = {
   left?: React.ReactNode;

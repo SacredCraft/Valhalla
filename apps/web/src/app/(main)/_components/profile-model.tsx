@@ -2,13 +2,14 @@ import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
 
 import { useProfile } from "@/app/(main)/layout.client";
-import { AvatarUploader } from "@/app/_components/ui/avatar-uploader";
-import { Button } from "@/app/_components/ui/button";
+import { api } from "@/trpc/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  AvatarUploader,
+  Button,
   Dialog,
   DialogContent,
   DialogDescription,
@@ -16,9 +17,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/app/_components/ui/dialog";
-import { DropdownMenuItem } from "@/app/_components/ui/dropdown-menu";
-import {
+  DropdownMenuItem,
   Form,
   FormControl,
   FormDescription,
@@ -26,11 +25,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/app/_components/ui/form";
-import { Input } from "@/app/_components/ui/input";
-import { Textarea } from "@/app/_components/ui/textarea";
-import { api } from "@/trpc/react";
-import { zodResolver } from "@hookform/resolvers/zod";
+  Input,
+  Textarea,
+  toast,
+} from "@sacred-craft/valhalla-components";
 
 export function ProfileModel() {
   const [tab, setTab] = useState<string>("information");

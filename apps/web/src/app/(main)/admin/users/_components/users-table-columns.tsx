@@ -1,14 +1,14 @@
 "use client";
 
+import valhallaConfig from "@/valhalla";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@/app/_components/ui/avatar";
-import { Badge } from "@/app/_components/ui/badge";
-import { Checkbox } from "@/app/_components/ui/checkbox";
-import { DataTableColumnHeader } from "@/app/_components/ui/data-table-column-header";
-import valhallaConfig from "@/valhalla";
+  Badge,
+  Checkbox,
+  DataTableColumnHeader,
+} from "@sacred-craft/valhalla-components";
 import { ColumnDef } from "@tanstack/react-table";
 
 export type UserCol = {

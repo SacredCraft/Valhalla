@@ -4,7 +4,7 @@ import { SaveIcon } from "lucide-react";
 import React from "react";
 
 import { useFilesEditorContext } from "@/app/(main)/resources/[resource]/files/editor/[...path]/layout.client";
-import { Button } from "@/app/_components/ui/button";
+import { Button } from "@sacred-craft/valhalla-components";
 
 export const ActionSave = () => {
   const { modified } = useFilesEditorContext();

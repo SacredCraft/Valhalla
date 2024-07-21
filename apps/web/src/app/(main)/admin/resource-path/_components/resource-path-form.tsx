@@ -3,10 +3,11 @@
 import { SaveIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 
-import { Button } from "@/app/_components/ui/button";
+import { api } from "@/trpc/react";
+import valhallaConfig from "@/valhalla";
 import {
+  Button,
   Form,
   FormControl,
   FormDescription,
@@ -14,10 +15,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/app/_components/ui/form";
-import { Input } from "@/app/_components/ui/input";
-import { api } from "@/trpc/react";
-import valhallaConfig from "@/valhalla";
+  Input,
+  toast,
+} from "@sacred-craft/valhalla-components";
 
 export const ResourcePathForm = ({
   resourcePaths,

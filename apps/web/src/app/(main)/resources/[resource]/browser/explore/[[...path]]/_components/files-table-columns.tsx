@@ -3,13 +3,15 @@
 import { File as FileIcon, Folder } from "lucide-react";
 
 import { FilesTableRowActions } from "@/app/(main)/resources/[resource]/browser/explore/[[...path]]/_components/files-table-row-actions";
-import { Badge } from "@/app/_components/ui/badge";
-import { Checkbox } from "@/app/_components/ui/checkbox";
-import { DataTableColumnHeader } from "@/app/_components/ui/data-table-column-header";
-import { formatBytes } from "@/lib/utils";
 import { FileMeta } from "@/server/api/routers/files";
 import valhallaConfig from "@/valhalla";
 import { Template } from "@sacred-craft/resource";
+import {
+  Badge,
+  Checkbox,
+  DataTableColumnHeader,
+  formatBytes,
+} from "@sacred-craft/valhalla-components";
 import { ColumnDef, RowData } from "@tanstack/react-table";
 
 export type FileCol = FileMeta & { template?: Template };

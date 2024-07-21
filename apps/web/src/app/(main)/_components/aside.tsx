@@ -24,8 +24,8 @@ import React, {
 import { AnimatedItem } from "@/app/(main)/_components/animated-item";
 import { Profile } from "@/app/(main)/_components/profile";
 import { useProfile } from "@/app/(main)/layout.client";
-import { cn } from "@/lib/utils";
 import valhallaConfig from "@/valhalla";
+import { cn } from "@sacred-craft/valhalla-components";
 
 type ContextType = {
   collapsed: boolean;

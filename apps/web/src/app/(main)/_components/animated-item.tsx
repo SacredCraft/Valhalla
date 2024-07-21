@@ -2,8 +2,7 @@ import { motion } from "framer-motion";
 import React from "react";
 
 import { useAside } from "@/app/(main)/_components/aside";
-import { Button, ButtonProps } from "@/app/_components/ui/button";
-import { cn } from "@/lib/utils";
+import { Button, ButtonProps, cn } from "@sacred-craft/valhalla-components";
 
 type AnimatedItemProps = {
   icon?: React.ReactNode;

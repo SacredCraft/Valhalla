@@ -2,14 +2,13 @@
 
 import { TrashIcon } from "lucide-react";
 import React, { useEffect } from "react";
-import { toast } from "sonner";
 
 import { BrowserHeader } from "@/app/(main)/resources/[resource]/browser/_components/browser-header";
 import { BrowserTabs } from "@/app/(main)/resources/[resource]/browser/_components/browser-tabs";
 import { useBrowserContext } from "@/app/(main)/resources/[resource]/browser/layout.client";
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
-import { Button } from "@/app/_components/ui/button";
 import { Trash, emptyTrash } from "@/lib/core";
+import { Button, toast } from "@sacred-craft/valhalla-components";
 
 type TrashClientLayoutProps = {
   trash: Trash[];

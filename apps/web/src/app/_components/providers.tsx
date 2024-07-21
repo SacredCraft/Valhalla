@@ -1,10 +1,9 @@
 "use client";
 
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { Toaster } from "sonner";
 
-import { TooltipProvider } from "@/app/_components/ui/tooltip";
 import { TRPCReactProvider } from "@/trpc/react";
+import { Toaster, TooltipProvider } from "@sacred-craft/valhalla-components";
 
 export default function Providers({
   children,

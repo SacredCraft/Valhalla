@@ -10,18 +10,16 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@/app/_components/ui/avatar";
-import { Badge } from "@/app/_components/ui/badge";
-import { Button } from "@/app/_components/ui/button";
-import {
+  Badge,
+  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/app/_components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
+  cn,
+} from "@sacred-craft/valhalla-components";
 
 type AvatarProps = {
   className?: string;

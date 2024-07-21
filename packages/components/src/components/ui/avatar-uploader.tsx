@@ -1,15 +1,12 @@
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import Dropzone, { type FileRejection } from "react-dropzone";
 import { toast } from "sonner";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/app/_components/ui/avatar";
-import { FormDescription, FormLabel } from "@/app/_components/ui/form";
 import { cn } from "@/lib/utils";
 import { useControllableState } from "@radix-ui/react-use-controllable-state";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { FormDescription, FormLabel } from "@/components/ui/form";
 
 type AvatarUploaderProps = {
   fallback?: string;

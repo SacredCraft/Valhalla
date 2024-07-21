@@ -1,11 +1,13 @@
 import _ from "lodash";
 
 import { useBrowserContext } from "@/app/(main)/resources/[resource]/browser/layout.client";
-import { Button } from "@/app/_components/ui/button";
-import { DataTableFacetedFilter } from "@/app/_components/ui/data-table-faceted-filter";
-import { DataTableViewOptions } from "@/app/_components/ui/data-table-view-options";
-import { Input } from "@/app/_components/ui/input";
 import { Cross2Icon } from "@radix-ui/react-icons";
+import {
+  Button,
+  DataTableFacetedFilter,
+  DataTableViewOptions,
+  Input,
+} from "@sacred-craft/valhalla-components";
 
 export function FilesTableToolbar() {
   const { table } = useBrowserContext();

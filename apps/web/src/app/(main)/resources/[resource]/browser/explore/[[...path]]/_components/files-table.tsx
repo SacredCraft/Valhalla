@@ -4,19 +4,19 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { FilesTableToolbar } from "@/app/(main)/resources/[resource]/browser/explore/[[...path]]/_components/files-table-toolbar";
+import { ImageModel } from "@/app/(main)/resources/[resource]/browser/explore/[[...path]]/_components/image-model";
 import { useBrowserContext } from "@/app/(main)/resources/[resource]/browser/layout.client";
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
-import { DataTablePagination } from "@/app/_components/ui/data-table-pagination";
-import { ImageModel } from "@/app/_components/ui/image-model";
 import {
+  DataTablePagination,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-} from "@/app/_components/ui/table";
-import { cn } from "@/lib/utils";
+  cn,
+} from "@sacred-craft/valhalla-components";
 import {
   ColumnFiltersState,
   SortingState,

@@ -1,15 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useMemo } from "react";
 
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
+import { api } from "@/trpc/react";
 import {
   Dialog,
   DialogContent,
   DialogTrigger,
-} from "@/app/_components/ui/dialog";
-import { api } from "@/trpc/react";
+} from "@sacred-craft/valhalla-components";
 
 type ImageModelProps = {
   children: React.ReactNode;

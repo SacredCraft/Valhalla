@@ -1,3 +1,5 @@
+import React from "react";
+
 import {
   Resource,
   Template,
@@ -5,8 +7,6 @@ import {
   createTemplate,
 } from "@sacred-craft/resource";
 import { defineValhallaConfig } from "@sacred-craft/valhalla-config";
-
-import { JormungandrDefault } from "@/components/templates/jormungandr/jormungandr-default";
 
 const jormungandr = createResource({
   name: "jormungandr",
@@ -16,7 +16,7 @@ const jormungandr = createResource({
       matchedPaths: ["item/.*\\.ya?ml$"],
       action: {
         render: {
-          editor: JormungandrDefault,
+          editor: () => React.createElement("div", null, "Jormungandr Editor"),
         },
       },
     }),

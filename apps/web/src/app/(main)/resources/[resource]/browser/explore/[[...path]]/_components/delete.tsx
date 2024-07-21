@@ -1,13 +1,10 @@
-import { toast } from "sonner";
-
 import { FileCol } from "@/app/(main)/resources/[resource]/browser/explore/[[...path]]/_components/files-table-columns";
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
-import { Button } from "@/app/_components/ui/button";
+import { api } from "@/trpc/react";
 import {
+  Button,
   DropdownMenuItem,
   DropdownMenuShortcut,
-} from "@/app/_components/ui/dropdown-menu";
-import {
   Sheet,
   SheetClose,
   SheetContent,
@@ -16,8 +13,8 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/app/_components/ui/sheet";
-import { api } from "@/trpc/react";
+  toast,
+} from "@sacred-craft/valhalla-components";
 import { Row, Table } from "@tanstack/react-table";
 
 interface DeleteProps {

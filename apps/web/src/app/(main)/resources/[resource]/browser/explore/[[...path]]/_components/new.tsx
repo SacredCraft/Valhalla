@@ -2,13 +2,14 @@
 
 import { Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
 
 import { useBrowserContext } from "@/app/(main)/resources/[resource]/browser/layout.client";
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
-import { Button } from "@/app/_components/ui/button";
+import { api } from "@/trpc/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  Button,
   Form,
   FormControl,
   FormDescription,
@@ -16,16 +17,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/app/_components/ui/form";
-import { Input } from "@/app/_components/ui/input";
-import {
+  Input,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/app/_components/ui/select";
-import {
   Sheet,
   SheetClose,
   SheetContent,
@@ -34,9 +31,8 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/app/_components/ui/sheet";
-import { api } from "@/trpc/react";
-import { zodResolver } from "@hookform/resolvers/zod";
+  toast,
+} from "@sacred-craft/valhalla-components";
 
 const FormSchema = z.object({
   name: z.string({
