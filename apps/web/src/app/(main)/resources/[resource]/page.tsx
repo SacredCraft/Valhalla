@@ -7,5 +7,5 @@ type Props = {
 };
 
 export default function ResourcePage({ params: { resource } }: Props) {
-  redirect(`/resources/${resource}/browser`);
+  redirect(`/resources/${resource}/browser/explore`);
 }

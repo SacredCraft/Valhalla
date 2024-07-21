@@ -9,5 +9,5 @@ export default async function ResourcesPage() {
     return notFound();
   }
 
-  redirect(`/resources/${ownedResources[0]}`);
+  redirect(`/resources/${ownedResources[0]}/browser/explore`);
 }
