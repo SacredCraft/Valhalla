@@ -88,7 +88,7 @@ export function Delete({ row, table }: DeleteProps) {
           {row.original.type === "file" && (
             <SheetClose>
               <Button variant="default" onClick={() => handleMoveToTrash()}>
-                Move it to Trash Bin
+                Move to trash
               </Button>
             </SheetClose>
           )}
