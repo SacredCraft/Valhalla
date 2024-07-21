@@ -14,12 +14,12 @@ export const getTemplateByPath = (
       if (matchedPath.includes("*")) {
         const regex = new RegExp(matchedPath.replace(/\*/g, ".*"));
         if (regex.test(path.join("/"))) {
-          if (template.isMatch?.()) {
+          if (template.isMatch?.(resource)) {
             matchedTemplate = template;
           }
         }
       } else if (matchedPath === path.join("/")) {
-        if (template.isMatch?.()) {
+        if (template.isMatch?.(resource)) {
           matchedTemplate = template;
         }
       }

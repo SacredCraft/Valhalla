@@ -1,3 +1,5 @@
+import { Resource } from "./resource";
+
 export type Template = {
   name: string;
   originName?: string;
@@ -5,7 +7,9 @@ export type Template = {
   priority: number;
   action?: Action;
 
-  isMatch?: () => boolean;
+  resource?: Resource;
+
+  isMatch?: (resource: Resource) => boolean;
   relatedFiles?: () => RelatedFile[];
 };
 

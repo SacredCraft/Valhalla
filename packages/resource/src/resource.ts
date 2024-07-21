@@ -7,6 +7,8 @@ export type Resource = {
   version?: string;
 
   templates: Template[];
+  relatedFiles?: () => any[];
+
   options?: {
     [key: string]: any;
   };
