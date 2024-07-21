@@ -27,39 +27,39 @@ export type ResourceOptions = {
 
 export const createResource = (
   resource: Partial<Resource>,
-  options?: ResourceOptions,
-): Resource => {
-  // Filter out disabled templates
-  const templates = (resource?.templates ? resource.templates : [])
-    .map((template: Partial<Template>) => {
-      const templateOptions = options?.templatesOptions?.[template.name!!];
-      if (templateOptions?.disable) {
-        return null;
-      }
-      return {
-        name: template.name,
-        matchedPaths: [],
-        priority: 0,
-        actions: [],
-        ...template,
-        ...templateOptions?.extend,
-        ...(templateOptions?.alias
-          ? { name: templateOptions.alias, originName: template.name }
-          : {}),
-      };
-    })
-    .filter(Boolean)
-    .map((template) => template as Template)
-    .sort((a, b) => b.priority - a.priority);
-
-  return {
-    name: "default",
-    templates,
-    ...resource,
-    ...options?.extend,
-    ...(options?.options ? { options: options.options } : {}),
-    ...(options?.alias
-      ? { name: options.alias, originName: resource.name }
-      : {}),
+): ((options?: ResourceOptions) => Resource) => {
+  return (options?: ResourceOptions) => {
+    // Filter out disabled templates
+    const templates = (resource?.templates ? resource.templates : [])
+      .map((template: Partial<Template>) => {
+        const templateOptions = options?.templatesOptions?.[template.name!!];
+        if (templateOptions?.disable) {
+          return null;
+        }
+        return {
+          name: template.name,
+          matchedPaths: [],
+          priority: 0,
+          actions: [],
+          ...template,
+          ...templateOptions?.extend,
+          ...(templateOptions?.alias
+            ? { name: templateOptions.alias, originName: template.name }
+            : {}),
+        };
+      })
+      .filter(Boolean)
+      .map((template) => template as Template)
+      .sort((a, b) => b.priority - a.priority);
+    return {
+      name: "default",
+      templates,
+      ...options?.extend,
+      ...resource,
+      ...(options?.options ? { options: options.options } : {}),
+      ...(options?.alias
+        ? { name: options.alias, originName: resource.name }
+        : {}),
+    };
   };
 };

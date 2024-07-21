@@ -8,22 +8,22 @@ import {
 
 import { JormungandrDefault } from "@/components/templates/jormungandr/jormungandr-default";
 
-const resources: Resource[] = [
-  createResource({
-    name: "jormungandr",
-    templates: [
-      createTemplate({
-        name: "JormungandrDefault",
-        matchedPaths: ["item/.*\\.ya?ml$"],
-        action: {
-          render: {
-            editor: JormungandrDefault,
-          },
+const jormungandr = createResource({
+  name: "jormungandr",
+  templates: [
+    createTemplate({
+      name: "JormungandrDefault",
+      matchedPaths: ["item/.*\\.ya?ml$"],
+      action: {
+        render: {
+          editor: JormungandrDefault,
         },
-      }),
-    ],
-  }),
-];
+      },
+    }),
+  ],
+});
+
+const resources: Resource[] = [jormungandr()];
 
 const globalTemplates: Template[] = [
   createTemplate({
