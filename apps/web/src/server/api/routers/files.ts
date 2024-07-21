@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { z } from "zod";
 
+import valhallaConfig from "@/valhalla";
 import { TRPCError } from "@trpc/server";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
@@ -286,6 +287,51 @@ export const filesRouter = createTRPCRouter({
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to replace file",
+        });
+      }
+    }),
+
+  moveToTrash: protectedProcedure
+    .input(z.object({ name: z.string(), relativePath: z.array(z.string()) }))
+    .mutation(async ({ input, ctx }) => {
+      const resourcePath = await getResourcePath({ name: input.name });
+      if (!resourcePath) {
+        throw resourcePathNotFound;
+      }
+
+      const filePath = path.join(
+        resourcePath,
+        input.relativePath.join(path.sep),
+      );
+
+      const trashPath = path.join(
+        resourcePath,
+        valhallaConfig.folders.valhalla,
+        valhallaConfig.folders.trash,
+      );
+      try {
+        const name = crypto.randomUUID();
+        fs.mkdirSync(trashPath, { recursive: true });
+        fs.renameSync(filePath, `${trashPath}/${name}`);
+
+        await ctx.db.log.create({
+          data: {
+            userId: ctx.session.user.id!!,
+            action: {
+              type: "MOVE_TO_TRASH",
+              resource: input.name,
+              path: input.relativePath,
+              originName: path.basename(filePath),
+              trashName: name,
+            },
+          },
+        });
+      } catch (error) {
+        console.log(error);
+
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to move file to trash",
         });
       }
     }),

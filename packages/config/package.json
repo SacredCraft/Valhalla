@@ -1,0 +1,28 @@
+{
+  "name": "@sacred-craft/valhalla-config",
+  "version": "1.0.0",
+  "exports": {
+    ".": {
+      "types": "./src/**/*",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint . --max-warnings 0",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@sacred-craft/typescript-config": "workspace:*",
+    "@sacred-craft/eslint-config": "workspace:*",
+    "@sacred-craft/valhalla-resource": "workspace:*",
+    "eslint": "^8.57.0",
+    "tsup": "^8.1.2",
+    "typescript": "^5.5.3"
+  }
+}

@@ -1,11 +1,10 @@
-import { ValhallaConfig } from "./config";
 import { Resource } from "./resource";
 import { Template } from "./template";
 
 export const getTemplateByPath = (
   path: string[],
   resource: Resource,
-  config: ValhallaConfig,
+  config: { globalTemplates: Template[] },
 ): Template | null => {
   const templates = [...resource.templates, ...config.globalTemplates];
   let matchedTemplate: Template | null = null;

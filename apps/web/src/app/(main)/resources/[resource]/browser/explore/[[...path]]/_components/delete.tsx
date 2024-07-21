@@ -17,7 +17,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/app/_components/ui/sheet";
-import { moveToTrash } from "@/lib/core";
 import { api } from "@/trpc/react";
 import { Row, Table } from "@tanstack/react-table";
 
@@ -28,6 +27,22 @@ interface DeleteProps {
 
 export function Delete({ row, table }: DeleteProps) {
   const { resource, setOpenedFiles } = useResourceContext();
+
+  const moveToTrash = api.files.moveToTrash.useMutation({
+    onSuccess: () => {
+      setOpenedFiles((prev) => {
+        if (!prev) return prev;
+        return prev.filter(
+          (file) => file.path.join("/") !== row.original.path.join("/"),
+        );
+      });
+      toast.success("File moved to trash bin");
+      table.options.meta?.refresh();
+    },
+    onError: () => {
+      toast.error("Failed to move the file to trash bin");
+    },
+  });
 
   const deleteFile = api.files.deleteResourceFile.useMutation({
     onSuccess: () => {
@@ -52,6 +67,13 @@ export function Delete({ row, table }: DeleteProps) {
     });
   };
 
+  const handleMoveToTrash = () => {
+    moveToTrash.mutate({
+      name: resource.name,
+      relativePath: row.original.path,
+    });
+  };
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -68,24 +90,7 @@ export function Delete({ row, table }: DeleteProps) {
         <SheetFooter className="flex flex-col sm:flex-row sm:justify-between gap-y-2 mt-4">
           {row.original.type === "file" && (
             <SheetClose>
-              <Button
-                variant="default"
-                onClick={() => {
-                  moveToTrash(resource.name, row.original.path, "admin").then(
-                    () => {
-                      setOpenedFiles((prev) => {
-                        if (!prev) return prev;
-                        return prev.filter(
-                          (file) =>
-                            file.path.join("/") !== row.original.path.join("/"),
-                        );
-                      });
-                      toast.success("File moved to trash bin");
-                      table.options.meta?.refresh();
-                    },
-                  );
-                }}
-              >
+              <Button variant="default" onClick={() => handleMoveToTrash()}>
                 Move it to Trash Bin
               </Button>
             </SheetClose>

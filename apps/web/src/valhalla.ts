@@ -3,8 +3,8 @@ import {
   Template,
   createResource,
   createTemplate,
-  defineValhallaConfig,
 } from "@sacred-craft/resource";
+import { defineValhallaConfig } from "@sacred-craft/valhalla-config";
 
 import { JormungandrDefault } from "@/components/templates/jormungandr/jormungandr-default";
 

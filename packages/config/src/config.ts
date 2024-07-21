@@ -1,10 +1,13 @@
-import { Resource } from "./resource";
-import { Template } from "./template";
+import { Resource, Template } from "@sacred-craft/valhalla-resource";
 
 export type ValhallaConfig = {
   resources: Resource[];
   globalTemplates: Template[];
   dateOptions: Intl.DateTimeFormatOptions;
+  folders: {
+    valhalla: string;
+    trash: string;
+  };
 };
 
 export const defineValhallaConfig = (
@@ -14,6 +17,11 @@ export const defineValhallaConfig = (
     resources: [],
     globalTemplates: [],
     dateOptions: {},
+    folders: {
+      valhalla: ".valhalla",
+      trash: "trash",
+      ...(config.folders || {}),
+    },
     ...config,
   };
 };

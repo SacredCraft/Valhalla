@@ -39,6 +39,7 @@
     "@radix-ui/react-tooltip": "^1.1.2",
     "@radix-ui/react-use-controllable-state": "^1.1.0",
     "@sacred-craft/valhalla-resource": "workspace:*",
+    "@sacred-craft/valhalla-config": "workspace:*",
     "@tanstack/react-query": "^5.51.5",
     "@tanstack/react-table": "^8.19.3",
     "@trpc/client": "11.0.0-rc.461",
