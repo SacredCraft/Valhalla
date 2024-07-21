@@ -326,11 +326,17 @@ export const filesRouter = createTRPCRouter({
         valhallaConfig.folders.files,
       );
       try {
+        const meta = fs.statSync(filePath);
+        if (meta.isDirectory()) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Cannot move directories to trash",
+          });
+        }
         const name = crypto.randomUUID();
         fs.mkdirSync(trashPath, { recursive: true });
         fs.mkdirSync(filesPath, { recursive: true });
         fs.renameSync(filePath, `${filesPath}/${name}`);
-        const size = fs.statSync(`${filesPath}/${name}`).size;
 
         fs.writeFileSync(
           `${trashPath}/${name}.json`,
@@ -338,7 +344,7 @@ export const filesRouter = createTRPCRouter({
             path: input.relativePath,
             originName: path.basename(filePath),
             trashName: name,
-            size,
+            size: meta.size,
             operator: ctx.session.user.id!!,
             timestamp: new Date().toISOString(),
           } as Trash),
