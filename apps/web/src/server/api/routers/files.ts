@@ -12,8 +12,8 @@ export type FileMeta = {
   name: string;
   path: string[];
   size: number;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
   ext?: string;
   [key: string]: any;
 };
@@ -57,8 +57,8 @@ export const filesRouter = createTRPCRouter({
               path: `${input.relativePath.length !== 0 ? `${input.relativePath.join(path.sep)}/` : ``}${file}`.split(
                 path.sep,
               ),
-              createdAt: stats.birthtime.toLocaleString(),
-              updatedAt: stats.mtime.toLocaleString(),
+              createdAt: stats.birthtime,
+              updatedAt: stats.mtime,
               size: stats.size,
             } as FileMeta;
           });
@@ -97,8 +97,8 @@ export const filesRouter = createTRPCRouter({
           type: stats.isDirectory() ? "dir" : "file",
           name: path.basename(filePath),
           path: input.relativePath,
-          createdAt: stats.birthtime.toLocaleString(),
-          updatedAt: stats.mtime.toLocaleString(),
+          createdAt: stats.birthtime,
+          updatedAt: stats.mtime,
           size: stats.size,
           ext: path.extname(filePath).slice(1),
         } as FileMeta;

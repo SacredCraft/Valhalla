@@ -8,6 +8,7 @@ import { Checkbox } from "@/app/_components/ui/checkbox";
 import { DataTableColumnHeader } from "@/app/_components/ui/data-table-column-header";
 import { formatBytes } from "@/lib/utils";
 import { FileMeta } from "@/server/api/routers/files";
+import { dateOptions } from "@/valhalla";
 import { Template } from "@sacred-craft/resource";
 import { ColumnDef, RowData } from "@tanstack/react-table";
 
@@ -97,12 +98,28 @@ export const filesTableColumns: ColumnDef<FileCol>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Created At" />
     ),
+    cell: ({ row }) => {
+      const createdAt = row.original.createdAt;
+      return (
+        <span suppressHydrationWarning>
+          {createdAt.toLocaleString(undefined, dateOptions)}
+        </span>
+      );
+    },
   },
   {
     accessorKey: "updatedAt",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Updated At" />
     ),
+    cell: ({ row }) => {
+      const updatedAt = row.original.updatedAt;
+      return (
+        <span suppressHydrationWarning>
+          {updatedAt.toLocaleString(undefined, dateOptions)}
+        </span>
+      );
+    },
   },
   {
     accessorKey: "actions",

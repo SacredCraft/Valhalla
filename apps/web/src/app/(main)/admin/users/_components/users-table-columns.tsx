@@ -8,6 +8,7 @@ import {
 import { Badge } from "@/app/_components/ui/badge";
 import { Checkbox } from "@/app/_components/ui/checkbox";
 import { DataTableColumnHeader } from "@/app/_components/ui/data-table-column-header";
+import { dateOptions } from "@/valhalla";
 import { ColumnDef } from "@tanstack/react-table";
 
 export type UserCol = {
@@ -84,14 +85,22 @@ export const usersTableColumns: ColumnDef<UserCol>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Created At" />
     ),
-    cell: ({ row }) => <div>{row.original.createdAt.toDateString()}</div>,
+    cell: ({ row }) => (
+      <span suppressHydrationWarning>
+        {row.original.createdAt.toLocaleString(undefined, dateOptions)}
+      </span>
+    ),
   },
   {
     accessorKey: "updatedAt",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Updated At" />
     ),
-    cell: ({ row }) => <div>{row.original.updatedAt.toDateString()}</div>,
+    cell: ({ row }) => (
+      <span suppressHydrationWarning>
+        {row.original.updatedAt.toLocaleString(undefined, dateOptions)}
+      </span>
+    ),
   },
   {
     accessorKey: "lastLogin",
@@ -100,9 +109,11 @@ export const usersTableColumns: ColumnDef<UserCol>[] = [
     ),
     cell: ({ row }) =>
       row.original.lastLogin ? (
-        <div>{row.original.lastLogin.toDateString()}</div>
+        <span suppressHydrationWarning>
+          {row.original.lastLogin.toLocaleString(undefined, dateOptions)}
+        </span>
       ) : (
-        <div>Never</div>
+        <span>Never</span>
       ),
   },
 ];

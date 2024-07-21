@@ -171,7 +171,7 @@ function Item({
         href={`/resources/${pathname.split("/")[2]}/${value}`}
         draggable={false}
       >
-        {decodeURIComponent(label)}
+        <span className="truncate">{decodeURIComponent(label)}</span>
         {index !== undefined && (
           <span
             className="ml-auto group-hover:opacity-100 opacity-0 transition-all rounded-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 p-1"

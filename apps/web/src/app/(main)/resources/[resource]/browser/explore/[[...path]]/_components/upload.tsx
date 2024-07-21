@@ -110,8 +110,8 @@ export function Upload() {
             progresses={progresses}
           />
         </div>
-        <SheetFooter>
-          <SheetClose>
+        <SheetFooter className="gap-2">
+          <SheetClose asChild>
             <Button variant="outline">Cancel</Button>
           </SheetClose>
           <Button disabled={isUploading} onClick={() => handleUpload()}>

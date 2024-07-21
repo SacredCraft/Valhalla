@@ -40,4 +40,14 @@ const valhallaConfig = defineValhallaConfig({
   globalTemplates,
 });
 
-export { valhallaConfig, resources, globalTemplates };
+const dateOptions: Intl.DateTimeFormatOptions = {
+  year: "2-digit",
+  month: "numeric",
+  day: "numeric",
+  hour: "numeric",
+  minute: "numeric",
+  second: "numeric",
+  hour12: false,
+};
+
+export { valhallaConfig, resources, globalTemplates, dateOptions };
