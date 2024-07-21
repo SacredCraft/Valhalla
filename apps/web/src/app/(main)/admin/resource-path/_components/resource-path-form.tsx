@@ -73,7 +73,9 @@ export const ResourcePathForm = ({
               name={resource.name}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{resource.name} Path</FormLabel>
+                  <FormLabel className="capitalize">
+                    {resource.name} Path
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder={`/server/resources/${resource.name}`}

@@ -54,7 +54,7 @@ export function ResourceMenu({
               <Button
                 variant="outline"
                 role="combobox"
-                className="w-[200px] justify-between"
+                className="w-[200px] justify-between capitalize"
               >
                 {resource ? resource : `Select resource...`}
                 <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -71,6 +71,7 @@ export function ResourceMenu({
                   <CommandGroup>
                     {ownedResources.map((item) => (
                       <CommandItem
+                        className="capitalize"
                         value={item.name}
                         key={item.name}
                         onSelect={() => router.push(`/resources/${item.name}`)}
