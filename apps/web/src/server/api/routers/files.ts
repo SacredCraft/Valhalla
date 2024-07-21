@@ -3,6 +3,7 @@ import path from "path";
 import { z } from "zod";
 
 import valhallaConfig from "@/valhalla";
+import { User } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
@@ -35,6 +36,15 @@ const bufferEncodingSchema = z.union([
   z.literal("binary"),
   z.literal("hex"),
 ]);
+
+export type Trash = {
+  path: string[];
+  originName: string;
+  trashName: string;
+  size: number;
+  operator: string | User;
+  timestamp: string;
+};
 
 export const filesRouter = createTRPCRouter({
   getResourceFiles: protectedProcedure
@@ -309,14 +319,36 @@ export const filesRouter = createTRPCRouter({
         valhallaConfig.folders.valhalla,
         valhallaConfig.folders.trash,
       );
+
+      const filesPath = path.join(
+        resourcePath,
+        valhallaConfig.folders.valhalla,
+        valhallaConfig.folders.files,
+      );
       try {
         const name = crypto.randomUUID();
         fs.mkdirSync(trashPath, { recursive: true });
-        fs.renameSync(filePath, `${trashPath}/${name}`);
+        fs.mkdirSync(filesPath, { recursive: true });
+        fs.renameSync(filePath, `${filesPath}/${name}`);
+        const size = fs.statSync(`${filesPath}/${name}`).size;
+
+        fs.writeFileSync(
+          `${trashPath}/${name}.json`,
+          JSON.stringify({
+            path: input.relativePath,
+            originName: path.basename(filePath),
+            trashName: name,
+            size,
+            operator: ctx.session.user.id!!,
+            timestamp: new Date().toISOString(),
+          } as Trash),
+        );
 
         await ctx.db.log.create({
           data: {
-            userId: ctx.session.user.id!!,
+            operators: {
+              connect: [{ id: ctx.session.user.id!! }],
+            },
             action: {
               type: "MOVE_TO_TRASH",
               resource: input.name,
@@ -327,11 +359,97 @@ export const filesRouter = createTRPCRouter({
           },
         });
       } catch (error) {
-        console.log(error);
-
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to move file to trash",
+        });
+      }
+    }),
+
+  emptyTrash: protectedProcedure
+    .input(z.object({ name: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const resourcePath = await getResourcePath({ name: input.name });
+      if (!resourcePath) {
+        throw resourcePathNotFound;
+      }
+
+      const trashPath = path.join(
+        resourcePath,
+        valhallaConfig.folders.valhalla,
+        valhallaConfig.folders.trash,
+      );
+
+      const filesPath = path.join(
+        resourcePath,
+        valhallaConfig.folders.valhalla,
+        valhallaConfig.folders.files,
+      );
+
+      try {
+        fs.mkdirSync(trashPath, { recursive: true });
+        fs.readdirSync(trashPath).forEach((file) => {
+          if (!file.endsWith(".json")) {
+            return;
+          }
+          fs.unlinkSync(`${filesPath}/${path.basename(file, ".json")}`);
+          fs.unlinkSync(`${trashPath}/${file}`);
+        });
+
+        await ctx.db.log.create({
+          data: {
+            operators: {
+              connect: [{ id: ctx.session.user.id!! }],
+            },
+            action: {
+              type: "EMPTY_TRASH",
+              resource: input.name,
+            },
+          },
+        });
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to empty trash",
+        });
+      }
+    }),
+
+  getTrash: protectedProcedure
+    .input(z.object({ name: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const resourcePath = await getResourcePath({ name: input.name });
+      if (!resourcePath) {
+        throw resourcePathNotFound;
+      }
+
+      const trashPath = path.join(
+        resourcePath,
+        valhallaConfig.folders.valhalla,
+        valhallaConfig.folders.trash,
+      );
+
+      try {
+        fs.mkdirSync(trashPath, { recursive: true });
+        const trash = fs
+          .readdirSync(trashPath)
+          .filter((file) => file.endsWith(".json"))
+          .map(async (file) => {
+            const content = fs.readFileSync(`${trashPath}/${file}`, "utf-8");
+            const operator = await ctx.db.user.findUnique({
+              where: { id: JSON.parse(content).operator },
+            });
+            return {
+              ...JSON.parse(content),
+              operator,
+            } as Trash;
+          });
+
+        return Promise.all(trash);
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to get trash",
         });
       }
     }),

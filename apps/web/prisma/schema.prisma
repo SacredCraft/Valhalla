@@ -23,7 +23,7 @@ model User {
   updatedAt        DateTime           @updatedAt
   lastLogin        DateTime?
   UserResourceRole UserResourceRole[]
-  Log              Log[]
+  LogOperators     Log[]              @relation("LogOperators")
 }
 
 model ResourceRole {
@@ -49,8 +49,7 @@ model ResourcePath {
 
 model Log {
   id        Int      @id @default(autoincrement())
-  user      User?    @relation(fields: [userId], references: [id])
-  userId    String?
+  operators User[]   @relation("LogOperators")
   action    Json
   createdAt DateTime @default(now())
 }

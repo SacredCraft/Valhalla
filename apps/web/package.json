@@ -18,7 +18,7 @@
     "@hookform/resolvers": "^3.9.0",
     "@lezer/highlight": "^1.2.0",
     "@monaco-editor/react": "^4.6.0",
-    "@prisma/client": "^5.17.0",
+    "@prisma/client": "5.17.0",
     "@radix-ui/react-icons": "^1.3.0",
     "@sacred-craft/valhalla-components": "workspace:*",
     "@sacred-craft/valhalla-config": "workspace:*",

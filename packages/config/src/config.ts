@@ -7,6 +7,7 @@ export type ValhallaConfig = {
   folders: {
     valhalla: string;
     trash: string;
+    files: string;
   };
 };
 
@@ -20,6 +21,7 @@ export const defineValhallaConfig = (
     folders: {
       valhalla: ".valhalla",
       trash: "trash",
+      files: "files",
       ...(config.folders || {}),
     },
     ...config,

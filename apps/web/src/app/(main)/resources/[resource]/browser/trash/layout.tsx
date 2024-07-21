@@ -1,5 +1,5 @@
 import { TrashClientLayout } from "@/app/(main)/resources/[resource]/browser/trash/layout.client";
-import { getDeletedFiles } from "@/lib/core";
+import { api } from "@/trpc/server";
 
 type TrashLayoutProps = {
   params: {
@@ -12,7 +12,7 @@ export default async function TrashLayout({
   params: { resource },
   children,
 }: TrashLayoutProps) {
-  const trash = (await getDeletedFiles(resource, [])) ?? [];
+  const trash = await api.files.getTrash({ name: resource });
 
   return <TrashClientLayout trash={trash}>{children}</TrashClientLayout>;
 }

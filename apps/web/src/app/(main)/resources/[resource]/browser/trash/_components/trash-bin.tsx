@@ -1,4 +1,5 @@
 import { useBrowserContext } from "@/app/(main)/resources/[resource]/browser/layout.client";
+import { Trash } from "@/server/api/routers/files";
 import {
   Table,
   TableBody,
@@ -24,11 +25,17 @@ export function TrashBin() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {trash.map((file) => (
-                <TableRow key={file.fileName}>
-                  <TableCell>{file.fileName}</TableCell>
-                  <TableCell>{file.operator}</TableCell>
-                  <TableCell>{file.deletedAt}</TableCell>
+              {trash.map((file: Trash) => (
+                <TableRow key={`${file.originName}-${file.timestamp}`}>
+                  <TableCell>{file.originName}</TableCell>
+                  <TableCell>
+                    {typeof file.operator === "object"
+                      ? file.operator.username
+                      : file.operator}
+                  </TableCell>
+                  <TableCell>
+                    {new Date(file.timestamp).toLocaleString()}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

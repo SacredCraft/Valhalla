@@ -35,29 +35,40 @@ CREATE TABLE "UserResourceRole" (
 );
 
 -- CreateTable
-CREATE TABLE "PluginPath" (
+CREATE TABLE "ResourcePath" (
     "id" SERIAL NOT NULL,
-    "pluginId" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
     "path" TEXT NOT NULL,
 
-    CONSTRAINT "PluginPath_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "ResourcePath_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Log" (
     "id" SERIAL NOT NULL,
-    "userId" TEXT,
     "action" JSONB NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Log_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "_LogOperators" (
+    "A" INTEGER NOT NULL,
+    "B" TEXT NOT NULL
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "PluginPath_pluginId_key" ON "PluginPath"("pluginId");
+CREATE UNIQUE INDEX "ResourcePath_name_key" ON "ResourcePath"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_LogOperators_AB_unique" ON "_LogOperators"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_LogOperators_B_index" ON "_LogOperators"("B");
 
 -- AddForeignKey
 ALTER TABLE "UserResourceRole" ADD CONSTRAINT "UserResourceRole_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -66,4 +77,7 @@ ALTER TABLE "UserResourceRole" ADD CONSTRAINT "UserResourceRole_userId_fkey" FOR
 ALTER TABLE "UserResourceRole" ADD CONSTRAINT "UserResourceRole_resourceRoleId_fkey" FOREIGN KEY ("resourceRoleId") REFERENCES "ResourceRole"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Log" ADD CONSTRAINT "Log_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "_LogOperators" ADD CONSTRAINT "_LogOperators_A_fkey" FOREIGN KEY ("A") REFERENCES "Log"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_LogOperators" ADD CONSTRAINT "_LogOperators_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
