@@ -8,7 +8,7 @@ import { Checkbox } from "@/app/_components/ui/checkbox";
 import { DataTableColumnHeader } from "@/app/_components/ui/data-table-column-header";
 import { formatBytes } from "@/lib/utils";
 import { FileMeta } from "@/server/api/routers/files";
-import { dateOptions } from "@/valhalla";
+import valhallaConfig from "@/valhalla";
 import { Template } from "@sacred-craft/resource";
 import { ColumnDef, RowData } from "@tanstack/react-table";
 
@@ -102,7 +102,7 @@ export const filesTableColumns: ColumnDef<FileCol>[] = [
       const createdAt = row.original.createdAt;
       return (
         <span suppressHydrationWarning>
-          {createdAt.toLocaleString(undefined, dateOptions)}
+          {createdAt.toLocaleString(undefined, valhallaConfig.dateOptions)}
         </span>
       );
     },
@@ -116,7 +116,7 @@ export const filesTableColumns: ColumnDef<FileCol>[] = [
       const updatedAt = row.original.updatedAt;
       return (
         <span suppressHydrationWarning>
-          {updatedAt.toLocaleString(undefined, dateOptions)}
+          {updatedAt.toLocaleString(undefined, valhallaConfig.dateOptions)}
         </span>
       );
     },

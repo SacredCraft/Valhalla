@@ -1,4 +1,4 @@
-import { resources } from "@/valhalla";
+import valhallaConfig from "@/valhalla";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -28,7 +28,7 @@ export const resourceRouter = createTRPCRouter({
 
     if (user) {
       if (user.role === "ADMIN") {
-        return resources.map((resource) => resource.name);
+        return valhallaConfig.resources.map((resource) => resource.name);
       }
       const filteredResources = user.UserResourceRole.flatMap(
         (userResourceRole) => userResourceRole.resourceRole.resources,

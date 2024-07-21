@@ -5,7 +5,7 @@ import React, { useEffect, useMemo } from "react";
 import { useBrowserContext } from "@/app/(main)/resources/[resource]/browser/layout.client";
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
 import { FileMeta } from "@/server/api/routers/files";
-import { valhallaConfig } from "@/valhalla";
+import valhallaConfig from "@/valhalla";
 import { getTemplateByPath } from "@sacred-craft/resource";
 
 type BrowserClientLayoutProps = {

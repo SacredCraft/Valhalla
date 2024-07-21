@@ -4,6 +4,7 @@ import { Template } from "./template";
 export type ValhallaConfig = {
   resources: Resource[];
   globalTemplates: Template[];
+  dateOptions: Intl.DateTimeFormatOptions;
 };
 
 export const defineValhallaConfig = (
@@ -12,6 +13,7 @@ export const defineValhallaConfig = (
   return {
     resources: [],
     globalTemplates: [],
+    dateOptions: {},
     ...config,
   };
 };

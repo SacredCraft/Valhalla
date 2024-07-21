@@ -12,7 +12,7 @@ import React, {
 } from "react";
 
 import { useAside } from "@/app/(main)/_components/aside";
-import { resources } from "@/valhalla";
+import valhallaConfig from "@/valhalla";
 import { Resource } from "@sacred-craft/resource";
 
 import { ResourceMenu } from "./_components/resource-menu";
@@ -59,7 +59,9 @@ export function ResourceClientLayout({
 
   useEffect(() => {
     startTransition(() => {
-      setResource(resources.find((r) => r.name === resourceName));
+      setResource(
+        valhallaConfig.resources.find((r) => r.name === resourceName),
+      );
     });
   }, [resourceName]);
 

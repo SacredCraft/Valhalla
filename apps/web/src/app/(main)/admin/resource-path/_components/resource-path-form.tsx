@@ -17,7 +17,7 @@ import {
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
 import { api } from "@/trpc/react";
-import { resources } from "@/valhalla";
+import valhallaConfig from "@/valhalla";
 
 export const ResourcePathForm = ({
   resourcePaths,
@@ -43,7 +43,7 @@ export const ResourcePathForm = ({
   });
 
   function onSubmit(values: any) {
-    for (const resource of resources) {
+    for (const resource of valhallaConfig.resources) {
       const path = values[resource.name];
       if (!path) {
         continue;
@@ -66,7 +66,7 @@ export const ResourcePathForm = ({
             </Button>
           </div>
         </div>
-        {resources.map((resource) => (
+        {valhallaConfig.resources.map((resource) => (
           <div key={resource.name} className="border-b p-2">
             <FormField
               control={form.control}

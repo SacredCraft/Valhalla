@@ -8,7 +8,7 @@ import {
 import { Badge } from "@/app/_components/ui/badge";
 import { Checkbox } from "@/app/_components/ui/checkbox";
 import { DataTableColumnHeader } from "@/app/_components/ui/data-table-column-header";
-import { dateOptions } from "@/valhalla";
+import valhallaConfig from "@/valhalla";
 import { ColumnDef } from "@tanstack/react-table";
 
 export type UserCol = {
@@ -87,7 +87,10 @@ export const usersTableColumns: ColumnDef<UserCol>[] = [
     ),
     cell: ({ row }) => (
       <span suppressHydrationWarning>
-        {row.original.createdAt.toLocaleString(undefined, dateOptions)}
+        {row.original.createdAt.toLocaleString(
+          undefined,
+          valhallaConfig.dateOptions,
+        )}
       </span>
     ),
   },
@@ -98,7 +101,10 @@ export const usersTableColumns: ColumnDef<UserCol>[] = [
     ),
     cell: ({ row }) => (
       <span suppressHydrationWarning>
-        {row.original.updatedAt.toLocaleString(undefined, dateOptions)}
+        {row.original.updatedAt.toLocaleString(
+          undefined,
+          valhallaConfig.dateOptions,
+        )}
       </span>
     ),
   },
@@ -110,7 +116,10 @@ export const usersTableColumns: ColumnDef<UserCol>[] = [
     cell: ({ row }) =>
       row.original.lastLogin ? (
         <span suppressHydrationWarning>
-          {row.original.lastLogin.toLocaleString(undefined, dateOptions)}
+          {row.original.lastLogin.toLocaleString(
+            undefined,
+            valhallaConfig.dateOptions,
+          )}
         </span>
       ) : (
         <span>Never</span>

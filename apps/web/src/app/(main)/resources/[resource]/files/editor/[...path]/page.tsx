@@ -2,7 +2,7 @@
 
 import { useFilesContext } from "@/app/(main)/resources/[resource]/files/layout.client";
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
-import { valhallaConfig } from "@/valhalla";
+import valhallaConfig from "@/valhalla";
 import { getTemplateByPath } from "@sacred-craft/resource";
 
 export default function EditorPage() {

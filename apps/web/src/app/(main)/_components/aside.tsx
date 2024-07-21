@@ -25,7 +25,7 @@ import { AnimatedItem } from "@/app/(main)/_components/animated-item";
 import { Profile } from "@/app/(main)/_components/profile";
 import { useProfile } from "@/app/(main)/layout.client";
 import { cn } from "@/lib/utils";
-import { resources } from "@/valhalla";
+import valhallaConfig from "@/valhalla";
 
 type ContextType = {
   collapsed: boolean;
@@ -161,7 +161,9 @@ function Item({
   const route = useMemo(() => pathnameSplit[0], [pathnameSplit]);
   const href = useMemo(
     () =>
-      value === "resources" ? `/resources/${resources[0]?.name}` : `/${value}`,
+      value === "resources"
+        ? `/resources/${valhallaConfig.resources[0]?.name}`
+        : `/${value}`,
     [value],
   );
   const { collapsed } = useAside();

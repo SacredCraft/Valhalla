@@ -23,7 +23,7 @@ import {
   PopoverTrigger,
 } from "@/app/_components/ui/popover";
 import { cn } from "@/lib/utils";
-import { resources } from "@/valhalla";
+import valhallaConfig from "@/valhalla";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 
 export function ResourceMenu({
@@ -37,7 +37,7 @@ export function ResourceMenu({
   const resource = useMemo(() => pathname.split("/")[2], [pathname]);
   const router = useRouter();
   const ownedResources = useMemo(() => {
-    return resources.filter((resource) =>
+    return valhallaConfig.resources.filter((resource) =>
       ownedResourcesNames.includes(resource.name),
     );
   }, [ownedResourcesNames]);
