@@ -23,7 +23,7 @@ import {
 import { useExploreContext } from "../layout.client";
 
 export function SelectedDelete() {
-  const { resource } = useResourceContext();
+  const { resource, setOpenedFiles } = useResourceContext();
   const { rowSelection, data } = useExploreContext();
   const router = useRouter();
 
@@ -58,6 +58,17 @@ export function SelectedDelete() {
     if (errors.length > 0) {
       toast.error("Failed to delete files");
     } else {
+      selectedRows.forEach((row) => {
+        if (!row) {
+          return;
+        }
+        setOpenedFiles((prev) => {
+          if (!prev) return prev;
+          return prev.filter(
+            (file) => file.path.join("/") !== row.path.join("/"),
+          );
+        });
+      });
       toast.success("Files deleted");
       router.refresh();
     }
@@ -84,6 +95,17 @@ export function SelectedDelete() {
     if (errors.length > 0) {
       toast.error("Failed to move files to trash bin");
     } else {
+      selectedRows.forEach((row) => {
+        if (!row) {
+          return;
+        }
+        setOpenedFiles((prev) => {
+          if (!prev) return prev;
+          return prev.filter(
+            (file) => file.path.join("/") !== row.path.join("/"),
+          );
+        });
+      });
       toast.success("Files moved to trash bin");
       router.refresh();
     }
