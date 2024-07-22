@@ -1,11 +1,10 @@
 "use client";
 
-import { useBrowserContext } from "@/app/(main)/resources/[resource]/browser/layout.client";
-
 import { TrashTable } from "./_components/trash-table";
+import { useTrashContext } from "./layout.client";
 
 export default function TrashPage() {
-  const { trash } = useBrowserContext();
+  const { trash } = useTrashContext();
 
   if (!trash) {
     return null;

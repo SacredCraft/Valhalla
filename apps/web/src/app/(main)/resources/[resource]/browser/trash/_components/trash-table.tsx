@@ -1,11 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import { useBrowserContext } from "@/app/(main)/resources/[resource]/browser/layout.client";
-import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
-import { Trash } from "@/server/api/routers/files";
 import {
   DataTablePagination,
   Table,
@@ -17,9 +13,6 @@ import {
   cn,
 } from "@sacred-craft/valhalla-components";
 import {
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
   flexRender,
   getCoreRowModel,
   getFacetedRowModel,
@@ -30,23 +23,29 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
+import { useTrashContext } from "../layout.client";
 import { trashTableColumns } from "./trash-table-columns";
 import { TrashTableToolbar } from "./trash-table-toolbar";
 
 export function TrashTable() {
-  const { trash, setTrashTable } = useBrowserContext();
+  const {
+    trash,
+    setTable,
+    data,
+    sorting,
+    setSorting,
+    columnVisibility,
+    setColumnVisibility,
+    rowSelection,
+    setRowSelection,
+    columnFilters,
+    setColumnFilters,
+    setData,
+  } = useTrashContext();
 
   if (!trash) {
     throw new Error("trash is required");
   }
-
-  const [data, setData] = useState<Trash[]>(trash);
-  const [rowSelection, setRowSelection] = useState({});
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [sorting, setSorting] = useState<SortingState>([]);
-
-  const router = useRouter();
 
   const table = useReactTable({
     data,
@@ -68,10 +67,6 @@ export function TrashTable() {
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
-    meta: {
-      setData,
-      refresh: () => router.refresh(),
-    },
   });
 
   useEffect(() => {
@@ -80,8 +75,8 @@ export function TrashTable() {
   }, [trash]);
 
   useEffect(() => {
-    setTrashTable?.(table);
-  }, [setTrashTable, table]);
+    setTable(table);
+  }, [table]);
 
   return (
     <Template>
@@ -117,16 +112,16 @@ export function TrashTable() {
 }
 
 function Template({ children }: { children: React.ReactNode }) {
-  const { trashTable } = useBrowserContext();
+  const { table } = useTrashContext();
 
   return (
     <div className="px-2 flex flex-col gap-2">
-      {trashTable && <TrashTableToolbar />}
+      {table && <TrashTableToolbar />}
       <div className="border rounded-lg">
         <Table>
           <TableHeader>
-            {trashTable &&
-              trashTable.getHeaderGroups().map((headerGroup) => (
+            {table &&
+              table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     return (
@@ -146,9 +141,7 @@ function Template({ children }: { children: React.ReactNode }) {
           {children}
         </Table>
       </div>
-      {trashTable && (
-        <DataTablePagination persist name="trash" table={trashTable} />
-      )}
+      {table && <DataTablePagination persist name="trash" table={table} />}
     </div>
   );
 }

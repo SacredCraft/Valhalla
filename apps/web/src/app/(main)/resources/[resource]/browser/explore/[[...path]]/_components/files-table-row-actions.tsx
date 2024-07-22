@@ -6,7 +6,6 @@ import { CopyCutRowAction } from "@/app/(main)/resources/[resource]/browser/expl
 import { Delete } from "@/app/(main)/resources/[resource]/browser/explore/[[...path]]/_components/delete";
 import { FileCol } from "@/app/(main)/resources/[resource]/browser/explore/[[...path]]/_components/files-table-columns";
 import { RenameMove } from "@/app/(main)/resources/[resource]/browser/explore/[[...path]]/_components/rename-move";
-import { useBrowserContext } from "@/app/(main)/resources/[resource]/browser/layout.client";
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import {
@@ -24,6 +23,8 @@ import {
 } from "@sacred-craft/valhalla-components";
 import { Row, Table } from "@tanstack/react-table";
 
+import { useExploreContext } from "../layout.client";
+
 interface FilesTableRowActionsProps {
   row: Row<FileCol>;
   table: Table<FileCol>;
@@ -34,7 +35,7 @@ export function FilesTableRowActions({
   table,
 }: FilesTableRowActionsProps) {
   const { resource } = useResourceContext();
-  const { relativePath: relativeFolderPath } = useBrowserContext();
+  const { relativePath: relativeFolderPath } = useExploreContext();
   const relativePath = [...relativeFolderPath!!, row.original.name];
 
   const handleDownload = () => {

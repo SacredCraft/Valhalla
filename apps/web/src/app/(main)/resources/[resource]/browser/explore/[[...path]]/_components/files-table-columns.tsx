@@ -133,10 +133,3 @@ export const filesTableColumns: ColumnDef<FileCol>[] = [
     enableHiding: false,
   },
 ];
-
-declare module "@tanstack/react-table" {
-  interface TableMeta<TData extends RowData> {
-    setData: (data: TData[]) => void;
-    refresh: () => void;
-  }
-}

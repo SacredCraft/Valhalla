@@ -1,6 +1,5 @@
 import _ from "lodash";
 
-import { useBrowserContext } from "@/app/(main)/resources/[resource]/browser/layout.client";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import {
   Button,
@@ -9,8 +8,10 @@ import {
   Input,
 } from "@sacred-craft/valhalla-components";
 
+import { useExploreContext } from "../layout.client";
+
 export function FilesTableToolbar() {
-  const { table } = useBrowserContext();
+  const { table } = useExploreContext();
 
   if (!table) {
     throw new Error("FilesTableToolbar must be used within a FilesTable");

@@ -1,8 +1,7 @@
-import { ArchiveRestore, TrashIcon } from "lucide-react";
+import { ArchiveRestore } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-import { useBrowserContext } from "@/app/(main)/resources/[resource]/browser/layout.client";
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
 import { api } from "@/trpc/react";
 import {
@@ -18,9 +17,11 @@ import {
   toast,
 } from "@sacred-craft/valhalla-components";
 
+import { useTrashContext } from "../layout.client";
+
 export const RestoreAll = () => {
   const { resource } = useResourceContext();
-  const { trash } = useBrowserContext();
+  const { trash } = useTrashContext();
   const router = useRouter();
 
   const restoreAll = api.files.restoreAllFromTrash.useMutation({

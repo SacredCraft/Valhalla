@@ -1,3 +1,5 @@
+import { useRouter } from "next/navigation";
+
 import { FileCol } from "@/app/(main)/resources/[resource]/browser/explore/[[...path]]/_components/files-table-columns";
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
 import { api } from "@/trpc/react";
@@ -25,6 +27,7 @@ interface DeleteProps {
 
 export function Delete({ row, table }: DeleteProps) {
   const { resource, setOpenedFiles } = useResourceContext();
+  const router = useRouter();
 
   const moveToTrash = api.files.moveToTrash.useMutation({
     onSuccess: () => {
@@ -35,7 +38,7 @@ export function Delete({ row, table }: DeleteProps) {
         );
       });
       toast.success("File moved to trash bin");
-      table.options.meta?.refresh();
+      router.refresh();
     },
     onError: () => {
       toast.error("Failed to move the file to trash bin");
@@ -51,7 +54,7 @@ export function Delete({ row, table }: DeleteProps) {
         );
       });
       toast.success("File deleted");
-      table.options.meta?.refresh();
+      router.refresh();
     },
     onError: () => {
       toast.error("Failed to delete the file");

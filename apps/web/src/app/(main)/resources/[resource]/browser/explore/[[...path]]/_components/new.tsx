@@ -1,10 +1,11 @@
 "use client";
 
 import { Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { useBrowserContext } from "@/app/(main)/resources/[resource]/browser/layout.client";
+import "@/app/(main)/resources/[resource]/browser/layout.client";
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -34,6 +35,8 @@ import {
   toast,
 } from "@sacred-craft/valhalla-components";
 
+import { useExploreContext } from "../layout.client";
+
 const FormSchema = z.object({
   name: z.string({
     message: "Name is required",
@@ -43,7 +46,8 @@ const FormSchema = z.object({
 
 export function New() {
   const { resource } = useResourceContext();
-  const { relativePath, table } = useBrowserContext();
+  const { relativePath, table } = useExploreContext();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -56,7 +60,7 @@ export function New() {
     onSuccess: () => {
       toast.success("File created");
       form.reset();
-      table?.options.meta?.refresh();
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message);

@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 
 import { FilesTableToolbar } from "@/app/(main)/resources/[resource]/browser/explore/[[...path]]/_components/files-table-toolbar";
 import { ImageModel } from "@/app/(main)/resources/[resource]/browser/explore/[[...path]]/_components/image-model";
-import { useBrowserContext } from "@/app/(main)/resources/[resource]/browser/layout.client";
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
 import {
   DataTablePagination,
@@ -18,9 +17,6 @@ import {
   cn,
 } from "@sacred-craft/valhalla-components";
 import {
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
   flexRender,
   getCoreRowModel,
   getFacetedRowModel,
@@ -31,21 +27,30 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { FileCol, filesTableColumns } from "./files-table-columns";
+import { useExploreContext } from "../layout.client";
+import { filesTableColumns } from "./files-table-columns";
 
 export function FilesTable() {
   const { resource, setOpenedFiles, openedFiles } = useResourceContext();
-  const { relativePath, files, setTable } = useBrowserContext();
+  const {
+    relativePath,
+    files,
+    data,
+    setData,
+    setTable,
+    sorting,
+    columnVisibility,
+    rowSelection,
+    columnFilters,
+    setSorting,
+    setColumnVisibility,
+    setRowSelection,
+    setColumnFilters,
+  } = useExploreContext();
 
   if (!relativePath || !files) {
     throw new Error("relativePath and files are required");
   }
-
-  const [data, setData] = useState<FileCol[]>(files);
-  const [rowSelection, setRowSelection] = useState({});
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [sorting, setSorting] = useState<SortingState>([]);
 
   const router = useRouter();
 
@@ -69,10 +74,6 @@ export function FilesTable() {
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
-    meta: {
-      setData,
-      refresh: () => router.refresh(),
-    },
   });
 
   useEffect(() => {
@@ -169,7 +170,7 @@ export function FilesTable() {
 }
 
 function Template({ children }: { children: React.ReactNode }) {
-  const { table } = useBrowserContext();
+  const { table } = useExploreContext();
 
   return (
     <div className="px-2 flex flex-col gap-2">

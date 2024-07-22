@@ -9,7 +9,9 @@ import { Upload } from "@/app/(main)/resources/[resource]/browser/explore/[[...p
 import { ExploreClientLayout } from "@/app/(main)/resources/[resource]/browser/explore/[[...path]]/layout.client";
 import { api } from "@/trpc/server";
 
-type BrowserLayoutProps = {
+import { SelectedDelete } from "./_components/selected-delete";
+
+type ExploreLayoutProps = {
   params: {
     resource: string;
     path?: string[];
@@ -20,7 +22,7 @@ type BrowserLayoutProps = {
 export default async function ExploreLayout({
   params: { resource: resourceName, path: relativePath = [] },
   children,
-}: BrowserLayoutProps) {
+}: ExploreLayoutProps) {
   const files =
     (await api.files.getResourceFiles({
       resource: resourceName,
@@ -36,6 +38,7 @@ export default async function ExploreLayout({
             <New />
             <Upload />
             <PasteAction />
+            <SelectedDelete />
           </>
         }
         right={

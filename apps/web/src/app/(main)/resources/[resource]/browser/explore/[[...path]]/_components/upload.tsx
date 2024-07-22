@@ -1,8 +1,8 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { useBrowserContext } from "@/app/(main)/resources/[resource]/browser/layout.client";
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
 import { UploadIcon } from "@radix-ui/react-icons";
 import {
@@ -19,9 +19,12 @@ import {
   toast,
 } from "@sacred-craft/valhalla-components";
 
+import { useExploreContext } from "../layout.client";
+
 export function Upload() {
+  const router = useRouter();
   const { resource } = useResourceContext();
-  const { relativePath, table } = useBrowserContext();
+  const { relativePath, table } = useExploreContext();
   const [isUploading, setIsUploading] = useState<boolean>(false);
 
   const [files, setFiles] = useState<File[]>([]);
@@ -56,7 +59,7 @@ export function Upload() {
 
       xhr.addEventListener("load", () => {
         if (xhr.status === 200) {
-          table?.options.meta?.refresh();
+          router.refresh();
           setProgresses((progresses) => {
             const newProgresses = { ...progresses };
             delete newProgresses[file.name];

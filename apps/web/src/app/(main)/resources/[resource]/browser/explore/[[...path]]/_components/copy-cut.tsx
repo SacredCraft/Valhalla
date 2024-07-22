@@ -1,10 +1,10 @@
 "use client";
 
 import { ClipboardPaste } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { FileCol } from "@/app/(main)/resources/[resource]/browser/explore/[[...path]]/_components/files-table-columns";
-import { useBrowserContext } from "@/app/(main)/resources/[resource]/browser/layout.client";
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
 import { api } from "@/trpc/react";
 import {
@@ -22,22 +22,24 @@ import {
 } from "@sacred-craft/valhalla-components";
 import { Row, Table } from "@tanstack/react-table";
 
+import { useExploreContext } from "../layout.client";
+
 interface CopyCutRowActionProps {
   row: Row<FileCol>;
   table: Table<FileCol>;
 }
 
-export function CopyCutRowAction({ row, table }: CopyCutRowActionProps) {
-  const { setCopyFiles, setCutFiles } = useBrowserContext();
+export function CopyCutRowAction({ row }: CopyCutRowActionProps) {
+  const { setCopyFiles, setCutFiles } = useExploreContext();
 
   const copy = () => {
-    setCutFiles?.(undefined);
-    setCopyFiles?.([row.original.path.join("/")]);
+    setCutFiles([]);
+    setCopyFiles([row.original.path.join("/")]);
   };
 
   const cut = () => {
-    setCopyFiles?.(undefined);
-    setCutFiles?.([row.original.path.join("/")]);
+    setCopyFiles([]);
+    setCutFiles([row.original.path.join("/")]);
   };
 
   return (
@@ -73,16 +75,18 @@ export function PasteAction() {
     setCutFiles,
     setCopyFiles,
     table,
-  } = useBrowserContext();
+  } = useExploreContext();
   const [openedSheet, setOpenedSheet] = useState(false);
   const [exists, setExists] = useState<string[]>([]);
   const [failed, setFailed] = useState<string[]>([]);
 
-  const show = copyFiles?.length || cutFiles?.length;
-  const length = copyFiles?.length || cutFiles?.length;
+  const show = copyFiles.length !== 0 || cutFiles.length !== 0;
+  const length = copyFiles.length + cutFiles.length;
 
   const copyFile = api.files.copyResourceFile.useMutation();
   const replaceFile = api.files.replaceResourceFile.useMutation();
+
+  const router = useRouter();
 
   const handlePaste = () => {
     if (relativePath) {
@@ -127,11 +131,11 @@ export function PasteAction() {
         if (!exists.length && !failed.length) {
           toast.success("File(s) pasted");
         }
-        table?.options.meta?.refresh();
+        router.refresh();
         if (cutFiles) {
-          setCutFiles?.(undefined);
+          setCutFiles([]);
         } else {
-          setCopyFiles?.(undefined);
+          setCopyFiles([]);
         }
       });
     }
@@ -152,7 +156,7 @@ export function PasteAction() {
       replace().then(() => {
         setExists([]);
         setOpenedSheet(false);
-        table?.options.meta?.refresh();
+        router.refresh();
         toast.success("File(s) replaced");
       });
     }

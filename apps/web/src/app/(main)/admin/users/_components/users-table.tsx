@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { UsersEdit } from "@/app/(main)/admin/users/_components/users-edit";
@@ -42,8 +41,6 @@ export function UsersTable({ users }: { users: UserCol[] }) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
 
-  const router = useRouter();
-
   const table = useReactTable({
     data,
     columns: usersTableColumns,
@@ -64,10 +61,6 @@ export function UsersTable({ users }: { users: UserCol[] }) {
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
-    meta: {
-      setData,
-      refresh: () => router.refresh(),
-    },
   });
 
   useEffect(() => {

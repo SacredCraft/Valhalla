@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { FileCol } from "@/app/(main)/resources/[resource]/browser/explore/[[...path]]/_components/files-table-columns";
@@ -27,16 +28,17 @@ interface RenameMoveProps {
 
 export function RenameMove({ row, table }: RenameMoveProps) {
   const { resource } = useResourceContext();
+  const router = useRouter();
   const [path, setPath] = useState(
     row.original.path.map((i) => `/${i}`).join(""),
   );
 
   const renameFile = api.files.renameResourceFile.useMutation({
     onSuccess: () => {
-      table.options.meta?.refresh();
       toast.success("File renamed");
+      router.refresh();
     },
-    onError: (error) => {
+    onError: () => {
       toast.error("Failed to rename the file");
     },
   });

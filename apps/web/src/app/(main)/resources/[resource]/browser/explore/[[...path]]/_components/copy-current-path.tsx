@@ -2,11 +2,12 @@
 
 import { Copy } from "lucide-react";
 
-import { useBrowserContext } from "@/app/(main)/resources/[resource]/browser/layout.client";
 import { Button, toast } from "@sacred-craft/valhalla-components";
 
+import { useExploreContext } from "../layout.client";
+
 export function CopyCurrentPath() {
-  const { relativePath } = useBrowserContext();
+  const { relativePath } = useExploreContext();
 
   return (
     <Button
