@@ -1,12 +1,12 @@
 import React from "react";
 
+import { defineValhallaConfig } from "@sacred-craft/valhalla-config";
 import {
   Resource,
   Template,
   createResource,
   createTemplate,
-} from "@sacred-craft/resource";
-import { defineValhallaConfig } from "@sacred-craft/valhalla-config";
+} from "@sacred-craft/valhalla-resource";
 
 const jormungandr = createResource({
   name: "jormungandr",

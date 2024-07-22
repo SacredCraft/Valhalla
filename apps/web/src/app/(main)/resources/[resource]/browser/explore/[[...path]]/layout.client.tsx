@@ -12,7 +12,7 @@ import React, {
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
 import { FileMeta } from "@/server/api/routers/files";
 import valhallaConfig from "@/valhalla";
-import { getTemplateByPath } from "@sacred-craft/resource";
+import { getTemplateByPath } from "@sacred-craft/valhalla-resource";
 import {
   ColumnFiltersState,
   OnChangeFn,

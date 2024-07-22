@@ -5,13 +5,13 @@ import { File as FileIcon, Folder } from "lucide-react";
 import { FilesTableRowActions } from "@/app/(main)/resources/[resource]/browser/explore/[[...path]]/_components/files-table-row-actions";
 import { FileMeta } from "@/server/api/routers/files";
 import valhallaConfig from "@/valhalla";
-import { Template } from "@sacred-craft/resource";
 import {
   Badge,
   Checkbox,
   DataTableColumnHeader,
   formatBytes,
 } from "@sacred-craft/valhalla-components";
+import { Template } from "@sacred-craft/valhalla-resource";
 import { ColumnDef, RowData } from "@tanstack/react-table";
 
 export type FileCol = FileMeta & { template?: Template };
