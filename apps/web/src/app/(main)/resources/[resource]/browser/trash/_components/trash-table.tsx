@@ -76,6 +76,7 @@ export function TrashTable() {
 
   useEffect(() => {
     setData(trash);
+    setRowSelection({});
   }, [trash]);
 
   useEffect(() => {

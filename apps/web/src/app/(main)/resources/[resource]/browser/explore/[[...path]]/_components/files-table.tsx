@@ -77,6 +77,7 @@ export function FilesTable() {
 
   useEffect(() => {
     setData(files);
+    setRowSelection({});
   }, [files]);
 
   useEffect(() => {
