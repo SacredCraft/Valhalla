@@ -43,7 +43,7 @@ export function RenameMove({ row, table }: RenameMoveProps) {
 
   const handleRename = () => {
     renameFile.mutate({
-      name: resource.name,
+      resource: resource.name,
       oldRelativePath: row.original.path,
       newRelativePath: path.split("/").filter((i) => i),
     });
@@ -67,12 +67,14 @@ export function RenameMove({ row, table }: RenameMoveProps) {
         <form className="my-4">
           <Input value={path} onChange={(value) => setPath(String(value))} />
         </form>
-        <SheetFooter>
-          <SheetClose>
-            <Button variant="outline">Cancel</Button>
+        <SheetFooter className="mt-2">
+          <SheetClose asChild>
+            <Button variant="outline" size="sm">
+              Cancel
+            </Button>
           </SheetClose>
-          <SheetClose>
-            <Button variant="default" onClick={handleRename}>
+          <SheetClose asChild>
+            <Button variant="default" onClick={handleRename} size="sm">
               Save
             </Button>
           </SheetClose>

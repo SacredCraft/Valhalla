@@ -7,7 +7,8 @@ import { BrowserTabs } from "@/app/(main)/resources/[resource]/browser/_componen
 import { useBrowserContext } from "@/app/(main)/resources/[resource]/browser/layout.client";
 import { Trash } from "@/server/api/routers/files";
 
-import { EmptyTrash } from "./_components/empty-trash";
+import { DeleteAll } from "./_components/delete-all";
+import { RestoreAll } from "./_components/restore-all";
 
 type TrashClientLayoutProps = {
   trash: Trash[];
@@ -28,7 +29,15 @@ export function TrashClientLayout({ trash, children }: TrashClientLayoutProps) {
   return (
     <>
       <BrowserHeader />
-      <BrowserTabs left={<EmptyTrash />} />
+      <BrowserTabs
+        left={<></>}
+        right={
+          <>
+            <RestoreAll />
+            <DeleteAll />
+          </>
+        }
+      />
       {children}
     </>
   );

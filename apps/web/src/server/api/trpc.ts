@@ -7,7 +7,7 @@
  * need to use are documented accordingly near the end.
  */
 import superjson from "superjson";
-import { ZodError } from "zod";
+import { ZodError, z } from "zod";
 
 import { auth } from "@/server/auth";
 import { db } from "@/server/db";
@@ -135,9 +135,58 @@ export const adminProcedure = protectedProcedure.use(async ({ ctx, next }) => {
   }
 
   return next({
-    ctx: {
-      // infers the `session` as non-nullable
-      session: { ...ctx.session, user: ctx.session.user },
-    },
+    ctx,
   });
 });
+
+export const resourceProcedure = protectedProcedure
+  .input(z.object({ resource: z.string() }))
+  .use(async ({ input, ctx, next }) => {
+    const { resource } = input;
+
+    const user = await ctx.db.user.findFirst({
+      where: {
+        id: ctx.session.user.id,
+      },
+      select: {
+        role: true,
+        UserResourceRole: {
+          select: {
+            resourceRole: {
+              select: {
+                resources: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      throw new TRPCError({ code: "FORBIDDEN" });
+    }
+
+    if (user.role === "ADMIN") {
+      return next({
+        ctx: {
+          ...ctx,
+          resource,
+        },
+      });
+    }
+
+    const filteredResources = user.UserResourceRole.flatMap(
+      (userResourceRole) => userResourceRole.resourceRole.resources,
+    );
+
+    if (!filteredResources.includes(resource)) {
+      throw new TRPCError({ code: "FORBIDDEN" });
+    }
+
+    return next({
+      ctx: {
+        ...ctx,
+        resource,
+      },
+    });
+  });

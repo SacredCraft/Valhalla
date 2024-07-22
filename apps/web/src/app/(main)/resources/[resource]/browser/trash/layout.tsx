@@ -12,7 +12,7 @@ export default async function TrashLayout({
   params: { resource },
   children,
 }: TrashLayoutProps) {
-  const trash = await api.files.getTrash({ name: resource });
+  const trash = await api.files.getTrash({ resource });
 
   return <TrashClientLayout trash={trash}>{children}</TrashClientLayout>;
 }

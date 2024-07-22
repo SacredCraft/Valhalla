@@ -23,7 +23,7 @@ export default async function ExploreLayout({
 }: BrowserLayoutProps) {
   const files =
     (await api.files.getResourceFiles({
-      name: resourceName,
+      resource: resourceName,
       relativePath: relativePath.map((i) => decodeURIComponent(i)),
     })) ?? [];
 

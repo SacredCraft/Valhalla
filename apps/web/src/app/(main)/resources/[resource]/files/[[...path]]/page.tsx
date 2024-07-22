@@ -16,7 +16,7 @@ export default async function Browser({
     redirect(`/resources/${resource}/browser/explore`);
   }
   const file = await api.files.getResourceFile({
-    name: resource,
+    resource,
     relativePath: relativePath.map((i) => decodeURIComponent(i)),
   });
 

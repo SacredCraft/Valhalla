@@ -19,7 +19,7 @@ type ImageModelProps = {
 export function ImageModel({ children, src }: ImageModelProps) {
   const { resource } = useResourceContext();
   const { data, isPending } = api.files.readResourceFile.useQuery({
-    name: resource.name,
+    resource: resource.name,
     relativePath: src.split("/"),
     options: "base64",
   });

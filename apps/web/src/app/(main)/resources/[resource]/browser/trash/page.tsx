@@ -1,7 +1,8 @@
 "use client";
 
 import { useBrowserContext } from "@/app/(main)/resources/[resource]/browser/layout.client";
-import { TrashBin } from "@/app/(main)/resources/[resource]/browser/trash/_components/trash-bin";
+
+import { TrashTable } from "./_components/trash-table";
 
 export default function TrashPage() {
   const { trash } = useBrowserContext();
@@ -12,7 +13,7 @@ export default function TrashPage() {
 
   return (
     <div className="mt-2">
-      <TrashBin />
+      <TrashTable />
     </div>
   );
 }

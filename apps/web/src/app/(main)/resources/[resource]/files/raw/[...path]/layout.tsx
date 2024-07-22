@@ -19,7 +19,7 @@ export default async function FilesRawLayout({
   children,
 }: FilesRawLayoutProps) {
   const file = await api.files.getResourceFile({
-    name: resource,
+    resource: resource,
     relativePath: relativePath.map((i) => decodeURIComponent(i)),
   });
 

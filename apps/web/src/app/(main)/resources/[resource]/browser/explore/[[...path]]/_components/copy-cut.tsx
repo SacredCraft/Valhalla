@@ -94,7 +94,7 @@ export function PasteAction() {
           return new Promise<void>((resolve) => {
             copyFile.mutate(
               {
-                name: resource.name,
+                resource: resource.name,
                 source: [decodeURIComponent(file)],
                 destination: relativePath || [],
                 cut: Boolean(cutFiles && cutFiles.length > 0),
@@ -143,7 +143,7 @@ export function PasteAction() {
       const replace = async () => {
         for (const file of files) {
           replaceFile.mutate({
-            name: resource.name,
+            resource: resource.name,
             source: [file],
             destination: relativePath || [],
           });
@@ -218,11 +218,15 @@ export function PasteAction() {
               </div>
             )}
           </div>
-          <SheetFooter>
+          <SheetFooter className="mt-2">
             <SheetClose asChild>
-              <Button variant="outline">Close</Button>
+              <Button variant="outline" size="sm">
+                Close
+              </Button>
             </SheetClose>
-            <Button onClick={handleReplace}>Replace existing</Button>
+            <Button onClick={handleReplace} size="sm">
+              Replace existing
+            </Button>
           </SheetFooter>
         </SheetContent>
       </Sheet>

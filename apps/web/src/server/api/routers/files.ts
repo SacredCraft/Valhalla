@@ -6,7 +6,7 @@ import valhallaConfig from "@/valhalla";
 import { User } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, resourceProcedure } from "../trpc";
 import { getResourcePath } from "./resource-paths";
 
 export type FileMeta = {
@@ -47,10 +47,10 @@ const bufferEncodingSchema = z.union([
 ]);
 
 export const filesRouter = createTRPCRouter({
-  getResourceFiles: protectedProcedure
-    .input(z.object({ name: z.string(), relativePath: z.array(z.string()) }))
-    .query(async ({ input }): Promise<FileMeta[] | null> => {
-      const resourcePath = await getResourcePath({ name: input.name });
+  getResourceFiles: resourceProcedure
+    .input(z.object({ relativePath: z.array(z.string()) }))
+    .query(async ({ input, ctx }): Promise<FileMeta[] | null> => {
+      const resourcePath = await getResourcePath({ name: ctx.resource });
       const absolutePath = resourcePath
         ? [resourcePath, ...input.relativePath]
         : [];
@@ -90,10 +90,10 @@ export const filesRouter = createTRPCRouter({
       }
     }),
 
-  getResourceFile: protectedProcedure
-    .input(z.object({ name: z.string(), relativePath: z.array(z.string()) }))
-    .query(async ({ input }) => {
-      const resourcePath = await getResourcePath({ name: input.name });
+  getResourceFile: resourceProcedure
+    .input(z.object({ relativePath: z.array(z.string()) }))
+    .query(async ({ input, ctx }) => {
+      const resourcePath = await getResourcePath({ name: ctx.resource });
       if (!resourcePath) {
         return null;
       }
@@ -118,10 +118,9 @@ export const filesRouter = createTRPCRouter({
       }
     }),
 
-  readResourceFile: protectedProcedure
+  readResourceFile: resourceProcedure
     .input(
       z.object({
-        name: z.string(),
         relativePath: z.array(z.string()),
         options: z
           .union([
@@ -134,8 +133,8 @@ export const filesRouter = createTRPCRouter({
           .optional(),
       }),
     )
-    .query(async ({ input }): Promise<string | Buffer | null> => {
-      const resourcePath = await getResourcePath({ name: input.name });
+    .query(async ({ input, ctx }): Promise<string | Buffer | null> => {
+      const resourcePath = await getResourcePath({ name: ctx.resource });
       if (!resourcePath) {
         return null;
       }
@@ -145,10 +144,10 @@ export const filesRouter = createTRPCRouter({
       );
     }),
 
-  deleteResourceFile: protectedProcedure
-    .input(z.object({ name: z.string(), relativePath: z.array(z.string()) }))
-    .mutation(async ({ input }) => {
-      const resourcePath = await getResourcePath({ name: input.name });
+  deleteResourceFile: resourceProcedure
+    .input(z.object({ relativePath: z.array(z.string()) }))
+    .mutation(async ({ input, ctx }) => {
+      const resourcePath = await getResourcePath({ name: ctx.resource });
       if (!resourcePath) {
         throw resourcePathNotFound;
       }
@@ -164,16 +163,15 @@ export const filesRouter = createTRPCRouter({
       }
     }),
 
-  renameResourceFile: protectedProcedure
+  renameResourceFile: resourceProcedure
     .input(
       z.object({
-        name: z.string(),
         oldRelativePath: z.array(z.string()),
         newRelativePath: z.array(z.string()),
       }),
     )
-    .mutation(async ({ input }) => {
-      const resourcePath = await getResourcePath({ name: input.name });
+    .mutation(async ({ input, ctx }) => {
+      const resourcePath = await getResourcePath({ name: ctx.resource });
       if (!resourcePath) {
         throw resourcePathNotFound;
       }
@@ -190,17 +188,16 @@ export const filesRouter = createTRPCRouter({
       }
     }),
 
-  createResourceFile: protectedProcedure
+  createResourceFile: resourceProcedure
     .input(
       z.object({
-        name: z.string(),
         relativePath: z.array(z.string()),
         type: z.enum(["file", "dir"]),
         content: z.string().optional(),
       }),
     )
-    .mutation(async ({ input }) => {
-      const resourcePath = await getResourcePath({ name: input.name });
+    .mutation(async ({ input, ctx }) => {
+      const resourcePath = await getResourcePath({ name: ctx.resource });
       if (!resourcePath) {
         throw resourcePathNotFound;
       }
@@ -222,17 +219,16 @@ export const filesRouter = createTRPCRouter({
       }
     }),
 
-  copyResourceFile: protectedProcedure
+  copyResourceFile: resourceProcedure
     .input(
       z.object({
-        name: z.string(),
         source: z.array(z.string()),
         destination: z.array(z.string()),
         cut: z.boolean().optional(),
       }),
     )
-    .mutation(async ({ input }) => {
-      const resourcePath = await getResourcePath({ name: input.name });
+    .mutation(async ({ input, ctx }) => {
+      const resourcePath = await getResourcePath({ name: ctx.resource });
       if (!resourcePath) {
         throw resourcePathNotFound;
       }
@@ -271,16 +267,15 @@ export const filesRouter = createTRPCRouter({
       }
     }),
 
-  replaceResourceFile: protectedProcedure
+  replaceResourceFile: resourceProcedure
     .input(
       z.object({
-        name: z.string(),
         source: z.array(z.string()),
         destination: z.array(z.string()),
       }),
     )
-    .mutation(async ({ input }) => {
-      const resourcePath = await getResourcePath({ name: input.name });
+    .mutation(async ({ input, ctx }) => {
+      const resourcePath = await getResourcePath({ name: ctx.resource });
       if (!resourcePath) {
         throw resourcePathNotFound;
       }
@@ -301,10 +296,10 @@ export const filesRouter = createTRPCRouter({
       }
     }),
 
-  moveToTrash: protectedProcedure
-    .input(z.object({ name: z.string(), relativePath: z.array(z.string()) }))
+  moveToTrash: resourceProcedure
+    .input(z.object({ relativePath: z.array(z.string()) }))
     .mutation(async ({ input, ctx }) => {
-      const resourcePath = await getResourcePath({ name: input.name });
+      const resourcePath = await getResourcePath({ name: ctx.resource });
       if (!resourcePath) {
         throw resourcePathNotFound;
       }
@@ -357,7 +352,7 @@ export const filesRouter = createTRPCRouter({
             },
             action: {
               type: "MOVE_TO_TRASH",
-              resource: input.name,
+              resource: ctx.resource,
               path: input.relativePath,
               originName: path.basename(filePath),
               trashName: name,
@@ -372,10 +367,47 @@ export const filesRouter = createTRPCRouter({
       }
     }),
 
-  emptyTrash: protectedProcedure
-    .input(z.object({ name: z.string() }))
+  getTrash: resourceProcedure.query(async ({ input, ctx }) => {
+    const resourcePath = await getResourcePath({ name: ctx.resource });
+    if (!resourcePath) {
+      throw resourcePathNotFound;
+    }
+
+    const trashPath = path.join(
+      resourcePath,
+      valhallaConfig.folders.valhalla,
+      valhallaConfig.folders.trash,
+    );
+
+    try {
+      fs.mkdirSync(trashPath, { recursive: true });
+      const trash = fs
+        .readdirSync(trashPath)
+        .filter((file) => file.endsWith(".json"))
+        .map(async (file) => {
+          const content = fs.readFileSync(`${trashPath}/${file}`, "utf-8");
+          const operator = await ctx.db.user.findUnique({
+            where: { id: JSON.parse(content).operator },
+          });
+          return {
+            ...JSON.parse(content),
+            operator,
+          } as Trash;
+        });
+
+      return Promise.all(trash);
+    } catch (error) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Failed to get trash",
+      });
+    }
+  }),
+
+  restoreFromTrash: resourceProcedure
+    .input(z.object({ trashName: z.string() }))
     .mutation(async ({ input, ctx }) => {
-      const resourcePath = await getResourcePath({ name: input.name });
+      const resourcePath = await getResourcePath({ name: ctx.resource });
       if (!resourcePath) {
         throw resourcePathNotFound;
       }
@@ -393,14 +425,16 @@ export const filesRouter = createTRPCRouter({
       );
 
       try {
-        fs.mkdirSync(trashPath, { recursive: true });
-        fs.readdirSync(trashPath).forEach((file) => {
-          if (!file.endsWith(".json")) {
-            return;
-          }
-          fs.unlinkSync(`${filesPath}/${path.basename(file, ".json")}`);
-          fs.unlinkSync(`${trashPath}/${file}`);
-        });
+        const trashFile = fs.readFileSync(
+          `${trashPath}/${input.trashName}.json`,
+          "utf-8",
+        );
+        const trash = JSON.parse(trashFile) as Trash;
+        fs.renameSync(
+          `${filesPath}/${input.trashName}`,
+          `${resourcePath}/${trash.path.join(path.sep)}`,
+        );
+        fs.unlinkSync(`${trashPath}/${input.trashName}.json`);
 
         await ctx.db.log.create({
           data: {
@@ -408,23 +442,26 @@ export const filesRouter = createTRPCRouter({
               connect: [{ id: ctx.session.user.id!! }],
             },
             action: {
-              type: "EMPTY_TRASH",
-              resource: input.name,
+              type: "RESTORE_FROM_TRASH",
+              resource: ctx.resource,
+              path: trash.path,
+              originName: trash.originName,
+              trashName: input.trashName,
             },
           },
         });
       } catch (error) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "Failed to empty trash",
+          message: "Failed to restore file from trash",
         });
       }
     }),
 
-  getTrash: protectedProcedure
-    .input(z.object({ name: z.string() }))
-    .query(async ({ input, ctx }) => {
-      const resourcePath = await getResourcePath({ name: input.name });
+  deleteFromTrash: resourceProcedure
+    .input(z.object({ trashName: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const resourcePath = await getResourcePath({ name: ctx.resource });
       if (!resourcePath) {
         throw resourcePathNotFound;
       }
@@ -435,28 +472,137 @@ export const filesRouter = createTRPCRouter({
         valhallaConfig.folders.trash,
       );
 
-      try {
-        fs.mkdirSync(trashPath, { recursive: true });
-        const trash = fs
-          .readdirSync(trashPath)
-          .filter((file) => file.endsWith(".json"))
-          .map(async (file) => {
-            const content = fs.readFileSync(`${trashPath}/${file}`, "utf-8");
-            const operator = await ctx.db.user.findUnique({
-              where: { id: JSON.parse(content).operator },
-            });
-            return {
-              ...JSON.parse(content),
-              operator,
-            } as Trash;
-          });
+      const filesPath = path.join(
+        resourcePath,
+        valhallaConfig.folders.valhalla,
+        valhallaConfig.folders.files,
+      );
 
-        return Promise.all(trash);
+      try {
+        const trashFile = fs.readFileSync(
+          `${trashPath}/${input.trashName}.json`,
+          "utf-8",
+        );
+        const trash = JSON.parse(trashFile) as Trash;
+        fs.unlinkSync(`${trashPath}/${input.trashName}.json`);
+        fs.unlinkSync(`${filesPath}/${input.trashName}`);
+
+        await ctx.db.log.create({
+          data: {
+            operators: {
+              connect: [{ id: ctx.session.user.id!! }],
+            },
+            action: {
+              type: "DELETE_FROM_TRASH",
+              resource: ctx.resource,
+              path: trash.path,
+              originName: trash.originName,
+              trashName: input.trashName,
+            },
+          },
+        });
       } catch (error) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "Failed to get trash",
+          message: "Failed to delete file from trash",
         });
       }
     }),
+
+  restoreAllFromTrash: resourceProcedure.mutation(async ({ input, ctx }) => {
+    const resourcePath = await getResourcePath({ name: ctx.resource });
+    if (!resourcePath) {
+      throw resourcePathNotFound;
+    }
+
+    const trashPath = path.join(
+      resourcePath,
+      valhallaConfig.folders.valhalla,
+      valhallaConfig.folders.trash,
+    );
+
+    const filesPath = path.join(
+      resourcePath,
+      valhallaConfig.folders.valhalla,
+      valhallaConfig.folders.files,
+    );
+
+    try {
+      fs.readdirSync(trashPath).forEach((file) => {
+        if (!file.endsWith(".json")) {
+          return;
+        }
+        const trashFile = fs.readFileSync(`${trashPath}/${file}`, "utf-8");
+        const trash = JSON.parse(trashFile) as Trash;
+        fs.renameSync(
+          `${filesPath}/${path.basename(file, ".json")}`,
+          `${resourcePath}/${trash.path.join(path.sep)}`,
+        );
+        fs.unlinkSync(`${trashPath}/${file}`);
+      });
+
+      await ctx.db.log.create({
+        data: {
+          operators: {
+            connect: [{ id: ctx.session.user.id!! }],
+          },
+          action: {
+            type: "RESTORE_ALL_FROM_TRASH",
+            resource: ctx.resource,
+          },
+        },
+      });
+    } catch (error) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Failed to restore all files from trash",
+      });
+    }
+  }),
+
+  deleteAllFromTrash: resourceProcedure.mutation(async ({ input, ctx }) => {
+    const resourcePath = await getResourcePath({ name: ctx.resource });
+    if (!resourcePath) {
+      throw resourcePathNotFound;
+    }
+
+    const trashPath = path.join(
+      resourcePath,
+      valhallaConfig.folders.valhalla,
+      valhallaConfig.folders.trash,
+    );
+
+    const filesPath = path.join(
+      resourcePath,
+      valhallaConfig.folders.valhalla,
+      valhallaConfig.folders.files,
+    );
+
+    try {
+      fs.readdirSync(trashPath).forEach((file) => {
+        if (!file.endsWith(".json")) {
+          return;
+        }
+        fs.unlinkSync(`${trashPath}/${file}`);
+        fs.unlinkSync(`${filesPath}/${path.basename(file, ".json")}`);
+      });
+
+      await ctx.db.log.create({
+        data: {
+          operators: {
+            connect: [{ id: ctx.session.user.id!! }],
+          },
+          action: {
+            type: "DELETE_ALL_FROM_TRASH",
+            resource: ctx.resource,
+          },
+        },
+      });
+    } catch (error) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Failed to delete all files from trash",
+      });
+    }
+  }),
 });

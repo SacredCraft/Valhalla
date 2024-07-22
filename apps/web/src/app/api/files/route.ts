@@ -1,12 +1,24 @@
 import fs from "fs";
 import path from "path";
 
+import { auth } from "@/server/auth";
 import { api } from "@/trpc/server";
 
-export async function POST(request: Request) {
+export const POST = auth(async (request) => {
+  if (!request.auth) {
+    return new Response(null, { status: 401 });
+  }
+
   const formData = await request.formData();
 
   const resource = formData.get("resource") as string;
+
+  const ownedResources = await api.resources.getOwnedResources();
+
+  if (!ownedResources.some((r) => r === resource)) {
+    return new Response(null, { status: 403 });
+  }
+
   const relativePath = formData.get("relativePath") as string;
   const files = formData.getAll("files") as File[];
 
@@ -33,13 +45,24 @@ export async function POST(request: Request) {
   } catch (error) {
     return new Response(null, { status: 500 });
   }
-}
+});
 
-export async function GET(request: Request) {
+export const GET = auth(async (request) => {
+  if (!request.auth) {
+    return new Response(null, { status: 401 });
+  }
+
   const { searchParams } = new URL(request.url);
 
-  const relativePath = searchParams.get("relativePath") as string;
   const resource = searchParams.get("resource") as string;
+
+  const ownedResources = await api.resources.getOwnedResources();
+
+  if (!ownedResources.some((r) => r === resource)) {
+    return new Response(null, { status: 403 });
+  }
+
+  const relativePath = searchParams.get("relativePath") as string;
 
   if (!relativePath || !resource) {
     return new Response(null, { status: 400 });
@@ -57,11 +80,8 @@ export async function GET(request: Request) {
     return new Response(null, { status: 404 });
   }
 
-  const content = fs.readFileSync(filePath, "utf-8");
+  const content = fs.readFileSync(filePath);
   const headers = new Headers();
-  headers.set(
-    "Content-Disposition",
-    `attachment; filename="${path.basename(filePath)}"`,
-  );
+  headers.set("Content-Type", "application/octet-stream");
   return new Response(content, { headers });
-}
+});

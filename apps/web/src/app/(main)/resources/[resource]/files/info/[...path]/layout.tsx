@@ -19,7 +19,7 @@ export default async function FilesInfoLayout({
   children,
 }: FilesInfoLayoutProps) {
   const file = await api.files.getResourceFile({
-    name: resource,
+    resource,
     relativePath: relativePath.map((i) => decodeURIComponent(i)),
   });
 

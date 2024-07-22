@@ -13,6 +13,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  cn,
   toast,
 } from "@sacred-craft/valhalla-components";
 import { Row, Table } from "@tanstack/react-table";
@@ -59,14 +60,14 @@ export function Delete({ row, table }: DeleteProps) {
 
   const handleDelete = () => {
     deleteFile.mutate({
-      name: resource.name,
+      resource: resource.name,
       relativePath: row.original.path,
     });
   };
 
   const handleMoveToTrash = () => {
     moveToTrash.mutate({
-      name: resource.name,
+      resource: resource.name,
       relativePath: row.original.path,
     });
   };
@@ -84,30 +85,41 @@ export function Delete({ row, table }: DeleteProps) {
           <SheetTitle>Are you sure you want to delete this file?</SheetTitle>
           <SheetDescription>This action cannot be undone.</SheetDescription>
         </SheetHeader>
-        <SheetFooter className="flex flex-col sm:flex-row sm:justify-between gap-y-2 mt-4">
+        <SheetFooter className="flex flex-col sm:flex-row sm:justify-between gap-y-2 mt-2">
           {row.original.type === "file" && (
-            <SheetClose>
-              <Button variant="default" onClick={() => handleMoveToTrash()}>
+            <SheetClose asChild>
+              <Button
+                size="sm"
+                variant="default"
+                onClick={() => handleMoveToTrash()}
+                className="sm:mr-auto"
+              >
                 Move to trash
               </Button>
             </SheetClose>
           )}
-          <div className="flex gap-2 sm:ml-auto">
-            <SheetClose>
-              <Button variant="outline" className="w-full sm:w-fit">
-                No
-              </Button>
-            </SheetClose>
-            <SheetClose>
-              <Button
-                className="w-full sm:w-fit"
-                variant="destructive"
-                onClick={() => handleDelete()}
-              >
-                Yes
-              </Button>
-            </SheetClose>
-          </div>
+          <SheetClose asChild>
+            <Button
+              size="sm"
+              variant="outline"
+              className={cn(
+                "w-full sm:w-fit",
+                row.original.type === "dir" ? "ml-auto" : undefined,
+              )}
+            >
+              Cancel
+            </Button>
+          </SheetClose>
+          <SheetClose asChild>
+            <Button
+              size="sm"
+              className="w-full sm:w-fit"
+              variant="destructive"
+              onClick={() => handleDelete()}
+            >
+              Delete
+            </Button>
+          </SheetClose>
         </SheetFooter>
       </SheetContent>
     </Sheet>

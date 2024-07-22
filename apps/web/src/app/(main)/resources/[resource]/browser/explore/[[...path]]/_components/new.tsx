@@ -65,7 +65,7 @@ export function New() {
 
   const handleCreate = (data: z.infer<typeof FormSchema>) => {
     createFile.mutate({
-      name: resource.name,
+      resource: resource.name,
       relativePath: [...relativePath!!, data.name],
       type: data.type,
     });
@@ -138,12 +138,16 @@ export function New() {
                 )}
               />
             </div>
-            <SheetFooter>
-              <SheetClose>
-                <Button variant="outline">Cancel</Button>
+            <SheetFooter className="mt-2">
+              <SheetClose asChild>
+                <Button variant="outline" size="sm">
+                  Cancel
+                </Button>
               </SheetClose>
-              <SheetClose>
-                <Button type="submit">Create</Button>
+              <SheetClose asChild>
+                <Button type="submit" size="sm">
+                  Create
+                </Button>
               </SheetClose>
             </SheetFooter>
           </form>
