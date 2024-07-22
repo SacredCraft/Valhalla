@@ -5,6 +5,12 @@ import React, { Dispatch, createContext, useContext, useState } from "react";
 type ContextType = {
   relativePath?: string[];
   setRelativePath: Dispatch<string[] | undefined>;
+
+  copyFiles: string[];
+  setCopyFiles: Dispatch<string[]>;
+
+  cutFiles: string[];
+  setCutFiles: Dispatch<string[]>;
 };
 
 const BrowserContext = createContext<ContextType | undefined>(undefined);
@@ -23,12 +29,18 @@ type BrowserClientLayoutProps = {
 
 export function BrowserClientLayout({ children }: BrowserClientLayoutProps) {
   const [relativePath, setRelativePath] = useState<string[]>();
+  const [copyFiles, setCopyFiles] = useState<string[]>([]);
+  const [cutFiles, setCutFiles] = useState<string[]>([]);
 
   return (
     <BrowserContext.Provider
       value={{
         relativePath,
         setRelativePath,
+        copyFiles,
+        setCopyFiles,
+        cutFiles,
+        setCutFiles,
       }}
     >
       {children}

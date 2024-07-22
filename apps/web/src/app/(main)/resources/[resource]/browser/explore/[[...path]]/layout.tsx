@@ -9,6 +9,7 @@ import { Upload } from "@/app/(main)/resources/[resource]/browser/explore/[[...p
 import { ExploreClientLayout } from "@/app/(main)/resources/[resource]/browser/explore/[[...path]]/layout.client";
 import { api } from "@/trpc/server";
 
+import { SelectedCopyCut } from "./_components/selected-copy-cut";
 import { SelectedDelete } from "./_components/selected-delete";
 
 type ExploreLayoutProps = {
@@ -39,6 +40,7 @@ export default async function ExploreLayout({
             <Upload />
             <PasteAction />
             <SelectedDelete />
+            <SelectedCopyCut />
           </>
         }
         right={

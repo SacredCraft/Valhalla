@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
 import { UploadIcon } from "@radix-ui/react-icons";
@@ -24,8 +24,13 @@ import { useExploreContext } from "../layout.client";
 export function Upload() {
   const router = useRouter();
   const { resource } = useResourceContext();
-  const { relativePath, table } = useExploreContext();
+  const { relativePath, rowSelection } = useExploreContext();
   const [isUploading, setIsUploading] = useState<boolean>(false);
+
+  const length = useMemo(
+    () => Object.keys(rowSelection).length,
+    [rowSelection],
+  );
 
   const [files, setFiles] = useState<File[]>([]);
 
@@ -89,6 +94,10 @@ export function Upload() {
       xhr.send(formData);
     });
   };
+
+  if (length > 0) {
+    return null;
+  }
 
   return (
     <Sheet>

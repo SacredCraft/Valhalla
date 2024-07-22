@@ -2,6 +2,7 @@
 
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -46,8 +47,13 @@ const FormSchema = z.object({
 
 export function New() {
   const { resource } = useResourceContext();
-  const { relativePath, table } = useExploreContext();
+  const { relativePath, rowSelection } = useExploreContext();
   const router = useRouter();
+
+  const length = useMemo(
+    () => Object.keys(rowSelection).length,
+    [rowSelection],
+  );
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -74,6 +80,10 @@ export function New() {
       type: data.type,
     });
   };
+
+  if (length > 0) {
+    return null;
+  }
 
   return (
     <Sheet>

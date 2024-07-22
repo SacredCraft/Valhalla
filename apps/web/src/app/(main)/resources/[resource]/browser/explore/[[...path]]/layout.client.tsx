@@ -33,12 +33,6 @@ type ContextType = {
 
   files: FileMeta[];
 
-  copyFiles: string[];
-  setCopyFiles: Dispatch<string[]>;
-
-  cutFiles: string[];
-  setCutFiles: Dispatch<string[]>;
-
   data: FileCol[];
   setData: Dispatch<FileCol[]>;
 
@@ -79,8 +73,7 @@ export function ExploreClientLayout({
   const { setRelativePath } = useBrowserContext();
   const [table, setTable] =
     useState<ReturnType<typeof useReactTable<FileCol>>>();
-  const [copyFiles, setCopyFiles] = useState<string[]>([]);
-  const [cutFiles, setCutFiles] = useState<string[]>([]);
+
   const [data, setData] = useState<FileCol[]>(files);
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -110,10 +103,6 @@ export function ExploreClientLayout({
         table,
         setTable,
         files: realFiles,
-        copyFiles,
-        setCopyFiles,
-        cutFiles,
-        setCutFiles,
         relativePath: relativePath.map((i) => decodeURIComponent(i)),
         data,
         setData,

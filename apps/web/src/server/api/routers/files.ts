@@ -240,30 +240,30 @@ export const filesRouter = createTRPCRouter({
         path.basename(input.source.join(path.sep)),
       );
 
+      const existsError = new TRPCError({
+        code: "CONFLICT",
+        message: "Destination file already exists",
+      });
+
       try {
         fs.accessSync(destinationFile, fs.constants.F_OK);
-        throw new TRPCError({
-          code: "CONFLICT",
-          message: "Destination file already exists",
-        });
+        throw existsError;
       } catch (error) {
         if (error instanceof TRPCError && error.code === "CONFLICT") {
-          throw new TRPCError({
-            code: "CONFLICT",
-            message: "Destination file already exists",
-          });
+          throw existsError;
         }
-        try {
-          fs.copyFileSync(sourceFile, destinationFile);
-          if (input.cut) {
-            fs.unlinkSync(sourceFile);
-          }
-        } catch (error) {
-          throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: "Failed to copy file",
-          });
+      }
+
+      try {
+        fs.copyFileSync(sourceFile, destinationFile);
+        if (input.cut) {
+          fs.unlinkSync(sourceFile);
         }
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to copy file",
+        });
       }
     }),
 

@@ -2,7 +2,7 @@
 
 import { ClipboardPaste } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { FileCol } from "@/app/(main)/resources/[resource]/browser/explore/[[...path]]/_components/files-table-columns";
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
@@ -22,6 +22,7 @@ import {
 } from "@sacred-craft/valhalla-components";
 import { Row, Table } from "@tanstack/react-table";
 
+import { useBrowserContext } from "../../../layout.client";
 import { useExploreContext } from "../layout.client";
 
 interface CopyCutRowActionProps {
@@ -30,7 +31,7 @@ interface CopyCutRowActionProps {
 }
 
 export function CopyCutRowAction({ row }: CopyCutRowActionProps) {
-  const { setCopyFiles, setCutFiles } = useExploreContext();
+  const { setCopyFiles, setCutFiles } = useBrowserContext();
 
   const copy = () => {
     setCutFiles([]);
@@ -68,14 +69,9 @@ export function CopyCutRowAction({ row }: CopyCutRowActionProps) {
 
 export function PasteAction() {
   const { resource } = useResourceContext();
-  const {
-    copyFiles,
-    cutFiles,
-    relativePath,
-    setCutFiles,
-    setCopyFiles,
-    table,
-  } = useExploreContext();
+  const { relativePath, rowSelection } = useExploreContext();
+  const { setCutFiles, setCopyFiles, copyFiles, cutFiles } =
+    useBrowserContext();
   const [openedSheet, setOpenedSheet] = useState(false);
   const [exists, setExists] = useState<string[]>([]);
   const [failed, setFailed] = useState<string[]>([]);
@@ -88,40 +84,49 @@ export function PasteAction() {
 
   const router = useRouter();
 
+  const lengthRowSelection = useMemo(
+    () => Object.keys(rowSelection).length,
+    [rowSelection],
+  );
+
   const handlePaste = () => {
     if (relativePath) {
-      const files = cutFiles || copyFiles || [];
+      const files = cutFiles.length > 0 ? cutFiles : copyFiles;
       const exists: string[] = [];
       const failed: string[] = [];
-      const paste = async () => {
-        const pastePromises = files.map((file) => {
-          return new Promise<void>((resolve) => {
-            copyFile.mutate(
-              {
-                resource: resource.name,
-                source: [decodeURIComponent(file)],
-                destination: relativePath || [],
-                cut: Boolean(cutFiles && cutFiles.length > 0),
-              },
-              {
-                onError: (error) => {
-                  if (error.data?.code === "CONFLICT") {
-                    exists.push(file);
-                  } else {
-                    failed.push(file);
-                  }
-                  resolve();
-                },
-                onSuccess: () => {
-                  resolve();
-                },
-              },
-            );
-          });
-        });
 
-        await Promise.all(pastePromises);
+      const pasteFile = async (file: string) => {
+        return new Promise<void>((resolve) => {
+          copyFile.mutate(
+            {
+              resource: resource.name,
+              source: [decodeURIComponent(file)],
+              destination: relativePath || [],
+              cut: Boolean(cutFiles && cutFiles.length > 0),
+            },
+            {
+              onError: (error) => {
+                if (error.data?.code === "CONFLICT") {
+                  exists.push(file);
+                } else {
+                  failed.push(file);
+                }
+              },
+              onSettled: () => {
+                console.log(123);
+
+                resolve();
+              },
+            },
+          );
+        });
       };
+
+      const paste = async () => {
+        const promises = files.map((file) => pasteFile(file));
+        await Promise.all(promises);
+      };
+
       paste().then(() => {
         if (exists.length || failed.length) {
           setExists(exists);
@@ -130,9 +135,11 @@ export function PasteAction() {
         }
         if (!exists.length && !failed.length) {
           toast.success("File(s) pasted");
+        } else {
+          toast.error("Failed to paste file(s)");
         }
         router.refresh();
-        if (cutFiles) {
+        if (cutFiles.length > 0) {
           setCutFiles([]);
         } else {
           setCopyFiles([]);
@@ -168,6 +175,10 @@ export function PasteAction() {
       setFailed([]);
     }
   }, [openedSheet]);
+
+  if (lengthRowSelection > 0) {
+    return null;
+  }
 
   return (
     <>
