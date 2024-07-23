@@ -7,10 +7,11 @@
     "dev": "turbo dev",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md,mdx}\"",
-    "clean": "rimraf .turbo dist node_modules"
+    "clean": "pnpm -r exec rimraf node_modules .turbo dist && rimraf node_modules .turbo .pnpm-lock.yaml"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "pnpm": "^9.6.0",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.5",
     "rimraf": "^6.0.1",
