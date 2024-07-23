@@ -23,7 +23,7 @@ export default function NotFound() {
   }, [pathname, setOpenedFiles]);
 
   return (
-    <div className="h-full w-full flex flex-col gap-4 items-center justify-center">
+    <div className="h-screen w-full flex flex-col gap-4 items-center justify-center">
       <Bird className="w-24 h-24 text-gray-400 animate-bounce border-dashed border-2 rounded-full p-4" />
       <div className="text-center">
         <h1 className="text-2xl">File not found.</h1>
