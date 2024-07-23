@@ -1,11 +1,16 @@
 import { I18nProvider } from "fumadocs-ui/i18n";
 import { RootProvider } from "fumadocs-ui/provider";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 
 import "./global.css";
 
-const inter = Inter({
-  subsets: ["latin"],
+const geistSans = localFont({
+  src: "./fonts/GeistVF.woff",
+  variable: "--font-geist-sans",
+});
+const geistMono = localFont({
+  src: "./fonts/GeistMonoVF.woff",
+  variable: "--font-geist-mono",
 });
 
 export default function Layout({
@@ -16,8 +21,8 @@ export default function Layout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang={lang} className={inter.className} suppressHydrationWarning>
-      <body>
+    <html lang={lang} suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
         <I18nProvider
           locale={lang}
           translations={{

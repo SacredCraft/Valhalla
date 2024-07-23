@@ -10,6 +10,14 @@ const config = {
     "./node_modules/fumadocs-ui/dist/**/*.js",
   ],
   presets: [createPreset()],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ["var(--font-geist-sans)"],
+        mono: ["var(--font-geist-mono)"],
+      },
+    },
+  },
 } satisfies Config;
 
 export default config;
