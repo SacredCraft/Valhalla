@@ -12,7 +12,7 @@ import {
   formatBytes,
 } from "@sacred-craft/valhalla-components";
 import { Template } from "@sacred-craft/valhalla-resource";
-import { ColumnDef, RowData } from "@tanstack/react-table";
+import { ColumnDef } from "@tanstack/react-table";
 
 export type FileCol = FileMeta & { template?: Template };
 
@@ -128,7 +128,7 @@ export const filesTableColumns: ColumnDef<FileCol>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Actions" />
     ),
-    cell: ({ row, table }) => <FilesTableRowActions row={row} table={table} />,
+    cell: ({ row }) => <FilesTableRowActions row={row} />,
     enableSorting: false,
     enableHiding: false,
   },

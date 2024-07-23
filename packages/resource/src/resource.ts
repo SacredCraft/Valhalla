@@ -9,12 +9,15 @@ export type Resource = {
   templates: Template[];
   relatedFiles?: () => any[];
 
-  options?: {
-    [key: string]: any;
-  };
+  // eslint-disable-next-line no-unused-vars
+  options?: ResourceOptions;
 };
 
-export type ResourceOptions = {
+type ResourceOptions = {
+  [key: string]: any;
+};
+
+export type CreateResourceOptions = {
   extend?: Partial<Resource>;
   alias?: string;
   templatesOptions?: {
@@ -29,8 +32,9 @@ export type ResourceOptions = {
 
 export const createResource = (
   resource: Partial<Resource>,
-): ((options?: ResourceOptions) => Resource) => {
-  return (options?: ResourceOptions) => {
+  // eslint-disable-next-line no-unused-vars
+): ((options?: CreateResourceOptions) => Resource) => {
+  return (options?: CreateResourceOptions) => {
     // Filter out disabled templates
     const templates = (resource?.templates ? resource.templates : [])
       .map((template: Partial<Template>) => {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { FilesTableToolbar } from "@/app/(main)/resources/[resource]/browser/explore/[[...path]]/_components/files-table-toolbar";
 import { ImageModel } from "@/app/(main)/resources/[resource]/browser/explore/[[...path]]/_components/image-model";
@@ -92,6 +92,7 @@ export function FilesTable() {
           table.getRowModel().rows.map((row) => {
             const isImage =
               row.original.template?.action &&
+              // eslint-disable-next-line no-unsafe-optional-chaining
               "preview" in row.original.template?.action &&
               row.original.template.action.preview === "image";
 

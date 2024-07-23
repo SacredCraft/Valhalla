@@ -8,7 +8,6 @@ import { z } from "zod";
 
 import { signInSchema } from "@/lib/zod";
 import { signIn } from "@/server/service/auth";
-import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import {

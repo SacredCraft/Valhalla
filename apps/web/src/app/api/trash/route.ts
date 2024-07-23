@@ -1,15 +1,14 @@
 import fs from "fs";
 import path from "path";
 
-import { Trash } from "@/server/api/routers/files";
 import { auth } from "@/server/auth";
 import { api } from "@/trpc/server";
 import valhallaConfig from "@/valhalla";
 
-export const GET = async (request: Request) => {
-  // if (!request.auth) {
-  //   return new Response(null, { status: 401 });
-  // }
+export const GET = auth(async (request) => {
+  if (!request.auth) {
+    return new Response(null, { status: 401 });
+  }
 
   const { searchParams } = new URL(request.url);
 
@@ -49,10 +48,6 @@ export const GET = async (request: Request) => {
       return new Response(null, { status: 404 });
     }
 
-    const meta = JSON.parse(
-      fs.readFileSync(path.join(trashPath, trashName + ".json"), "utf-8"),
-    ) as Trash;
-
     const content = fs.readFileSync(filePath);
 
     const headers = new Headers();
@@ -64,4 +59,4 @@ export const GET = async (request: Request) => {
 
     return new Response(null, { status: 500 });
   }
-};
+});

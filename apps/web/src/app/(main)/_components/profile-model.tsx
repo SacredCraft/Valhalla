@@ -87,7 +87,7 @@ function Information() {
     onSuccess: (data) => {
       toast.success("Profile updated");
       if (data.password) {
-        signOut().then((r) => {
+        signOut().then(() => {
           toast.success("Password updated, please sign in again");
         });
       }

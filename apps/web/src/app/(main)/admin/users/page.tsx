@@ -1,6 +1,6 @@
 import { UsersTable } from "@/app/(main)/admin/users/_components/users-table";
 import { UserCol } from "@/app/(main)/admin/users/_components/users-table-columns";
-import { db } from "@/server/db";
+import { db } from "@sacred-craft/valhalla-database";
 
 export default async function UsersPage() {
   const users: UserCol[] = (await db.user.findMany()).map((user) => ({

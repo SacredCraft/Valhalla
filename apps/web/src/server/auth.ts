@@ -2,8 +2,8 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
 import { signInSchema } from "@/lib/zod";
+import { db } from "@sacred-craft/valhalla-database";
 
-import { db } from "./db";
 import { getUserByUsernameAndPassword } from "./service/auth";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -49,6 +49,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 });
 
 declare module "next-auth" {
+  // eslint-disable-next-line no-unused-vars
   interface User {
     username: string;
   }

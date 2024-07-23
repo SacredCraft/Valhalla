@@ -3,7 +3,7 @@ import path from "path";
 import { z } from "zod";
 
 import valhallaConfig from "@/valhalla";
-import { User } from "@prisma/client";
+import { User } from "@sacred-craft/valhalla-database";
 import { TRPCError } from "@trpc/server";
 
 import { createTRPCRouter, resourceProcedure } from "../trpc";
@@ -367,7 +367,7 @@ export const filesRouter = createTRPCRouter({
       }
     }),
 
-  getTrash: resourceProcedure.query(async ({ input, ctx }) => {
+  getTrash: resourceProcedure.query(async ({ ctx }) => {
     const resourcePath = await getResourcePath({ name: ctx.resource });
     if (!resourcePath) {
       throw resourcePathNotFound;
@@ -509,7 +509,7 @@ export const filesRouter = createTRPCRouter({
       }
     }),
 
-  restoreAllFromTrash: resourceProcedure.mutation(async ({ input, ctx }) => {
+  restoreAllFromTrash: resourceProcedure.mutation(async ({ ctx }) => {
     const resourcePath = await getResourcePath({ name: ctx.resource });
     if (!resourcePath) {
       throw resourcePathNotFound;
@@ -560,7 +560,7 @@ export const filesRouter = createTRPCRouter({
     }
   }),
 
-  deleteAllFromTrash: resourceProcedure.mutation(async ({ input, ctx }) => {
+  deleteAllFromTrash: resourceProcedure.mutation(async ({ ctx }) => {
     const resourcePath = await getResourcePath({ name: ctx.resource });
     if (!resourcePath) {
       throw resourcePathNotFound;

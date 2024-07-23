@@ -1,11 +1,8 @@
 "use client";
 
-import { ClipboardPaste, DeleteIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { ClipboardPaste } from "lucide-react";
 import { useMemo } from "react";
 
-import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
-import { api } from "@/trpc/react";
 import {
   Button,
   Sheet,
@@ -16,8 +13,6 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  cn,
-  toast,
 } from "@sacred-craft/valhalla-components";
 
 import { useBrowserContext } from "../../../layout.client";

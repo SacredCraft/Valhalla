@@ -18,14 +18,13 @@ import {
   cn,
   toast,
 } from "@sacred-craft/valhalla-components";
-import { Row, Table } from "@tanstack/react-table";
+import { Row } from "@tanstack/react-table";
 
 interface DeleteProps {
   row: Row<FileCol>;
-  table: Table<FileCol>;
 }
 
-export function Delete({ row, table }: DeleteProps) {
+export function Delete({ row }: DeleteProps) {
   const { resource, setOpenedFiles } = useResourceContext();
   const router = useRouter();
 

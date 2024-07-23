@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 
 import { auth } from "@/server/auth";
-import { db } from "@/server/db";
+import { db } from "@sacred-craft/valhalla-database";
 
 import { AdminClientLayout } from "./layout.client";
 

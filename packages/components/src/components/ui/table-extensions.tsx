@@ -239,6 +239,7 @@ export function DataTablePagination<TData>({
   const tableState = table.getState().pagination.pageSize;
 
   const [localPageSize, setLocalPageSize] = useState<number>(() => {
+    // eslint-disable-next-line no-undef
     const local = localStorage.getItem(`pagination-size-${name}`);
     return local ? Number(local) : tableState;
   });
@@ -254,6 +255,7 @@ export function DataTablePagination<TData>({
   useEffect(() => {
     if (persist) {
       table.setPageSize(pageSize);
+      // eslint-disable-next-line no-undef
       localStorage.setItem(`pagination-size-${name}`, pageSize.toString());
     }
   }, [name, pageSize, persist, table]);

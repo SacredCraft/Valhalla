@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { db } from "@/server/db";
+import { db } from "@sacred-craft/valhalla-database";
 import { TRPCError } from "@trpc/server";
 
 import { adminProcedure, createTRPCRouter, protectedProcedure } from "../trpc";

@@ -29,6 +29,7 @@ import { cn } from "@sacred-craft/valhalla-components";
 
 type ContextType = {
   collapsed: boolean;
+  // eslint-disable-next-line no-unused-vars
   setCollapsed: (collapsed: boolean) => void;
 };
 

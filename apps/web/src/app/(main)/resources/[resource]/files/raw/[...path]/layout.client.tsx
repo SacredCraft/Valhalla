@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect } from "react";
 
 import { useFilesContext } from "@/app/(main)/resources/[resource]/files/layout.client";
 import { FileMeta } from "@/server/api/routers/files";
@@ -29,13 +29,11 @@ type FilesInfoClientLayoutProps = {
 };
 
 export default function FilesRawClientLayout({
-  template,
   file,
   children,
   relativePath,
 }: FilesInfoClientLayoutProps) {
   const { setRelativePath } = useFilesContext();
-  const [tabValue, setTabValue] = useState(template ? "edit" : "raw");
 
   useEffect(() => {
     setRelativePath?.(relativePath.map((i) => decodeURIComponent(i)));

@@ -21,19 +21,15 @@ import {
   TooltipTrigger,
   toast,
 } from "@sacred-craft/valhalla-components";
-import { Row, Table } from "@tanstack/react-table";
+import { Row } from "@tanstack/react-table";
 
 import { useExploreContext } from "../layout.client";
 
 interface FilesTableRowActionsProps {
   row: Row<FileCol>;
-  table: Table<FileCol>;
 }
 
-export function FilesTableRowActions({
-  row,
-  table,
-}: FilesTableRowActionsProps) {
+export function FilesTableRowActions({ row }: FilesTableRowActionsProps) {
   const { resource } = useResourceContext();
   const { relativePath: relativeFolderPath } = useExploreContext();
   const relativePath = [...relativeFolderPath!!, row.original.name];
@@ -89,8 +85,8 @@ export function FilesTableRowActions({
           className="w-[160px]"
           onClick={(e) => e.stopPropagation()}
         >
-          <RenameMove row={row} table={table} />
-          <CopyCutRowAction row={row} table={table} />
+          <RenameMove row={row} />
+          <CopyCutRowAction row={row} />
           {row.original.type === "file" && (
             <DropdownMenuItem onClick={() => handleDownload()}>
               Download
@@ -108,7 +104,7 @@ export function FilesTableRowActions({
             <DropdownMenuShortcut>⌘C</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <Delete row={row} table={table} />
+          <Delete row={row} />
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

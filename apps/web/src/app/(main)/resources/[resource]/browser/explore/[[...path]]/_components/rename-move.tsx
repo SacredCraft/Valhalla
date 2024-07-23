@@ -19,14 +19,13 @@ import {
   SheetTrigger,
   toast,
 } from "@sacred-craft/valhalla-components";
-import { Row, Table } from "@tanstack/react-table";
+import { Row } from "@tanstack/react-table";
 
 interface RenameMoveProps {
   row: Row<FileCol>;
-  table: Table<FileCol>;
 }
 
-export function RenameMove({ row, table }: RenameMoveProps) {
+export function RenameMove({ row }: RenameMoveProps) {
   const { resource } = useResourceContext();
   const router = useRouter();
   const [path, setPath] = useState(

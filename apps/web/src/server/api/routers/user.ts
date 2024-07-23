@@ -7,7 +7,7 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
-import { getUserByUsernameAndPassword, signIn } from "@/server/service/auth";
+import { getUserByUsernameAndPassword } from "@/server/service/auth";
 import { TRPCError } from "@trpc/server";
 
 const updateSchema = z.object({

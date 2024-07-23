@@ -37,6 +37,7 @@ interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
    * @default undefined
    * @example onUpload={(files) => uploadFiles(files)}
    */
+  // eslint-disable-next-line no-unused-vars
   onUpload?: (files: File[]) => Promise<void>;
 
   /**
@@ -134,7 +135,6 @@ export function FileUploader(props: FileUploaderProps) {
         }
       });
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const isDisabled = disabled;

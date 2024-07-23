@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { EventEmitter } from "events";
 
 import { observable } from "@trpc/server/observable";
@@ -28,6 +29,7 @@ declare interface ViewFilesEventsEmitter {
   ): boolean;
 }
 
+// eslint-disable-next-line no-redeclare
 class ViewFilesEventsEmitter extends EventEmitter {}
 
 const ee = new ViewFilesEventsEmitter();

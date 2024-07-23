@@ -13,6 +13,7 @@ type AvatarUploaderProps = {
   avatar?: string;
   disabled?: boolean;
   value?: File;
+  // eslint-disable-next-line no-unused-vars
   onChange?: (file: File) => void;
 };
 

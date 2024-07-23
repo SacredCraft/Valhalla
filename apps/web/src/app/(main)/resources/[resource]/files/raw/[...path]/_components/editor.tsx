@@ -6,7 +6,6 @@ import React, { useEffect } from "react";
 import { api } from "@/trpc/react";
 import {
   EditorProps,
-  Monaco,
   Editor as MonacoEditor,
   useMonaco,
 } from "@monaco-editor/react";
@@ -39,7 +38,7 @@ export const Editor = (editorProps: EditorProps) => {
     }
   }, [monaco]);
 
-  const beforeMount = (monaco: Monaco) => {
+  const beforeMount = () => {
     console.log("beforeMount");
   };
 

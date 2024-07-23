@@ -8,6 +8,7 @@ import { cn } from "@sacred-craft/valhalla-components";
 type ContextType = {
   step: number;
   name: string;
+  // eslint-disable-next-line no-unused-vars
   setName: (name: string) => void;
 };
 

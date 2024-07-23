@@ -14,8 +14,10 @@ type ContextType = {
   form: ReturnType<typeof useForm>;
   file: FileMeta;
   configuration: ConfigurationResult;
+  // eslint-disable-next-line no-unused-vars
   setConfiguration: (configuration: ConfigurationResult) => void;
   modified: boolean;
+  // eslint-disable-next-line no-unused-vars
   setModified: (modified: boolean) => void;
 };
 

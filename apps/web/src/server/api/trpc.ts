@@ -10,7 +10,7 @@ import superjson from "superjson";
 import { ZodError, z } from "zod";
 
 import { auth } from "@/server/auth";
-import { db } from "@/server/db";
+import { db } from "@sacred-craft/valhalla-database";
 import { TRPCError, initTRPC } from "@trpc/server";
 import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
 import type { CreateWSSContextFnOptions } from "@trpc/server/adapters/ws";

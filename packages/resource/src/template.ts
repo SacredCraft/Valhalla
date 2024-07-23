@@ -9,6 +9,7 @@ export type Template = {
 
   resource?: Resource;
 
+  // eslint-disable-next-line no-unused-vars
   isMatch?: (resource: Resource) => boolean;
   relatedFiles?: () => RelatedFile[];
 };

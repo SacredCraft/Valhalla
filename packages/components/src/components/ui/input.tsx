@@ -8,6 +8,7 @@ import { useControllableState } from "@radix-ui/react-use-controllable-state";
 export type InputProps = {
   value?: string | number | readonly string[] | undefined | null;
   defaultValue?: string | number | readonly string[] | undefined | null;
+  // eslint-disable-next-line no-unused-vars
   onChange?: (value: string | number | readonly string[] | undefined) => void;
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange">;
 

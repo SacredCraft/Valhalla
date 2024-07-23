@@ -1,0 +1,33 @@
+{
+  "name": "@sacred-craft/valhalla-database",
+  "version": "1.0.0",
+  "exports": {
+    ".": "./src/client.ts"
+  },
+  "scripts": {
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:migrate:dev": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:seed": "tsx src/seed.ts",
+    "dev": "tsup --watch",
+    "format": "prisma format",
+    "generate": "prisma generate",
+    "lint": "eslint . --max-warnings 0",
+    "prebuild": "npm run generate",
+    "predev": "npm run generate",
+    "studio": "prisma studio"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.17.0"
+  },
+  "devDependencies": {
+    "@sacred-craft/eslint-config": "workspace:*",
+    "@sacred-craft/typescript-config": "workspace:*",
+    "@types/node": "^20.14.11",
+    "eslint": "^8.57.0",
+    "prisma": "^5.17.0",
+    "tsup": "^8.1.2",
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3"
+  }
+}

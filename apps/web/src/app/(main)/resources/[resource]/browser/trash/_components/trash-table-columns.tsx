@@ -3,7 +3,6 @@
 import { Trash } from "@/server/api/routers/files";
 import valhallaConfig from "@/valhalla";
 import {
-  Badge,
   Checkbox,
   DataTableColumnHeader,
   formatBytes,
@@ -112,7 +111,7 @@ export const trashTableColumns: ColumnDef<Trash>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Actions" />
     ),
-    cell: ({ row, table }) => <TrashTableRowActions row={row} table={table} />,
+    cell: ({ row }) => <TrashTableRowActions row={row} />,
     enableSorting: false,
     enableHiding: false,
   },

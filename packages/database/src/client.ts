@@ -8,6 +8,7 @@ const createPrismaClient = () =>
         : ["error"],
   });
 
+// eslint-disable-next-line no-undef
 const globalForPrisma = globalThis as unknown as {
   prisma: ReturnType<typeof createPrismaClient> | undefined;
 };
@@ -15,3 +16,5 @@ const globalForPrisma = globalThis as unknown as {
 export const db = globalForPrisma.prisma ?? createPrismaClient();
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;
+
+export * from "@prisma/client";

@@ -1,8 +1,9 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalEnv": ["VERCEL_URL", "PORT"],
   "tasks": {
     "build": {
-      "dependsOn": ["^db:generate", "^build"],
+      "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
@@ -10,15 +11,14 @@
       "dependsOn": ["^lint"]
     },
     "dev": {
-      "dependsOn": ["^db:generate"],
       "cache": false,
       "persistent": true
     },
-    "db:generate": {
-      "cache": false
-    },
-    "db:push": {
-      "cache": false
+    "db:migrate:deploy": {},
+    "db:push": {},
+    "db:seed": {},
+    "generate": {
+      "dependsOn": ["^generate"]
     }
   }
 }

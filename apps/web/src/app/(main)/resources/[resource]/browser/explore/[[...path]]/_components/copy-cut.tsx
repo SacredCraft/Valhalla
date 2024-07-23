@@ -20,14 +20,13 @@ import {
   SheetTitle,
   toast,
 } from "@sacred-craft/valhalla-components";
-import { Row, Table } from "@tanstack/react-table";
+import { Row } from "@tanstack/react-table";
 
 import { useBrowserContext } from "../../../layout.client";
 import { useExploreContext } from "../layout.client";
 
 interface CopyCutRowActionProps {
   row: Row<FileCol>;
-  table: Table<FileCol>;
 }
 
 export function CopyCutRowAction({ row }: CopyCutRowActionProps) {

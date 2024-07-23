@@ -1,7 +1,5 @@
 "use client";
 
-import { ArchiveRestore } from "lucide-react";
-
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
 import { Trash } from "@/server/api/routers/files";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
@@ -13,25 +11,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
   toast,
 } from "@sacred-craft/valhalla-components";
-import { Row, Table } from "@tanstack/react-table";
+import { Row } from "@tanstack/react-table";
 
 import { Delete } from "./delete";
 import { Restore } from "./restore";
 
 interface TrashTableRowActionsProps {
   row: Row<Trash>;
-  table: Table<Trash>;
 }
 
-export function TrashTableRowActions({
-  row,
-  table,
-}: TrashTableRowActionsProps) {
+export function TrashTableRowActions({ row }: TrashTableRowActionsProps) {
   const { resource } = useResourceContext();
 
   const handleDownload = () => {

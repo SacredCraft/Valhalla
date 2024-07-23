@@ -3,8 +3,8 @@ import { redirect } from "next/navigation";
 
 import { Step1 } from "@/app/(empty)/setup/[step]/_components/step-1";
 import { Step2 } from "@/app/(empty)/setup/[step]/_components/step-2";
-import { db } from "@/server/db";
 import { Button } from "@sacred-craft/valhalla-components";
+import { db } from "@sacred-craft/valhalla-database";
 
 export default async function SetupPage({
   params,
