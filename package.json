@@ -7,7 +7,11 @@
     "dev": "turbo dev",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md,mdx}\"",
-    "clean": "pnpm -r exec rimraf node_modules .turbo dist && rimraf node_modules .turbo .pnpm-lock.yaml"
+    "clean": "pnpm -r exec rimraf node_modules .turbo dist && rimraf node_modules .turbo .pnpm-lock.yaml",
+    "db:migrate:deploy": "turbo run db:migrate:deploy",
+    "db:push": "turbo run db:push",
+    "db:seed": "turbo run db:seed",
+    "generate": "turbo run generate"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
