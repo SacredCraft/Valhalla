@@ -1,0 +1,5 @@
+{
+  "title": "User Guide",
+  "root": true,
+  "pages": ["---Guide---", "index", "..."]
+}
