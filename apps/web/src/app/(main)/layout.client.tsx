@@ -11,7 +11,7 @@ import React, {
 } from "react";
 
 import { Aside, AsideContext } from "@/app/(main)/_components/aside";
-import { Role } from "@prisma/client";
+import { Role } from "@sacred-craft/valhalla-database";
 
 type ContextType = {
   username: string;
