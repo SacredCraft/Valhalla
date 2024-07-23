@@ -2,7 +2,7 @@ import { Editor } from "./_components/editor";
 
 export default async function RawPage() {
   return (
-    <div className="">
+    <div>
       <Editor defaultLanguage="yaml" />
     </div>
   );
