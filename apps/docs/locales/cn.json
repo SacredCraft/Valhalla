@@ -1,0 +1,12 @@
+{
+  "root-toggle": {
+    "for-users": {
+      "title": "For Users",
+      "description": "Documentation for users"
+    },
+    "for-developers": {
+      "title": "For Developers",
+      "description": "Documentation for developers"
+    }
+  }
+}
