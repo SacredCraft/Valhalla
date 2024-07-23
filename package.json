@@ -2,7 +2,7 @@
   "name": "valhalla",
   "private": true,
   "scripts": {
-    "start": "cd apps/web && npx next start",
+    "start": "cd apps/web && pnpm start",
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
