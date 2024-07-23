@@ -7,7 +7,7 @@
   "scripts": {
     "db:migrate:deploy": "prisma migrate deploy",
     "db:migrate:dev": "prisma migrate dev",
-    "db:push": "prisma db push",
+    "db:push": "env-cmd -f ../../.env prisma db push",
     "db:seed": "tsx src/seed.ts",
     "dev": "tsup --watch",
     "format": "prisma format",
