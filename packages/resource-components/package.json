@@ -1,6 +1,6 @@
 {
   "name": "@sacred-craft/valhalla-resource-components",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "exports": {
     ".": {
       "types": "./src/**/*",
@@ -29,5 +29,9 @@
     "eslint": "^8.57.0",
     "tsup": "^8.1.2",
     "typescript": "^5.5.3"
+  },
+  "dependencies": {
+    "lucide-react": "^0.381.0",
+    "next-theme": "^0.1.5"
   }
 }
