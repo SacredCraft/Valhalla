@@ -9,7 +9,9 @@ import { useResourceFileContext } from "../essential/layout";
 
 export const ResourceMonacoEditor = (editorProps: EditorProps) => {
   const { theme } = useTheme();
-  const { contentCache, setContentCache } = useResourceFileContext();
+  const { contentCache, setContentCache, meta } = useResourceFileContext();
+
+  const lang = meta.path.join(".").split(".").pop() || "plaintext";
 
   return (
     <MonacoEditor
@@ -17,6 +19,7 @@ export const ResourceMonacoEditor = (editorProps: EditorProps) => {
       onChange={(value) => setContentCache(value || "")}
       height="calc(100vh - 6rem)"
       theme={theme === "dark" ? "vs-dark" : "vs"}
+      language={lang}
       {...editorProps}
     />
   );
