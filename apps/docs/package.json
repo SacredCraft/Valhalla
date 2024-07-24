@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "next build",
-    "dev": "next dev",
-    "start": "next start",
+    "docs:build": "next build",
+    "docs:dev": "next dev",
+    "docs:start": "next start",
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {

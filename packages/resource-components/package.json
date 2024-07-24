@@ -1,5 +1,5 @@
 {
-  "name": "@sacred-craft/valhalla-config",
+  "name": "@sacred-craft/valhalla-resource-components",
   "version": "1.0.0",
   "exports": {
     ".": {
@@ -16,10 +16,16 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "peerDependencies": {
+    "@sacred-craft/valhalla-components": "workspace:*",
+    "@sacred-craft/valhalla-resource": "workspace:*"
+  },
   "devDependencies": {
-    "@sacred-craft/typescript-config": "workspace:*",
     "@sacred-craft/eslint-config": "workspace:*",
-    "@sacred-craft/valhalla-resource": "workspace:*",
+    "@sacred-craft/typescript-config": "workspace:*",
+    "@types/node": "^20.14.11",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
     "eslint": "^8.57.0",
     "tsup": "^8.1.2",
     "typescript": "^5.5.3"

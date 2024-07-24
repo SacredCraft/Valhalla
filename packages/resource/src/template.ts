@@ -1,13 +1,37 @@
+import { type ObjectEncodingOptions, WriteFileOptions } from "fs";
+
 import { Resource } from "./resource";
+
+export type FileMeta = {
+  type: "file" | "dir";
+  name: string;
+  path: string[];
+  size: number;
+  createdAt: Date;
+  updatedAt: Date;
+  ext?: string;
+  [key: string]: any;
+};
 
 export type Template = {
   name: string;
   originName?: string;
   matchedPaths: string[];
   priority: number;
-  action?: Action;
 
-  resource?: Resource;
+  filesOptions?: {
+    read?:
+      | (ObjectEncodingOptions & {
+          flag?: string | undefined;
+        })
+      // eslint-disable-next-line no-undef
+      | BufferEncoding
+      | null;
+
+    write?: WriteFileOptions;
+  };
+
+  options: Options;
 
   // eslint-disable-next-line no-unused-vars
   isMatch?: (resource: Resource) => boolean;
@@ -16,23 +40,23 @@ export type Template = {
 
 export type RelatedFile = {};
 
-export type Action =
-  | {
-      render: {
-        info?: () => React.ReactNode;
-        editor?: () => React.ReactNode;
-        raw?: () => React.ReactNode;
-      };
-    }
-  | {
-      redirect: string;
-    }
-  | {
-      error: string;
-    }
-  | {
-      preview: "image" | "video" | "audio";
-    };
+export type Preview = "preview-image";
+
+export type Options = {
+  browser?: {
+    icon?: string;
+    // eslint-disable-next-line no-unused-vars
+    label?: (name: string) => string;
+    onClick?: Preview | "open";
+  };
+
+  render?: {
+    component: () => JSX.Element;
+    value: string;
+    label: string;
+    order: number;
+  }[];
+};
 
 export const createTemplate = (template: Partial<Template>): Template => {
   return {
@@ -41,6 +65,7 @@ export const createTemplate = (template: Partial<Template>): Template => {
     priority: 0,
     relatedFiles: () => [],
     isMatch: () => true,
+    options: {},
     ...template,
   };
 };

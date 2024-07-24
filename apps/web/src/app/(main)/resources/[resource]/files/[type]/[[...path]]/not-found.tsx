@@ -4,7 +4,7 @@ import { Bird } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
-import { useResourceContext } from "../../layout.client";
+import { useResourceContext } from "../../../layout.client";
 
 export default function NotFound() {
   const { setOpenedFiles } = useResourceContext();

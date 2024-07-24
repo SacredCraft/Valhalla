@@ -123,7 +123,7 @@ export function ResourceMenu({
                 <Reorder.Item key={file.path.join("/")} value={file}>
                   <Item
                     index={index}
-                    value={`files/${file.path.join("/")}`}
+                    value={`files/enter/${file.path.join("/")}`}
                     label={label}
                   />
                 </Reorder.Item>

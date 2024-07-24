@@ -91,10 +91,11 @@ export function FilesTable() {
         {table.getRowModel().rows?.length ? (
           table.getRowModel().rows.map((row) => {
             const isImage =
-              row.original.template?.action &&
+              row.original.template?.options?.browser &&
+              row.original.template.options?.browser?.onClick &&
               // eslint-disable-next-line no-unsafe-optional-chaining
-              "preview" in row.original.template?.action &&
-              row.original.template.action.preview === "image";
+              row.original.template.options?.browser?.onClick ===
+                "preview-image";
 
             return isImage ? (
               <ImageModel key={row.id} src={row.original.path.join("/")}>
@@ -141,7 +142,7 @@ export function FilesTable() {
                       ]);
                     }
                     router.push(
-                      `/resources/${resource.name}/files/${relativePath.join("/")}/${row.original.name}`,
+                      `/resources/${resource.name}/files/enter/${relativePath.join("/")}/${row.original.name}`,
                     );
                   }
                 }}

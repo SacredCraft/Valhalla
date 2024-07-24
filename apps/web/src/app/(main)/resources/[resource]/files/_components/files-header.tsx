@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { Fragment } from "react";
 
-import { useFilesContext } from "@/app/(main)/resources/[resource]/files/layout.client";
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
 import {
   Breadcrumb,
@@ -14,10 +13,11 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@sacred-craft/valhalla-components";
+import { useResourceFileContext } from "@sacred-craft/valhalla-resource-components";
 
 export function FilesHeader() {
   const { resource } = useResourceContext();
-  const { relativePath } = useFilesContext();
+  const { relativePath } = useResourceFileContext();
   const pathname = usePathname();
 
   const currentPageName = pathname.split("/")[4];

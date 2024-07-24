@@ -1,35 +1,19 @@
-import React from "react";
-
 import { defineValhallaConfig } from "@sacred-craft/valhalla-config";
 import {
   Resource,
   Template,
-  createResource,
   createTemplate,
 } from "@sacred-craft/valhalla-resource";
 
-const jormungandr = createResource({
-  name: "jormungandr",
-  templates: [
-    createTemplate({
-      name: "JormungandrDefault",
-      matchedPaths: ["item/.*\\.ya?ml$"],
-      action: {
-        render: {
-          editor: () => React.createElement("div", null, "Jormungandr Editor"),
-        },
-      },
-    }),
-  ],
-});
-
-const resources: Resource[] = [jormungandr()];
+const resources: Resource[] = [];
 
 const globalTemplates: Template[] = [
   createTemplate({
     name: "Image",
-    action: {
-      preview: "image",
+    options: {
+      browser: {
+        onClick: "preview-image",
+      },
     },
     matchedPaths: [".*\\.(png|jpe?g|gif|svg)$"],
   }),

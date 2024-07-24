@@ -10,9 +10,8 @@ import React, {
 } from "react";
 
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
-import { FileMeta } from "@/server/api/routers/files";
 import valhallaConfig from "@/valhalla";
-import { getTemplateByPath } from "@sacred-craft/valhalla-resource";
+import { FileMeta, getTemplateByPath } from "@sacred-craft/valhalla-resource";
 import {
   ColumnFiltersState,
   OnChangeFn,

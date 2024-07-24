@@ -4,21 +4,11 @@ import { z } from "zod";
 
 import valhallaConfig from "@/valhalla";
 import { User } from "@sacred-craft/valhalla-database";
+import { FileMeta } from "@sacred-craft/valhalla-resource";
 import { TRPCError } from "@trpc/server";
 
 import { createTRPCRouter, resourceProcedure } from "../trpc";
 import { getResourcePath } from "./resource-paths";
-
-export type FileMeta = {
-  type: "file" | "dir";
-  name: string;
-  path: string[];
-  size: number;
-  createdAt: Date;
-  updatedAt: Date;
-  ext?: string;
-  [key: string]: any;
-};
 
 export type Trash = {
   path: string[];
@@ -37,8 +27,11 @@ export const resourcePathNotFound = new TRPCError({
 const bufferEncodingSchema = z.union([
   z.literal("ascii"),
   z.literal("utf8"),
+  z.literal("utf-8"),
+  z.literal("utf16le"),
   z.literal("utf-16le"),
   z.literal("ucs2"),
+  z.literal("ucs-2"),
   z.literal("base64"),
   z.literal("base64url"),
   z.literal("latin1"),
@@ -49,11 +42,12 @@ const bufferEncodingSchema = z.union([
 export const filesRouter = createTRPCRouter({
   getResourceFiles: resourceProcedure
     .input(z.object({ relativePath: z.array(z.string()) }))
-    .query(async ({ input, ctx }): Promise<FileMeta[] | null> => {
+    .query(async ({ input, ctx }): Promise<FileMeta[]> => {
       const resourcePath = await getResourcePath({ name: ctx.resource });
-      const absolutePath = resourcePath
-        ? [resourcePath, ...input.relativePath]
-        : [];
+      if (!resourcePath) {
+        throw resourcePathNotFound;
+      }
+      const absolutePath = [resourcePath, ...input.relativePath];
       try {
         const mappedFiles = fs
           .readdirSync(absolutePath.map((i) => decodeURIComponent(i)).join("/"))
@@ -86,7 +80,10 @@ export const filesRouter = createTRPCRouter({
           return a.name.localeCompare(b.name);
         });
       } catch (error) {
-        return null;
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to get files",
+        });
       }
     }),
 
@@ -95,7 +92,7 @@ export const filesRouter = createTRPCRouter({
     .query(async ({ input, ctx }) => {
       const resourcePath = await getResourcePath({ name: ctx.resource });
       if (!resourcePath) {
-        return null;
+        throw resourcePathNotFound;
       }
       const filePath = path.join(
         resourcePath,
@@ -129,17 +126,38 @@ export const filesRouter = createTRPCRouter({
               flag: z.string().optional(),
             }),
             bufferEncodingSchema,
+            z.null(),
           ])
           .optional(),
       }),
     )
-    .query(async ({ input, ctx }): Promise<string | Buffer | null> => {
+    .query(async ({ input, ctx }): Promise<string | Buffer> => {
       const resourcePath = await getResourcePath({ name: ctx.resource });
       if (!resourcePath) {
-        return null;
+        throw resourcePathNotFound;
       }
       return fs.readFileSync(
         path.join(resourcePath, input.relativePath.join(path.sep)),
+        input.options,
+      );
+    }),
+
+  writeResourceFile: resourceProcedure
+    .input(
+      z.object({
+        relativePath: z.array(z.string()),
+        content: z.any(),
+        options: z.any(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const resourcePath = await getResourcePath({ name: ctx.resource });
+      if (!resourcePath) {
+        throw resourcePathNotFound;
+      }
+      fs.writeFileSync(
+        path.join(resourcePath, input.relativePath.join(path.sep)),
+        input.content,
         input.options,
       );
     }),
