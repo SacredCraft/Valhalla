@@ -18,7 +18,8 @@
   "license": "ISC",
   "peerDependencies": {
     "@sacred-craft/valhalla-components": "workspace:*",
-    "@sacred-craft/valhalla-resource": "workspace:*"
+    "@sacred-craft/valhalla-resource": "workspace:*",
+    "@sacred-craft/valhalla-config": "workspace:*"
   },
   "devDependencies": {
     "@sacred-craft/eslint-config": "workspace:*",

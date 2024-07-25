@@ -1,8 +1,10 @@
 import { Dispatch, createContext, useContext } from "react";
 
+import { ValhallaConfig } from "@sacred-craft/valhalla-config";
 import { FileMeta, Resource, Template } from "@sacred-craft/valhalla-resource";
 
 type ContextType = {
+  config: ValhallaConfig;
   resource: Resource;
   template: Template;
   relativePath: string[];
@@ -10,8 +12,12 @@ type ContextType = {
   meta: FileMeta;
 
   content?: string | Buffer;
-  // eslint-disable-next-line no-unused-vars, no-undef
-  setContent: (content: string | NodeJS.ArrayBufferView) => void;
+  setContent: (
+    // eslint-disable-next-line no-unused-vars, no-undef
+    content: string | NodeJS.ArrayBufferView,
+    // eslint-disable-next-line no-unused-vars
+    comment?: string,
+  ) => void;
 
   contentCache?: string | Buffer;
   // eslint-disable-next-line no-undef

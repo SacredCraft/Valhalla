@@ -4,10 +4,12 @@ export type ValhallaConfig = {
   resources: Resource[];
   globalTemplates: Template[];
   dateOptions: Intl.DateTimeFormatOptions;
+  enableComments: boolean;
   folders: {
     valhalla: string;
     trash: string;
     files: string;
+    versions: string;
   };
 };
 
@@ -18,10 +20,12 @@ export const defineValhallaConfig = (
     resources: [],
     globalTemplates: [],
     dateOptions: {},
+    enableComments: true,
     folders: {
       valhalla: ".valhalla",
       trash: "trash",
       files: "files",
+      versions: "versions",
       ...(config.folders || {}),
     },
     ...config,

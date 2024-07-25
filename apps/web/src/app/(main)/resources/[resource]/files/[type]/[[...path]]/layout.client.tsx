@@ -104,12 +104,16 @@ const ContentLayer = ({
     },
   });
 
-  // eslint-disable-next-line no-undef
-  const setContent = (content: string | NodeJS.ArrayBufferView) =>
+  const setContent = (
+    // eslint-disable-next-line no-undef
+    content: string | NodeJS.ArrayBufferView,
+    comment?: string,
+  ) =>
     writeResourceFile.mutate({
       resource: resource.name,
       relativePath: relativePath.map((i) => decodeURIComponent(i)),
       content,
+      comment,
       options: template?.filesOptions?.write,
     });
 
@@ -133,6 +137,7 @@ const ContentLayer = ({
   return (
     <ResourceFileProvider
       value={{
+        config: valhallaConfig,
         resource,
         template,
         relativePath,

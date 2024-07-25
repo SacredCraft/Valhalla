@@ -19,6 +19,14 @@ export type Trash = {
   timestamp: string;
 };
 
+export type Version = {
+  path: string[];
+  version: string;
+  comment: string;
+  operators: string[] | User[];
+  timestamp: string;
+};
+
 export const resourcePathNotFound = new TRPCError({
   code: "NOT_FOUND",
   message: "Resource path not found",
@@ -147,7 +155,9 @@ export const filesRouter = createTRPCRouter({
       z.object({
         relativePath: z.array(z.string()),
         content: z.any(),
+        comment: z.string().optional(),
         options: z.any(),
+        collaborators: z.array(z.string()).optional(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
@@ -160,6 +170,126 @@ export const filesRouter = createTRPCRouter({
         input.content,
         input.options,
       );
+
+      const versionsPath = path.join(
+        resourcePath,
+        valhallaConfig.folders.valhalla,
+        valhallaConfig.folders.versions,
+      );
+
+      const filesPath = path.join(
+        resourcePath,
+        valhallaConfig.folders.valhalla,
+        valhallaConfig.folders.files,
+      );
+
+      const version = Math.random().toString(36).slice(2, 8);
+
+      fs.mkdirSync(versionsPath, { recursive: true });
+      fs.mkdirSync(filesPath, { recursive: true });
+      fs.writeFileSync(
+        path.join(
+          versionsPath,
+          `${input.relativePath.join(path.sep)}.${version}.json`,
+        ),
+        JSON.stringify({
+          path: input.relativePath,
+          version,
+          comment: input.comment,
+          operators: [ctx.session.user.id, ...(input.collaborators || [])],
+          timestamp: new Date().toISOString(),
+        } as Version),
+        input.options,
+      );
+
+      fs.copyFileSync(
+        path.join(resourcePath, input.relativePath.join(path.sep)),
+        path.join(filesPath, `${input.relativePath.join(path.sep)}.${version}`),
+      );
+
+      await ctx.db.log.create({
+        data: {
+          operators: {
+            connect: [
+              { id: ctx.session.user.id! },
+              ...(input.collaborators || []).map((id) => ({ id })),
+            ],
+          },
+          action: {
+            type: "WRITE",
+            resource: ctx.resource,
+            path: input.relativePath,
+            version,
+            comment: input.comment,
+          },
+        },
+      });
+    }),
+
+  getFileVersions: resourceProcedure
+    .input(z.object({ relativePath: z.array(z.string()) }))
+    .query(async ({ input, ctx }) => {
+      const resourcePath = await getResourcePath({ name: ctx.resource });
+      if (!resourcePath) {
+        throw resourcePathNotFound;
+      }
+
+      const versionsPath = path.join(
+        resourcePath,
+        valhallaConfig.folders.valhalla,
+        valhallaConfig.folders.versions,
+      );
+
+      try {
+        const versions = fs
+          .readdirSync(versionsPath)
+          .filter((file) => file.startsWith(input.relativePath.join(path.sep)))
+          .map(async (file) => {
+            const content = fs.readFileSync(`${versionsPath}/${file}`, "utf-8");
+            const operators = await Promise.all(
+              JSON.parse(content).operators.map((id: string) =>
+                ctx.db.user.findUnique({ where: { id } }),
+              ),
+            );
+            return {
+              ...JSON.parse(content),
+              operators,
+            } as Version;
+          });
+
+        return Promise.all(versions);
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to get file versions",
+        });
+      }
+    }),
+
+  readResourceFileVersion: resourceProcedure
+    .input(z.object({ relativePath: z.array(z.string()), version: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const resourcePath = await getResourcePath({ name: ctx.resource });
+      if (!resourcePath) {
+        throw resourcePathNotFound;
+      }
+
+      const filesPath = path.join(
+        resourcePath,
+        valhallaConfig.folders.valhalla,
+        valhallaConfig.folders.files,
+      );
+
+      try {
+        return fs.readFileSync(
+          path.join(
+            filesPath,
+            `${input.relativePath.join(path.sep)}.${input.version}`,
+          ),
+        );
+      } catch (error) {
+        return null;
+      }
     }),
 
   deleteResourceFile: resourceProcedure

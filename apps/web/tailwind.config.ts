@@ -6,6 +6,7 @@ const config = {
   content: [
     "./src/**/*.{ts,tsx}",
     "./node_modules/@sacred-craft/valhalla-components/**/*.{ts,tsx}",
+    "./node_modules/@sacred-craft/valhalla-resource-components/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {
