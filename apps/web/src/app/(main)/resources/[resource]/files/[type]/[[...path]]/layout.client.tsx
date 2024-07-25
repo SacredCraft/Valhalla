@@ -96,7 +96,7 @@ const ContentLayer = ({
       options: template?.filesOptions?.write,
     });
 
-  const [contentCache, setContentCache] = useState(content || "");
+  const [contentCache, setContentCache] = useState(content);
   const isModified = content !== contentCache;
   const [leftActions, setLeftActions] = useState<React.ReactNode>(null);
   const [rightActions, setRightActions] = useState<React.ReactNode>(null);
@@ -107,13 +107,11 @@ const ContentLayer = ({
     }
   }, [content]);
 
-  const children = template.options?.render?.find(
+  const Component = template.options?.render?.find(
     (item) => item.value === type,
   )?.component;
 
-  if (!content) {
-    return null;
-  }
+  const children = Component ? () => <Component /> : null;
 
   return (
     <ResourceFileProvider
@@ -135,7 +133,7 @@ const ContentLayer = ({
     >
       <FilesHeader />
       <FilesTabs left={leftActions} right={rightActions} />
-      {children?.()}
+      {children && children()}
     </ResourceFileProvider>
   );
 };

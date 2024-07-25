@@ -142,7 +142,7 @@ export function FilesTable() {
                       ]);
                     }
                     router.push(
-                      `/resources/${resource.name}/files/enter/${relativePath.join("/")}/${row.original.name}`,
+                      `/resources/${resource.name}/files/*/${relativePath.join("/")}/${row.original.name}`,
                     );
                   }
                 }}

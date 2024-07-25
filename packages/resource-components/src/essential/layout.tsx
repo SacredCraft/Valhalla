@@ -9,13 +9,13 @@ type ContextType = {
 
   meta: FileMeta;
 
-  content: string | Buffer;
+  content?: string | Buffer;
   // eslint-disable-next-line no-unused-vars, no-undef
   setContent: (content: string | NodeJS.ArrayBufferView) => void;
 
-  contentCache: string | Buffer;
+  contentCache?: string | Buffer;
   // eslint-disable-next-line no-undef
-  setContentCache: Dispatch<React.SetStateAction<string | Buffer>>;
+  setContentCache: Dispatch<React.SetStateAction<string | Buffer | undefined>>;
 
   isModified: boolean;
 

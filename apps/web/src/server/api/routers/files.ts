@@ -42,10 +42,10 @@ const bufferEncodingSchema = z.union([
 export const filesRouter = createTRPCRouter({
   getResourceFiles: resourceProcedure
     .input(z.object({ relativePath: z.array(z.string()) }))
-    .query(async ({ input, ctx }): Promise<FileMeta[]> => {
+    .query(async ({ input, ctx }): Promise<FileMeta[] | null> => {
       const resourcePath = await getResourcePath({ name: ctx.resource });
       if (!resourcePath) {
-        throw resourcePathNotFound;
+        return null;
       }
       const absolutePath = [resourcePath, ...input.relativePath];
       try {

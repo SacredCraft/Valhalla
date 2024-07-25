@@ -8,7 +8,7 @@ export const ResourceSave = () => {
   const { isModified, setContent, contentCache } = useResourceFileContext();
 
   const handleSave = () => {
-    setContent(contentCache);
+    setContent(contentCache || "");
     toast.success("Saved successfully");
   };
 

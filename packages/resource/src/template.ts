@@ -54,7 +54,6 @@ export type Options = {
     component: () => JSX.Element;
     value: string;
     label: string;
-    order: number;
   }[];
 };
 

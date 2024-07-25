@@ -3,7 +3,6 @@
 import { File as FileIcon, Folder } from "lucide-react";
 
 import { FilesTableRowActions } from "@/app/(main)/resources/[resource]/browser/explore/[[...path]]/_components/files-table-row-actions";
-import { FileMeta } from "@/server/api/routers/files";
 import valhallaConfig from "@/valhalla";
 import {
   Badge,
@@ -11,7 +10,7 @@ import {
   DataTableColumnHeader,
   formatBytes,
 } from "@sacred-craft/valhalla-components";
-import { Template } from "@sacred-craft/valhalla-resource";
+import { FileMeta, Template } from "@sacred-craft/valhalla-resource";
 import { ColumnDef } from "@tanstack/react-table";
 
 export type FileCol = FileMeta & { template?: Template };

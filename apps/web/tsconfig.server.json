@@ -1,8 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "isolatedModules": false,
-    "noEmit": false
-  },
-  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx"]
-}
