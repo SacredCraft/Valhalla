@@ -36,7 +36,6 @@ export function FileClientLayout({
     });
 
   if (!meta || meta.type === "dir") {
-    router.push(`/resources/${resource.name}/browser/explore`);
     return null;
   }
 
