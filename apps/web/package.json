@@ -17,7 +17,7 @@
     "@sacred-craft/valhalla-config": "workspace:*",
     "@sacred-craft/valhalla-database": "workspace:*",
     "@sacred-craft/valhalla-resource": "workspace:*",
-    "@sacred-craft/valhalla-resource-common": "^1.0.5",
+    "@sacred-craft/valhalla-resource-common": "^1.0.6",
     "@sacred-craft/valhalla-resource-components": "workspace:*",
     "@tanstack/react-query": "^5.51.5",
     "@tanstack/react-table": "^8.19.3",
