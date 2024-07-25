@@ -4,8 +4,9 @@ import {
   Template,
   createTemplate,
 } from "@sacred-craft/valhalla-resource";
+import { common } from "@sacred-craft/valhalla-resource-common";
 
-const resources: Resource[] = [];
+const resources: Resource[] = [common()];
 
 const globalTemplates: Template[] = [
   createTemplate({
