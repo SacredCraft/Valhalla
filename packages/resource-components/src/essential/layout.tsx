@@ -17,6 +17,12 @@ type ContextType = {
   // eslint-disable-next-line no-undef
   setContentCache: Dispatch<React.SetStateAction<string | Buffer | undefined>>;
 
+  refresh: () => void;
+
+  refetchMeta: () => void;
+
+  refetchContent: () => void;
+
   isModified: boolean;
 
   leftActions: React.ReactNode;

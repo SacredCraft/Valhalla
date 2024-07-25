@@ -19,17 +19,26 @@ import { FilesTabs } from "../../_components/files-tabs";
 
 type FileClientLayoutProps = {
   relativePath: string[];
-  meta: FileMeta;
   type: string;
 };
 
 export function FileClientLayout({
   relativePath,
-  meta,
   type,
 }: FileClientLayoutProps) {
   const { resource } = useResourceContext();
   const router = useRouter();
+
+  const { data: meta, refetch: refetchMeta } =
+    api.files.getResourceFile.useQuery({
+      resource: resource.name,
+      relativePath: relativePath.map((i) => decodeURIComponent(i)),
+    });
+
+  if (!meta || meta.type === "dir") {
+    router.push(`/resources/${resource.name}/browser/explore`);
+    return null;
+  }
 
   const template = getTemplateByPath(meta.path, resource, valhallaConfig);
 
@@ -57,6 +66,7 @@ export function FileClientLayout({
       resource={resource}
       relativePath={relativePath}
       meta={meta}
+      refetchMeta={refetchMeta}
       type={type}
     />
   );
@@ -67,6 +77,7 @@ const ContentLayer = ({
   resource,
   relativePath,
   meta,
+  refetchMeta,
   type,
 }: {
   template: Template;
@@ -74,16 +85,23 @@ const ContentLayer = ({
   relativePath: string[];
   meta: FileMeta;
   type: string;
+  refetchMeta: () => void;
 }) => {
-  const { data: content, refetch } = api.files.readResourceFile.useQuery({
-    resource: resource.name,
-    relativePath: relativePath.map((i) => decodeURIComponent(i)),
-    options: template?.filesOptions?.read as unknown as any,
-  });
+  const { data: content, refetch: refetchContent } =
+    api.files.readResourceFile.useQuery({
+      resource: resource.name,
+      relativePath: relativePath.map((i) => decodeURIComponent(i)),
+      options: template?.filesOptions?.read as unknown as any,
+    });
+
+  const refresh = () => {
+    refetchContent();
+    refetchMeta();
+  };
 
   const writeResourceFile = api.files.writeResourceFile.useMutation({
     onSuccess: () => {
-      refetch();
+      refresh();
     },
   });
 
@@ -129,6 +147,9 @@ const ContentLayer = ({
         setLeftActions,
         rightActions,
         setRightActions,
+        refresh,
+        refetchMeta,
+        refetchContent,
       }}
     >
       <FilesHeader />

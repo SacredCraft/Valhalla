@@ -1,10 +1,10 @@
 import { SaveIcon } from "lucide-react";
 
-import { Button, toast } from "@sacred-craft/valhalla-components";
+import { Button, ButtonProps, toast } from "@sacred-craft/valhalla-components";
 
 import { useResourceFileContext } from "../essential/layout";
 
-export const ResourceSave = () => {
+export const ResourceSave = (props: ButtonProps) => {
   const { isModified, setContent, contentCache } = useResourceFileContext();
 
   const handleSave = () => {
@@ -13,7 +13,12 @@ export const ResourceSave = () => {
   };
 
   return (
-    <Button className="h-7 px-2" disabled={!isModified} onClick={handleSave}>
+    <Button
+      className="h-7 px-2"
+      disabled={!isModified}
+      onClick={handleSave}
+      {...props}
+    >
       <SaveIcon className="mr-1 size-4" />
       Save
     </Button>

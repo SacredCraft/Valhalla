@@ -1,6 +1,4 @@
-import { notFound, redirect } from "next/navigation";
-
-import { api } from "@/trpc/server";
+import { redirect } from "next/navigation";
 
 import { FileClientLayout } from "./layout.client";
 
@@ -19,16 +17,5 @@ export default async function FileLayout({
     redirect(`/resources/${resource}/browser/explore`);
   }
 
-  const meta = await api.files.getResourceFile({
-    resource,
-    relativePath: relativePath.map((i) => decodeURIComponent(i)),
-  });
-
-  if (!meta || meta.type === "dir") {
-    notFound();
-  }
-
-  return (
-    <FileClientLayout type={type} relativePath={relativePath} meta={meta} />
-  );
+  return <FileClientLayout type={type} relativePath={relativePath} />;
 }
