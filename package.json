@@ -14,7 +14,7 @@
     "generate": "turbo run generate",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo build --filter=./apps/* && changeset publish"
+    "release": "turbo build --filter=!./apps/* && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.7",

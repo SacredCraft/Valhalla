@@ -1,5 +1,11 @@
 # @sacred-craft/valhalla-resource-components
 
+## 1.0.4
+
+### Patch Changes
+
+- add resource-refresh component
+
 ## 1.0.3
 
 ### Patch Changes
