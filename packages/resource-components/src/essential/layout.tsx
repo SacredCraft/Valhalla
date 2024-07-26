@@ -1,9 +1,16 @@
 import { Dispatch, createContext, useContext } from "react";
 
 import { ValhallaConfig } from "@sacred-craft/valhalla-config";
-import { FileMeta, Resource, Template } from "@sacred-craft/valhalla-resource";
+import {
+  FileMeta,
+  Resource,
+  Template,
+  Version,
+} from "@sacred-craft/valhalla-resource";
 
 type ContextType = {
+  versions: Version[];
+
   config: ValhallaConfig;
   resource: Resource;
   template: Template;
@@ -17,13 +24,15 @@ type ContextType = {
     content: string | NodeJS.ArrayBufferView,
     // eslint-disable-next-line no-unused-vars
     comment?: string,
-  ) => void;
+  ) => Promise<boolean>;
 
   contentCache?: string | Buffer;
   // eslint-disable-next-line no-undef
   setContentCache: Dispatch<React.SetStateAction<string | Buffer | undefined>>;
 
   refresh: () => void;
+
+  refetchVersions: () => void;
 
   refetchMeta: () => void;
 

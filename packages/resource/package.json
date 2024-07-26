@@ -17,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@sacred-craft/valhalla-database": "workspace:*",
     "@sacred-craft/eslint-config": "workspace:*",
     "@sacred-craft/typescript-config": "workspace:*",
     "@types/node": "^20.14.11",

@@ -25,8 +25,12 @@ export const ResourceSave = (props: ButtonProps) => {
 
   const [comment, setComment] = useState<string | undefined>();
 
-  const handleSave = (comment?: string) => {
-    setContent(contentCache || "", comment);
+  const handleSave = async (comment?: string) => {
+    const success = await setContent(contentCache || "", comment);
+
+    if (!success) {
+      return;
+    }
     setComment(undefined);
     toast.success("Saved successfully");
   };

@@ -4,7 +4,7 @@ import { z } from "zod";
 
 import valhallaConfig from "@/valhalla";
 import { User } from "@sacred-craft/valhalla-database";
-import { FileMeta } from "@sacred-craft/valhalla-resource";
+import { FileMeta, Version } from "@sacred-craft/valhalla-resource";
 import { TRPCError } from "@trpc/server";
 
 import { createTRPCRouter, resourceProcedure } from "../trpc";
@@ -16,14 +16,6 @@ export type Trash = {
   trashName: string;
   size: number;
   operator: string | User;
-  timestamp: string;
-};
-
-export type Version = {
-  path: string[];
-  version: string;
-  comment: string;
-  operators: string[] | User[];
   timestamp: string;
 };
 
@@ -158,6 +150,7 @@ export const filesRouter = createTRPCRouter({
         comment: z.string().optional(),
         options: z.any(),
         collaborators: z.array(z.string()).optional(),
+        version: z.string().optional(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
@@ -165,11 +158,6 @@ export const filesRouter = createTRPCRouter({
       if (!resourcePath) {
         throw resourcePathNotFound;
       }
-      fs.writeFileSync(
-        path.join(resourcePath, input.relativePath.join(path.sep)),
-        input.content,
-        input.options,
-      );
 
       const versionsPath = path.join(
         resourcePath,
@@ -183,17 +171,53 @@ export const filesRouter = createTRPCRouter({
         valhallaConfig.folders.files,
       );
 
+      if (input.version) {
+        const versions = fs
+          .readdirSync(versionsPath)
+          .filter((file) => file.endsWith(".json"))
+          .map(async (file) => {
+            const content = fs.readFileSync(`${versionsPath}/${file}`, "utf-8");
+
+            return {
+              ...JSON.parse(content),
+            } as Version;
+          });
+
+        const latestVersion = await Promise.all(versions).then(
+          (versions) =>
+            versions
+              .filter(
+                (version) =>
+                  version.path.join(path.sep) ===
+                  input.relativePath.join(path.sep),
+              )
+              .sort((a, b) => b.timestamp.localeCompare(a.timestamp))[0],
+        );
+
+        if (latestVersion?.version !== input.version) {
+          throw new TRPCError({
+            code: "CONFLICT",
+            message: "File has been modified since you last read it",
+          });
+        }
+      }
+
+      fs.writeFileSync(
+        path.join(resourcePath, input.relativePath.join(path.sep)),
+        input.content,
+        input.options,
+      );
+
       const version = Math.random().toString(36).slice(2, 8);
+      const name = crypto.randomUUID();
 
       fs.mkdirSync(versionsPath, { recursive: true });
       fs.mkdirSync(filesPath, { recursive: true });
       fs.writeFileSync(
-        path.join(
-          versionsPath,
-          `${input.relativePath.join(path.sep)}.${version}.json`,
-        ),
+        path.join(versionsPath, `${name}.json`),
         JSON.stringify({
           path: input.relativePath,
+          name,
           version,
           comment: input.comment,
           operators: [ctx.session.user.id, ...(input.collaborators || [])],
@@ -204,7 +228,7 @@ export const filesRouter = createTRPCRouter({
 
       fs.copyFileSync(
         path.join(resourcePath, input.relativePath.join(path.sep)),
-        path.join(filesPath, `${input.relativePath.join(path.sep)}.${version}`),
+        path.join(filesPath, name),
       );
 
       await ctx.db.log.create({
@@ -243,36 +267,58 @@ export const filesRouter = createTRPCRouter({
       try {
         const versions = fs
           .readdirSync(versionsPath)
-          .filter((file) => file.startsWith(input.relativePath.join(path.sep)))
+          .filter((file) => file.endsWith(".json"))
           .map(async (file) => {
             const content = fs.readFileSync(`${versionsPath}/${file}`, "utf-8");
+            const obj = JSON.parse(content);
+
+            const isCorrectPath =
+              obj.path.join(path.sep) === input.relativePath.join(path.sep);
+
+            if (!isCorrectPath) {
+              return null;
+            }
+
             const operators = await Promise.all(
-              JSON.parse(content).operators.map((id: string) =>
+              obj.operators.map((id: string) =>
                 ctx.db.user.findUnique({ where: { id } }),
               ),
             );
             return {
-              ...JSON.parse(content),
+              ...obj,
               operators,
             } as Version;
           });
 
-        return Promise.all(versions);
+        return Promise.all(versions).then((versions) =>
+          versions
+            .filter((version) => version !== null)
+            .sort((a, b) => b.timestamp.localeCompare(a.timestamp)),
+        );
       } catch (error) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Failed to get file versions",
-        });
+        return [];
       }
     }),
 
   readResourceFileVersion: resourceProcedure
-    .input(z.object({ relativePath: z.array(z.string()), version: z.string() }))
+    .input(
+      z.object({
+        relativePath: z.array(z.string()),
+        version: z.string(),
+        options: z.any(),
+      }),
+    )
     .query(async ({ input, ctx }) => {
       const resourcePath = await getResourcePath({ name: ctx.resource });
       if (!resourcePath) {
         throw resourcePathNotFound;
       }
+
+      const versionsPath = path.join(
+        resourcePath,
+        valhallaConfig.folders.valhalla,
+        valhallaConfig.folders.versions,
+      );
 
       const filesPath = path.join(
         resourcePath,
@@ -281,12 +327,49 @@ export const filesRouter = createTRPCRouter({
       );
 
       try {
-        return fs.readFileSync(
-          path.join(
-            filesPath,
-            `${input.relativePath.join(path.sep)}.${input.version}`,
-          ),
+        const versions = fs
+          .readdirSync(versionsPath)
+          .filter((file) => file.endsWith(".json"))
+          .map(async (file) => {
+            const content = fs.readFileSync(`${versionsPath}/${file}`, "utf-8");
+            const isCorrectPath =
+              JSON.parse(content).path.join(path.sep) ===
+              input.relativePath.join(path.sep);
+
+            if (!isCorrectPath) {
+              return null;
+            }
+
+            const operators = await Promise.all(
+              JSON.parse(content).operators.map((id: string) =>
+                ctx.db.user.findUnique({ where: { id } }),
+              ),
+            );
+
+            return {
+              ...JSON.parse(content),
+              operators,
+            } as Version;
+          });
+
+        const version = (await Promise.all(versions)).find(
+          (version) => version?.version === input.version,
         );
+
+        if (!version) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Version not found",
+          });
+        }
+
+        return {
+          ...version,
+          content: fs.readFileSync(
+            `${filesPath}/${version.name}`,
+            input.options,
+          ),
+        };
       } catch (error) {
         return null;
       }

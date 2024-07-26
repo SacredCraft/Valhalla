@@ -94,6 +94,7 @@ const ContentLayer = ({
     });
 
   const refresh = () => {
+    refetchVersions();
     refetchContent();
     refetchMeta();
   };
@@ -108,13 +109,33 @@ const ContentLayer = ({
     // eslint-disable-next-line no-undef
     content: string | NodeJS.ArrayBufferView,
     comment?: string,
-  ) =>
-    writeResourceFile.mutate({
+  ) => {
+    return new Promise<boolean>((resolve) => {
+      writeResourceFile.mutate(
+        {
+          resource: resource.name,
+          relativePath: relativePath.map((i) => decodeURIComponent(i)),
+          content,
+          comment,
+          options: template?.filesOptions?.write,
+          version: versions?.[0]?.version,
+        },
+        {
+          onSuccess: () => {
+            resolve(true);
+          },
+          onError: () => {
+            resolve(false);
+          },
+        },
+      );
+    });
+  };
+
+  const { data: versions, refetch: refetchVersions } =
+    api.files.getFileVersions.useQuery({
       resource: resource.name,
       relativePath: relativePath.map((i) => decodeURIComponent(i)),
-      content,
-      comment,
-      options: template?.filesOptions?.write,
     });
 
   const [contentCache, setContentCache] = useState(content);
@@ -137,6 +158,7 @@ const ContentLayer = ({
   return (
     <ResourceFileProvider
       value={{
+        versions: versions || [],
         config: valhallaConfig,
         resource,
         template,
@@ -152,6 +174,7 @@ const ContentLayer = ({
         rightActions,
         setRightActions,
         refresh,
+        refetchVersions,
         refetchMeta,
         refetchContent,
       }}
