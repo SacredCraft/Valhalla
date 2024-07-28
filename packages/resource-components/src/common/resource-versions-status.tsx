@@ -25,12 +25,16 @@ export const ResourceVersionsStatus = () => {
             <span className="text-[10px] mb-1">
               The current file has been modified, the latest changes:
             </span>
-            <span className="text-[10px] text-gray-400 dark:text-gray-700">
-              {latestVersion?.comment}
-            </span>
-            <span className="text-[8px] text-gray-400 dark:text-gray-700">
-              {new Date(latestVersion?.timestamp ?? "").toLocaleString()}
-            </span>
+            {latestVersion && (
+              <>
+                <span className="text-[10px] text-gray-400 dark:text-gray-700">
+                  {latestVersion.comment ?? "Auto Save"}
+                </span>
+                <span className="text-[8px] text-gray-400 dark:text-gray-700">
+                  {new Date(latestVersion.timestamp).toLocaleString()}
+                </span>
+              </>
+            )}
             <span className="text-[8px] text-gray-400 dark:text-gray-700 mt-1">
               {(latestVersion?.operators as User[] | undefined)?.map(
                 (operator) => (
