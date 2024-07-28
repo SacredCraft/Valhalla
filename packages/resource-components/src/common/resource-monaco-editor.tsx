@@ -8,7 +8,7 @@ import {
   MonacoDiffEditor,
 } from "@sacred-craft/valhalla-components";
 
-import { useResourceFileContext } from "../essential/layout";
+import { useResourceFileContext } from "../essential/providers";
 
 export const ResourceMonacoEditor = (editorProps: EditorProps) => {
   const { theme } = useTheme();

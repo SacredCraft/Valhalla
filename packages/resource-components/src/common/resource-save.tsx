@@ -17,7 +17,7 @@ import {
   toast,
 } from "@sacred-craft/valhalla-components";
 
-import { useResourceFileContext } from "../essential/layout";
+import { useResourceFileContext } from "../essential/providers";
 
 export const ResourceSave = (props: ButtonProps) => {
   const { isModified, setContent, contentCache, config } =

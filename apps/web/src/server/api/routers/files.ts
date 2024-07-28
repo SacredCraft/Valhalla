@@ -305,7 +305,16 @@ export const filesRouter = createTRPCRouter({
       z.object({
         relativePath: z.array(z.string()),
         version: z.string(),
-        options: z.any(),
+        options: z
+          .union([
+            z.object({
+              encoding: bufferEncodingSchema,
+              flag: z.string().optional(),
+            }),
+            bufferEncodingSchema,
+            z.null(),
+          ])
+          .optional(),
       }),
     )
     .query(async ({ input, ctx }) => {

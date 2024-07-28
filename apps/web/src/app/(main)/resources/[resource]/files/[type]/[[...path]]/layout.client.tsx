@@ -11,7 +11,10 @@ import {
   Template,
   getTemplateByPath,
 } from "@sacred-craft/valhalla-resource";
-import { ResourceFileProvider } from "@sacred-craft/valhalla-resource-components";
+import {
+  ResourceFileProvider,
+  ResourceVersionsProvider,
+} from "@sacred-craft/valhalla-resource-components";
 
 import { useResourceContext } from "../../../layout.client";
 import { FilesHeader } from "../../_components/files-header";
@@ -133,10 +136,44 @@ const ContentLayer = ({
   };
 
   const { data: versions, refetch: refetchVersions } =
-    api.files.getFileVersions.useQuery({
+    api.files.getFileVersions.useQuery(
+      {
+        resource: resource.name,
+        relativePath: relativePath.map((i) => decodeURIComponent(i)),
+      },
+      {
+        refetchInterval: 2000,
+        refetchIntervalInBackground: true,
+        refetchOnWindowFocus: true,
+      },
+    );
+
+  useEffect(() => {
+    setCurrentVersion(versions?.[0]?.version);
+  }, []);
+
+  const [currentVersion, setCurrentVersion] = useState<
+    string | [string, string]
+  >();
+
+  useEffect(() => {
+    if (currentVersion) {
+      refetchContent();
+      refetchMeta();
+    }
+  }, [currentVersion]);
+
+  const readResourceFileVersion = (version: string) =>
+    api.files.readResourceFileVersion.useQuery({
       resource: resource.name,
       relativePath: relativePath.map((i) => decodeURIComponent(i)),
+      version,
+      options: template?.filesOptions?.read as unknown as any,
     });
+
+  const latestVersion = versions?.[0];
+
+  const isLatestVersion = latestVersion?.version === currentVersion || true;
 
   const [contentCache, setContentCache] = useState(content);
   const isModified = content !== contentCache;
@@ -158,7 +195,6 @@ const ContentLayer = ({
   return (
     <ResourceFileProvider
       value={{
-        versions: versions || [],
         config: valhallaConfig,
         resource,
         template,
@@ -174,14 +210,25 @@ const ContentLayer = ({
         rightActions,
         setRightActions,
         refresh,
-        refetchVersions,
         refetchMeta,
         refetchContent,
       }}
     >
-      <FilesHeader />
-      <FilesTabs left={leftActions} right={rightActions} />
-      {children && children()}
+      <ResourceVersionsProvider
+        value={{
+          readResourceFileVersion,
+          latestVersion,
+          isLatestVersion,
+          versions: versions || [],
+          refetchVersions,
+          currentVersion,
+          setCurrentVersion,
+        }}
+      >
+        <FilesHeader />
+        <FilesTabs left={leftActions} right={rightActions} />
+        {children && children()}
+      </ResourceVersionsProvider>
     </ResourceFileProvider>
   );
 };

@@ -13,7 +13,7 @@ import {
   toast,
 } from "@sacred-craft/valhalla-components";
 
-import { useResourceFileContext } from "../essential/layout";
+import { useResourceFileContext } from "../essential/providers";
 
 export const ResourceRefresh = (props: ButtonProps) => {
   const { isModified, refresh, setContentCache, content } =

@@ -7,10 +7,9 @@ import {
   Template,
   Version,
 } from "@sacred-craft/valhalla-resource";
+import { useQuery } from "@tanstack/react-query";
 
-type ContextType = {
-  versions: Version[];
-
+type FileContextType = {
   config: ValhallaConfig;
   resource: Resource;
   template: Template;
@@ -32,8 +31,6 @@ type ContextType = {
 
   refresh: () => void;
 
-  refetchVersions: () => void;
-
   refetchMeta: () => void;
 
   refetchContent: () => void;
@@ -45,19 +42,53 @@ type ContextType = {
 
   rightActions: React.ReactNode;
   setRightActions: Dispatch<React.SetStateAction<React.ReactNode>>;
-
-  [key: string]: any;
 };
 
-export const ResourceFileContext = createContext<ContextType | null>(null);
+export const ResourceFileContext = createContext<FileContextType | null>(null);
 
 export const ResourceFileProvider = ResourceFileContext.Provider;
 
-export const useResourceFileContext = (): ContextType => {
+export const useResourceFileContext = (): FileContextType => {
   const context = useContext(ResourceFileContext);
   if (!context) {
     throw new Error(
       "useResourceFileContext must be used within a ResourceFileProvider",
+    );
+  }
+  return context;
+};
+
+type VersionsContextType = {
+  versions: Version[];
+  latestVersion?: Version;
+  isLatestVersion: boolean;
+
+  currentVersion: string | [string, string] | undefined;
+
+  setCurrentVersion: Dispatch<
+    React.SetStateAction<string | [string, string] | undefined>
+  >;
+
+  readResourceFileVersion: (
+    // eslint-disable-next-line no-unused-vars
+    version: string,
+  ) => ReturnType<
+    typeof useQuery<(Version & { content: string | Buffer }) | null, any>
+  >;
+
+  refetchVersions: () => void;
+};
+
+export const ResourceVersionsContext =
+  createContext<VersionsContextType | null>(null);
+
+export const ResourceVersionsProvider = ResourceVersionsContext.Provider;
+
+export const useResourceVersionsContext = (): VersionsContextType => {
+  const context = useContext(ResourceVersionsContext);
+  if (!context) {
+    throw new Error(
+      "useResourceVersionsContext must be used within a ResourceVersionsProvider",
     );
   }
   return context;
