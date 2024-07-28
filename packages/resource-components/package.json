@@ -1,6 +1,6 @@
 {
   "name": "@sacred-craft/valhalla-resource-components",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "exports": {
     ".": {
       "types": "./src/**/*",
