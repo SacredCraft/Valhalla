@@ -1,33 +1,62 @@
 import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Badge,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  cn,
 } from "@sacred-craft/valhalla-components";
+import { User } from "@sacred-craft/valhalla-database";
 
 import { useResourceVersionsContext } from "../essential/providers";
 
 export const ResourceVersionsStatus = () => {
-  const { latestVersion, currentVersion, isLatestVersion } =
-    useResourceVersionsContext();
+  const { latestVersion, isLatestVersion } = useResourceVersionsContext();
 
   return (
-    <div className="flex items-center space-x-2">
-      <Tooltip>
-        <TooltipContent>Current Version</TooltipContent>
-        <TooltipTrigger className="flex items-center">
-          <span className="bg-green-500 rounded-full size-2 mr-1" />{" "}
-          {currentVersion}
-        </TooltipTrigger>
-      </Tooltip>
-      {!isLatestVersion && (
-        <Tooltip>
-          <TooltipContent>Latest Version</TooltipContent>
-          <TooltipTrigger className="flex items-center">
-            <span className="bg-red-500 rounded-full size-2 mr-1" />{" "}
-            {latestVersion?.version}
-          </TooltipTrigger>
-        </Tooltip>
-      )}
-    </div>
+    <Tooltip>
+      <TooltipContent>
+        {isLatestVersion ? (
+          "The current file is the latest version"
+        ) : (
+          <div className="flex flex-col">
+            <span className="text-[10px] mb-1">
+              The current file has been modified, the latest changes:
+            </span>
+            <span className="text-[10px] text-gray-400 dark:text-gray-700">
+              {latestVersion?.comment}
+            </span>
+            <span className="text-[8px] text-gray-400 dark:text-gray-700">
+              {new Date(latestVersion?.timestamp ?? "").toLocaleString()}
+            </span>
+            <span className="text-[8px] text-gray-400 dark:text-gray-700 mt-1">
+              {(latestVersion?.operators as User[] | undefined)?.map(
+                (operator) => (
+                  <Avatar className="size-4">
+                    <AvatarFallback>
+                      {operator.username.slice(0, 2)}
+                    </AvatarFallback>
+                    {operator.avatar && <AvatarImage src={operator.avatar} />}
+                  </Avatar>
+                ),
+              )}
+            </span>
+          </div>
+        )}
+      </TooltipContent>
+      <TooltipTrigger className="flex items-center font-mono">
+        <Badge className="rounded-sm">
+          <span
+            className={cn(
+              "rounded-full size-2 mr-1.5",
+              isLatestVersion ? "bg-green-500" : "bg-red-500",
+            )}
+          />
+          {isLatestVersion ? "Latest" : "Outdated"}
+        </Badge>
+      </TooltipTrigger>
+    </Tooltip>
   );
 };

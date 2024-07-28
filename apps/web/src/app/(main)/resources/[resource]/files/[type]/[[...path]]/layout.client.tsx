@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { api } from "@/trpc/react";
 import valhallaConfig from "@/valhalla";
@@ -87,7 +87,7 @@ const ContentLayer = ({
   relativePath: string[];
   meta: FileMeta;
   type: string;
-  refetchMeta: () => void;
+  refetchMeta: () => Promise<any>;
 }) => {
   const { data: content, refetch: refetchContent } =
     api.files.readResourceFile.useQuery({
@@ -96,10 +96,11 @@ const ContentLayer = ({
       options: template?.filesOptions?.read as unknown as any,
     });
 
-  const refresh = () => {
-    refetchVersions();
-    refetchContent();
-    refetchMeta();
+  const refresh = async () => {
+    const { data: newVersions } = await refetchVersions();
+    await refetchContent();
+    await refetchMeta();
+    setCurrentVersion(newVersions?.[0]?.version);
   };
 
   const writeResourceFile = api.files.writeResourceFile.useMutation({
@@ -148,13 +149,15 @@ const ContentLayer = ({
       },
     );
 
-  useEffect(() => {
-    setCurrentVersion(versions?.[0]?.version);
-  }, []);
-
   const [currentVersion, setCurrentVersion] = useState<
     string | [string, string]
   >();
+
+  useEffect(() => {
+    if (!currentVersion && versions?.length) {
+      setCurrentVersion(versions[0]?.version);
+    }
+  }, [currentVersion, versions]);
 
   useEffect(() => {
     if (currentVersion) {
@@ -171,9 +174,9 @@ const ContentLayer = ({
       options: template?.filesOptions?.read as unknown as any,
     });
 
-  const latestVersion = versions?.[0];
+  const latestVersion = useMemo(() => versions?.[0], [versions]);
 
-  const isLatestVersion = latestVersion?.version === currentVersion || true;
+  const isLatestVersion = latestVersion?.version === currentVersion ?? true;
 
   const [contentCache, setContentCache] = useState(content);
   const isModified = content !== contentCache;

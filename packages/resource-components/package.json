@@ -19,7 +19,8 @@
   "peerDependencies": {
     "@sacred-craft/valhalla-components": "workspace:*",
     "@sacred-craft/valhalla-config": "workspace:*",
-    "@sacred-craft/valhalla-resource": "workspace:*"
+    "@sacred-craft/valhalla-resource": "workspace:*",
+    "@sacred-craft/valhalla-database": "workspace:*"
   },
   "devDependencies": {
     "@sacred-craft/eslint-config": "workspace:*",
