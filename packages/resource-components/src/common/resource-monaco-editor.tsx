@@ -1,4 +1,5 @@
-import useTheme from "next-theme";
+import { useTheme } from "next-themes";
+import { useEffect } from "react";
 
 import {
   DiffEditor,
@@ -8,7 +9,10 @@ import {
   MonacoDiffEditor,
 } from "@sacred-craft/valhalla-components";
 
-import { useResourceFileContext } from "../essential/providers";
+import {
+  useResourceFileContext,
+  useResourceVersionsContext,
+} from "../essential/providers";
 
 export const ResourceMonacoEditor = (editorProps: EditorProps) => {
   const { theme } = useTheme();
@@ -28,8 +32,22 @@ export const ResourceMonacoEditor = (editorProps: EditorProps) => {
 
 export const ResourceMonacoDiffEditor = (diffEditorProps: DiffEditorProps) => {
   const { theme } = useTheme();
-  const { content, contentCache, setContentCache, meta } =
-    useResourceFileContext();
+  const { contentCache, setContentCache, meta } = useResourceFileContext();
+
+  const { currentVersion, readResourceFileVersion } =
+    useResourceVersionsContext();
+
+  if (!currentVersion) {
+    return null;
+  }
+
+  const { data: modified } = readResourceFileVersion(currentVersion[1]);
+
+  const { data: readonly } = readResourceFileVersion(currentVersion[0]);
+
+  useEffect(() => {
+    setContentCache(modified?.content);
+  }, []);
 
   const handleEditorDidMount = (editor: MonacoDiffEditor) => {
     editor.onDidUpdateDiff(() => {
@@ -44,7 +62,7 @@ export const ResourceMonacoDiffEditor = (diffEditorProps: DiffEditorProps) => {
     <DiffEditor
       originalModelPath={meta.path.join("/")}
       modifiedModelPath={meta.path.join("/")}
-      original={content?.toString()}
+      original={readonly?.content?.toString()}
       modified={contentCache?.toString()}
       height="calc(100vh - 6rem)"
       theme={theme === "dark" ? "vs-dark" : "vs"}
