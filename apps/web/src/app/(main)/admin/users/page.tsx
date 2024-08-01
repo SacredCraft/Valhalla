@@ -15,7 +15,7 @@ export default async function UsersPage() {
   }));
 
   return (
-    <div className="mt-2">
+    <div className="my-2">
       <UsersTable users={users} />
     </div>
   );

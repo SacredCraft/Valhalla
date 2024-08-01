@@ -102,6 +102,29 @@ export const resourceRouter = createTRPCRouter({
         });
       }
     }),
+
+  getResourceRoles: protectedProcedure.query(async ({ ctx }) => {
+    const roles = await ctx.db.resourceRole.findMany({
+      include: {
+        UserResourceRole: {
+          select: {
+            user: true,
+          },
+        },
+      },
+    });
+
+    return roles;
+  }),
+
+  createResourceRole: adminProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        resources: z.array(z.string()),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {}),
 });
 
 export async function getResourcePath(input: { name: string }) {

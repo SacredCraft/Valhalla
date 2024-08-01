@@ -23,9 +23,10 @@ export function AdminMenu() {
         </div>
         <nav className="flex flex-col gap-1 px-2">
           <p className="text-muted-foreground text-xs font-semibold uppercase px-2 mb-1 mt-2">
-            Functions
+            Main
           </p>
           <Item value="users" label="Users" />
+          <Item value="resource-roles" label="Roles" />
         </nav>
         <nav className="flex flex-col gap-1 px-2">
           <p className="text-muted-foreground text-xs font-semibold uppercase px-2 mb-1 mt-2">

@@ -13,17 +13,19 @@ enum Role {
 }
 
 model User {
-  id               String             @id @default(cuid())
-  username         String             @unique
-  password         String
-  avatar           String?
-  bio              String?
-  role             Role               @default(USER)
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
-  lastLogin        DateTime?
+  id       String  @id @default(cuid())
+  username String  @unique
+  password String
+  avatar   String?
+  bio      String?
+  role     Role    @default(USER)
+
   UserResourceRole UserResourceRole[]
   LogOperators     Log[]              @relation("LogOperators")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  lastLogin DateTime?
 }
 
 model ResourceRole {
@@ -31,6 +33,9 @@ model ResourceRole {
   role             String
   resources        String[]
   UserResourceRole UserResourceRole[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model UserResourceRole {
@@ -39,6 +44,9 @@ model UserResourceRole {
   userId         String
   resourceRole   ResourceRole @relation(fields: [resourceRoleId], references: [id])
   resourceRoleId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ResourcePath {

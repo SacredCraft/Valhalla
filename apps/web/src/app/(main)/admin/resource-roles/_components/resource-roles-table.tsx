@@ -2,13 +2,6 @@
 
 import { useEffect, useState } from "react";
 
-import { UsersEdit } from "@/app/(main)/admin/users/_components/users-edit";
-import {
-  UserCol,
-  usersTableColumns,
-} from "@/app/(main)/admin/users/_components/users-table-columns";
-import { UsersTableToolbar } from "@/app/(main)/admin/users/_components/users-table-toolbar";
-import { useUsersContext } from "@/app/(main)/admin/users/layout.client";
 import {
   DataTablePagination,
   Table,
@@ -33,9 +26,21 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-export function UsersTable({ users }: { users: UserCol[] }) {
-  const { setTable } = useUsersContext();
-  const [data, setData] = useState<UserCol[]>(users);
+import { useResourceRolesContext } from "../layout.client";
+import { ResourceRolesEdit } from "./resource-roles-edit";
+import {
+  RoleCol,
+  resourceRolesTableColumns,
+} from "./resource-roles-table-columns";
+import { ResourceRolesTableToolbar } from "./resource-roles-table-toolbar";
+
+export function ResourceRolesTable({
+  resourceRoles,
+}: {
+  resourceRoles: RoleCol[];
+}) {
+  const { setTable } = useResourceRolesContext();
+  const [data, setData] = useState<RoleCol[]>(resourceRoles);
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -43,7 +48,7 @@ export function UsersTable({ users }: { users: UserCol[] }) {
 
   const table = useReactTable({
     data,
-    columns: usersTableColumns,
+    columns: resourceRolesTableColumns,
     state: {
       sorting,
       columnVisibility,
@@ -64,8 +69,8 @@ export function UsersTable({ users }: { users: UserCol[] }) {
   });
 
   useEffect(() => {
-    setData(users);
-  }, [users]);
+    setData(resourceRoles);
+  }, [resourceRoles]);
 
   useEffect(() => {
     setTable(table);
@@ -83,17 +88,17 @@ export function UsersTable({ users }: { users: UserCol[] }) {
               data-state={row.getIsSelected() && "selected"}
             >
               {row.getVisibleCells().map((cell) => (
-                <UsersEdit key={cell.id} cell={cell} />
+                <ResourceRolesEdit key={cell.id} cell={cell} />
               ))}
             </TableRow>
           ))
         ) : (
           <TableRow>
             <TableCell
-              colSpan={usersTableColumns.length}
+              colSpan={resourceRolesTableColumns.length}
               className="h-24 text-center"
             >
-              No users found.
+              No roles found.
             </TableCell>
           </TableRow>
         )}
@@ -103,11 +108,11 @@ export function UsersTable({ users }: { users: UserCol[] }) {
 }
 
 function Template({ children }: { children: React.ReactNode }) {
-  const { table } = useUsersContext();
+  const { table } = useResourceRolesContext();
 
   return (
     <div className="px-2 flex flex-col gap-2">
-      {table && <UsersTableToolbar />}
+      {table && <ResourceRolesTableToolbar />}
       <div className="border rounded-lg">
         <Table>
           <TableHeader>
