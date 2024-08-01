@@ -63,12 +63,24 @@ export const userRouter = createTRPCRouter({
       const hashedPassword = hashSync(input.password, salt);
 
       try {
-        await ctx.db.user.create({
+        const user = await ctx.db.user.create({
           data: {
             username: input.username,
             password: hashedPassword,
             avatar: input.avatar,
             role: input.role,
+          },
+        });
+
+        await ctx.db.log.create({
+          data: {
+            operators: {
+              connect: [{ id: ctx.session.user.id!! }],
+            },
+            action: {
+              type: "CREATE_USER",
+              userId: user.id,
+            },
           },
         });
       } catch (e) {
@@ -156,6 +168,19 @@ export const userRouter = createTRPCRouter({
           password: input.data.password
             ? hashSync(input.data.password, genSaltSync(10))
             : undefined,
+        },
+      });
+
+      await ctx.db.log.create({
+        data: {
+          operators: {
+            connect: [{ id: ctx.session.user.id!! }],
+          },
+          action: {
+            type: "UPDATE_USER",
+            userId: input.id,
+            update: input.data,
+          },
         },
       });
 

@@ -420,6 +420,20 @@ export const filesRouter = createTRPCRouter({
           path.join(resourcePath, input.oldRelativePath.join(path.sep)),
           path.join(resourcePath, input.newRelativePath.join(path.sep)),
         );
+
+        ctx.db.log.create({
+          data: {
+            operators: {
+              connect: [{ id: ctx.session.user.id!! }],
+            },
+            action: {
+              type: "RENAME",
+              resource: ctx.resource,
+              oldPath: input.oldRelativePath,
+              newPath: input.newRelativePath,
+            },
+          },
+        });
       } catch (error) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
@@ -451,6 +465,19 @@ export const filesRouter = createTRPCRouter({
         } else {
           fs.writeFileSync(filePath, input.content || "");
         }
+        ctx.db.log.create({
+          data: {
+            operators: {
+              connect: [{ id: ctx.session.user.id!! }],
+            },
+            action: {
+              type: "CREATE",
+              resource: ctx.resource,
+              isDir: input.type === "dir",
+              path: input.relativePath,
+            },
+          },
+        });
       } catch (error) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
@@ -499,6 +526,20 @@ export const filesRouter = createTRPCRouter({
         if (input.cut) {
           fs.unlinkSync(sourceFile);
         }
+        ctx.db.log.create({
+          data: {
+            operators: {
+              connect: [{ id: ctx.session.user.id!! }],
+            },
+            action: {
+              type: "COPY",
+              resource: ctx.resource,
+              source: input.source,
+              destination: input.destination,
+              cut: input.cut,
+            },
+          },
+        });
       } catch (error) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
@@ -528,6 +569,20 @@ export const filesRouter = createTRPCRouter({
 
       try {
         fs.copyFileSync(sourceFile, destinationFile);
+
+        ctx.db.log.create({
+          data: {
+            operators: {
+              connect: [{ id: ctx.session.user.id!! }],
+            },
+            action: {
+              type: "REPLACE",
+              resource: ctx.resource,
+              source: input.source,
+              destination: input.destination,
+            },
+          },
+        });
       } catch (error) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",

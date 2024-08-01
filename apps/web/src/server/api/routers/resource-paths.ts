@@ -44,6 +44,19 @@ export const resourcePathsRouter = createTRPCRouter({
             path: input.path,
           },
         });
+
+        await ctx.db.log.create({
+          data: {
+            operators: {
+              connect: [{ id: ctx.session.user.id }],
+            },
+            action: {
+              type: "SET_RESOURCE_PATH",
+              name: input.name,
+              path: input.path,
+            },
+          },
+        });
       } catch (error) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
