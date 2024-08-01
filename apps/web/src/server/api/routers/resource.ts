@@ -122,6 +122,7 @@ export const resourceRouter = createTRPCRouter({
       z.object({
         role: z.string(),
         resources: z.array(z.string()),
+        users: z.array(z.string()),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -133,6 +134,23 @@ export const resourceRouter = createTRPCRouter({
           },
         });
 
+        for (const userId of input.users) {
+          await ctx.db.userResourceRole.create({
+            data: {
+              user: {
+                connect: {
+                  id: userId,
+                },
+              },
+              resourceRole: {
+                connect: {
+                  role: input.role,
+                },
+              },
+            },
+          });
+        }
+
         await ctx.db.log.create({
           data: {
             operators: {
@@ -142,6 +160,7 @@ export const resourceRouter = createTRPCRouter({
               type: "CREATE_RESOURCE_ROLE",
               role: input.role,
               resources: input.resources,
+              users: input.users,
             },
           },
         });
@@ -160,6 +179,14 @@ export const resourceRouter = createTRPCRouter({
         await ctx.db.resourceRole.delete({
           where: {
             role: input.role,
+          },
+        });
+
+        await ctx.db.userResourceRole.deleteMany({
+          where: {
+            resourceRole: {
+              role: input.role,
+            },
           },
         });
 
@@ -264,7 +291,13 @@ export const resourceRouter = createTRPCRouter({
     }),
 
   updateResourceRole: adminProcedure
-    .input(z.object({ roleId: z.number(), resources: z.array(z.string()) }))
+    .input(
+      z.object({
+        roleId: z.number(),
+        resources: z.array(z.string()),
+        users: z.array(z.string()),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       try {
         await ctx.db.resourceRole.update({
@@ -276,6 +309,45 @@ export const resourceRouter = createTRPCRouter({
           },
         });
 
+        await ctx.db.userResourceRole.deleteMany({
+          where: {
+            resourceRoleId: input.roleId,
+            NOT: {
+              userId: {
+                in: input.users,
+              },
+            },
+          },
+        });
+
+        for (const userId of input.users) {
+          const existing = await ctx.db.userResourceRole.findFirst({
+            where: {
+              userId,
+              resourceRoleId: input.roleId,
+            },
+          });
+
+          if (existing) {
+            continue;
+          }
+
+          await ctx.db.userResourceRole.create({
+            data: {
+              user: {
+                connect: {
+                  id: userId,
+                },
+              },
+              resourceRole: {
+                connect: {
+                  id: input.roleId,
+                },
+              },
+            },
+          });
+        }
+
         await ctx.db.log.create({
           data: {
             operators: {
@@ -285,6 +357,7 @@ export const resourceRouter = createTRPCRouter({
               type: "UPDATE_RESOURCE_ROLE",
               roleId: input.roleId,
               resources: input.resources,
+              users: input.users,
             },
           },
         });

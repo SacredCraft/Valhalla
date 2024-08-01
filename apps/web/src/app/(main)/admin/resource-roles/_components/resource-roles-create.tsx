@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { UsersList } from "@/app/(main)/_components/users-list";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -34,6 +35,7 @@ import { ResourcesList } from "./resources-list";
 export const createResourceRoleSchema = z.object({
   role: z.string(),
   resources: z.array(z.string()),
+  users: z.array(z.string()),
 });
 
 export const ResourceRolesCreate = () => {
@@ -58,6 +60,7 @@ export const ResourceRolesCreate = () => {
     defaultValues: {
       role: "",
       resources: [],
+      users: [],
     },
     disabled: creating,
   });
@@ -108,6 +111,17 @@ export const ResourceRolesCreate = () => {
                   <ResourcesList
                     selectedResources={field.value}
                     setSelectResources={field.onChange}
+                    {...field}
+                  />
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="users"
+                render={({ field }) => (
+                  <UsersList
+                    users={field.value}
+                    setUsers={field.onChange}
                     {...field}
                   />
                 )}

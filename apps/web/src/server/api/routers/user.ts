@@ -106,6 +106,38 @@ export const userRouter = createTRPCRouter({
       );
     }),
 
+  getUsersByIDs: protectedProcedure
+    .input(
+      z.object({
+        ids: z.array(z.string()),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      try {
+        return ctx.db.user.findMany({
+          where: {
+            id: {
+              in: input.ids,
+            },
+          },
+          select: {
+            id: true,
+            bio: true,
+            username: true,
+            role: true,
+            avatar: true,
+            password: false,
+            UserResourceRole: true,
+          },
+        });
+      } catch (e) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to get users",
+        });
+      }
+    }),
+
   getUserById: protectedProcedure
     .input(
       z.object({
