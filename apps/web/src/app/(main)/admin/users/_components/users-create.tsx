@@ -93,15 +93,15 @@ export const UsersCreate = () => {
         </Button>
       </SheetTrigger>
       <SheetContent>
+        <SheetHeader>
+          <SheetTitle>Create User</SheetTitle>
+          <SheetDescription>
+            Fill out the form below to create a new user.
+          </SheetDescription>
+        </SheetHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <SheetHeader>
-              <SheetTitle>Create User</SheetTitle>
-              <SheetDescription>
-                Fill out the form below to create a new user.
-              </SheetDescription>
-            </SheetHeader>
-            <div className="py-4">
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="grid gap-4 py-4">
               <AvatarUploader
                 value={file}
                 onChange={setFile}
@@ -191,7 +191,7 @@ export const UsersCreate = () => {
                 )}
               />
             </div>
-            <SheetFooter>
+            <SheetFooter className="mt-2">
               <SheetClose asChild>
                 <Button type="submit">Create</Button>
               </SheetClose>

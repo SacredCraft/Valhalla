@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { createResourceRoleSchema } from "@/app/(main)/admin/resource-roles/_components/resource-roles-create";
 import valhallaConfig from "@/valhalla";
 import { db } from "@sacred-craft/valhalla-database";
 import { TRPCError } from "@trpc/server";
@@ -120,11 +121,213 @@ export const resourceRouter = createTRPCRouter({
   createResourceRole: adminProcedure
     .input(
       z.object({
-        name: z.string(),
+        role: z.string(),
         resources: z.array(z.string()),
       }),
     )
-    .mutation(async ({ ctx, input }) => {}),
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.db.resourceRole.create({
+          data: {
+            role: input.role,
+            resources: input.resources,
+          },
+        });
+
+        await ctx.db.log.create({
+          data: {
+            operators: {
+              connect: [{ id: ctx.session.user.id }],
+            },
+            action: {
+              type: "CREATE_RESOURCE_ROLE",
+              role: input.role,
+              resources: input.resources,
+            },
+          },
+        });
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to create resource role",
+        });
+      }
+    }),
+
+  deleteResourceRole: adminProcedure
+    .input(z.object({ role: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.db.resourceRole.delete({
+          where: {
+            role: input.role,
+          },
+        });
+
+        await ctx.db.log.create({
+          data: {
+            operators: {
+              connect: [{ id: ctx.session.user.id }],
+            },
+            action: {
+              type: "DELETE_RESOURCE_ROLE",
+              role: input.role,
+            },
+          },
+        });
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to delete resource role",
+        });
+      }
+    }),
+
+  assignResourceRole: adminProcedure
+    .input(z.object({ roleId: z.number(), userId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const existing = await ctx.db.userResourceRole.findFirst({
+          where: {
+            userId: input.userId,
+            resourceRoleId: input.roleId,
+          },
+        });
+
+        if (existing) {
+          return;
+        }
+
+        await ctx.db.userResourceRole.create({
+          data: {
+            user: {
+              connect: {
+                id: input.userId,
+              },
+            },
+            resourceRole: {
+              connect: {
+                id: input.roleId,
+              },
+            },
+          },
+        });
+
+        await ctx.db.log.create({
+          data: {
+            operators: {
+              connect: [{ id: ctx.session.user.id }],
+            },
+            action: {
+              type: "ASSIGN_RESOURCE_ROLE",
+              roleId: input.roleId,
+              userId: input.userId,
+            },
+          },
+        });
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to assign resource role",
+        });
+      }
+    }),
+
+  unassignResourceRole: adminProcedure
+    .input(z.object({ roleId: z.number(), userId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.db.userResourceRole.deleteMany({
+          where: {
+            userId: input.userId,
+            resourceRoleId: input.roleId,
+          },
+        });
+
+        await ctx.db.log.create({
+          data: {
+            operators: {
+              connect: [{ id: ctx.session.user.id }],
+            },
+            action: {
+              type: "UNASSIGN_RESOURCE_ROLE",
+              role: input.roleId,
+              userId: input.userId,
+            },
+          },
+        });
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to unassign resource role",
+        });
+      }
+    }),
+
+  updateResourceRole: adminProcedure
+    .input(z.object({ roleId: z.number(), resources: z.array(z.string()) }))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.db.resourceRole.update({
+          where: {
+            id: input.roleId,
+          },
+          data: {
+            resources: input.resources,
+          },
+        });
+
+        await ctx.db.log.create({
+          data: {
+            operators: {
+              connect: [{ id: ctx.session.user.id }],
+            },
+            action: {
+              type: "UPDATE_RESOURCE_ROLE",
+              roleId: input.roleId,
+              resources: input.resources,
+            },
+          },
+        });
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to update resource role",
+        });
+      }
+    }),
+
+  getResourceRoleUsers: protectedProcedure
+    .input(z.object({ role: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const users = await ctx.db.userResourceRole.findMany({
+        where: {
+          resourceRole: {
+            role: input.role,
+          },
+        },
+        include: {
+          user: true,
+        },
+      });
+
+      return users;
+    }),
+
+  getUserResourceRoles: protectedProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const roles = await ctx.db.userResourceRole.findMany({
+        where: {
+          userId: input.userId,
+        },
+        include: {
+          resourceRole: true,
+        },
+      });
+
+      return roles;
+    }),
 });
 
 export async function getResourcePath(input: { name: string }) {

@@ -30,7 +30,7 @@ model User {
 
 model ResourceRole {
   id               Int                @id @default(autoincrement())
-  role             String
+  role             String             @unique
   resources        String[]
   UserResourceRole UserResourceRole[]
 

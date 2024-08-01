@@ -110,15 +110,15 @@ export const UsersEdit = ({ cell }: { cell: Cell<UserCol, any> }) => {
         </TableCell>
       </SheetTrigger>
       <SheetContent>
+        <SheetHeader>
+          <SheetTitle>Edit User</SheetTitle>
+          <SheetDescription>
+            Edit user with id: {cell.row.original.id}
+          </SheetDescription>
+        </SheetHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <SheetHeader>
-              <SheetTitle>Edit User</SheetTitle>
-              <SheetDescription>
-                Edit user with id: {cell.row.original.id}
-              </SheetDescription>
-            </SheetHeader>
-            <div className="py-4">
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="grid gap-4 py-4">
               <AvatarUploader
                 fallback={cell.row.original.username}
                 avatar={cell.row.original.avatar ?? ""}
@@ -232,7 +232,7 @@ export const UsersEdit = ({ cell }: { cell: Cell<UserCol, any> }) => {
                 )}
               />
             </div>
-            <SheetFooter>
+            <SheetFooter className="mt-2">
               <SheetClose asChild>
                 <Button type="submit">Edit</Button>
               </SheetClose>
