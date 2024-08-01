@@ -29,6 +29,8 @@ import {
   toast,
 } from "@sacred-craft/valhalla-components";
 
+import { ResourcesList } from "./resources-list";
+
 export const createResourceRoleSchema = z.object({
   role: z.string(),
   resources: z.array(z.string()),
@@ -57,6 +59,7 @@ export const ResourceRolesCreate = () => {
       role: "",
       resources: [],
     },
+    disabled: creating,
   });
 
   const onSubmit = (values: z.infer<typeof createResourceRoleSchema>) => {
@@ -89,13 +92,24 @@ export const ResourceRolesCreate = () => {
                   <FormItem>
                     <FormLabel>Role</FormLabel>
                     <FormControl>
-                      <Input disabled={creating} {...field} />
+                      <Input {...field} />
                     </FormControl>
                     <FormDescription>
                       The role should be unique and descriptive.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="resources"
+                render={({ field }) => (
+                  <ResourcesList
+                    selectedResources={field.value}
+                    setSelectResources={field.onChange}
+                    {...field}
+                  />
                 )}
               />
             </div>

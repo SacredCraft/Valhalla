@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-import { createResourceRoleSchema } from "@/app/(main)/admin/resource-roles/_components/resource-roles-create";
 import valhallaConfig from "@/valhalla";
 import { db } from "@sacred-craft/valhalla-database";
 import { TRPCError } from "@trpc/server";
