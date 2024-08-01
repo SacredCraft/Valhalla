@@ -22,7 +22,7 @@ export const POST = auth(async (request) => {
   const relativePath = formData.get("relativePath") as string;
   const files = formData.getAll("files") as File[];
 
-  const resourcePath = await api.resourcePaths.getResourcePath({
+  const resourcePath = await api.resources.getResourcePath({
     name: resource,
   });
   if (!resourcePath) {
@@ -68,7 +68,7 @@ export const GET = auth(async (request) => {
     return new Response(null, { status: 400 });
   }
 
-  const resourcePath = await api.resourcePaths.getResourcePath({
+  const resourcePath = await api.resources.getResourcePath({
     name: resource,
   });
   if (!resourcePath) {

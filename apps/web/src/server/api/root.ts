@@ -2,7 +2,6 @@ import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 
 import { filesRouter } from "./routers/files";
 import { resourceRouter } from "./routers/resource";
-import { resourcePathsRouter } from "./routers/resource-paths";
 import { userRouter } from "./routers/user";
 import { viewFilesRouter } from "./routers/view-file";
 
@@ -14,7 +13,6 @@ import { viewFilesRouter } from "./routers/view-file";
 export const appRouter = createTRPCRouter({
   users: userRouter,
   resources: resourceRouter,
-  resourcePaths: resourcePathsRouter,
   files: filesRouter,
   viewFiles: viewFilesRouter,
 });

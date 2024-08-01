@@ -32,7 +32,7 @@ export const ResourcePathForm = ({
 
   const router = useRouter();
 
-  const setResourcePath = api.resourcePaths.setResourcePath.useMutation({
+  const setResourcePath = api.resources.setResourcePath.useMutation({
     onSuccess: () => {
       toast.success("Plugin path updated.");
       router.refresh();

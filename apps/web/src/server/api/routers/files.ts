@@ -8,7 +8,7 @@ import { FileMeta, Version } from "@sacred-craft/valhalla-resource";
 import { TRPCError } from "@trpc/server";
 
 import { createTRPCRouter, resourceProcedure } from "../trpc";
-import { getResourcePath } from "./resource-paths";
+import { getResourcePath } from "./resource";
 
 export type Trash = {
   path: string[];

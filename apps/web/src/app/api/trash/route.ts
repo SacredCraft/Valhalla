@@ -20,7 +20,7 @@ export const GET = auth(async (request) => {
     return new Response(null, { status: 403 });
   }
 
-  const resourcePath = await api.resourcePaths.getResourcePath({
+  const resourcePath = await api.resources.getResourcePath({
     name: resource,
   });
   if (!resourcePath) {

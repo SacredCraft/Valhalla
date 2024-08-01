@@ -3,7 +3,7 @@ import { ResourcePathHeader } from "@/app/(main)/admin/resource-path/_components
 import { api } from "@/trpc/server";
 
 export default async function ResourcePath() {
-  const resourcePaths = await api.resourcePaths.getResourcePaths();
+  const resourcePaths = await api.resources.getResourcePaths();
 
   return (
     <>
