@@ -168,6 +168,38 @@ export const userRouter = createTRPCRouter({
       }
     }),
 
+  queryUsers: protectedProcedure
+    .input(
+      z.object({
+        username: z.string().optional(),
+        role: z.enum(["ADMIN", "USER"]).optional(),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      try {
+        return ctx.db.user.findMany({
+          where: {
+            username: input.username ? { contains: input.username } : undefined,
+            role: input.role,
+          },
+          select: {
+            id: true,
+            bio: true,
+            username: true,
+            role: true,
+            avatar: true,
+            password: false,
+            UserResourceRole: true,
+          },
+        });
+      } catch (e) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to get users",
+        });
+      }
+    }),
+
   updateUserById: adminProcedure
     .input(
       z.object({
@@ -217,5 +249,31 @@ export const userRouter = createTRPCRouter({
       });
 
       return input.data.password ? { password: true } : {};
+    }),
+
+  deleteUserById: adminProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      await ctx.db.user.delete({
+        where: {
+          id: input.id,
+        },
+      });
+
+      await ctx.db.log.create({
+        data: {
+          operators: {
+            connect: [{ id: ctx.session.user.id!! }],
+          },
+          action: {
+            type: "DELETE_USER",
+            userId: input.id,
+          },
+        },
+      });
     }),
 });

@@ -294,6 +294,7 @@ export const resourceRouter = createTRPCRouter({
     .input(
       z.object({
         roleId: z.number(),
+        role: z.string(),
         resources: z.array(z.string()),
         users: z.array(z.string()),
       }),
@@ -305,6 +306,7 @@ export const resourceRouter = createTRPCRouter({
             id: input.roleId,
           },
           data: {
+            role: input.role,
             resources: input.resources,
           },
         });

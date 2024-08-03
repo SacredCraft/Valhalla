@@ -1,4 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { debounce } from "lodash";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { api } from "@/trpc/react";
 import { useControllableState } from "@radix-ui/react-use-controllable-state";
@@ -51,27 +58,39 @@ export const UsersList = ({
           value={search}
           onChange={(value) => setSearch(value as string)}
         />
-        <AddUser />
+        <AddUser setUsers={setValue} ids={value} />
       </div>
       <ScrollArea className="flex flex-col gap-2 border rounded-md p-2">
         {usersList && usersList.length > 0 ? (
-          usersList
-            .filter((user) => user.username.includes(search))
-            .map((user, index) => (
-              <li key={index} className="flex items-center gap-2">
-                <Avatar className="w-8 h-8">
-                  <AvatarImage
-                    src={user.avatar ?? undefined}
-                    alt={user.username}
-                  />
-                  <AvatarFallback>{user.username.slice(0, 2)}</AvatarFallback>
-                </Avatar>
-                <div className="flex flex-col gap-1">
-                  <span>{user.username}</span>
-                  <span className="text-sm text-gray-500">{user.bio}</span>
-                </div>
-              </li>
-            ))
+          <div className="flex flex-col gap-2">
+            {usersList
+              .filter((user) => user.username.includes(search))
+              .map((user, index) => (
+                <li key={index} className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Avatar className="w-8 h-8">
+                      <AvatarImage
+                        src={user.avatar ?? undefined}
+                        alt={user.username}
+                      />
+                      <AvatarFallback>
+                        {user.username.slice(0, 2)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm">{user.username}</span>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      setValue((prev) => prev?.filter((id) => id !== user.id));
+                    }}
+                  >
+                    Remove
+                  </Button>
+                </li>
+              ))}
+          </div>
         ) : (
           <div className="text-sm text-muted-foreground min-h-20 flex items-center justify-center">
             No users found
@@ -85,7 +104,25 @@ export const UsersList = ({
   );
 };
 
-export const AddUser = () => {
+export const AddUser = ({
+  ids,
+  setUsers,
+}: {
+  ids: string[] | undefined;
+  setUsers: Dispatch<SetStateAction<string[] | undefined>>;
+}) => {
+  const [search, setSearch] = useState("");
+
+  const { data: users, refetch } = api.users.queryUsers.useQuery({
+    username: search,
+  });
+
+  const debouncedRefetch = useRef(debounce(refetch, 300));
+
+  useEffect(() => {
+    debouncedRefetch.current();
+  }, [search]);
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -100,6 +137,60 @@ export const AddUser = () => {
             Search for a user to add to this role.
           </DialogDescription>
         </DialogHeader>
+        <Input
+          placeholder="Search users"
+          className="h-8"
+          value={search}
+          onChange={(value) => setSearch(value as string)}
+        />
+        <ScrollArea className="border rounded-md p-2">
+          {users && users.length > 0 ? (
+            <div className="flex flex-col gap-2">
+              {users.map((user, index) => (
+                <li key={index} className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Avatar className="w-8 h-8">
+                      <AvatarImage
+                        src={user.avatar ?? undefined}
+                        alt={user.username}
+                      />
+                      <AvatarFallback>
+                        {user.username.slice(0, 2)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm">{user.username}</span>
+                  </div>
+                  {ids?.includes(user.id) ? (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        setUsers((prev) =>
+                          prev?.filter((id) => id !== user.id),
+                        );
+                      }}
+                    >
+                      Remove
+                    </Button>
+                  ) : (
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        setUsers((prev) => [...(prev ?? []), user.id]);
+                      }}
+                    >
+                      Add
+                    </Button>
+                  )}
+                </li>
+              ))}
+            </div>
+          ) : (
+            <div className="text-sm text-muted-foreground min-h-20 flex items-center justify-center">
+              No users found
+            </div>
+          )}
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );
