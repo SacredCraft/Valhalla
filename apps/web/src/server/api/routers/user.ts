@@ -15,6 +15,21 @@ const updateSchema = z.object({
 });
 
 export const userRouter = createTRPCRouter({
+  isAdmin: protectedProcedure.query(async ({ ctx }) => {
+    const user = await ctx.db.user.findFirst({
+      where: {
+        id: ctx.session.user.id,
+        role: "ADMIN",
+      },
+    });
+
+    if (!user || user.role !== "ADMIN") {
+      return false;
+    }
+
+    return true;
+  }),
+
   setupAdminUser: publicProcedure
     .input(
       z.object({

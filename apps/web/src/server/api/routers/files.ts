@@ -395,6 +395,19 @@ export const filesRouter = createTRPCRouter({
         fs.unlinkSync(
           path.join(resourcePath, input.relativePath.join(path.sep)),
         );
+
+        ctx.db.log.create({
+          data: {
+            operators: {
+              connect: [{ id: ctx.session.user.id!! }],
+            },
+            action: {
+              type: "DELETE",
+              resource: ctx.resource,
+              path: input.relativePath,
+            },
+          },
+        });
       } catch (error) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
