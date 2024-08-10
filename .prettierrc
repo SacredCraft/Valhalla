@@ -12,5 +12,8 @@
     "^[./]"
   ],
   "importOrderSeparation": true,
-  "importOrderSortSpecifiers": true
+  "importOrderSortSpecifiers": true,
+  "overrides": [
+    { "files": ["./apps/docs/**/*.mdx"], "options": { "singleQuote": true } }
+  ]
 }
