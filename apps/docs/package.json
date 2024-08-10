@@ -3,13 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "docs:build": "next build",
-    "docs:dev": "next dev",
-    "docs:start": "next start",
+    "build": "next build",
+    "dev": "next dev",
+    "start": "next start",
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
     "fumadocs-core": "12.5.4",
+    "fumadocs-docgen": "^1.1.0",
     "fumadocs-mdx": "8.2.34",
     "fumadocs-ui": "12.5.4",
     "lucide-react": "^0.381.0",
@@ -21,14 +22,14 @@
     "@sacred-craft/eslint-config": "workspace:*",
     "@sacred-craft/typescript-config": "workspace:*",
     "@types/mdx": "^2.0.13",
-    "@types/node": "^22.0.0",
+    "@types/node": "^22.2.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "autoprefixer": "^10.4.19",
+    "autoprefixer": "^10.4.20",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.3",
-    "postcss": "^8.4.39",
-    "tailwindcss": "^3.4.6",
-    "typescript": "^5.5.3"
+    "postcss": "^8.4.41",
+    "tailwindcss": "^3.4.9",
+    "typescript": "^5.5.4"
   }
 }

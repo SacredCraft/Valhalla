@@ -2,7 +2,7 @@
   "name": "valhalla",
   "private": true,
   "scripts": {
-    "start": "cd apps/web && pnpm start",
+    "start": "turbo start --filter=./apps/web",
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
@@ -14,7 +14,8 @@
     "generate": "turbo run generate",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo build --filter=!./apps/* && changeset publish"
+    "release": "turbo build --filter=!./apps/* && changeset publish",
+    "docs": "turbo dev --filter=./apps/docs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.7",
