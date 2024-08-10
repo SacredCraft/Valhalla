@@ -30,29 +30,13 @@ openssl rand -base64 33
 
 <Tabs items={["npm", "pnpm", "yarn", "bun"]} className="rounded-none border-none">
 
-<Tab value="npm">
-```bash
-npx auth secret
-```
-</Tab>
+<Tab value="npm">```bash npx auth secret ```</Tab>
 
-<Tab value="pnpm">
-```bash
-pnpx dlx auth secret
-```
-</Tab>
+<Tab value="pnpm">```bash pnpx dlx auth secret ```</Tab>
 
-<Tab value="yarn">
-```bash
-yarn dlx auth secret
-```
-</Tab>
+<Tab value="yarn">```bash yarn dlx auth secret ```</Tab>
 
-<Tab value="bun">
-```bash
-bun auth secret
-```
-</Tab>
+<Tab value="bun">```bash bun auth secret ```</Tab>
 
 </Tabs>
 
@@ -68,8 +52,8 @@ AUTH_SECRET=X3K131LCQyonfh7lv5KaWCkNwQ00MiDPnNqhVRan1EI=
 
 ## `AUTH_TRUST_HOST`
 
-如果需要允许外网访问, 请设置 `AUTH_TRUST_HOST` 为 `true`
+如果需要禁止外网访问, 请设置 `AUTH_TRUST_HOST` 为 `false`
 
 ```bash
-AUTH_TRUST_HOST=true
+AUTH_TRUST_HOST=false
 ```

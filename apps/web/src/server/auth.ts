@@ -46,6 +46,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     },
   },
+  trustHost: Boolean(process.env.AUTH_TRUST_HOST ?? true),
 });
 
 declare module "next-auth" {
