@@ -2,7 +2,8 @@
   "name": "valhalla",
   "private": true,
   "scripts": {
-    "start": "turbo build --filter=!./apps/docs && turbo start --filter=./apps/web",
+    "setup": "turbo run generate && turbo run build --filter=!./apps/docs && turbo run db:migrate:deploy && turbo run db:push && turbo run db:seed",
+    "start": "cd apps/web && pnpm start",
     "build": "turbo build --filter=!./apps/docs",
     "dev": "turbo dev",
     "lint": "turbo lint",
