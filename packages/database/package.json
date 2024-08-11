@@ -7,25 +7,26 @@
   "scripts": {
     "db:migrate:deploy": "env-cmd -f ../../.env prisma migrate deploy",
     "db:migrate:dev": "env-cmd -f ../../.env prisma migrate dev",
-    "db:push": "env-cmd -f ../../.env prisma db push",
-    "db:seed": "tsx src/seed.ts",
+    "db:push": "env-cmd -f ../../.env prisma db push --skip-generate",
+    "db:seed": "env-cmd -f ../../.env tsx src/seed.ts",
+    "db:generate": "env-cmd -f ../../.env prisma generate",
     "dev": "tsup --watch",
     "format": "prisma format",
-    "generate": "prisma generate",
     "lint": "eslint . --max-warnings 0",
-    "prebuild": "npm run generate",
-    "predev": "npm run generate",
-    "studio": "prisma studio"
+    "prebuild": "npm run db:generate",
+    "predev": "npm run db:generate",
+    "studio": "env-cmd -f ../../.env prisma studio"
   },
   "dependencies": {
-    "@prisma/client": "^5.17.0"
+    "@prisma/client": "latest",
+    "bcrypt-ts": "^5.0.2"
   },
   "devDependencies": {
     "@sacred-craft/eslint-config": "workspace:*",
     "@sacred-craft/typescript-config": "workspace:*",
     "@types/node": "^20.14.11",
     "eslint": "^8.57.0",
-    "prisma": "^5.17.0",
+    "prisma": "latest",
     "tsup": "^8.1.2",
     "tsx": "^4.7.1",
     "typescript": "^5.3.3"

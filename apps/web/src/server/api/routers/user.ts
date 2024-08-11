@@ -30,40 +30,6 @@ export const userRouter = createTRPCRouter({
     return true;
   }),
 
-  setupAdminUser: publicProcedure
-    .input(
-      z.object({
-        username: z.string(),
-        password: z.string(),
-      }),
-    )
-    .mutation(async ({ input, ctx }) => {
-      if ((await ctx.db.user.count()) > 0) {
-        throw new TRPCError({
-          code: "FORBIDDEN",
-          message: "Admin account already exists",
-        });
-      }
-
-      const salt = genSaltSync(10);
-      const hashedPassword = hashSync(input.password, salt);
-
-      try {
-        await ctx.db.user.create({
-          data: {
-            username: input.username,
-            password: hashedPassword,
-            role: "ADMIN",
-          },
-        });
-      } catch (e) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Failed to create admin account",
-        });
-      }
-    }),
-
   createUser: adminProcedure
     .input(
       z.object({

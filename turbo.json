@@ -3,7 +3,7 @@
   "globalEnv": ["VERCEL_URL", "PORT", "AUTH_TRUST_HOST"],
   "tasks": {
     "build": {
-      "dependsOn": ["^generate", "^build"],
+      "dependsOn": ["^db:generate", "^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
@@ -14,11 +14,18 @@
       "cache": false,
       "persistent": true
     },
-    "db:migrate:deploy": {},
-    "db:push": {},
-    "db:seed": {},
-    "generate": {
-      "dependsOn": ["^generate"]
+    "db:migrate:deploy": {
+      "cache": false
+    },
+    "db:push": {
+      "cache": false
+    },
+    "db:seed": {
+      "cache": false
+    },
+    "db:generate": {
+      "dependsOn": ["^db:generate"],
+      "cache": false
     }
   }
 }
