@@ -1,25 +1,22 @@
-import { db } from "@sacred-craft/valhalla-database";
+"use client";
 
-import { LogsHeader } from "./_components/logs-header";
-import { LogsTabs } from "./_components/logs-tabs";
+import { api } from "@/trpc/react";
 
-export default async function Page() {
-  const logs = await db.log.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-    select: {
-      id: true,
-      action: true,
-      createdAt: true,
-      operators: true,
-    },
+import { LogsTable } from "./_components/logs-table";
+import { useLogsContext } from "./layout.client";
+
+export default function Page() {
+  const { page, orderBy, perPage } = useLogsContext();
+
+  const { data } = api.logs.query.useQuery({
+    page,
+    orderBy,
+    perPage,
   });
 
   return (
-    <>
-      <LogsHeader />
-      <LogsTabs />
-    </>
+    <div className="my-2">
+      <LogsTable logs={data?.logs ?? []} count={data?.count ?? 0} />
+    </div>
   );
 }

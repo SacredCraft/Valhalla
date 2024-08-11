@@ -112,8 +112,6 @@ export function PasteAction() {
                 }
               },
               onSettled: () => {
-                console.log(123);
-
                 resolve();
               },
             },
