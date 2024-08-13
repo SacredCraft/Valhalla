@@ -51,7 +51,7 @@ void app.prepare().then(() => {
     process.exit(1);
   });
 
-  server.listen(port);
+  server.listen(port, hostname);
 
   console.log();
   console.log(
