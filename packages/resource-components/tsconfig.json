@@ -1,5 +1,5 @@
 {
-  "extends": "@sacred-craft/typescript-config/react-library.json",
+  "extends": "@sacred-craft/typescript-config/nextjs.json",
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"]
 }

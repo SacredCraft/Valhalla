@@ -1,6 +1,7 @@
 {
   "name": "@sacred-craft/valhalla-resource-components",
-  "version": "1.0.9",
+  "version": "1.1.0",
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -17,29 +18,35 @@
   "author": "",
   "license": "ISC",
   "peerDependencies": {
-    "react": "^18.3.1",
-    "@sacred-craft/valhalla-config": "workspace:*",
+    "@sacred-craft/eslint-config": "workspace:*",
     "@sacred-craft/valhalla-components": "workspace:*",
+    "@sacred-craft/valhalla-config": "workspace:*",
     "@sacred-craft/valhalla-database": "workspace:*",
     "@sacred-craft/valhalla-resource": "workspace:*",
-    "@sacred-craft/eslint-config": "workspace:*"
+    "react": "^18.3.1"
   },
   "devDependencies": {
-    "@sacred-craft/valhalla-config": "workspace:*",
-    "@sacred-craft/valhalla-components": "workspace:*",
-    "@sacred-craft/valhalla-database": "workspace:*",
-    "@sacred-craft/valhalla-resource": "workspace:*",
     "@sacred-craft/eslint-config": "workspace:*",
     "@sacred-craft/typescript-config": "workspace:*",
+    "@sacred-craft/valhalla-components": "workspace:*",
+    "@sacred-craft/valhalla-config": "workspace:*",
+    "@sacred-craft/valhalla-database": "workspace:*",
+    "@sacred-craft/valhalla-resource": "workspace:*",
     "@tanstack/react-query": "^5.51.15",
     "@types/node": "^20.14.12",
     "@types/react": "^18.3.3",
     "eslint": "^8.57.0",
+    "monaco-editor": "^0.50.0",
+    "next": "^14.2.5",
+    "next-auth": "5.0.0-beta.19",
     "tsup": "^8.2.3",
     "typescript": "^5.5.4"
   },
   "dependencies": {
+    "@hocuspocus/provider": "^2.13.5",
     "lucide-react": "^0.381.0",
-    "next-themes": "^0.3.0"
+    "next-themes": "^0.3.0",
+    "y-monaco": "^0.1.6",
+    "yjs": "^13.6.18"
   }
 }
