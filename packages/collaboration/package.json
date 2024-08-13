@@ -1,6 +1,6 @@
 {
-  "name": "@sacred-craft/valhalla-resource",
-  "version": "1.0.1",
+  "name": "@sacred-craft/valhalla-collaboration",
+  "version": "0.0.0",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -17,14 +17,16 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@sacred-craft/valhalla-database": "workspace:*",
     "@sacred-craft/eslint-config": "workspace:*",
     "@sacred-craft/typescript-config": "workspace:*",
-    "@types/node": "^20.14.11",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
     "eslint": "^8.57.0",
     "tsup": "^8.1.2",
     "typescript": "^5.5.3"
+  },
+  "dependencies": {
+    "@sacred-craft/valhalla-database": "workspace:*",
+    "@hocuspocus/extension-database": "^2.13.5",
+    "@hocuspocus/server": "^2.13.5",
+    "ky": "^1.5.0"
   }
 }

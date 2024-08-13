@@ -5,8 +5,8 @@ const config = {
   darkMode: ["class"],
   content: [
     "./src/**/*.{ts,tsx}",
-    "./node_modules/@sacred-craft/valhalla-components/**/*.{ts,tsx}",
-    "./node_modules/@sacred-craft/valhalla-resource-components/**/*.{ts,tsx}",
+    "./node_modules/@sacred-craft/valhalla-components/dist/*.js",
+    "./node_modules/@sacred-craft/valhalla-resource-components/dist/*.js",
   ],
   prefix: "",
   theme: {

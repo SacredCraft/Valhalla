@@ -61,3 +61,9 @@ model Log {
   action    Json
   createdAt DateTime @default(now())
 }
+
+model Documents {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  data Bytes
+}

@@ -1,4 +1,4 @@
-.monaco-editor,
+/* .monaco-editor,
 .monaco-editor-background {
   background-color: transparent !important;
   color: var(--foreground) !important;
@@ -14,4 +14,19 @@
 
 .monaco-editor .quick-input-widget {
   margin-top: 12px !important;
+} */
+
+.yRemoteSelection {
+  @apply -mr-[1px] bg-[var(--user-color)] opacity-50;
+}
+
+.yRemoteSelectionHead {
+  @apply absolute box-border h-full rounded-md border-l-[2px] border-[var(--user-color)];
+}
+
+.yRemoteSelectionHead::after {
+  @apply absolute -left-[2px] -top-[1.4em] z-10 block px-1;
+  @apply rounded-md rounded-bl-none border-0;
+  @apply whitespace-nowrap bg-[var(--user-color)] font-bold leading-normal text-white;
+  @apply pointer-events-none select-none;
 }

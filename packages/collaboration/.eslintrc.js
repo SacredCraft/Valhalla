@@ -5,12 +5,4 @@ module.exports = {
   parserOptions: {
     project: true,
   },
-  rules: {
-    "turbo/no-undeclared-env-vars": [
-      "error",
-      {
-        allowList: ["ENV"],
-      },
-    ],
-  },
 };

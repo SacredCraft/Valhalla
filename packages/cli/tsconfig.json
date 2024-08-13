@@ -1,0 +1,15 @@
+{
+  "extends": "@sacred-craft/typescript-config/nextjs.json",
+  "compilerOptions": {
+    "strict": true,
+    "stripInternal": true,
+    "esModuleInterop": true,
+    "verbatimModuleSyntax": true,
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "target": "ES2018",
+    "moduleResolution": "Bundler"
+  },
+  "include": ["."],
+  "exclude": ["dist", "build", "node_modules"]
+}

@@ -1,0 +1,43 @@
+{
+  "name": "@sacred-craft/valhalla-cli",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "bin": {
+    "valhalla": "./dist/index.mjs"
+  },
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint . --max-warnings 0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "peerDependencies": {
+    "next": "^14.2.5"
+  },
+  "devDependencies": {
+    "@sacred-craft/eslint-config": "workspace:*",
+    "@sacred-craft/typescript-config": "workspace:*",
+    "@sacred-craft/valhalla-database": "workspace:*",
+    "@types/ws": "^8.5.12",
+    "eslint": "^8.57.0",
+    "tsup": "^8.1.2",
+    "typescript": "^5.5.3"
+  },
+  "dependencies": {
+    "@sacred-craft/valhalla-collaboration": "workspace:*",
+    "commander": "^12.1.0",
+    "consola": "^3.2.3",
+    "dotenv": "^16.4.5",
+    "kleur": "^4.1.5",
+    "ws": "^8.18.0"
+  }
+}
