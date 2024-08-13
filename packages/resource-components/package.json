@@ -1,6 +1,6 @@
 {
   "name": "@sacred-craft/valhalla-resource-components",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "type": "module",
   "exports": {
     ".": {
@@ -18,7 +18,6 @@
   "author": "",
   "license": "ISC",
   "peerDependencies": {
-    "@sacred-craft/eslint-config": "workspace:*",
     "@sacred-craft/valhalla-components": "workspace:*",
     "@sacred-craft/valhalla-config": "workspace:*",
     "@sacred-craft/valhalla-database": "workspace:*",
