@@ -4,3 +4,6 @@ export * from "./common/resource-save";
 export * from "./common/resource-refresh";
 export * from "./common/resource-versions";
 export * from "./common/resource-versions-status";
+export * from "./collaboration/monaco";
+export * from "./collaboration/cursor";
+export * from "./collaboration/room";

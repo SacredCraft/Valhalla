@@ -14,22 +14,6 @@ import {
   useResourceVersionsContext,
 } from "../essential/providers";
 
-export const ResourceRealtimeMonacoEditor = (editorProps: EditorProps) => {
-  const { theme } = useTheme();
-  const { contentCache, setContentCache, meta } = useResourceFileContext();
-
-  return (
-    <Editor
-      value={contentCache?.toString()}
-      onChange={(value) => setContentCache(value || "")}
-      height="calc(100vh - 6rem)"
-      theme={theme === "dark" ? "vs-dark" : "vs"}
-      path={meta.path.join("/")}
-      {...editorProps}
-    />
-  );
-};
-
 export const ResourceMonacoEditor = (editorProps: EditorProps) => {
   const { theme } = useTheme();
   const { contentCache, setContentCache, meta } = useResourceFileContext();
