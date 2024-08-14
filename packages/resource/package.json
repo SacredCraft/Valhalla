@@ -1,11 +1,11 @@
 {
   "name": "@sacred-craft/valhalla-resource",
   "version": "1.0.1",
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": "./dist/index.js"
     }
   },
   "scripts": {
@@ -16,6 +16,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "peerDependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
   "devDependencies": {
     "@sacred-craft/valhalla-database": "workspace:*",
     "@sacred-craft/eslint-config": "workspace:*",

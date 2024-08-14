@@ -1,21 +1,19 @@
 "use client";
 
+import ky from "ky";
 import type { editor } from "monaco-editor";
 import { useTheme } from "next-themes";
 import { useCallback, useEffect, useState } from "react";
 import { MonacoBinding } from "y-monaco";
 
 import { HocuspocusProvider } from "@hocuspocus/provider";
-import { Editor } from "@sacred-craft/valhalla-components";
+import { Editor, type EditorProps } from "@sacred-craft/valhalla-components";
 
 import { useResourceFileContext } from "../essential/providers";
-import { getCookies } from "./actions";
 import { Cursors } from "./cursor";
 import { useRoom } from "./room";
 
-export const ResourceRealtimeMonacoEditor = (
-  editorProps: editor.IStandaloneEditorConstructionOptions,
-) => {
+export const ResourceRealtimeMonacoEditor = (editorProps: EditorProps) => {
   const { theme } = useTheme();
   const [editorRef, setEditorRef] = useState<editor.IStandaloneCodeEditor>();
   const [provider, setProvider] = useState<HocuspocusProvider>();
@@ -28,13 +26,19 @@ export const ResourceRealtimeMonacoEditor = (
   const { socket, roomName } = useRoom();
 
   useEffect(() => {
-    const provider = new HocuspocusProvider({
-      websocketProvider: socket,
-      name: roomName,
-      token: getCookies(),
-    });
+    async function createProvider() {
+      const cookies = await ky.get("/api/auth/cookies").text();
 
-    setProvider(provider);
+      const provider = new HocuspocusProvider({
+        websocketProvider: socket,
+        name: roomName,
+        token: cookies,
+      });
+
+      setProvider(provider);
+    }
+
+    createProvider();
 
     return () => {
       provider?.destroy();

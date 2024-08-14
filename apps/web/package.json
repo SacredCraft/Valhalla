@@ -2,6 +2,7 @@
   "name": "@scared-craft/valhalla-web",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "valhalla dev",
     "build": "valhalla build",
@@ -18,8 +19,8 @@
     "@sacred-craft/valhalla-config": "workspace:*",
     "@sacred-craft/valhalla-database": "workspace:*",
     "@sacred-craft/valhalla-resource": "workspace:*",
-    "@sacred-craft/valhalla-resource-common": "^1.0.7",
     "@sacred-craft/valhalla-resource-components": "workspace:*",
+    "@sacred-craft/valhalla-resource-common": "^1.0.7",
     "@tanstack/react-query": "^5.51.23",
     "@tanstack/react-table": "^8.20.1",
     "@trpc/client": "11.0.0-rc.461",

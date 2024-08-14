@@ -1,10 +1,9 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig((options) => ({
-  entryPoints: ["src/index.ts"],
-  format: ["cjs", "esm"],
+  entry: ["src/index.ts"],
+  format: "esm",
   dts: true,
-  sourcemap: true,
-  external: ["react"],
+  target: "es2022",
   ...options,
 }));

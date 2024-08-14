@@ -3,8 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
+import valhallaConfig from "@/config";
 import { api } from "@/trpc/react";
-import valhallaConfig from "@/valhalla";
 import {
   FileMeta,
   Resource,

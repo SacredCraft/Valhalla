@@ -3,7 +3,7 @@
 import { File as FileIcon, Folder } from "lucide-react";
 
 import { FilesTableRowActions } from "@/app/(main)/resources/[resource]/browser/explore/[[...path]]/_components/files-table-row-actions";
-import valhallaConfig from "@/valhalla";
+import valhallaConfig from "@/config";
 import {
   Badge,
   Checkbox,

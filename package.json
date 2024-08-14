@@ -1,6 +1,7 @@
 {
   "name": "valhalla",
   "private": true,
+  "type": "module",
   "scripts": {
     "setup": "turbo run build --filter=!./apps/docs && turbo run db:push && turbo run db:seed",
     "start": "cd apps/web && pnpm start",

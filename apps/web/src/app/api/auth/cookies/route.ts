@@ -1,7 +1,7 @@
-"use server";
-
 import { cookies } from "next/headers";
 
-export const getCookies = () => {
+const handler = async () => {
   return cookies().toString();
 };
+
+export { handler as GET, handler as POST };

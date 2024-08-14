@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { z } from "zod";
 
-import valhallaConfig from "@/valhalla";
+import valhallaConfig from "@/config";
 import { User } from "@sacred-craft/valhalla-database";
 import { FileMeta, Version } from "@sacred-craft/valhalla-resource";
 import { TRPCError } from "@trpc/server";

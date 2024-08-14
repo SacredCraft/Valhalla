@@ -1,6 +1,6 @@
 import React from "react";
 
-import valhallaConfig from "@/valhalla";
+import valhallaConfig from "@/config";
 import { useControllableState } from "@radix-ui/react-use-controllable-state";
 import {
   Checkbox,

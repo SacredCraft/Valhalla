@@ -1,9 +1,9 @@
 import fs from "fs";
 import path from "path";
 
+import valhallaConfig from "@/config";
 import { auth } from "@/server/auth";
 import { api } from "@/trpc/server";
-import valhallaConfig from "@/valhalla";
 
 export const GET = auth(async (request) => {
   if (!request.auth) {

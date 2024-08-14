@@ -1,11 +1,10 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig((options) => ({
-  entryPoints: ["src/index.ts"],
-  format: ["esm"],
+  entry: ["src/index.ts"],
+  format: "esm",
   dts: true,
-  sourcemap: true,
-  target: "esnext",
+  target: "node18",
   banner: {
     js: "#!/usr/bin/env node",
   },

@@ -1,6 +1,6 @@
 "use client";
 
-import valhallaConfig from "@/valhalla";
+import valhallaConfig from "@/config";
 import {
   Checkbox,
   DataTableColumnHeader,

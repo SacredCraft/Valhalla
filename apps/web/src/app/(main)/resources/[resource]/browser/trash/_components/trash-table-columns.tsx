@@ -1,7 +1,7 @@
 "use client";
 
+import valhallaConfig from "@/config";
 import { Trash } from "@/server/api/routers/files";
-import valhallaConfig from "@/valhalla";
 import {
   Checkbox,
   DataTableColumnHeader,

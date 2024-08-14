@@ -4,6 +4,7 @@
   "exports": {
     ".": "./src/client.ts"
   },
+  "type": "module",
   "scripts": {
     "db:migrate:deploy": "env-cmd -f ../../.env prisma migrate deploy",
     "db:migrate:dev": "env-cmd -f ../../.env prisma migrate dev",

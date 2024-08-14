@@ -1,4 +1,5 @@
 import { type ObjectEncodingOptions, WriteFileOptions } from "fs";
+import React from "react";
 
 import { Resource } from "./resource";
 
@@ -31,7 +32,7 @@ export type Template = {
     write?: WriteFileOptions;
   };
 
-  options: Options;
+  options?: Options;
 
   // eslint-disable-next-line no-unused-vars
   isMatch?: (resource: Resource) => boolean;
@@ -51,7 +52,7 @@ export type Options = {
   };
 
   render?: {
-    component: () => JSX.Element;
+    component: () => React.JSX.Element;
     value: string;
     label: string;
   }[];

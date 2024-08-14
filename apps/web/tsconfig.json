@@ -4,10 +4,12 @@
     "declaration": false,
     "declarationMap": false,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/config": ["./valhalla.config.ts"]
     }
   },
   "include": [
+    ".eslintrc.cjs",
     "next-env.d.ts",
     "next.config.mjs",
     "**/*.ts",

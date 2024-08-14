@@ -1,11 +1,11 @@
 {
   "name": "@sacred-craft/valhalla-collaboration",
   "version": "0.0.0",
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": "./dist/index.js"
     }
   },
   "scripts": {

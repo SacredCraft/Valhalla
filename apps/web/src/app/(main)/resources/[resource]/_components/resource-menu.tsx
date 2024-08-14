@@ -8,7 +8,7 @@ import { useMemo } from "react";
 
 import { useAside } from "@/app/(main)/_components/aside";
 import { useResourceContext } from "@/app/(main)/resources/[resource]/layout.client";
-import valhallaConfig from "@/valhalla";
+import valhallaConfig from "@/config";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import {
   Button,

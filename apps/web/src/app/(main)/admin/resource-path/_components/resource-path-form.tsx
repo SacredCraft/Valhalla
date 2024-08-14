@@ -4,8 +4,8 @@ import { SaveIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
+import valhallaConfig from "@/config";
 import { api } from "@/trpc/react";
-import valhallaConfig from "@/valhalla";
 import {
   Button,
   Form,

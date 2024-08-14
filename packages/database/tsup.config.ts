@@ -1,9 +1,8 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig((options) => ({
-  entryPoints: ["src/*"],
-  format: ["cjs", "esm"],
+  entry: ["src/*"],
+  format: "esm",
   dts: true,
-  sourcemap: true,
   ...options,
 }));

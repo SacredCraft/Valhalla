@@ -12,7 +12,7 @@ import React, {
 } from "react";
 
 import { useAside } from "@/app/(main)/_components/aside";
-import valhallaConfig from "@/valhalla";
+import valhallaConfig from "@/config";
 import { Resource } from "@sacred-craft/valhalla-resource";
 
 import { ResourceMenu } from "./_components/resource-menu";

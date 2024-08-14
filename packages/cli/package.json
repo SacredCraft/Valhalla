@@ -2,14 +2,15 @@
   "name": "@sacred-craft/valhalla-cli",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs"
+      "import": "./dist/index.js"
     }
   },
   "bin": {
-    "valhalla": "./dist/index.mjs"
+    "valhalla": "./dist/index.js"
   },
   "scripts": {
     "prepare": "npm run build",

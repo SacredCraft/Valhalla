@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import valhallaConfig from "@/valhalla";
+import valhallaConfig from "@/config";
 import { db } from "@sacred-craft/valhalla-database";
 import { TRPCError } from "@trpc/server";
 
