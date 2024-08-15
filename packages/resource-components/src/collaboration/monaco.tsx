@@ -17,13 +17,18 @@ export const ResourceRealtimeMonacoEditor = (editorProps: EditorProps) => {
   const { theme } = useTheme();
   const [editorRef, setEditorRef] = useState<editor.IStandaloneCodeEditor>();
   const [provider, setProvider] = useState<HocuspocusProvider>();
+  const [mounted, setMounted] = useState(false);
   const { contentCache, setContentCache, meta } = useResourceFileContext();
+
+  const { socket, roomName } = useRoom();
 
   const handleOnMount = useCallback((e: editor.IStandaloneCodeEditor) => {
     setEditorRef(e);
   }, []);
 
-  const { socket, roomName } = useRoom();
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     async function createProvider() {
@@ -46,7 +51,7 @@ export const ResourceRealtimeMonacoEditor = (editorProps: EditorProps) => {
   }, [roomName, socket]);
 
   useEffect(() => {
-    if (editorRef && provider) {
+    if (mounted && editorRef && provider) {
       const ydoc = provider.document;
 
       const awareness = provider.awareness;
@@ -58,16 +63,19 @@ export const ResourceRealtimeMonacoEditor = (editorProps: EditorProps) => {
         }
       });
 
-      const binding = new MonacoBinding(
-        type,
-        editorRef.getModel()!,
-        new Set([editorRef]),
-        awareness,
-      );
+      let binding: MonacoBinding;
+      if (typeof window !== "undefined") {
+        binding = new MonacoBinding(
+          type,
+          editorRef.getModel()!,
+          new Set([editorRef]),
+          awareness,
+        );
+      }
 
       return () => {
-        binding.destroy();
         ydoc.destroy();
+        binding?.destroy();
         awareness?.destroy();
       };
     }
@@ -77,6 +85,7 @@ export const ResourceRealtimeMonacoEditor = (editorProps: EditorProps) => {
     provider,
     provider?.awareness,
     provider?.document,
+    mounted,
   ]);
 
   return (
