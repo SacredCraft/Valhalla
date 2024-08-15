@@ -5,6 +5,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["."],
+  "include": [".", ".eslintrc.cjs"],
   "exclude": ["dist", "build", "node_modules"]
 }

@@ -3,6 +3,6 @@
   "compilerOptions": {
     "module": "ES2022"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "tsup.config.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "tsup.config.ts", ".eslintrc.cjs"],
   "exclude": ["node_modules"]
 }

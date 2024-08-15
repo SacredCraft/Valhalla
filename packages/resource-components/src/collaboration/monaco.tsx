@@ -10,7 +10,6 @@ import { HocuspocusProvider } from "@hocuspocus/provider";
 import {
   Editor,
   type EditorProps,
-  cn,
 } from "@sacred-craft/valhalla-components";
 
 import { useResourceFileContext } from "../essential/providers";

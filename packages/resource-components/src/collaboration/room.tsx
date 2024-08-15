@@ -56,6 +56,7 @@ export const Room = ({
 
 function getBaseUrl() {
   if (typeof window !== "undefined")
+    // eslint-disable-next-line no-undef
     return window.location.origin.replace(/^http/, "ws");
   if (process.env.VERCEL_URL) return `ws://${process.env.VERCEL_URL}`;
   return `ws://localhost:${process.env.PORT ?? 3000}`;

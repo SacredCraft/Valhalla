@@ -1,4 +1,3 @@
-import ky from "ky";
 import { useEffect, useMemo, useState } from "react";
 
 import type { HocuspocusProvider } from "@hocuspocus/provider";

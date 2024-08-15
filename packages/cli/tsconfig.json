@@ -3,6 +3,6 @@
   "compilerOptions": {
     "module": "ESNext"
   },
-  "include": ["."],
+  "include": [".", ".eslintrc.cjs"],
   "exclude": ["dist", "build", "node_modules"]
 }
