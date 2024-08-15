@@ -1,4 +1,4 @@
-/* .monaco-editor,
+.monaco-editor,
 .monaco-editor-background {
   background-color: transparent !important;
   color: var(--foreground) !important;
@@ -14,7 +14,11 @@
 
 .monaco-editor .quick-input-widget {
   margin-top: 12px !important;
-} */
+}
+
+.monaco-editor {
+  outline: none !important;
+}
 
 .yRemoteSelection {
   @apply -mr-[1px] bg-[var(--user-color)] opacity-50;

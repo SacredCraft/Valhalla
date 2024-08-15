@@ -41,7 +41,7 @@ export const ResourceRealtimeMonacoEditorInner = ({
   user,
   ...editorProps
 }: EditorProps & { cookies: string; user: { username: string } }) => {
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
   const [editorRef, setEditorRef] = useState<editor.IStandaloneCodeEditor>();
   const [provider, setProvider] = useState<HocuspocusProvider>();
   const [mounted, setMounted] = useState(false);
@@ -117,7 +117,7 @@ export const ResourceRealtimeMonacoEditorInner = ({
           height="calc(100vh - 6rem)"
           path={meta.path.join("/")}
           onMount={handleOnMount}
-          theme={theme === "dark" ? "vs-dark" : "vs"}
+          theme={resolvedTheme === "light" ? "vs" : "vs-dark"}
           onChange={(value) => setContentCache(value)}
           {...editorProps}
         />
