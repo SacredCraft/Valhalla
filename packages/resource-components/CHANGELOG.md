@@ -1,5 +1,16 @@
 # @sacred-craft/valhalla-resource-components
 
+## 1.1.3
+
+### Patch Changes
+
+- bump versions
+- Updated dependencies
+  - @sacred-craft/valhalla-components@1.0.2
+  - @sacred-craft/valhalla-config@0.0.2
+  - @sacred-craft/valhalla-database@1.0.2
+  - @sacred-craft/valhalla-resource@1.0.2
+
 ## 1.1.2
 
 ### Patch Changes
