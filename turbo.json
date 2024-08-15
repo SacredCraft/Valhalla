@@ -1,5 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
   "globalEnv": ["VERCEL_URL", "ENV", "PORT", "HOSTNAME", "AUTH_TRUST_HOST"],
   "tasks": {
     "build": {
@@ -12,7 +13,9 @@
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "db:migrate:deploy": {
       "cache": false

@@ -4,11 +4,21 @@ import { api } from "@/trpc/server";
 export const POST = async (req: Request) => {
   const session = await auth();
 
-  if (!session) {
+  if (!session || session.user?.id === undefined) {
     return new Response("Unauthorized", { status: 401 });
   }
 
   const body = (await req.json()) as { documentName: string };
+
+  const user = await api.users.getUserById({ id: session.user.id });
+
+  if (!user) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+
+  if (user.role === "ADMIN") {
+    return new Response("OK", { status: 200 });
+  }
 
   const { documentName } = body;
 
@@ -24,8 +34,7 @@ export const POST = async (req: Request) => {
 
   const ownedResources = await api.resources.getOwnedResources();
 
-  const hasAccess =
-    process.env.ENV === "development" || ownedResources.includes(resource);
+  const hasAccess = ownedResources.includes(resource);
 
   if (!hasAccess) {
     return new Response("Unauthorized", { status: 401 });

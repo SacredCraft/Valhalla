@@ -1,10 +1,11 @@
-import { useSession } from "next-auth/react";
+import ky from "ky";
 import { useEffect, useMemo, useState } from "react";
 
 import type { HocuspocusProvider } from "@hocuspocus/provider";
 
 type Props = {
   provider?: HocuspocusProvider;
+  username: string;
 };
 
 type UserAwareness = {
@@ -13,16 +14,15 @@ type UserAwareness = {
   clientID?: number;
 };
 
-export function Cursors({ provider }: Props) {
+export function Cursors({ provider, username }: Props) {
   const [userAwareness, setUserAwareness] = useState<UserAwareness[]>([]);
-  const session = useSession();
 
   const user = useMemo(
     () => ({
-      name: (session.data?.user as any).username ?? "Anonymous",
+      name: username,
       color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
     }),
-    [(session.data?.user as any).username],
+    [username],
   );
 
   useEffect(() => {

@@ -21,24 +21,6 @@ export const useRoom = () => {
   return context;
 };
 
-const RoomMounted = ({
-  roomName,
-  children,
-}: {
-  roomName: string;
-  children?: React.ReactNode;
-}) => {
-  const socket = new HocuspocusProviderWebsocket({
-    url: getBaseUrl(),
-  });
-
-  return (
-    <RoomContext.Provider value={{ socket, roomName }}>
-      {children}
-    </RoomContext.Provider>
-  );
-};
-
 export const Room = ({
   roomName,
   children,
@@ -46,15 +28,30 @@ export const Room = ({
   roomName: string;
   children?: React.ReactNode;
 }) => {
-  const [isMounted, setIsMounted] = useState(false);
+  const [socket, setSocket] = useState<HocuspocusProviderWebsocket | null>(
+    null,
+  );
 
   useEffect(() => {
-    setIsMounted(true);
+    const instance = new HocuspocusProviderWebsocket({
+      url: getBaseUrl(),
+    });
+
+    setSocket(instance);
+
+    return () => {
+      socket?.disconnect();
+      socket?.destroy();
+    };
   }, []);
 
-  return isMounted ? (
-    <RoomMounted roomName={roomName}>{children}</RoomMounted>
-  ) : null;
+  return (
+    socket && (
+      <RoomContext.Provider value={{ socket, roomName }}>
+        {children}
+      </RoomContext.Provider>
+    )
+  );
 };
 
 function getBaseUrl() {

@@ -7,18 +7,46 @@ import { useCallback, useEffect, useState } from "react";
 import { MonacoBinding } from "y-monaco";
 
 import { HocuspocusProvider } from "@hocuspocus/provider";
-import { Editor, type EditorProps } from "@sacred-craft/valhalla-components";
+import {
+  Editor,
+  type EditorProps,
+  cn,
+} from "@sacred-craft/valhalla-components";
 
 import { useResourceFileContext } from "../essential/providers";
 import { Cursors } from "./cursor";
-import { useRoom } from "./room";
+import { Room, useRoom } from "./room";
 
-export const ResourceRealtimeMonacoEditor = (editorProps: EditorProps) => {
+export const ResourceRealtimeMonacoEditor = () => {
+  const { meta, resource } = useResourceFileContext();
+  const [cookies, setCookies] = useState<string | null>(null);
+  const [user, setUser] = useState<{ username: string } | null>(null);
+
+  useEffect(() => {
+    ky.get("/api/auth/cookies").text().then(setCookies);
+    ky.get("/api/auth/profile").json<{ username: string }>().then(setUser);
+  }, []);
+
+  return (
+    <Room roomName={`${resource.name} ${meta.path.join("/")}`}>
+      {cookies && user && (
+        <ResourceRealtimeMonacoEditorInner cookies={cookies} user={user} />
+      )}
+    </Room>
+  );
+};
+
+export const ResourceRealtimeMonacoEditorInner = ({
+  cookies,
+  user,
+  ...editorProps
+}: EditorProps & { cookies: string; user: { username: string } }) => {
   const { theme } = useTheme();
   const [editorRef, setEditorRef] = useState<editor.IStandaloneCodeEditor>();
   const [provider, setProvider] = useState<HocuspocusProvider>();
   const [mounted, setMounted] = useState(false);
   const { contentCache, setContentCache, meta } = useResourceFileContext();
+  const [contentInitialed, setContentInitialed] = useState(false);
 
   const { socket, roomName } = useRoom();
 
@@ -31,24 +59,30 @@ export const ResourceRealtimeMonacoEditor = (editorProps: EditorProps) => {
   }, []);
 
   useEffect(() => {
-    async function createProvider() {
-      const cookies = await ky.get("/api/auth/cookies").text();
+    const provider = new HocuspocusProvider({
+      websocketProvider: socket,
+      name: roomName,
+      token: cookies,
+    });
 
-      const provider = new HocuspocusProvider({
-        websocketProvider: socket,
-        name: roomName,
-        token: cookies,
-      });
-
-      setProvider(provider);
-    }
-
-    createProvider();
+    setProvider(provider);
 
     return () => {
       provider?.destroy();
     };
-  }, [roomName, socket]);
+  }, [roomName]);
+
+  useEffect(() => {
+    if (provider && !contentInitialed) {
+      provider.on("synced", () => {
+        setContentInitialed(true);
+        const type = provider.document.getText("monaco");
+        if (contentCache && !type.toJSON()) {
+          type.insert(0, contentCache.toString());
+        }
+      });
+    }
+  }, [provider, contentCache, contentInitialed]);
 
   useEffect(() => {
     if (mounted && editorRef && provider) {
@@ -57,13 +91,7 @@ export const ResourceRealtimeMonacoEditor = (editorProps: EditorProps) => {
       const awareness = provider.awareness;
       const type = ydoc.getText("monaco");
 
-      provider.on("synced", () => {
-        if (contentCache && !type.toJSON()) {
-          type.insert(0, contentCache.toString());
-        }
-      });
-
-      let binding: MonacoBinding;
+      let binding: MonacoBinding | undefined;
       if (typeof window !== "undefined") {
         binding = new MonacoBinding(
           type,
@@ -74,31 +102,30 @@ export const ResourceRealtimeMonacoEditor = (editorProps: EditorProps) => {
       }
 
       return () => {
-        ydoc.destroy();
+        ydoc?.destroy();
         binding?.destroy();
         awareness?.destroy();
       };
     }
-  }, [
-    editorRef,
-    contentCache,
-    provider,
-    provider?.awareness,
-    provider?.document,
-    mounted,
-  ]);
+  }, [editorRef, provider, mounted]);
 
   return (
     <>
-      <Editor
-        height="80vh"
-        path={meta.path.join("/")}
-        onMount={handleOnMount}
-        theme={theme === "dark" ? "vs-dark" : "vs"}
-        onChange={(value) => setContentCache(value)}
-        {...editorProps}
-      />
-      <Cursors provider={provider} />
+      {contentInitialed && (
+        <Editor
+          loading={false}
+          height="calc(100vh - 6rem)"
+          path={meta.path.join("/")}
+          onMount={handleOnMount}
+          theme={theme === "dark" ? "vs-dark" : "vs"}
+          onChange={(value) => setContentCache(value)}
+          {...editorProps}
+        />
+      )}
+      {!contentInitialed && (
+        <div className="flex items-center justify-center">Loading...</div>
+      )}
+      <Cursors provider={provider} username={user.username} />
     </>
   );
 };
