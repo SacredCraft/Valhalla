@@ -46,7 +46,7 @@ export const useAside = () => {
   return context;
 };
 
-export function Aside() {
+export const Aside = React.memo(() => {
   const { collapsed, setCollapsed } = useAside();
   const { role } = useProfile();
   const { setTheme, theme } = useTheme();
@@ -146,44 +146,51 @@ export function Aside() {
       </motion.nav>
     </motion.aside>
   );
-}
+});
 
-function Item({
-  value,
-  label,
-  Icon,
-}: {
-  value: string;
-  label: string;
-  Icon?: React.ElementType;
-}) {
-  const pathname = usePathname();
-  const pathnameSplit = useMemo(() => pathname.split("/").slice(1), [pathname]);
-  const route = useMemo(() => pathnameSplit[0], [pathnameSplit]);
-  const href = useMemo(
-    () =>
-      value === "resources"
-        ? `/resources/${valhallaConfig.resources[0]?.name}`
-        : `/${value}`,
-    [value],
-  );
-  const { collapsed } = useAside();
-  return (
-    <Link
-      href={href}
-      className={cn("w-full", collapsed ? "h-9 w-9" : undefined)}
-    >
-      <AnimatedItem
-        size="sm"
-        variant={route === value ? "secondary" : "ghost"}
-        className={cn(
-          "gap-2 w-full text-primary",
-          collapsed ? undefined : "justify-start px-3",
-        )}
-        icon={Icon && <Icon className={cn(collapsed ? "size-5" : "size-4")} />}
+const Item = React.memo(
+  ({
+    value,
+    label,
+    Icon,
+  }: {
+    value: string;
+    label: string;
+    Icon?: React.ElementType;
+  }) => {
+    const pathname = usePathname();
+    const pathnameSplit = useMemo(
+      () => pathname.split("/").slice(1),
+      [pathname],
+    );
+    const route = useMemo(() => pathnameSplit[0], [pathnameSplit]);
+    const href = useMemo(
+      () =>
+        value === "resources"
+          ? `/resources/${valhallaConfig.resources[0]?.name}`
+          : `/${value}`,
+      [value],
+    );
+    const { collapsed } = useAside();
+    return (
+      <Link
+        href={href}
+        className={cn("w-full", collapsed ? "h-9 w-9" : undefined)}
       >
-        {!collapsed && label}
-      </AnimatedItem>
-    </Link>
-  );
-}
+        <AnimatedItem
+          size="sm"
+          variant={route === value ? "secondary" : "ghost"}
+          className={cn(
+            "gap-2 w-full text-primary",
+            collapsed ? undefined : "justify-start px-3",
+          )}
+          icon={
+            Icon && <Icon className={cn(collapsed ? "size-5" : "size-4")} />
+          }
+        >
+          {!collapsed && label}
+        </AnimatedItem>
+      </Link>
+    );
+  },
+);
