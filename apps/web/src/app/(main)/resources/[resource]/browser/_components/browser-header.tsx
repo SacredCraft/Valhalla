@@ -50,7 +50,9 @@ export function BrowserHeader() {
                   {index === relativePath.length - 1 ? (
                     <>
                       <BreadcrumbSeparator />
-                      <BreadcrumbPage key={path}>{path}</BreadcrumbPage>
+                      <BreadcrumbPage key={path}>
+                        {decodeURIComponent(path)}
+                      </BreadcrumbPage>
                     </>
                   ) : (
                     <>
@@ -62,7 +64,7 @@ export function BrowserHeader() {
                               ...relativePath.slice(0, index + 1),
                             ].join("/")}`}
                           >
-                            {path}
+                            {decodeURIComponent(path)}
                           </Link>
                         </BreadcrumbLink>
                       </BreadcrumbItem>

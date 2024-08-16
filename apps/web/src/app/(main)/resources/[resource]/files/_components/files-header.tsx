@@ -47,7 +47,7 @@ export function FilesHeader() {
                   className="capitalize"
                   href={`/resources/${resource.name}/files/${currentPageName}/${relativePath.join("/")}`}
                 >
-                  {currentPageName}
+                  {decodeURIComponent(currentPageName)}
                 </Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -57,7 +57,9 @@ export function FilesHeader() {
               {index === relativePath.length - 1 ? (
                 <>
                   <BreadcrumbSeparator />
-                  <BreadcrumbPage key={path}>{path}</BreadcrumbPage>
+                  <BreadcrumbPage key={path}>
+                    {decodeURIComponent(path)}
+                  </BreadcrumbPage>
                 </>
               ) : (
                 <>
@@ -69,7 +71,7 @@ export function FilesHeader() {
                           ...relativePath.slice(0, index + 1),
                         ].join("/")}`}
                       >
-                        {path}
+                        {decodeURIComponent(path)}
                       </Link>
                     </BreadcrumbLink>
                   </BreadcrumbItem>
