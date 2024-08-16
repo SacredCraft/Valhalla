@@ -14,6 +14,7 @@ import {
 import {
   ResourceFileProvider,
   ResourceVersionsProvider,
+  TemplateLocked,
 } from "@sacred-craft/valhalla-resource-components";
 
 import { useResourceContext } from "../../../layout.client";
@@ -31,6 +32,7 @@ export function FileClientLayout({
 }: FileClientLayoutProps) {
   const { resource } = useResourceContext();
   const router = useRouter();
+  const [locked, setLocked] = useState<boolean>(false);
 
   const { data: meta, refetch: refetchMeta } =
     api.files.getResourceFile.useQuery({
@@ -48,16 +50,25 @@ export function FileClientLayout({
     return <div>Template not found</div>;
   }
 
-  const pages = template.options?.render?.map((item) => item.value);
+  const pages = template.options?.render;
 
   if (!pages || pages.length === 0) {
     router.push(`/resources/${resource.name}/browser/explore`);
     return null;
   }
 
-  if (pages && !pages.includes(type)) {
+  if (pages.some((item) => item.lockOthersWhenCollaboration === true)) {
+    const lockedPage = pages.find((item) => item.lockOthersWhenCollaboration);
+    const currentPage = pages.find((item) => item.value.includes(type));
+
+    if (lockedPage && lockedPage !== currentPage) {
+      setLocked(true);
+    }
+  }
+
+  if (!pages.some((item) => item.value.includes(type))) {
     router.push(
-      `/resources/${resource.name}/files/${pages[0]}/${relativePath.join("/")}`,
+      `/resources/${resource.name}/files/${pages[0].value}/${relativePath.join("/")}`,
     );
     return null;
   }
@@ -70,6 +81,7 @@ export function FileClientLayout({
       meta={meta}
       refetchMeta={refetchMeta}
       type={type}
+      locked={locked}
     />
   );
 }
@@ -81,6 +93,7 @@ const ContentLayer = ({
   meta,
   refetchMeta,
   type,
+  locked,
 }: {
   template: Template;
   resource: Resource;
@@ -88,6 +101,7 @@ const ContentLayer = ({
   meta: FileMeta;
   type: string;
   refetchMeta: () => Promise<any>;
+  locked: boolean;
 }) => {
   const { data: content, refetch: refetchContent } =
     api.files.readResourceFile.useQuery({
@@ -182,6 +196,7 @@ const ContentLayer = ({
   const isModified = content !== contentCache;
   const [leftActions, setLeftActions] = useState<React.ReactNode>(null);
   const [rightActions, setRightActions] = useState<React.ReactNode>(null);
+  const [headerActions, setHeaderActions] = useState<React.ReactNode>(null);
 
   useEffect(() => {
     if (content) {
@@ -212,6 +227,8 @@ const ContentLayer = ({
         setLeftActions,
         rightActions,
         setRightActions,
+        headerActions,
+        setHeaderActions,
         refresh,
         refetchMeta,
         refetchContent,
@@ -228,9 +245,9 @@ const ContentLayer = ({
           setCurrentVersion,
         }}
       >
-        <FilesHeader />
+        <FilesHeader headerActions={headerActions} />
         <FilesTabs left={leftActions} right={rightActions} />
-        {children && children()}
+        {locked ? <TemplateLocked /> : children && children()}
       </ResourceVersionsProvider>
     </ResourceFileProvider>
   );

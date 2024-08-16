@@ -1,12 +1,25 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import ky from "ky";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
-import { HocuspocusProviderWebsocket } from "@hocuspocus/provider";
+import { HocuspocusProvider } from "@hocuspocus/provider";
+import { User } from "@sacred-craft/valhalla-database";
+
+import { useResourceFileContext } from "../essential/providers";
 
 type ContextType = {
-  socket: HocuspocusProviderWebsocket;
+  provider: HocuspocusProvider;
   roomName: string;
+  cookies: string;
+  user: User;
+  selfAwareness: any;
+  otherAwareness: any[];
+  // eslint-disable-next-line no-unused-vars
+  setSelfAwareness: (selfAwareness: any) => void;
+  usersAwareness: any[];
+  // eslint-disable-next-line no-unused-vars
+  setUsersAwareness: (usersAwareness: any[]) => void;
 };
 
 const RoomContext = createContext<ContextType | null>(null);
@@ -21,33 +34,103 @@ export const useRoom = () => {
   return context;
 };
 
-export const Room = ({
-  roomName,
-  children,
-}: {
-  roomName: string;
-  children?: React.ReactNode;
-}) => {
-  const [socket, setSocket] = useState<HocuspocusProviderWebsocket | null>(
-    null,
-  );
+export const Room = ({ children }: { children?: React.ReactNode }) => {
+  const { meta, resource } = useResourceFileContext();
+  const [cookies, setCookies] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const instance = new HocuspocusProviderWebsocket({
-      url: getBaseUrl(),
-    });
-
-    setSocket(instance);
-
-    return () => {
-      socket?.disconnect();
-      socket?.destroy();
-    };
+    ky.get("/api/auth/cookies").text().then(setCookies);
+    ky.get("/api/auth/profile").json<User>().then(setUser);
   }, []);
 
   return (
-    socket && (
-      <RoomContext.Provider value={{ socket, roomName }}>
+    cookies &&
+    user && (
+      <RoomInner
+        cookies={cookies}
+        user={user}
+        roomName={`${resource.name} ${meta.path.join("/")}`}
+      >
+        {children}
+      </RoomInner>
+    )
+  );
+};
+
+const RoomInner = ({
+  roomName,
+  children,
+  cookies,
+  user,
+}: {
+  roomName: string;
+  children?: React.ReactNode;
+  cookies: string;
+  user: User;
+}) => {
+  const [provider, setProvider] = useState<HocuspocusProvider | null>(null);
+  const [selfAwareness, setSelfAwareness] = useState<any>(null);
+  const [usersAwareness, setUsersAwareness] = useState<any[]>([]);
+
+  const otherAwareness = useMemo(() => {
+    return usersAwareness.filter(
+      (user) => user.clientID !== selfAwareness?.clientID,
+    );
+  }, [usersAwareness, selfAwareness]);
+
+  useEffect(() => {
+    provider?.awareness?.setLocalStateField("user", selfAwareness);
+  }, [selfAwareness]);
+
+  useEffect(() => {
+    function setUsers() {
+      const users = (provider?.awareness?.getStates() ?? []).entries();
+      const array = Array.from(users).map(([clientID, state]) => ({
+        ...state.user,
+        clientID,
+      }));
+
+      setUsersAwareness(array);
+    }
+
+    provider?.awareness?.on("change", setUsers);
+    setUsers();
+
+    return () => {
+      provider?.awareness?.off("change", setUsers);
+    };
+  }, [provider]);
+
+  useEffect(() => {
+    const provider = new HocuspocusProvider({
+      url: getBaseUrl(),
+      name: roomName,
+      token: cookies,
+    });
+
+    setProvider(provider);
+
+    return () => {
+      provider?.destroy();
+    };
+  }, [roomName]);
+
+  return (
+    provider && (
+      <RoomContext.Provider
+        value={{
+          provider,
+          roomName,
+          cookies,
+          user,
+          selfAwareness,
+          otherAwareness,
+          setSelfAwareness,
+          usersAwareness,
+          setUsersAwareness,
+        }}
+      >
         {children}
       </RoomContext.Provider>
     )

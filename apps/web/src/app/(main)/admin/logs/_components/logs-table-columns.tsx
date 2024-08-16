@@ -61,12 +61,9 @@ export const logsTableColumns: ColumnDef<LogCol>[] = [
     cell: ({ row }) => (
       <div className="flex items-center h-auto">
         {row.original.operators.map((operator) => (
-          <Tooltip>
+          <Tooltip key={operator.id}>
             <TooltipTrigger>
-              <Avatar
-                key={operator.id}
-                className="relative flex shrink-0 overflow-hidden group size-6 rounded-full -ms-2 [&:is(:first-child):is(:last-child)]:hover:-translate-x-0 hover:-translate-x-3 rtl:[&:is(:first-child):is(:last-child)]:hover:translate-x-0 rtl:hover:translate-x-3 transition-transform [&:is(:first-child):is(:last-child)]:focus-visible:-translate-x-0 rtl:[&:is(:first-child):is(:last-child)]:focus-visible:translate-x-0 focus-visible:translate-x-3 ring-2 ring-offset-2 ring-offset-background ring-primary"
-              >
+              <Avatar className="relative flex shrink-0 overflow-hidden group size-6 rounded-full -ms-2 [&:is(:first-child):is(:last-child)]:hover:-translate-x-0 hover:-translate-x-3 rtl:[&:is(:first-child):is(:last-child)]:hover:translate-x-0 rtl:hover:translate-x-3 transition-transform [&:is(:first-child):is(:last-child)]:focus-visible:-translate-x-0 rtl:[&:is(:first-child):is(:last-child)]:focus-visible:translate-x-0 focus-visible:translate-x-3 ring-2 ring-offset-2 ring-offset-background ring-primary">
                 <AvatarImage
                   src={operator.avatar ?? undefined}
                   alt={operator.username}

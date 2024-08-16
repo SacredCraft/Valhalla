@@ -1,55 +1,45 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 
 import type { HocuspocusProvider } from "@hocuspocus/provider";
 
+import { useRoom } from "./room";
+
 type Props = {
-  provider?: HocuspocusProvider;
+  provider: HocuspocusProvider | null;
   username: string;
+  avatar: string | null;
 };
 
 type UserAwareness = {
   name: string;
+  avatar: string | null;
   color: string;
   clientID?: number;
 };
 
-export function Cursors({ provider, username }: Props) {
-  const [userAwareness, setUserAwareness] = useState<UserAwareness[]>([]);
+export function MonacoCursors({ username, avatar }: Props) {
+  const { otherAwareness, setSelfAwareness, provider } = useRoom();
 
   const user = useMemo(
     () => ({
       name: username,
       color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+      avatar,
     }),
-    [username],
+    [username, avatar],
   );
 
   useEffect(() => {
-    provider?.awareness?.setLocalStateField("user", user);
-
-    function setUsers() {
-      const users = (provider?.awareness?.getStates() ?? []).entries();
-
-      setUserAwareness(
-        Array.from(users).map(([clientID, state]) => ({
-          ...(state.user as UserAwareness),
-          clientID,
-        })),
-      );
-    }
-
-    provider?.awareness?.on("change", setUsers);
-    setUsers();
-
-    return () => {
-      provider?.awareness?.off("change", setUsers);
-    };
-  }, [provider, user]);
+    setSelfAwareness({
+      ...user,
+      clientID: provider?.awareness?.clientID,
+    });
+  }, [user, setSelfAwareness]);
 
   const styleSheet = useMemo(() => {
     let cursorStyles = "";
 
-    userAwareness.forEach((user) => {
+    otherAwareness.forEach((user: UserAwareness) => {
       cursorStyles += `
           .yRemoteSelection-${user.clientID},
           .yRemoteSelectionHead-${user.clientID}  {
@@ -63,7 +53,7 @@ export function Cursors({ provider, username }: Props) {
     });
 
     return { __html: cursorStyles };
-  }, [userAwareness]);
+  }, [otherAwareness]);
 
   return <style dangerouslySetInnerHTML={styleSheet} />;
 }

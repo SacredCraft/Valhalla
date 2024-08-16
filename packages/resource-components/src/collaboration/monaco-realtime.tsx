@@ -1,53 +1,35 @@
 "use client";
 
-import ky from "ky";
 import type { editor } from "monaco-editor";
 import { useTheme } from "next-themes";
 import { useCallback, useEffect, useState } from "react";
 import { MonacoBinding } from "y-monaco";
 
-import { HocuspocusProvider } from "@hocuspocus/provider";
-import {
-  Editor,
-  type EditorProps,
-} from "@sacred-craft/valhalla-components";
+import { Editor, type EditorProps } from "@sacred-craft/valhalla-components";
 
 import { useResourceFileContext } from "../essential/providers";
-import { Cursors } from "./cursor";
+import { MonacoBasicToolbar } from "./monaco-basic-toolbar";
+import { MonacoCursors } from "./monaco-cursor";
+import { OnlineAvatars } from "./online-avatars";
 import { Room, useRoom } from "./room";
 
 export const ResourceRealtimeMonacoEditor = () => {
-  const { meta, resource } = useResourceFileContext();
-  const [cookies, setCookies] = useState<string | null>(null);
-  const [user, setUser] = useState<{ username: string } | null>(null);
-
-  useEffect(() => {
-    ky.get("/api/auth/cookies").text().then(setCookies);
-    ky.get("/api/auth/profile").json<{ username: string }>().then(setUser);
-  }, []);
-
   return (
-    <Room roomName={`${resource.name} ${meta.path.join("/")}`}>
-      {cookies && user && (
-        <ResourceRealtimeMonacoEditorInner cookies={cookies} user={user} />
-      )}
+    <Room>
+      <ResourceRealtimeMonacoEditorInner />
     </Room>
   );
 };
 
-export const ResourceRealtimeMonacoEditorInner = ({
-  cookies,
-  user,
-  ...editorProps
-}: EditorProps & { cookies: string; user: { username: string } }) => {
+const ResourceRealtimeMonacoEditorInner = ({ ...editorProps }: EditorProps) => {
   const { resolvedTheme } = useTheme();
   const [editorRef, setEditorRef] = useState<editor.IStandaloneCodeEditor>();
-  const [provider, setProvider] = useState<HocuspocusProvider>();
   const [mounted, setMounted] = useState(false);
-  const { contentCache, setContentCache, meta } = useResourceFileContext();
+  const { contentCache, setContentCache, meta, setLeftActions } =
+    useResourceFileContext();
   const [contentInitialed, setContentInitialed] = useState(false);
 
-  const { socket, roomName } = useRoom();
+  const { provider, user } = useRoom();
 
   const handleOnMount = useCallback((e: editor.IStandaloneCodeEditor) => {
     setEditorRef(e);
@@ -56,20 +38,6 @@ export const ResourceRealtimeMonacoEditorInner = ({
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  useEffect(() => {
-    const provider = new HocuspocusProvider({
-      websocketProvider: socket,
-      name: roomName,
-      token: cookies,
-    });
-
-    setProvider(provider);
-
-    return () => {
-      provider?.destroy();
-    };
-  }, [roomName]);
 
   useEffect(() => {
     if (provider && !contentInitialed) {
@@ -108,6 +76,12 @@ export const ResourceRealtimeMonacoEditorInner = ({
     }
   }, [editorRef, provider, mounted]);
 
+  useEffect(() => {
+    if (editorRef) {
+      setLeftActions(<MonacoBasicToolbar editor={editorRef} />);
+    }
+  }, [editorRef]);
+
   return (
     <>
       {contentInitialed && (
@@ -122,9 +96,16 @@ export const ResourceRealtimeMonacoEditorInner = ({
         />
       )}
       {!contentInitialed && (
-        <div className="flex items-center justify-center">Loading...</div>
+        <div className="flex items-center justify-center h-[calc(100vh-6rem)]">
+          Loading...
+        </div>
       )}
-      <Cursors provider={provider} username={user.username} />
+      <MonacoCursors
+        provider={provider}
+        username={user.username}
+        avatar={user.avatar}
+      />
+      <OnlineAvatars />
     </>
   );
 };

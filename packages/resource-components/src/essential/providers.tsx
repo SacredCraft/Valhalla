@@ -42,6 +42,9 @@ type FileContextType = {
 
   rightActions: React.ReactNode;
   setRightActions: Dispatch<React.SetStateAction<React.ReactNode>>;
+
+  headerActions: React.ReactNode;
+  setHeaderActions: Dispatch<React.SetStateAction<React.ReactNode>>;
 };
 
 export const ResourceFileContext = createContext<FileContextType | null>(null);

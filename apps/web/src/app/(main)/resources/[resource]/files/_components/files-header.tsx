@@ -15,7 +15,11 @@ import {
 } from "@sacred-craft/valhalla-components";
 import { useResourceFileContext } from "@sacred-craft/valhalla-resource-components";
 
-export function FilesHeader() {
+export function FilesHeader({
+  headerActions,
+}: {
+  headerActions: React.ReactNode;
+}) {
   const { resource } = useResourceContext();
   const { relativePath } = useResourceFileContext();
   const pathname = usePathname();
@@ -23,7 +27,7 @@ export function FilesHeader() {
   const currentPageName = pathname.split("/")[4];
 
   return (
-    <header className="h-12 border-b flex px-2 items-center">
+    <header className="h-12 border-b flex px-2 items-center justify-between">
       <Breadcrumb className="hidden md:flex">
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -81,6 +85,7 @@ export function FilesHeader() {
           ))}
         </BreadcrumbList>
       </Breadcrumb>
+      <div className="flex items-center gap-2">{headerActions}</div>
     </header>
   );
 }

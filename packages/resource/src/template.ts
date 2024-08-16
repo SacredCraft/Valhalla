@@ -20,6 +20,8 @@ export type Template = {
   matchedPaths: string[];
   priority: number;
 
+  enableCollaboration: boolean;
+
   filesOptions?: {
     read?:
       | (ObjectEncodingOptions & {
@@ -55,6 +57,7 @@ export type Options = {
     component: () => React.JSX.Element;
     value: string;
     label: string;
+    lockOthersWhenCollaboration?: boolean;
   }[];
 };
 
@@ -63,6 +66,7 @@ export const createTemplate = (template: Partial<Template>): Template => {
     name: "default",
     matchedPaths: [],
     priority: 0,
+    enableCollaboration: true,
     relatedFiles: () => [],
     isMatch: () => true,
     options: {},
