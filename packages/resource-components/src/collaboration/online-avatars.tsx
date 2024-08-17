@@ -49,12 +49,11 @@ const OnlineAvatarInner = ({
         <Tooltip key={user.clientID ?? user.name}>
           <TooltipTrigger>
             <Avatar
-              className="relative flex shrink-0 overflow-hidden group size-6 rounded-full -ms-1 ring-2 ring-offset-2 ring-offset-background"
+              className="flex shrink-0 overflow-hidden size-6 rounded-full -ms-0.5 ring-2 ring-offset-2 ring-offset-background"
               style={
                 {
                   backgroundColor: user.color,
                   "--tw-ring-color": user.color,
-                  "--translate-x": list.length !== 1 ? "-0.75rem" : undefined,
                 } as React.CSSProperties
               }
             >
