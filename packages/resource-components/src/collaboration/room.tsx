@@ -7,6 +7,7 @@ import { HocuspocusProvider } from "@hocuspocus/provider";
 import { User } from "@sacred-craft/valhalla-database";
 
 import { useResourceFileContext } from "../essential/providers";
+import { OnlineAvatars } from "./online-avatars";
 
 type ContextType = {
   provider: HocuspocusProvider;
@@ -34,7 +35,14 @@ export const useRoom = () => {
   return context;
 };
 
-export const Room = ({ children }: { children?: React.ReactNode }) => {
+export const Room = ({
+  children,
+  setUsers,
+}: {
+  children?: React.ReactNode;
+  // eslint-disable-next-line no-unused-vars
+  setUsers: (users: number) => void;
+}) => {
   const { meta, resource } = useResourceFileContext();
   const [cookies, setCookies] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
@@ -51,6 +59,7 @@ export const Room = ({ children }: { children?: React.ReactNode }) => {
         cookies={cookies}
         user={user}
         roomName={`${resource.name} ${meta.path.join("/")}`}
+        setUsersCount={setUsers}
       >
         {children}
       </RoomInner>
@@ -63,11 +72,14 @@ const RoomInner = ({
   children,
   cookies,
   user,
+  setUsersCount,
 }: {
   roomName: string;
   children?: React.ReactNode;
   cookies: string;
   user: User;
+  // eslint-disable-next-line no-unused-vars
+  setUsersCount: (users: number) => void;
 }) => {
   const [provider, setProvider] = useState<HocuspocusProvider | null>(null);
   const [selfAwareness, setSelfAwareness] = useState<any>(null);
@@ -78,6 +90,10 @@ const RoomInner = ({
       (user) => user.clientID !== selfAwareness?.clientID,
     );
   }, [usersAwareness, selfAwareness]);
+
+  useEffect(() => {
+    setUsersCount(usersAwareness.length);
+  }, [usersAwareness]);
 
   useEffect(() => {
     provider?.awareness?.setLocalStateField("user", selfAwareness);
@@ -132,6 +148,7 @@ const RoomInner = ({
         }}
       >
         {children}
+        <OnlineAvatars />
       </RoomContext.Provider>
     )
   );

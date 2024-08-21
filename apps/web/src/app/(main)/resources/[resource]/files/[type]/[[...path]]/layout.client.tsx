@@ -14,6 +14,7 @@ import {
 import {
   ResourceFileProvider,
   ResourceVersionsProvider,
+  Room,
   TemplateLocked,
 } from "@sacred-craft/valhalla-resource-components";
 
@@ -32,7 +33,6 @@ export function FileClientLayout({
 }: FileClientLayoutProps) {
   const { resource } = useResourceContext();
   const router = useRouter();
-  const [locked, setLocked] = useState<boolean>(false);
 
   const { data: meta, refetch: refetchMeta } =
     api.files.getResourceFile.useQuery({
@@ -57,15 +57,6 @@ export function FileClientLayout({
     return null;
   }
 
-  if (pages.some((item) => item.lockOthersWhenCollaboration === true)) {
-    const lockedPage = pages.find((item) => item.lockOthersWhenCollaboration);
-    const currentPage = pages.find((item) => item.value.includes(type));
-
-    if (lockedPage && lockedPage !== currentPage) {
-      setLocked(true);
-    }
-  }
-
   if (!pages.some((item) => item.value.includes(type))) {
     router.push(
       `/resources/${resource.name}/files/${pages[0].value}/${relativePath.join("/")}`,
@@ -81,7 +72,6 @@ export function FileClientLayout({
       meta={meta}
       refetchMeta={refetchMeta}
       type={type}
-      locked={locked}
     />
   );
 }
@@ -93,7 +83,6 @@ const ContentLayer = ({
   meta,
   refetchMeta,
   type,
-  locked,
 }: {
   template: Template;
   resource: Resource;
@@ -101,7 +90,6 @@ const ContentLayer = ({
   meta: FileMeta;
   type: string;
   refetchMeta: () => Promise<any>;
-  locked: boolean;
 }) => {
   const { data: content, refetch: refetchContent } =
     api.files.readResourceFile.useQuery({
@@ -197,6 +185,8 @@ const ContentLayer = ({
   const [leftActions, setLeftActions] = useState<React.ReactNode>(null);
   const [rightActions, setRightActions] = useState<React.ReactNode>(null);
   const [headerActions, setHeaderActions] = useState<React.ReactNode>(null);
+  const [locked, setLocked] = useState<boolean>(false);
+  const [users, setUsers] = useState<number>();
 
   useEffect(() => {
     if (content) {
@@ -209,6 +199,32 @@ const ContentLayer = ({
   )?.component;
 
   const children = Component ? () => <Component /> : null;
+
+  const pages = template.options?.render;
+
+  useEffect(() => {
+    if (
+      pages &&
+      users &&
+      users > 1 &&
+      pages.some((item) => item.lockOthersWhenCollaboration === true)
+    ) {
+      const lockedPage = pages.find((item) => item.lockOthersWhenCollaboration);
+      const currentPage = pages.find((item) => item.value.includes(type));
+
+      if (lockedPage && lockedPage !== currentPage) {
+        setLocked(true);
+      }
+    }
+  }, [pages, type, users]);
+
+  let body: React.ReactNode = null;
+
+  if (template.enableCollaboration) {
+    body = <Room setUsers={setUsers}>{children && children()}</Room>;
+  } else {
+    body = children && children();
+  }
 
   return (
     <ResourceFileProvider
@@ -247,7 +263,7 @@ const ContentLayer = ({
       >
         <FilesHeader headerActions={headerActions} />
         <FilesTabs left={leftActions} right={rightActions} />
-        {locked ? <TemplateLocked /> : children && children()}
+        {locked ? <TemplateLocked /> : body}
       </ResourceVersionsProvider>
     </ResourceFileProvider>
   );

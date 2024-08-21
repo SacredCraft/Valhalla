@@ -8,20 +8,13 @@ import { MonacoBinding } from "y-monaco";
 import { Editor, type EditorProps } from "@sacred-craft/valhalla-components";
 
 import { useResourceFileContext } from "../essential/providers";
+import { MonacoAwareness } from "./monaco-awareness";
 import { MonacoBasicToolbar } from "./monaco-basic-toolbar";
-import { MonacoCursors } from "./monaco-cursor";
-import { OnlineAvatars } from "./online-avatars";
-import { Room, useRoom } from "./room";
+import { useRoom } from "./room";
 
-export const ResourceRealtimeMonacoEditor = () => {
-  return (
-    <Room>
-      <ResourceRealtimeMonacoEditorInner />
-    </Room>
-  );
-};
-
-const ResourceRealtimeMonacoEditorInner = ({ ...editorProps }: EditorProps) => {
+export const ResourceRealtimeMonacoEditor = ({
+  ...editorProps
+}: EditorProps) => {
   const { resolvedTheme } = useTheme();
   const [editorRef, setEditorRef] = useState<editor.IStandaloneCodeEditor>();
   const [mounted, setMounted] = useState(false);
@@ -100,12 +93,11 @@ const ResourceRealtimeMonacoEditorInner = ({ ...editorProps }: EditorProps) => {
           Loading...
         </div>
       )}
-      <MonacoCursors
+      <MonacoAwareness
         provider={provider}
         username={user.username}
         avatar={user.avatar}
       />
-      <OnlineAvatars />
     </>
   );
 };

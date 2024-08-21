@@ -17,7 +17,7 @@ type UserAwareness = {
   clientID?: number;
 };
 
-export function MonacoCursors({ username, avatar }: Props) {
+export function MonacoAwareness({ username, avatar }: Props) {
   const { otherAwareness, setSelfAwareness, provider } = useRoom();
 
   const user = useMemo(

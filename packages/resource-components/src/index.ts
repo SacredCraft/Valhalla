@@ -6,5 +6,5 @@ export * from "./common/resource-versions";
 export * from "./common/resource-versions-status";
 export * from "./common/template-locked";
 export * from "./collaboration/monaco-realtime";
-export * from "./collaboration/monaco-cursor";
+export * from "./collaboration/monaco-awareness";
 export * from "./collaboration/room";
