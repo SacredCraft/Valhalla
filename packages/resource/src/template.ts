@@ -53,12 +53,14 @@ export type Options = {
     onClick?: Preview | "open";
   };
 
-  render?: {
-    component: () => React.JSX.Element;
-    value: string;
-    label: string;
-    lockOthersWhenCollaboration?: boolean;
-  }[];
+  render?: Render[];
+};
+
+export type Render = {
+  component: () => React.JSX.Element;
+  value: string;
+  label: string;
+  lockOthersWhenCollaboration?: boolean;
 };
 
 export const createTemplate = (template: Partial<Template>): Template => {

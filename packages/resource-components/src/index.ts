@@ -8,3 +8,5 @@ export * from "./common/template-locked";
 export * from "./collaboration/monaco-realtime";
 export * from "./collaboration/monaco-awareness";
 export * from "./collaboration/room";
+export * from "./collaboration/form/text";
+export * from "./collaboration/form/node";

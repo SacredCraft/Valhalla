@@ -35,14 +35,7 @@ export const useRoom = () => {
   return context;
 };
 
-export const Room = ({
-  children,
-  setUsers,
-}: {
-  children?: React.ReactNode;
-  // eslint-disable-next-line no-unused-vars
-  setUsers: (users: number) => void;
-}) => {
+export const Room = ({ children }: { children?: React.ReactNode }) => {
   const { meta, resource } = useResourceFileContext();
   const [cookies, setCookies] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
@@ -59,7 +52,6 @@ export const Room = ({
         cookies={cookies}
         user={user}
         roomName={`${resource.name} ${meta.path.join("/")}`}
-        setUsersCount={setUsers}
       >
         {children}
       </RoomInner>
@@ -72,18 +64,22 @@ const RoomInner = ({
   children,
   cookies,
   user,
-  setUsersCount,
 }: {
   roomName: string;
   children?: React.ReactNode;
   cookies: string;
   user: User;
-  // eslint-disable-next-line no-unused-vars
-  setUsersCount: (users: number) => void;
 }) => {
   const [provider, setProvider] = useState<HocuspocusProvider | null>(null);
-  const [selfAwareness, setSelfAwareness] = useState<any>(null);
+  const [_selfAwareness, setSelfAwareness] = useState<any>(null);
   const [usersAwareness, setUsersAwareness] = useState<any[]>([]);
+
+  const selfAwareness = useMemo(() => {
+    return {
+      ..._selfAwareness,
+      clientID: provider?.awareness?.clientID,
+    };
+  }, [_selfAwareness, provider]);
 
   const otherAwareness = useMemo(() => {
     return usersAwareness.filter(
@@ -92,12 +88,8 @@ const RoomInner = ({
   }, [usersAwareness, selfAwareness]);
 
   useEffect(() => {
-    setUsersCount(usersAwareness.length);
-  }, [usersAwareness]);
-
-  useEffect(() => {
-    provider?.awareness?.setLocalStateField("user", selfAwareness);
-  }, [selfAwareness]);
+    provider?.awareness?.setLocalStateField("user", _selfAwareness);
+  }, [_selfAwareness]);
 
   useEffect(() => {
     function setUsers() {

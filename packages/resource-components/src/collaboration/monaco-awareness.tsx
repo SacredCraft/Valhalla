@@ -2,6 +2,8 @@ import { useEffect, useMemo } from "react";
 
 import type { HocuspocusProvider } from "@hocuspocus/provider";
 
+import { useResourceFileContext } from "../essential/providers";
+import { BasicAwareness } from "./basic-awareness";
 import { useRoom } from "./room";
 
 type Props = {
@@ -18,22 +20,21 @@ type UserAwareness = {
 };
 
 export function MonacoAwareness({ username, avatar }: Props) {
-  const { otherAwareness, setSelfAwareness, provider } = useRoom();
+  const { render } = useResourceFileContext();
+  const { otherAwareness, setSelfAwareness } = useRoom();
 
-  const user = useMemo(
+  const user: BasicAwareness = useMemo(
     () => ({
       name: username,
       color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
       avatar,
+      location: render.value,
     }),
-    [username, avatar],
+    [username, avatar, render],
   );
 
   useEffect(() => {
-    setSelfAwareness({
-      ...user,
-      clientID: provider?.awareness?.clientID,
-    });
+    setSelfAwareness(user);
   }, [user, setSelfAwareness]);
 
   const styleSheet = useMemo(() => {

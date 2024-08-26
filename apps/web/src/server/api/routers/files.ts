@@ -201,12 +201,19 @@ export const filesRouter = createTRPCRouter({
           });
         }
       }
-
-      fs.writeFileSync(
-        path.join(resourcePath, input.relativePath.join(path.sep)),
-        input.content,
-        input.options,
+      const filePath = path.join(
+        resourcePath,
+        input.relativePath.join(path.sep),
       );
+
+      if (!fs.existsSync(filePath)) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "File not found",
+        });
+      }
+
+      fs.writeFileSync(filePath, input.content, input.options);
 
       const version = Math.random().toString(36).slice(2, 8);
       const name = crypto.randomUUID();
@@ -292,7 +299,7 @@ export const filesRouter = createTRPCRouter({
 
         return Promise.all(versions).then((versions) =>
           versions
-            .filter((version) => version !== null)
+            .filter((version): version is Version => version !== null)
             .sort((a, b) => b.timestamp.localeCompare(a.timestamp)),
         );
       } catch (error) {

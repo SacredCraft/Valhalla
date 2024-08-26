@@ -50,16 +50,16 @@ export function FileClientLayout({
     return <div>Template not found</div>;
   }
 
-  const pages = template.options?.render;
+  const renders = template.options?.render;
 
-  if (!pages || pages.length === 0) {
+  if (!renders || renders.length === 0) {
     router.push(`/resources/${resource.name}/browser/explore`);
     return null;
   }
 
-  if (!pages.some((item) => item.value.includes(type))) {
+  if (!renders.some((item) => item.value.includes(type))) {
     router.push(
-      `/resources/${resource.name}/files/${pages[0].value}/${relativePath.join("/")}`,
+      `/resources/${resource.name}/files/${renders[0].value}/${relativePath.join("/")}`,
     );
     return null;
   }
@@ -116,7 +116,7 @@ const ContentLayer = ({
     content: string | NodeJS.ArrayBufferView,
     comment?: string,
   ) => {
-    return new Promise<boolean>((resolve) => {
+    return new Promise<"success" | "not-found" | "error">((resolve) => {
       writeResourceFile.mutate(
         {
           resource: resource.name,
@@ -128,10 +128,14 @@ const ContentLayer = ({
         },
         {
           onSuccess: () => {
-            resolve(true);
+            resolve("success");
           },
-          onError: () => {
-            resolve(false);
+          onError: (error) => {
+            if (error.data?.code === "NOT_FOUND") {
+              resolve("not-found");
+            } else {
+              resolve("error");
+            }
           },
         },
       );
@@ -186,7 +190,6 @@ const ContentLayer = ({
   const [rightActions, setRightActions] = useState<React.ReactNode>(null);
   const [headerActions, setHeaderActions] = useState<React.ReactNode>(null);
   const [locked, setLocked] = useState<boolean>(false);
-  const [users, setUsers] = useState<number>();
 
   useEffect(() => {
     if (content) {
@@ -200,28 +203,33 @@ const ContentLayer = ({
 
   const children = Component ? () => <Component /> : null;
 
-  const pages = template.options?.render;
+  const renders = template.options?.render;
+  const currentRender = renders?.find((item) => item.value === type);
 
   useEffect(() => {
     if (
-      pages &&
-      users &&
-      users > 1 &&
-      pages.some((item) => item.lockOthersWhenCollaboration === true)
+      renders &&
+      renders.some((item) => item.lockOthersWhenCollaboration === true)
     ) {
-      const lockedPage = pages.find((item) => item.lockOthersWhenCollaboration);
-      const currentPage = pages.find((item) => item.value.includes(type));
+      const lockedPage = renders.find(
+        (item) => item.lockOthersWhenCollaboration,
+      );
 
-      if (lockedPage && lockedPage !== currentPage) {
+      // TODO
+      if (lockedPage && lockedPage !== currentRender) {
         setLocked(true);
       }
     }
-  }, [pages, type, users]);
+  }, [currentRender, type]);
 
   let body: React.ReactNode = null;
 
+  if (!currentRender) {
+    return null;
+  }
+
   if (template.enableCollaboration) {
-    body = <Room setUsers={setUsers}>{children && children()}</Room>;
+    body = <Room>{children && children()}</Room>;
   } else {
     body = children && children();
   }
@@ -229,6 +237,7 @@ const ContentLayer = ({
   return (
     <ResourceFileProvider
       value={{
+        render: currentRender,
         config: valhallaConfig,
         resource,
         template,

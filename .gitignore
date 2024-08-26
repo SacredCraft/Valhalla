@@ -41,3 +41,5 @@ yarn-error.log*
 .idea
 # Million Lint
 .million
+
+.cursorrules

@@ -3,6 +3,7 @@ import { Dispatch, createContext, useContext } from "react";
 import { ValhallaConfig } from "@sacred-craft/valhalla-config";
 import {
   FileMeta,
+  Render,
   Resource,
   Template,
   Version,
@@ -13,6 +14,7 @@ type FileContextType = {
   config: ValhallaConfig;
   resource: Resource;
   template: Template;
+  render: Render;
   relativePath: string[];
 
   meta: FileMeta;
@@ -23,7 +25,7 @@ type FileContextType = {
     content: string | NodeJS.ArrayBufferView,
     // eslint-disable-next-line no-unused-vars
     comment?: string,
-  ) => Promise<boolean>;
+  ) => Promise<"success" | "not-found" | "error">;
 
   contentCache?: string | Buffer;
   // eslint-disable-next-line no-undef
@@ -45,6 +47,8 @@ type FileContextType = {
 
   headerActions: React.ReactNode;
   setHeaderActions: Dispatch<React.SetStateAction<React.ReactNode>>;
+
+  setLocked: Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const ResourceFileContext = createContext<FileContextType | null>(null);

@@ -1,0 +1,31 @@
+{
+  "name": "@sacred-craft/valhalla-resource-common",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint . --max-warnings 0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@sacred-craft/valhalla-components": "workspace:*",
+    "@sacred-craft/valhalla-resource": "workspace:*",
+    "@sacred-craft/valhalla-resource-components": "workspace:*"
+  },
+  "devDependencies": {
+    "@sacred-craft/eslint-config": "workspace:*",
+    "@sacred-craft/typescript-config": "workspace:*",
+    "@types/node": "^20.14.12",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "eslint": "^8.57.0",
+    "tsup": "^8.2.2",
+    "typescript": "^5.5.4"
+  }
+}
