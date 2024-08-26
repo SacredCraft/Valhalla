@@ -1,0 +1,35 @@
+---
+title: 第一个资源
+---
+
+如果你还不知道什么是资源, 请先阅读 [基本概念](/docs/for-users/getting-started/concepts) 章节。
+
+通过 Valhalla 的脚手架, 你可以快速创建一个资源。
+
+```bash
+npx create-valhalla-resource resource-name
+```
+
+记得将 `resource-name` 替换为你的资源名称。
+
+你可以使用 `-m` 参数, 创建 `monorepo` 项目, 如:
+
+```bash
+npx create-valhalla-resource resource-name -m
+```
+
+创建完成后, 找到项目目录下的 `src/index.ts` 文件, 编辑资源信息。
+
+```typescript
+import { createResource } from '@sacred-craft/valhalla-resource';
+
+import { defaultTemplate } from './templates';
+
+export const yourResourceName = createResource({
+  name: 'your-resource-name',
+  description: 'your-resource-description',
+  version: '1.0.0',
+
+  templates: [defaultTemplate],
+});
+```

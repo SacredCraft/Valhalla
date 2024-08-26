@@ -10,10 +10,10 @@
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
-    "fumadocs-core": "12.5.4",
+    "fumadocs-core": "13.3.2",
     "fumadocs-docgen": "^1.1.0",
-    "fumadocs-mdx": "8.2.34",
-    "fumadocs-ui": "12.5.4",
+    "fumadocs-mdx": "9.0.2",
+    "fumadocs-ui": "13.3.2",
     "lucide-react": "^0.381.0",
     "next": "^14.2.6",
     "react": "^18.3.1",

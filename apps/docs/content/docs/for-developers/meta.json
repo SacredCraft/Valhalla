@@ -1,0 +1,5 @@
+{
+  "title": "Developer Guide",
+  "root": true,
+  "pages": ["index", "resource", "template"]
+}

@@ -3,7 +3,6 @@ import { type HomeLayoutProps } from "fumadocs-ui/home-layout";
 import { type DocsLayoutProps } from "fumadocs-ui/layout";
 import { User, Workflow } from "lucide-react";
 
-import { defaultLanguage, t } from "@/utils/i18n";
 import { pageTree } from "@/utils/source";
 
 // shared configuration
@@ -21,29 +20,27 @@ export const baseOptions: HomeLayoutProps = {
 };
 
 // docs layout configuration
-export const docsOptions = (lang: string): DocsLayoutProps => ({
+export const docsOptions: DocsLayoutProps = {
   ...baseOptions,
-  tree: pageTree[lang] ? pageTree[lang] : pageTree[defaultLanguage]!!,
-  i18n: true,
+  tree: pageTree,
   nav: {
     ...baseOptions.nav,
-    url: `/${lang}`,
   },
   sidebar: {
     banner: (
       <RootToggle
         options={[
           {
-            title: t(lang, "root-toggle.for-users.title"),
-            description: t(lang, "root-toggle.for-users.description"),
+            title: "用户文档",
+            description: "学习如何使用 Valhalla",
             url: "/docs/for-users",
             icon: (
               <User className="size-9 shrink-0 rounded-md bg-gradient-to-t from-secondary p-1.5" />
             ),
           },
           {
-            title: t(lang, "root-toggle.for-developers.title"),
-            description: t(lang, "root-toggle.for-developers.description"),
+            title: "开发者文档",
+            description: "学习如何开发 Valhalla 资源",
             url: "/docs/for-developers",
             icon: (
               <Workflow className="size-9 shrink-0 rounded-md bg-gradient-to-t from-secondary p-1.5" />
@@ -53,4 +50,4 @@ export const docsOptions = (lang: string): DocsLayoutProps => ({
       />
     ),
   },
-});
+};
