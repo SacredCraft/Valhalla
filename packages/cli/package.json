@@ -22,7 +22,7 @@
   "author": "",
   "license": "ISC",
   "peerDependencies": {
-    "next": "^14.2.5"
+    "next": "^14.2.6"
   },
   "devDependencies": {
     "@sacred-craft/eslint-config": "workspace:*",
