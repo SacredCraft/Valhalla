@@ -3,7 +3,6 @@
   "compilerOptions": {
     "module": "ESNext"
   },
-
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"]
 }

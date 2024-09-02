@@ -1,6 +1,7 @@
 {
   "extends": "@sacred-craft/typescript-config/nextjs.json",
   "compilerOptions": {
+    "baseUrl": ".",
     "declaration": false,
     "declarationMap": false,
     "paths": {

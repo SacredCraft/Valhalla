@@ -21,9 +21,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "peerDependencies": {
-    "next": "^14.2.6"
-  },
   "devDependencies": {
     "@sacred-craft/eslint-config": "workspace:*",
     "@sacred-craft/typescript-config": "workspace:*",
@@ -37,6 +34,7 @@
     "@sacred-craft/valhalla-collaboration": "workspace:*",
     "commander": "^12.1.0",
     "consola": "^3.2.3",
+    "next": "^14.2.6",
     "dotenv": "^16.4.5",
     "kleur": "^4.1.5",
     "ws": "^8.18.0"
