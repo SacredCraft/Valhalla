@@ -237,6 +237,7 @@ const ContentLayer = ({
   return (
     <ResourceFileProvider
       value={{
+        setLocked,
         render: currentRender,
         config: valhallaConfig,
         resource,

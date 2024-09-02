@@ -3,7 +3,6 @@
 import { LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import * as React from "react";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { signInSchema } from "@/lib/zod";
@@ -21,6 +20,7 @@ import {
   Input,
   cn,
   toast,
+  useForm,
 } from "@sacred-craft/valhalla-components";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}

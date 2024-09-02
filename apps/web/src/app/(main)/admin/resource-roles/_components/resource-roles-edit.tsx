@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { UsersList } from "@/app/(main)/_components/users-list";
@@ -28,6 +27,7 @@ import {
   SheetTrigger,
   TableCell,
   toast,
+  useForm,
 } from "@sacred-craft/valhalla-components";
 import { Cell, flexRender } from "@tanstack/react-table";
 

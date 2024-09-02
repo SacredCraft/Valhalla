@@ -5,6 +5,7 @@ import {
   FieldPath,
   FieldValues,
   FormProvider,
+  useForm,
   useFormContext,
 } from "react-hook-form";
 
@@ -167,6 +168,7 @@ const FormMessage = React.forwardRef<
 FormMessage.displayName = "FormMessage";
 
 export {
+  useForm,
   useFormField,
   Form,
   FormItem,

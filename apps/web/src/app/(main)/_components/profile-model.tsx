@@ -1,7 +1,6 @@
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { useProfile } from "@/app/(main)/layout.client";
@@ -28,6 +27,7 @@ import {
   Input,
   Textarea,
   toast,
+  useForm,
 } from "@sacred-craft/valhalla-components";
 
 export function ProfileModel() {

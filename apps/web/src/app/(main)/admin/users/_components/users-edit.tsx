@@ -1,6 +1,5 @@
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
 import { string, z } from "zod";
 
 import { UserCol } from "@/app/(main)/admin/users/_components/users-table-columns";
@@ -30,6 +29,7 @@ import {
   TableCell,
   Textarea,
   toast,
+  useForm,
 } from "@sacred-craft/valhalla-components";
 import { Cell, flexRender } from "@tanstack/react-table";
 

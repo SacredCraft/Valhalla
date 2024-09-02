@@ -3,7 +3,6 @@
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import "@/app/(main)/resources/[resource]/browser/layout.client";
@@ -34,6 +33,7 @@ import {
   SheetTitle,
   SheetTrigger,
   toast,
+  useForm,
 } from "@sacred-craft/valhalla-components";
 
 import { useExploreContext } from "../layout.client";
