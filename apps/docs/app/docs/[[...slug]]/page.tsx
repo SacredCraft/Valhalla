@@ -1,40 +1,46 @@
-import { DocsBody, DocsPage } from "fumadocs-ui/page";
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import defaultComponents from "fumadocs-ui/mdx";
+import { DocsBody, DocsPage, DocsTitle } from "fumadocs-ui/page";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { getPage, getPages } from "@/utils/source";
+import { utils } from "@/app/source";
 
 interface Param {
   slug: string[];
 }
 
 export default async function Page({ params }: { params: Param }) {
-  const page = getPage(params.slug);
+  const page = utils.getPage(params.slug);
 
   if (page == null) {
     notFound();
   }
 
-  const MDX = page.data.exports.default;
-
   return (
-    <DocsPage toc={page.data.exports.toc} full={page.data.full}>
+    <DocsPage toc={page.data.toc} lastUpdate={page.data.lastModified}>
+      <DocsTitle>{page.data.title}</DocsTitle>
       <DocsBody>
-        <h1>{page.data.title}</h1>
-        <MDX />
+        <page.data.body
+          components={{
+            ...defaultComponents,
+            Tab,
+            Tabs,
+          }}
+        />
       </DocsBody>
     </DocsPage>
   );
 }
 
 export function generateStaticParams(): Param[] {
-  return getPages().map((page) => ({
+  return utils.getPages().map((page) => ({
     slug: page.slugs,
   }));
 }
 
 export function generateMetadata({ params }: { params: Param }) {
-  const page = getPage(params.slug);
+  const page = utils.getPage(params.slug);
 
   if (page == null) notFound();
 

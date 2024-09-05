@@ -3,7 +3,7 @@ import { type HomeLayoutProps } from "fumadocs-ui/home-layout";
 import { type DocsLayoutProps } from "fumadocs-ui/layout";
 import { User, Workflow } from "lucide-react";
 
-import { pageTree } from "@/utils/source";
+import { utils } from "../source";
 
 // shared configuration
 export const baseOptions: HomeLayoutProps = {
@@ -22,7 +22,7 @@ export const baseOptions: HomeLayoutProps = {
 // docs layout configuration
 export const docsOptions: DocsLayoutProps = {
   ...baseOptions,
-  tree: pageTree,
+  tree: utils.pageTree,
   nav: {
     ...baseOptions.nav,
   },
