@@ -1,12 +1,12 @@
-import { spawn } from "child_process";
 import { program } from "commander";
+import crossSpawn from "cross-spawn";
 import dotenv from "dotenv";
 import path from "path";
 
 dotenv.config({ path: "../../.env" });
 
 function runCommand(command: string, args: string[] = []) {
-  spawn(command, args, { stdio: "inherit" });
+  crossSpawn(command, args, { stdio: "inherit" });
 }
 
 program
