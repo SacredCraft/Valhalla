@@ -195,7 +195,7 @@ export const UsersEdit = ({ cell }: { cell: Cell<UserCol, any> }) => {
                 name="role"
                 render={({ field }) => (
                   <FormItem className="space-y-3">
-                    <FormLabel>Role</FormLabel>
+                    <FormLabel>System Role</FormLabel>
                     <FormControl>
                       <RadioGroup
                         disabled={updating}

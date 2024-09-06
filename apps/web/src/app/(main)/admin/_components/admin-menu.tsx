@@ -23,17 +23,17 @@ export function AdminMenu() {
         </div>
         <nav className="flex flex-col gap-1 px-2">
           <p className="text-muted-foreground text-xs font-semibold uppercase px-2 mb-1 mt-2">
-            Main
+            System
           </p>
           <Item value="users" label="Users" />
-          <Item value="resource-roles" label="Roles" />
           <Item value="logs" label="Logs" />
         </nav>
         <nav className="flex flex-col gap-1 px-2">
           <p className="text-muted-foreground text-xs font-semibold uppercase px-2 mb-1 mt-2">
-            Settings
+            Resource
           </p>
-          <Item value="resource-path" label="Resource Path" />
+          <Item value="resource-roles" label="Roles" />
+          <Item value="resource-path" label="Path" />
         </nav>
       </div>
     </motion.div>
