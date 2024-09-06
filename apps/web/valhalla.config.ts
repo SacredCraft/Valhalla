@@ -4,10 +4,16 @@ import {
   Template,
   createTemplate,
 } from "@sacred-craft/valhalla-resource";
-import { common } from "@sacred-craft/valhalla-resource-common";
+import { root, example1, example2 } from "@sacred-craft/valhalla-resource-common";
 
-const resources: Resource[] = [common()];
+// 在此注册资源
+const resources: Resource[] = [
+  root(), 
+  example1(), 
+  example2()
+];
 
+// 全局模板
 const globalTemplates: Template[] = [
   createTemplate({
     name: "Image",
@@ -20,6 +26,7 @@ const globalTemplates: Template[] = [
   }),
 ];
 
+// 主配置
 const valhallaConfig = defineValhallaConfig({
   resources,
   globalTemplates,
