@@ -1,4 +1,5 @@
 import { createResource } from "@sacred-craft/valhalla-resource";
+
 import { commonTemplate } from "./templates/common";
 
 // 在此创建资源

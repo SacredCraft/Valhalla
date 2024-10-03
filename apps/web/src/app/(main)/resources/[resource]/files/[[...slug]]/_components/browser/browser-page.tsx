@@ -1,6 +1,7 @@
 import { usePathname } from "next/navigation";
 import {
   Dispatch,
+  ReactNode,
   createContext,
   useContext,
   useEffect,
@@ -130,11 +131,7 @@ export const BrowserStoreContext = createContext<BrowserStoreApi | undefined>(
   undefined,
 );
 
-export const BrowserStoreProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const BrowserStoreProvider = ({ children }: { children: ReactNode }) => {
   const storeRef = useRef<BrowserStoreApi>();
 
   const { resource } = useResourceContext();
@@ -191,11 +188,7 @@ export const useBrowserStore = <T,>(
   return useStore(context, selector);
 };
 
-export const BrowserProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const BrowserProvider = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
   const segments = pathname.split("/").filter(Boolean);
   const relativePath = segments.slice(3);

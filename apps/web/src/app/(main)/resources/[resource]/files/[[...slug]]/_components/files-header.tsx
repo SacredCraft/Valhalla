@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { Fragment } from "react";
+import React, { Fragment, ReactNode } from "react";
 
 import {
   Breadcrumb,
@@ -16,11 +16,7 @@ import { useResourceFileContext } from "@sacred-craft/valhalla-resource-componen
 
 import { useResourceContext } from "../layout.client";
 
-export function FilesHeader({
-  headerActions,
-}: {
-  headerActions: React.ReactNode;
-}) {
+export function FilesHeader({ headerActions }: { headerActions: ReactNode }) {
   const { resource } = useResourceContext();
   const { relativePath } = useResourceFileContext();
   const pathname = usePathname();

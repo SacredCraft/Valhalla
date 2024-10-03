@@ -4,14 +4,14 @@ import {
   Template,
   createTemplate,
 } from "@sacred-craft/valhalla-resource";
-import { root, example1, example2 } from "@sacred-craft/valhalla-resource-common";
+import {
+  example1,
+  example2,
+  root,
+} from "@sacred-craft/valhalla-resource-common";
 
 // 在此注册资源
-const resources: Resource[] = [
-  root(), 
-  example1(), 
-  example2()
-];
+const resources: Resource[] = [root(), example1(), example2()];
 
 // 全局模板
 const globalTemplates: Template[] = [

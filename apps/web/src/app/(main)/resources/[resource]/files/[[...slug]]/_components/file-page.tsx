@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 import { useQueryState } from "nuqs";
-import { useEffect, useMemo, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 
 import valhallaConfig from "@/config";
 import { api } from "@/trpc/react";
@@ -180,9 +180,9 @@ const ContentLayer = ({
 
   const [contentCache, setContentCache] = useState(content);
   const isModified = content !== contentCache;
-  const [leftActions, setLeftActions] = useState<React.ReactNode>(null);
-  const [rightActions, setRightActions] = useState<React.ReactNode>(null);
-  const [headerActions, setHeaderActions] = useState<React.ReactNode>(null);
+  const [leftActions, setLeftActions] = useState<ReactNode>(null);
+  const [rightActions, setRightActions] = useState<ReactNode>(null);
+  const [headerActions, setHeaderActions] = useState<ReactNode>(null);
   const [locked, setLocked] = useState<boolean>(false);
 
   useEffect(() => {
