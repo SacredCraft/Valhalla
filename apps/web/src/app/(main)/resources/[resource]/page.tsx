@@ -1,11 +1,9 @@
 import { redirect } from "next/navigation";
 
-type Props = {
-  params: {
-    resource: string;
-  };
-};
-
-export default function ResourcePage({ params: { resource } }: Props) {
-  redirect(`/resources/${resource}/browser/explore`);
+export default function ResourcePage({
+  params: { resource },
+}: {
+  params: { resource: string };
+}) {
+  redirect(`/resources/${resource}/files`);
 }

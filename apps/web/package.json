@@ -43,7 +43,8 @@
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.18.0",
     "yaml": "^2.5.0",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "zustand": "^4.5.5"
   },
   "devDependencies": {
     "@sacred-craft/eslint-config": "workspace:*",

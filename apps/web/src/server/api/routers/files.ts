@@ -40,6 +40,28 @@ const bufferEncodingSchema = z.union([
 ]);
 
 export const filesRouter = createTRPCRouter({
+  getFileType: resourceProcedure
+    .input(z.object({ relativePath: z.array(z.string()) }))
+    .query(async ({ input, ctx }): Promise<string> => {
+      const resourcePath = await getResourcePath({ name: ctx.resource });
+      if (!resourcePath) {
+        throw resourcePathNotFound;
+      }
+      const stats = fs.statSync(
+        path.join(resourcePath, input.relativePath.join(path.sep)),
+      );
+      if (stats.isDirectory()) {
+        return "dir";
+      }
+      if (stats.isFile()) {
+        return "file";
+      }
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "File not found",
+      });
+    }),
+
   getResourceFiles: resourceProcedure
     .input(z.object({ relativePath: z.array(z.string()) }))
     .query(async ({ input, ctx }): Promise<FileMeta[] | null> => {
