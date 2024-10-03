@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 import localFont from "next/font/local";
 
 import Providers from "@/app/_components/providers";
@@ -24,16 +26,24 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+
+  // Providing all messages to the client
+  // side is the easiest way to get started
+  const messages = await getMessages();
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} h-full bg-muted/40 font-sans`}
       >
-        <Providers>
-          <HydrateClient>
-            <div className="flex min-h-full flex-col">{children}</div>
-          </HydrateClient>
-        </Providers>
+        <NextIntlClientProvider messages={messages}>
+          <Providers>
+            <HydrateClient>
+              <div className="flex min-h-full flex-col">{children}</div>
+            </HydrateClient>
+          </Providers>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

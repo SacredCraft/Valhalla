@@ -1,6 +1,7 @@
 "use client";
 
 import { LoaderCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { z } from "zod";
@@ -26,6 +27,7 @@ import {
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+  const t = useTranslations("authentication");
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const router = useRouter();
 
@@ -42,10 +44,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
     signIn(values.username, values.password).then((success) => {
       if (success) {
-        toast.success("Sign in successfully");
+        toast.success(t("sign-in.success"));
         router.push("/");
       } else {
-        toast.error("Sign in failed");
+        toast.error(t("sign-in.failure"));
       }
       setIsLoading(false);
     });
@@ -61,7 +63,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="sr-only">Username</FormLabel>
+                  <FormLabel className="sr-only">
+                    {t("sign-in.username")}
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="LioRael"
@@ -79,7 +83,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="sr-only">Password</FormLabel>
+                  <FormLabel className="sr-only">
+                    {t("sign-in.password")}
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="••••••••"
@@ -97,7 +103,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               {isLoading && (
                 <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
               )}
-              Sign In with Username
+              {t("sign-in.sign-in-with-username")}
             </Button>
           </div>
         </form>
@@ -108,7 +114,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         </div>
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
+            {t("sign-in.or-continue-with")}
           </span>
         </div>
       </div>
