@@ -19,9 +19,9 @@ import {
 } from "@sacred-craft/valhalla-resource-components";
 
 import { RelativePathContext, useResourceContext } from "../../layout.client";
-import { FilesTabs } from "../files-tabs";
 import { SharedHeader } from "../shared/shared-header";
 import { FileListWatcher } from "./file-list-watcher";
+import { FilesTabs } from "./files-tabs";
 
 export type FilePageProps = {
   relativePath: string[];

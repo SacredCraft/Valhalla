@@ -1,8 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useMemo } from "react";
+import { useQueryState } from "nuqs";
 
 import { Button } from "@sacred-craft/valhalla-components";
 import { useResourceFileContext } from "@sacred-craft/valhalla-resource-components";
@@ -32,25 +30,17 @@ export function FilesTabs({ left, right }: FilesTabsProps) {
 }
 
 function FilesTab({ value, label }: { value: string; label: string }) {
-  const pathname = usePathname();
-  const pathnameSliced = useMemo(() => pathname.split("/"), [pathname]);
-  const isActive = useMemo(
-    () => pathname.split("/")[4] === value,
-    [pathname, value],
-  );
+  const [type, setType] = useQueryState("type");
+  const isActive = type === value;
 
   return (
     <Button
       size="sm"
       variant={isActive ? "default" : "ghost"}
       className="w-full justify-start h-7"
-      asChild
+      onClick={() => setType(value)}
     >
-      <Link
-        href={`/resources/${pathnameSliced[2]}/files/${value}/${pathnameSliced.slice(5).join("/")}`}
-      >
-        {label}
-      </Link>
+      {label}
     </Button>
   );
 }
