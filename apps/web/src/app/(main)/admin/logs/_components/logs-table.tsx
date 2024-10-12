@@ -126,7 +126,7 @@ function Template({ children }: { children: React.ReactNode }) {
   return (
     <div className="px-2 flex flex-col gap-2">
       {table && <LogsTableToolbar />}
-      <div className="border rounded-lg">
+      <div className="border rounded-lg overflow-hidden">
         <Table>
           <TableHeader>
             {table &&
