@@ -1,3 +1,4 @@
+import { CircleSlash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useQueryState } from "nuqs";
 import { ReactNode, useEffect, useMemo, useState } from "react";
@@ -17,9 +18,10 @@ import {
   TemplateLocked,
 } from "@sacred-craft/valhalla-resource-components";
 
-import { useResourceContext } from "../layout.client";
-import { FilesHeader } from "./files-header";
-import { FilesTabs } from "./files-tabs";
+import { RelativePathContext, useResourceContext } from "../../layout.client";
+import { FilesTabs } from "../files-tabs";
+import { SharedHeader } from "../shared/shared-header";
+import { FileListWatcher } from "./file-list-watcher";
 
 export type FilePageProps = {
   relativePath: string[];
@@ -43,7 +45,12 @@ export const FilePage = ({ relativePath }: FilePageProps) => {
   const template = getTemplateByPath(meta.path, resource, valhallaConfig);
 
   if (!template) {
-    return <div>Template not found</div>;
+    return (
+      <div className="flex flex-col items-center justify-center h-screen text-xl">
+        <CircleSlash className="w-16 h-16 mb-4" />
+        Template not found
+      </div>
+    );
   }
 
   const renders = template.options?.render;
@@ -59,14 +66,17 @@ export const FilePage = ({ relativePath }: FilePageProps) => {
   }
 
   return (
-    <ContentLayer
-      template={template}
-      resource={resource}
-      relativePath={relativePath}
-      meta={meta}
-      refetchMeta={refetchMeta}
-      type={type}
-    />
+    <RelativePathContext.Provider value={relativePath}>
+      <FileListWatcher />
+      <ContentLayer
+        template={template}
+        resource={resource}
+        relativePath={relativePath}
+        meta={meta}
+        refetchMeta={refetchMeta}
+        type={type}
+      />
+    </RelativePathContext.Provider>
   );
 };
 
@@ -265,7 +275,7 @@ const ContentLayer = ({
           setCurrentVersion,
         }}
       >
-        <FilesHeader headerActions={headerActions} />
+        <SharedHeader headerActions={headerActions} />
         <FilesTabs left={leftActions} right={rightActions} />
         {locked ? <TemplateLocked /> : body}
       </ResourceVersionsProvider>

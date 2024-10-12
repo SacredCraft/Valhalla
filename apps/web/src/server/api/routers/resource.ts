@@ -120,7 +120,7 @@ export const resourceRouter = createTRPCRouter({
   createResourceRole: adminProcedure
     .input(
       z.object({
-        role: z.string(),
+        role: z.string().min(1),
         resources: z.array(z.string()),
         users: z.array(z.string()),
       }),

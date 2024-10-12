@@ -3,7 +3,7 @@
 import { api } from "@/trpc/react";
 
 import { BrowserPage } from "./browser/browser-page";
-import { FilePage } from "./file-page";
+import { FilePage } from "./file/file-page";
 
 export function FilesPage({
   params: { slug = [], resource },

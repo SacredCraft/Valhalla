@@ -10,12 +10,12 @@ export const getTemplateByPath = (
   let matchedTemplate: Template | null = null;
   for (const template of templates) {
     template.matchedPaths.forEach((matchedPath) => {
-      if (matchedPath.includes("*")) {
-        const regex = new RegExp(matchedPath.replace(/\*/g, ".*"));
-        if (regex.test(path.join("/"))) {
-          if (template.isMatch?.(resource)) {
-            matchedTemplate = template;
-          }
+      if (matchedPath === "*") {
+        matchedTemplate = template;
+      } else if (matchedPath.startsWith("*.")) {
+        const fileExtension = path[path.length - 1].split(".").pop();
+        if (matchedPath === `*.${fileExtension}`) {
+          matchedTemplate = template;
         }
       } else if (matchedPath === path.join("/")) {
         if (template.isMatch?.(resource)) {

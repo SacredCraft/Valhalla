@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import React, { Fragment } from "react";
+import React, { Fragment, ReactNode } from "react";
 
 import {
   Breadcrumb,
@@ -14,12 +14,12 @@ import {
 
 import { useRelativePath, useResourceContext } from "../../layout.client";
 
-export function BrowserHeader() {
+export function SharedHeader({ headerActions }: { headerActions?: ReactNode }) {
   const { resource } = useResourceContext();
   const relativePath = useRelativePath();
 
   return (
-    <header className="h-12 border-b flex px-2 items-center">
+    <header className="h-12 border-b flex px-2 items-center justify-between">
       <Breadcrumb className="hidden md:flex">
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -73,6 +73,7 @@ export function BrowserHeader() {
           )}
         </BreadcrumbList>
       </Breadcrumb>
+      <div className="flex items-center gap-2">{headerActions}</div>
     </header>
   );
 }

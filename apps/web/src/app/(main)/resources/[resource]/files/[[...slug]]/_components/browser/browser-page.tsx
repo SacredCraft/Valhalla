@@ -25,7 +25,7 @@ import {
 } from "@tanstack/react-table";
 
 import { RelativePathContext, useResourceContext } from "../../layout.client";
-import { BrowserHeader } from "./browser-header";
+import { SharedHeader } from "../shared/shared-header";
 import { BrowserTable } from "./browser-table";
 import { BrowserCol } from "./browser-table-columns";
 import { BrowserTabs } from "./browser-tabs";
@@ -203,7 +203,7 @@ export const BrowserProvider = ({ children }: { children: ReactNode }) => {
 export function BrowserPage() {
   return (
     <BrowserProvider>
-      <BrowserHeader />
+      <SharedHeader />
       <BrowserTabs
         left={
           <>

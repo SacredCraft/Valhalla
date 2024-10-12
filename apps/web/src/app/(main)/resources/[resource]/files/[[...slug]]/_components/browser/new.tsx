@@ -74,7 +74,9 @@ export function New() {
   const handleCreate = (data: z.infer<typeof FormSchema>) => {
     createFile.mutate({
       resource: resource.name,
-      relativePath: [...relativePath!!, data.name],
+      relativePath: [...relativePath!!, data.name].map((i) =>
+        decodeURIComponent(i),
+      ),
       type: data.type,
     });
   };

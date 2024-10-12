@@ -123,7 +123,7 @@ export function ResourceMenu({
                 <Reorder.Item key={file.path.join("/")} value={file}>
                   <Item
                     index={index}
-                    value={`files/*/${file.path.join("/")}`}
+                    value={`/files/${file.path.join("/")}`}
                     label={label}
                   />
                 </Reorder.Item>
@@ -148,16 +148,13 @@ function Item({
   const { setOpenedFiles } = useResourceContext();
   const pathname = usePathname();
 
-  const isActive = useMemo(
-    () =>
-      value.includes("files")
-        ? decodeURIComponent(pathname).includes(value?.split("/")[0] ?? "") &&
-          decodeURIComponent(pathname).includes(
-            value.split("/").slice(1).join("/"),
-          )
-        : pathname.split("/")[3] === value,
-    [pathname, value],
-  );
+  const isActive = useMemo(() => {
+    const decodedPathname = decodeURIComponent(pathname);
+    if (value === "files") {
+      return decodedPathname.endsWith("/files");
+    }
+    return decodedPathname.includes(value);
+  }, [pathname, value]);
 
   return (
     <Button
