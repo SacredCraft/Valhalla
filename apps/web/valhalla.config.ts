@@ -28,6 +28,10 @@ const globalTemplates: Template[] = [
 
 // 主配置
 const valhallaConfig = defineValhallaConfig({
+  limits: {
+    editableFileSize: 1024 * 1024 * 10, // 10MB
+    uploadFileSize: 1024 * 1024 * 10, // 10MB
+  },
   resources,
   globalTemplates,
   dateOptions: {

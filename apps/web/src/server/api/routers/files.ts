@@ -158,6 +158,17 @@ export const filesRouter = createTRPCRouter({
       if (!resourcePath) {
         throw resourcePathNotFound;
       }
+      const filePath = path.join(
+        resourcePath,
+        input.relativePath.join(path.sep),
+      );
+      const stats = fs.statSync(filePath);
+      if (stats.size > valhallaConfig.limits.editableFileSize) {
+        throw new TRPCError({
+          code: "PAYLOAD_TOO_LARGE",
+          message: "File size exceeds the limit",
+        });
+      }
       return fs.readFileSync(
         path.join(resourcePath, input.relativePath.join(path.sep)),
         input.options,

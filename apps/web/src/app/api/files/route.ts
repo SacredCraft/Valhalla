@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 
+import valhallaConfig from "@/config";
 import { auth } from "@/server/auth";
 import { api } from "@/trpc/server";
 
@@ -30,6 +31,12 @@ export const POST = auth(async (request) => {
   }
 
   const filePath = path.join(resourcePath, relativePath);
+
+  // 文件大小检查
+  const fileSize = files.reduce((acc, file) => acc + file.size, 0);
+  if (fileSize > valhallaConfig.limits.uploadFileSize) {
+    return new Response(null, { status: 413 });
+  }
 
   try {
     fs.mkdirSync(filePath, { recursive: true });
