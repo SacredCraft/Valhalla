@@ -30,11 +30,28 @@ import {
 import { useLogsContext } from "../layout.client";
 import { LogCol, logsTableColumns } from "./logs-table-columns";
 import { LogsTableToolbar } from "./logs-table-toolbar";
+import { LogsToolbar } from "./logs-toolbar";
 
-export function LogsTable({ logs, count }: { logs: LogCol[]; count: number }) {
-  const { setTable, page, setPage, perPage, setPerPage, setOrderBy } =
-    useLogsContext();
-  const [rowSelection, setRowSelection] = useState({});
+export function LogsTable({
+  logs,
+  count,
+  refetch,
+}: {
+  logs: LogCol[];
+  count: number;
+  refetch: () => void;
+}) {
+  const {
+    setTable,
+    page,
+    setPage,
+    perPage,
+    setPerPage,
+    setOrderBy,
+    rowSelection,
+    setRowSelection,
+  } = useLogsContext();
+
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -88,7 +105,7 @@ export function LogsTable({ logs, count }: { logs: LogCol[]; count: number }) {
   }, [setTable, table]);
 
   return (
-    <Template>
+    <Template refetch={refetch}>
       <TableBody>
         {table.getRowModel().rows?.length ? (
           table.getRowModel().rows.map((row) => (
@@ -120,11 +137,18 @@ export function LogsTable({ logs, count }: { logs: LogCol[]; count: number }) {
   );
 }
 
-function Template({ children }: { children: React.ReactNode }) {
+function Template({
+  children,
+  refetch,
+}: {
+  children: React.ReactNode;
+  refetch: () => void;
+}) {
   const { table } = useLogsContext();
 
   return (
     <div className="px-2 flex flex-col gap-2">
+      <LogsToolbar refetch={refetch} />
       {table && <LogsTableToolbar />}
       <div className="border rounded-lg overflow-hidden">
         <Table>

@@ -34,4 +34,26 @@ export const logsRouter = createTRPCRouter({
         count,
       };
     }),
+
+  deleteByIds: protectedProcedure
+    .input(z.object({ ids: z.array(z.number()) }))
+    .mutation(async ({ input, ctx }) => {
+      const { ids } = input;
+      await ctx.db.log.deleteMany({
+        where: {
+          id: { in: ids },
+        },
+      });
+    }),
+
+  deleteByTime: protectedProcedure
+    .input(z.object({ time: z.date() }))
+    .mutation(async ({ input, ctx }) => {
+      const { time } = input;
+      await ctx.db.log.deleteMany({
+        where: {
+          createdAt: { lt: time },
+        },
+      });
+    }),
 });

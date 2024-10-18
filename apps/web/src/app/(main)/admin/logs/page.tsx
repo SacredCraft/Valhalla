@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+
 import { api } from "@/trpc/react";
 
 import { LogsTable } from "./_components/logs-table";
@@ -8,15 +10,19 @@ import { useLogsContext } from "./layout.client";
 export default function Page() {
   const { page, orderBy, perPage } = useLogsContext();
 
-  const { data } = api.logs.query.useQuery({
+  const { data, refetch } = api.logs.query.useQuery({
     page,
     orderBy,
     perPage,
   });
 
   return (
-    <div className="my-2">
-      <LogsTable logs={data?.logs ?? []} count={data?.count ?? 0} />
+    <div className="mb-2">
+      <LogsTable
+        refetch={refetch}
+        logs={data?.logs ?? []}
+        count={data?.count ?? 0}
+      />
     </div>
   );
 }

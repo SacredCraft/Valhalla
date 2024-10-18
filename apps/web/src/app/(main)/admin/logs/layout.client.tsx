@@ -9,15 +9,24 @@ import React, {
   useState,
 } from "react";
 
-import { useReactTable } from "@tanstack/react-table";
+import {
+  OnChangeFn,
+  RowSelectionState,
+  useReactTable,
+} from "@tanstack/react-table";
 
 import { LogsHeader } from "./_components/logs-header";
 import { LogCol } from "./_components/logs-table-columns";
-import { LogsToolbar } from "./_components/logs-toolbar";
 
 type ContextType = {
   table?: ReturnType<typeof useReactTable<LogCol>>;
   setTable: Dispatch<ReturnType<typeof useReactTable<LogCol>>>;
+
+  rowSelection: RowSelectionState;
+  setRowSelection: OnChangeFn<RowSelectionState>;
+
+  data: LogCol[];
+  setData: Dispatch<LogCol[]>;
 
   page: number;
   setPage: Dispatch<number>;
@@ -65,6 +74,9 @@ const Content = ({ children }: { children: React.ReactNode }) => {
 
   const localPageSize = Number(localStorage.getItem("pagination-size-logs"));
 
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [data, setData] = useState<LogCol[]>([]);
+
   const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [perPage, setPerPage] = useQueryState(
     "perPage",
@@ -84,6 +96,10 @@ const Content = ({ children }: { children: React.ReactNode }) => {
       value={{
         table,
         setTable,
+        rowSelection,
+        setRowSelection,
+        data,
+        setData,
         page,
         setPage,
         perPage,
@@ -93,7 +109,6 @@ const Content = ({ children }: { children: React.ReactNode }) => {
       }}
     >
       <LogsHeader />
-      <LogsToolbar />
       {children}
     </LogsContext.Provider>
   );
