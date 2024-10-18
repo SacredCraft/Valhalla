@@ -23,14 +23,14 @@
     "@sacred-craft/eslint-config": "workspace:*",
     "@sacred-craft/typescript-config": "workspace:*",
     "@types/mdx": "^2.0.13",
-    "@types/node": "^22.5.4",
-    "@types/react": "^18.3.5",
-    "@types/react-dom": "^18.3.0",
+    "@types/node": "^22.7.6",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.1",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.3",
     "postcss": "^8.4.41",
-    "tailwindcss": "^3.4.10",
-    "typescript": "^5.5.4"
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.3"
   }
 }
