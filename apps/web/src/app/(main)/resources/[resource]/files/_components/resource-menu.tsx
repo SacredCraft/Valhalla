@@ -24,6 +24,8 @@ import {
   cn,
 } from "@sacred-craft/valhalla-components";
 
+import { FileContextMenu } from "./file-context-menu";
+
 export function ResourceMenu({
   ownedResources: ownedResourcesNames,
 }: {
@@ -121,11 +123,13 @@ export function ResourceMenu({
                   : file.name;
               return (
                 <Reorder.Item key={file.path.join("/")} value={file}>
-                  <Item
-                    index={index}
-                    value={`/files/${file.path.join("/")}`}
-                    label={label}
-                  />
+                  <FileContextMenu path={file.path}>
+                    <Item
+                      index={index}
+                      value={`/files/${file.path.join("/")}`}
+                      label={label}
+                    />
+                  </FileContextMenu>
                 </Reorder.Item>
               );
             })}
