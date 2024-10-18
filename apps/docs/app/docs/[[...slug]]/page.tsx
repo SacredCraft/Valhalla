@@ -46,6 +46,5 @@ export function generateMetadata({ params }: { params: Param }) {
 
   return {
     title: page.data.title,
-    description: page.data.description,
   } satisfies Metadata;
 }

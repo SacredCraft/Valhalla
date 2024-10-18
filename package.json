@@ -34,5 +34,10 @@
   },
   "dependencies": {
     "env-cmd": "^10.1.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "cookie": "^0.7.0"
+    }
   }
 }
