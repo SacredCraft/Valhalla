@@ -34,9 +34,8 @@ import {
 } from "@tanstack/react-table";
 
 export function UsersTable({ users }: { users: UserCol[] }) {
-  const { setTable } = useUsersContext();
-  const [data, setData] = useState<UserCol[]>(users);
-  const [rowSelection, setRowSelection] = useState({});
+  const { setTable, data, rowSelection, setRowSelection, setData } =
+    useUsersContext();
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
