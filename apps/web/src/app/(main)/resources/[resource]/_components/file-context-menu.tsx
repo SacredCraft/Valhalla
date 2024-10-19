@@ -7,7 +7,7 @@ import {
   ContextMenuTrigger,
 } from "@sacred-craft/valhalla-components";
 
-import { useResourceContext } from "../[[...slug]]/layout.client";
+import { useResourceContext } from "../files/[[...slug]]/layout.client";
 
 export const FileContextMenu = ({
   children,

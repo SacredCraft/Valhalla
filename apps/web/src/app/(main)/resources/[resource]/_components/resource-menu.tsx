@@ -99,9 +99,9 @@ export function ResourceMenu({
           <p className="text-muted-foreground text-xs font-semibold uppercase px-2 mb-1 mt-2">
             Functions
           </p>
-          <Item value="files" label="Files" />
-          <Item value="trash" label="Trash" />
-          <Item value="starred" label="Starred" />
+          <Item value="/files" label="Files" keyword="files" />
+          <Item value="/trash" label="Trash" keyword="trash" />
+          <Item value="/starred" label="Starred" keyword="starred" />
         </nav>
         <nav className="flex flex-col gap-1 px-2 flex-1 overflow-y-scroll">
           <p className="text-muted-foreground text-xs font-semibold uppercase px-2 mb-1 mt-2">
@@ -146,21 +146,25 @@ function Item({
   value,
   label,
   index,
+  keyword,
 }: {
   value: string;
   label: string;
   index?: number;
+  keyword?: string;
 }) {
   const { setOpenedFiles } = useResourceContext();
   const pathname = usePathname();
 
   const isActive = useMemo(() => {
     const decodedPathname = decodeURIComponent(pathname);
-    if (value === "files") {
-      return decodedPathname.endsWith("/files");
+    if (keyword) {
+      return decodedPathname.includes(keyword);
     }
-    return decodedPathname.includes(value);
-  }, [pathname, value]);
+    return decodedPathname.includes(
+      `/resources/${pathname.split("/")[2]}/${value}`,
+    );
+  }, [pathname, keyword]);
 
   return (
     <Button

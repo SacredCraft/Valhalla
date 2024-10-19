@@ -15,7 +15,7 @@ import { useAside } from "@/app/(main)/_components/aside";
 import valhallaConfig from "@/config";
 import { Resource } from "@sacred-craft/valhalla-resource";
 
-import { ResourceMenu } from "../_components/resource-menu";
+import { ResourceMenu } from "../../_components/resource-menu";
 
 type ResourceProviderProps = React.PropsWithChildren<{
   resource: string;

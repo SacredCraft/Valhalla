@@ -68,7 +68,7 @@ export function SharedHeader({ headerActions }: { headerActions?: ReactNode }) {
           ) : (
             <>
               <BreadcrumbSeparator />
-              <BreadcrumbPage>Trash</BreadcrumbPage>
+              <BreadcrumbPage>Files</BreadcrumbPage>
             </>
           )}
         </BreadcrumbList>
