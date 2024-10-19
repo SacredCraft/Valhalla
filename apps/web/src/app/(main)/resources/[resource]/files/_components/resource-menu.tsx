@@ -99,7 +99,9 @@ export function ResourceMenu({
           <p className="text-muted-foreground text-xs font-semibold uppercase px-2 mb-1 mt-2">
             Functions
           </p>
-          <Item value="files" label="Files Browser" />
+          <Item value="files" label="Files" />
+          <Item value="trash" label="Trash" />
+          <Item value="starred" label="Starred" />
         </nav>
         <nav className="flex flex-col gap-1 px-2 flex-1 overflow-y-scroll">
           <p className="text-muted-foreground text-xs font-semibold uppercase px-2 mb-1 mt-2">
