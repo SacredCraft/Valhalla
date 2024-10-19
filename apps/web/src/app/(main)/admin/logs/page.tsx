@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
-
 import { api } from "@/trpc/react";
 
 import { LogsTable } from "./_components/logs-table";
