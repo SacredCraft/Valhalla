@@ -186,7 +186,7 @@ const ContentLayer = ({
 
   const latestVersion = useMemo(() => versions?.[0], [versions]);
 
-  const isLatestVersion = latestVersion?.version === currentVersion ?? true;
+  const isLatestVersion = latestVersion?.version === currentVersion || true;
 
   const [contentCache, setContentCache] = useState(content);
   const isModified = content !== contentCache;
