@@ -103,12 +103,12 @@ export function ResourceMenu({
           <Item value="/trash" label="Trash" keyword="trash" />
           <Item value="/starred" label="Starred" keyword="starred" />
         </nav>
-        <nav className="flex flex-col gap-1 px-2 flex-1 overflow-y-scroll">
+        <nav className="flex flex-col gap-1 px-2 flex-1 overflow-y-scroll no-scrollbar">
           <p className="text-muted-foreground text-xs font-semibold uppercase px-2 mb-1 mt-2">
             Files
           </p>
           <Reorder.Group
-            className="overflow-scroll no-scrollbar flex-1"
+            className="overflow-scroll flex-1"
             axis="y"
             values={openedFiles}
             onReorder={setOpenedFiles}
