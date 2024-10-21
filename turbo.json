@@ -1,7 +1,14 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
-  "globalEnv": ["VERCEL_URL", "ENV", "PORT", "HOSTNAME", "AUTH_TRUST_HOST"],
+  "globalEnv": [
+    "VERCEL_URL",
+    "ENV",
+    "PORT",
+    "HOSTNAME",
+    "AUTH_TRUST_HOST",
+    "NEXT_PUBLIC_SIGN_OUT_REDIRECT_URL"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^db:generate", "^build"],

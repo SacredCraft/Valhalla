@@ -87,7 +87,15 @@ export function Profile({ className }: AvatarProps) {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <ProfileModel />
-        <DropdownMenuItem onClick={() => signOut()}>Log out</DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() =>
+            signOut({
+              callbackUrl: process.env.NEXT_PUBLIC_SIGN_OUT_REDIRECT_URL,
+            })
+          }
+        >
+          Log out
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
