@@ -40,11 +40,23 @@ export const POST = auth(async (request) => {
 
   try {
     fs.mkdirSync(filePath, { recursive: true });
+
+    // 检查是否有重名文件
+    for (const file of files) {
+      const fileDest = path.join(filePath, file.name);
+      if (fs.existsSync(fileDest)) {
+        return new Response(
+          JSON.stringify({ error: `File ${file.name} already exists` }),
+          { status: 409 },
+        );
+      }
+    }
+
+    // 写入文件
     for (const file of files) {
       const fileData = await file.arrayBuffer();
       const fileBuffer = Buffer.from(fileData);
       const fileDest = path.join(filePath, file.name);
-
       fs.writeFileSync(fileDest, fileBuffer);
     }
 

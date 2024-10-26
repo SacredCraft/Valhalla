@@ -72,6 +72,8 @@ export function Upload() {
           setFiles((files) => {
             return files.filter((f) => f.name !== file.name);
           });
+        } else if (xhr.status === 409) {
+          toast.error(`File ${file.name} already exists`);
         } else {
           errors.push(file.name);
           toast.error(`Failed to upload file: ${file.name}`);
