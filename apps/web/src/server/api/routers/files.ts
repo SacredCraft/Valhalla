@@ -469,6 +469,13 @@ export const filesRouter = createTRPCRouter({
         throw resourcePathNotFound;
       }
       try {
+        const targetDir = path.dirname(
+          path.join(resourcePath, input.newRelativePath.join(path.sep)),
+        );
+
+        // 确保目标目录存在
+        fs.mkdirSync(targetDir, { recursive: true });
+
         fs.renameSync(
           path.join(resourcePath, input.oldRelativePath.join(path.sep)),
           path.join(resourcePath, input.newRelativePath.join(path.sep)),
