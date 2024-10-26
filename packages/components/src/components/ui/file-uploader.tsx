@@ -215,7 +215,7 @@ interface FileCardProps {
 function FileCard({ file, progress, onRemove }: FileCardProps) {
   return (
     <div className="relative flex items-center space-x-4">
-      <div className="flex flex-1 space-x-4">
+      <div className="flex flex-1 space-x-4 min-w-0">
         {isFileWithPreview(file) && isImageFile(file) ? (
           <Image
             src={file.preview}
@@ -230,9 +230,9 @@ function FileCard({ file, progress, onRemove }: FileCardProps) {
             <FileIcon />
           </div>
         )}
-        <div className="flex w-full flex-col gap-2">
-          <div className="space-y-px">
-            <p className="line-clamp-1 text-sm font-medium text-foreground/80">
+        <div className="flex w-full flex-col gap-2 min-w-0">
+          <div className="space-y-px min-w-0">
+            <p className="truncate text-sm font-medium text-foreground/80">
               {file.name}
             </p>
             <p className="text-xs text-muted-foreground">
