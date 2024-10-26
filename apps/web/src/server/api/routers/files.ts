@@ -39,17 +39,32 @@ const bufferEncodingSchema = z.union([
   z.literal("hex"),
 ]);
 
+// 检查路径安全性
+function isPathSafe(resourcePath: string, targetPath: string): boolean {
+  const normalizedTarget = path.normalize(targetPath);
+  const normalizedResource = path.normalize(resourcePath);
+  return normalizedTarget.startsWith(normalizedResource);
+}
+
 export const filesRouter = createTRPCRouter({
   getFileType: resourceProcedure
     .input(z.object({ relativePath: z.array(z.string()) }))
     .query(async ({ input, ctx }): Promise<string> => {
       const resourcePath = await getResourcePath({ name: ctx.resource });
-      if (!resourcePath) {
-        throw resourcePathNotFound;
-      }
-      const stats = fs.statSync(
-        path.join(resourcePath, input.relativePath.join(path.sep)),
+      if (!resourcePath) throw resourcePathNotFound;
+
+      const targetPath = path.join(
+        resourcePath,
+        input.relativePath.join(path.sep),
       );
+      if (!isPathSafe(resourcePath, targetPath)) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Invalid file path",
+        });
+      }
+
+      const stats = fs.statSync(targetPath);
       if (stats.isDirectory()) {
         return "dir";
       }
@@ -66,11 +81,18 @@ export const filesRouter = createTRPCRouter({
     .input(z.object({ relativePath: z.array(z.string()) }))
     .query(async ({ input, ctx }): Promise<FileMeta[] | null> => {
       const resourcePath = await getResourcePath({ name: ctx.resource });
-      if (!resourcePath) {
-        return null;
+      if (!resourcePath) return null;
+
+      const targetPath = path.join(resourcePath, ...input.relativePath);
+      if (!isPathSafe(resourcePath, targetPath)) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Invalid file path",
+        });
       }
-      const absolutePath = [resourcePath, ...input.relativePath];
+
       try {
+        const absolutePath = [resourcePath, ...input.relativePath];
         const mappedFiles = fs
           .readdirSync(absolutePath.map((i) => decodeURIComponent(i)).join("/"))
           .filter((file) => !file.startsWith("."))
@@ -113,24 +135,29 @@ export const filesRouter = createTRPCRouter({
     .input(z.object({ relativePath: z.array(z.string()) }))
     .query(async ({ input, ctx }) => {
       const resourcePath = await getResourcePath({ name: ctx.resource });
-      if (!resourcePath) {
-        throw resourcePathNotFound;
-      }
-      const filePath = path.join(
+      if (!resourcePath) throw resourcePathNotFound;
+
+      const targetPath = path.join(
         resourcePath,
         input.relativePath.join(path.sep),
       );
+      if (!isPathSafe(resourcePath, targetPath)) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Invalid file path",
+        });
+      }
       try {
-        const stats = fs.statSync(filePath);
+        const stats = fs.statSync(targetPath);
 
         return {
           type: stats.isDirectory() ? "dir" : "file",
-          name: path.basename(filePath),
+          name: path.basename(targetPath),
           path: input.relativePath,
           createdAt: stats.birthtime,
           updatedAt: stats.mtime,
           size: stats.size,
-          ext: path.extname(filePath).slice(1),
+          ext: path.extname(targetPath).slice(1),
         } as FileMeta;
       } catch (error) {
         return null;
@@ -155,14 +182,19 @@ export const filesRouter = createTRPCRouter({
     )
     .query(async ({ input, ctx }): Promise<string | Buffer> => {
       const resourcePath = await getResourcePath({ name: ctx.resource });
-      if (!resourcePath) {
-        throw resourcePathNotFound;
-      }
-      const filePath = path.join(
+      if (!resourcePath) throw resourcePathNotFound;
+
+      const targetPath = path.join(
         resourcePath,
         input.relativePath.join(path.sep),
       );
-      const stats = fs.statSync(filePath);
+      if (!isPathSafe(resourcePath, targetPath)) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Invalid file path",
+        });
+      }
+      const stats = fs.statSync(targetPath);
       if (stats.size > valhallaConfig.limits.editableFileSize) {
         throw new TRPCError({
           code: "PAYLOAD_TOO_LARGE",
@@ -188,8 +220,17 @@ export const filesRouter = createTRPCRouter({
     )
     .mutation(async ({ input, ctx }) => {
       const resourcePath = await getResourcePath({ name: ctx.resource });
-      if (!resourcePath) {
-        throw resourcePathNotFound;
+      if (!resourcePath) throw resourcePathNotFound;
+
+      const targetPath = path.join(
+        resourcePath,
+        input.relativePath.join(path.sep),
+      );
+      if (!isPathSafe(resourcePath, targetPath)) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Invalid file path",
+        });
       }
 
       const versionsPath = path.join(
@@ -431,10 +472,22 @@ export const filesRouter = createTRPCRouter({
       if (!resourcePath) {
         throw resourcePathNotFound;
       }
+
+      const targetPath = path.join(
+        resourcePath,
+        input.relativePath.join(path.sep),
+      );
+
+      // 添加路径安全检查
+      if (!isPathSafe(resourcePath, targetPath)) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Invalid file path",
+        });
+      }
+
       try {
-        fs.unlinkSync(
-          path.join(resourcePath, input.relativePath.join(path.sep)),
-        );
+        fs.unlinkSync(targetPath);
 
         ctx.db.log.create({
           data: {
@@ -468,6 +521,27 @@ export const filesRouter = createTRPCRouter({
       if (!resourcePath) {
         throw resourcePathNotFound;
       }
+
+      const oldPath = path.join(
+        resourcePath,
+        input.oldRelativePath.join(path.sep),
+      );
+      const newPath = path.join(
+        resourcePath,
+        input.newRelativePath.join(path.sep),
+      );
+
+      // 添加路径安全检查
+      if (
+        !isPathSafe(resourcePath, oldPath) ||
+        !isPathSafe(resourcePath, newPath)
+      ) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Invalid file path",
+        });
+      }
+
       try {
         const targetDir = path.dirname(
           path.join(resourcePath, input.newRelativePath.join(path.sep)),
@@ -512,18 +586,23 @@ export const filesRouter = createTRPCRouter({
     )
     .mutation(async ({ input, ctx }) => {
       const resourcePath = await getResourcePath({ name: ctx.resource });
-      if (!resourcePath) {
-        throw resourcePathNotFound;
-      }
-      const filePath = path.join(
+      if (!resourcePath) throw resourcePathNotFound;
+
+      const targetPath = path.join(
         resourcePath,
         input.relativePath.join(path.sep),
       );
+      if (!isPathSafe(resourcePath, targetPath)) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Invalid file path",
+        });
+      }
       try {
         if (input.type === "dir") {
-          fs.mkdirSync(filePath);
+          fs.mkdirSync(targetPath);
         } else {
-          fs.writeFileSync(filePath, input.content || "");
+          fs.writeFileSync(targetPath, input.content || "");
         }
         ctx.db.log.create({
           data: {
@@ -556,16 +635,24 @@ export const filesRouter = createTRPCRouter({
     )
     .mutation(async ({ input, ctx }) => {
       const resourcePath = await getResourcePath({ name: ctx.resource });
-      if (!resourcePath) {
-        throw resourcePathNotFound;
-      }
+      if (!resourcePath) throw resourcePathNotFound;
 
-      const sourceFile = path.join(resourcePath, input.source.join(path.sep));
-      const destinationFile = path.join(
+      const sourcePath = path.join(resourcePath, input.source.join(path.sep));
+      const destPath = path.join(
         resourcePath,
         input.destination.join(path.sep),
         path.basename(input.source.join(path.sep)),
       );
+
+      if (
+        !isPathSafe(resourcePath, sourcePath) ||
+        !isPathSafe(resourcePath, destPath)
+      ) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Invalid file path",
+        });
+      }
 
       const existsError = new TRPCError({
         code: "CONFLICT",
@@ -573,7 +660,7 @@ export const filesRouter = createTRPCRouter({
       });
 
       try {
-        fs.accessSync(destinationFile, fs.constants.F_OK);
+        fs.accessSync(destPath, fs.constants.F_OK);
         throw existsError;
       } catch (error) {
         if (error instanceof TRPCError && error.code === "CONFLICT") {
@@ -582,9 +669,9 @@ export const filesRouter = createTRPCRouter({
       }
 
       try {
-        fs.copyFileSync(sourceFile, destinationFile);
+        fs.copyFileSync(sourcePath, destPath);
         if (input.cut) {
-          fs.unlinkSync(sourceFile);
+          fs.unlinkSync(sourcePath);
         }
         ctx.db.log.create({
           data: {
@@ -617,18 +704,26 @@ export const filesRouter = createTRPCRouter({
     )
     .mutation(async ({ input, ctx }) => {
       const resourcePath = await getResourcePath({ name: ctx.resource });
-      if (!resourcePath) {
-        throw resourcePathNotFound;
-      }
+      if (!resourcePath) throw resourcePathNotFound;
 
-      const sourceFile = path.join(resourcePath, input.source.join(path.sep));
-      const destinationFile = path.join(
+      const sourcePath = path.join(resourcePath, input.source.join(path.sep));
+      const destPath = path.join(
         resourcePath,
         input.destination.join(path.sep),
       );
 
+      if (
+        !isPathSafe(resourcePath, sourcePath) ||
+        !isPathSafe(resourcePath, destPath)
+      ) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Invalid file path",
+        });
+      }
+
       try {
-        fs.copyFileSync(sourceFile, destinationFile);
+        fs.copyFileSync(sourcePath, destPath);
 
         ctx.db.log.create({
           data: {
@@ -655,14 +750,18 @@ export const filesRouter = createTRPCRouter({
     .input(z.object({ relativePath: z.array(z.string()) }))
     .mutation(async ({ input, ctx }) => {
       const resourcePath = await getResourcePath({ name: ctx.resource });
-      if (!resourcePath) {
-        throw resourcePathNotFound;
-      }
+      if (!resourcePath) throw resourcePathNotFound;
 
       const filePath = path.join(
         resourcePath,
         input.relativePath.join(path.sep),
       );
+      if (!isPathSafe(resourcePath, filePath)) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Invalid file path",
+        });
+      }
 
       const trashPath = path.join(
         resourcePath,
