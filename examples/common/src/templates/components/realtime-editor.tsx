@@ -2,6 +2,7 @@ import { useEffect } from "react";
 
 import {
   ResourceRealtimeMonacoEditor,
+  ResourceReset,
   ResourceSave,
   useResourceFileContext,
 } from "@sacred-craft/valhalla-resource-components";
@@ -12,6 +13,7 @@ export const RealtimeEditor = () => {
   useEffect(() => {
     setRightActions(
       <>
+        <ResourceReset />
         <ResourceSave />
       </>,
     );
