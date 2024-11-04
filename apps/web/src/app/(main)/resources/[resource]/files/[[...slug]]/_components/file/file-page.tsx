@@ -16,6 +16,7 @@ import {
   ResourceVersionsProvider,
   Room,
   TemplateLocked,
+  useResourceFileContext,
 } from "@sacred-craft/valhalla-resource-components";
 
 import { RelativePathContext, useResourceContext } from "../../layout.client";
@@ -275,10 +276,29 @@ const ContentLayer = ({
           setCurrentVersion,
         }}
       >
+        <ExitWarning />
         <SharedHeader headerActions={headerActions} />
         <FilesTabs left={leftActions} right={rightActions} />
         {locked ? <TemplateLocked /> : body}
       </ResourceVersionsProvider>
     </ResourceFileProvider>
   );
+};
+
+const ExitWarning = () => {
+  const { isModified } = useResourceFileContext();
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isModified) {
+        e.preventDefault();
+        return "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [isModified]);
+
+  return null;
 };

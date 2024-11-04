@@ -161,9 +161,7 @@ function Item({
     if (keyword) {
       return decodedPathname.includes(keyword);
     }
-    return decodedPathname.includes(
-      `/resources/${pathname.split("/")[2]}/${value}`,
-    );
+    return decodedPathname.includes(value);
   }, [pathname, keyword]);
 
   return (
