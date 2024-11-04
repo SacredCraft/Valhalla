@@ -5,6 +5,7 @@ import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
+  toast,
 } from "@sacred-craft/valhalla-components";
 
 import { useResourceContext } from "../files/[[...slug]]/layout.client";
@@ -19,19 +20,38 @@ export const FileContextMenu = ({
   const { openedFiles, setOpenedFiles } = useResourceContext();
 
   const handleClose = () => {
-    setOpenedFiles(
-      openedFiles.filter((file) => file.path.join("/") !== path.join("/")),
-    );
+    if (
+      openedFiles.find((file) => file.path.join("/") === path.join("/"))
+        ?.isModified
+    ) {
+      toast.error("Please save the file before closing it.");
+    } else {
+      setOpenedFiles(
+        openedFiles.filter((file) => file.path.join("/") !== path.join("/")),
+      );
+    }
   };
 
   const handleCloseOthers = () => {
-    setOpenedFiles(
-      openedFiles.filter((file) => file.path.join("/") === path.join("/")),
-    );
+    if (
+      openedFiles
+        .filter((file) => file.path.join("/") !== path.join("/"))
+        .some((file) => file.isModified)
+    ) {
+      toast.error("Please save the files before closing them.");
+    } else {
+      setOpenedFiles(
+        openedFiles.filter((file) => file.path.join("/") === path.join("/")),
+      );
+    }
   };
 
   const handleCloseAll = () => {
-    setOpenedFiles([]);
+    if (openedFiles.some((file) => file.isModified)) {
+      toast.error("Please save the files before closing them.");
+    } else {
+      setOpenedFiles([]);
+    }
   };
 
   return (

@@ -276,7 +276,7 @@ const ContentLayer = ({
           setCurrentVersion,
         }}
       >
-        <ExitWarning />
+        <ExitWarning meta={meta} />
         <SharedHeader headerActions={headerActions} />
         <FilesTabs left={leftActions} right={rightActions} />
         {locked ? <TemplateLocked /> : body}
@@ -285,8 +285,18 @@ const ContentLayer = ({
   );
 };
 
-const ExitWarning = () => {
+const ExitWarning = ({ meta }: { meta: FileMeta }) => {
   const { isModified } = useResourceFileContext();
+  const { setOpenedFiles, openedFiles } = useResourceContext();
+  useEffect(() => {
+    const existingFile = openedFiles.find(
+      (file) => file.path.join("/") === meta.path.join("/"),
+    );
+    if (existingFile) {
+      existingFile.isModified = isModified;
+      setOpenedFiles([...openedFiles]);
+    }
+  }, [meta, isModified, openedFiles, setOpenedFiles]);
 
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {

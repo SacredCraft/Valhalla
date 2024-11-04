@@ -26,6 +26,7 @@ export type OpenedFile = {
   name: string;
   path: string[];
   tabValue?: string;
+  isModified?: boolean;
 };
 
 export const RelativePathContext = createContext<string[] | undefined>(

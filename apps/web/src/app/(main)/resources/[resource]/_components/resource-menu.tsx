@@ -1,7 +1,7 @@
 "use client";
 
 import { Reorder, motion } from "framer-motion";
-import { X } from "lucide-react";
+import { Circle, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useMemo } from "react";
@@ -22,6 +22,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   cn,
+  toast,
 } from "@sacred-craft/valhalla-components";
 
 import { FileContextMenu } from "./file-context-menu";
@@ -153,7 +154,7 @@ function Item({
   index?: number;
   keyword?: string;
 }) {
-  const { setOpenedFiles } = useResourceContext();
+  const { openedFiles, setOpenedFiles } = useResourceContext();
   const pathname = usePathname();
 
   const isActive = useMemo(() => {
@@ -163,6 +164,8 @@ function Item({
     }
     return decodedPathname.includes(value);
   }, [pathname, keyword]);
+
+  const file = index !== undefined ? openedFiles[index] : undefined;
 
   return (
     <Button
@@ -178,14 +181,27 @@ function Item({
         <span className="truncate">{decodeURIComponent(label)}</span>
         {index !== undefined && (
           <span
-            className="ml-auto group-hover:opacity-100 opacity-0 transition-all rounded-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 p-1"
+            className={cn(
+              "ml-auto group-hover:opacity-100 opacity-0 transition-all rounded-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 p-1",
+              file?.isModified ? "opacity-60" : "opacity-0",
+            )}
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
-              setOpenedFiles((prev) => prev?.filter((_, i) => i !== index));
+              if (file?.isModified) {
+                toast.error("Please save the file before closing it.");
+              } else {
+                setOpenedFiles((prev) =>
+                  prev?.filter((file, i) => i !== index || file.isModified),
+                );
+              }
             }}
           >
-            <X className="size-3" />
+            {file?.isModified ? (
+              <Circle className="size-2 fill-current" />
+            ) : (
+              <X className="size-3" />
+            )}
           </span>
         )}
       </Link>
