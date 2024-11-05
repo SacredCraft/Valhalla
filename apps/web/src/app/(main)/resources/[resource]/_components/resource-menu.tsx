@@ -109,7 +109,7 @@ export function ResourceMenu({
             Files
           </p>
           <Reorder.Group
-            className="overflow-scroll flex-1"
+            className="flex-1"
             axis="y"
             values={openedFiles}
             onReorder={setOpenedFiles}
