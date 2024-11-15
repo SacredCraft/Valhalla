@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "dotenv": "^16.4.5",
-    "drizzle-orm": "^0.36.1"
+    "drizzle-orm": "^0.36.2"
   },
   "devDependencies": {
     "@types/pg": "^8.11.10",
@@ -36,7 +36,7 @@
     "@valhalla/eslint": "workspace:*",
     "@valhalla/tsconfig": "workspace:*",
     "dotenv-cli": "catalog:",
-    "drizzle-kit": "^0.28.0",
+    "drizzle-kit": "^0.28.1",
     "pg": "catalog:"
   }
 }
