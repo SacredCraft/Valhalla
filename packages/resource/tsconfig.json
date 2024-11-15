@@ -1,9 +1,0 @@
-{
-  "extends": "@sacred-craft/typescript-config/react-library.json",
-  "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "Bundler"
-  },
-  "include": [".", ".eslintrc.cjs"],
-  "exclude": ["dist", "build", "node_modules"]
-}

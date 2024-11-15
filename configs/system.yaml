@@ -1,0 +1,19 @@
+database:
+  url: postgres://postgres:ShuyNLxUuxK4tQV2@localhost:5432/valhalla
+better-auth:
+  secret: EjkCOcYYLUtlghyYbdOMLBUrCSmHuxX4
+
+users:
+  avatar:
+    # 最大上传大小 2MB
+    max-size: 2048
+    # 接受图片格式
+    accept: image/*
+    # 保存后的图片宽度
+    width: 200
+    # 保存后的图片高度
+    height: 200
+    # 保存路径
+    path: /Users/leosouthey/Pictures/avatars
+    # 图片质量
+    quality: 80

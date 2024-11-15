@@ -1,0 +1,21 @@
+{
+  "name": "@valhalla/example",
+  "version": "0.0.0",
+  "private": true,
+  "author": "LioRael",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint . --max-warnings 0"
+  },
+  "dependencies": {
+    "@valhalla/core": "workspace:*",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@valhalla/eslint": "workspace:*",
+    "@valhalla/tsconfig": "workspace:*"
+  }
+}

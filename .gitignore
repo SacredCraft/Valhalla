@@ -11,7 +11,6 @@ node_modules
 .env.development.local
 .env.test.local
 .env.production.local
-!packages/database/.env
 
 # Testing
 coverage
@@ -27,7 +26,7 @@ coverage
 out/
 build
 dist
-.source
+
 
 # Debug
 npm-debug.log*
@@ -37,9 +36,4 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
-
-.idea
-# Million Lint
-.million
-
-.cursorrules
+*.tsbuildinfo

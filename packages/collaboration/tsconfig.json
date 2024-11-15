@@ -1,5 +1,0 @@
-{
-  "extends": "@sacred-craft/typescript-config/react-library.json",
-  "include": [".", ".eslintrc.cjs"],
-  "exclude": ["dist", "build", "node_modules"]
-}

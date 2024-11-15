@@ -1,0 +1,27 @@
+{
+  "name": "@valhalla/core",
+  "version": "0.0.0",
+  "private": true,
+  "author": "LioRael",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./config": "./src/config.ts",
+    "./resource": "./src/resource.ts"
+  },
+  "scripts": {
+    "lint": "eslint . --max-warnings 0"
+  },
+  "dependencies": {
+    "@valhalla/utils": "workspace:*",
+    "chalk": "^5.3.0",
+    "chokidar": "^4.0.1",
+    "yaml": "^2.6.0",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@total-typescript/ts-reset": "catalog:",
+    "@valhalla/eslint": "workspace:*",
+    "@valhalla/tsconfig": "workspace:*"
+  }
+}

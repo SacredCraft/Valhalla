@@ -1,0 +1,5 @@
+{
+  "app_dir": "apps/web",
+  "build_command": "pnpm turbo build",
+  "start_command": "pnpm turbo start"
+}

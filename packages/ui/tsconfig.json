@@ -1,0 +1,20 @@
+{
+  "extends": "@valhalla/tsconfig/react-library.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@valhalla/ui/*": ["./src/primitives/*"],
+      "@valhalla/ui/hooks/*": ["./src/hooks/*"],
+      "@valhalla/ui/lib/*": ["./src/lib/*"],
+      "@valhalla/ui/cn": ["./src/utils/cn.ts"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
+}

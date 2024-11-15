@@ -1,0 +1,26 @@
+{
+  "name": "@valhalla/tailwind",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "author": "LioRael",
+  "type": "module",
+  "exports": {
+    ".": "./src/preset.ts"
+  },
+  "scripts": {
+    "lint": "eslint . --max-warnings 0"
+  },
+  "dependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/container-queries": "^0.1.1",
+    "@tailwindcss/forms": "^0.5.9",
+    "@tailwindcss/typography": "^0.5.15",
+    "tailwindcss": "catalog:",
+    "tailwindcss-animate": "catalog:"
+  },
+  "devDependencies": {
+    "@valhalla/eslint": "workspace:*",
+    "@valhalla/tsconfig": "workspace:*"
+  }
+}

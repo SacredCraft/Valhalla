@@ -1,0 +1,35 @@
+{
+  "name": "@valhalla/api",
+  "version": "0.0.0",
+  "private": true,
+  "author": "LioRael",
+  "type": "module",
+  "exports": {
+    "./trpc": "./src/router/trpc/index.ts",
+    "./hono": "./src/router/hono/index.ts"
+  },
+  "scripts": {
+    "dev": "tsx watch ./src/router/hono/generate-routes.ts",
+    "lint": "eslint . --max-warnings 0"
+  },
+  "dependencies": {
+    "@hono/zod-validator": "^0.4.1",
+    "@trpc/server": "11.0.0-rc.593",
+    "@valhalla/auth": "workspace:*",
+    "@valhalla/db": "workspace:*",
+    "@valhalla/utils": "workspace:*",
+    "chokidar": "^4.0.1",
+    "globby": "^14.0.2",
+    "hono": "^4.6.9",
+    "sharp": "^0.33.5",
+    "superjson": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@total-typescript/ts-reset": "catalog:",
+    "@valhalla/core": "workspace:*",
+    "@valhalla/eslint": "workspace:*",
+    "@valhalla/tsconfig": "workspace:*",
+    "next": "^15.0.3"
+  }
+}

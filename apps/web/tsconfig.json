@@ -1,22 +1,20 @@
 {
-  "extends": "@sacred-craft/typescript-config/nextjs.json",
+  "extends": "@valhalla/tsconfig/nextjs.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "declaration": false,
     "declarationMap": false,
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@/config": ["./valhalla.config.ts"]
+      "@/*": ["./*"],
+      "@valhalla/*": ["../../packages/*"]
     }
   },
   "include": [
-    ".eslintrc.cjs",
     "next-env.d.ts",
-    "next.config.js",
-    "postcss.config.js",
+    ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": ["node_modules"]
+    "**/*.mjs",
+    "next.config.ts"
+  ]
 }

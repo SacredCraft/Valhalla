@@ -1,0 +1,27 @@
+{
+  "name": "@valhalla/auth",
+  "version": "0.0.0",
+  "private": true,
+  "author": "LioRael",
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "lint": "eslint . --max-warnings 0"
+  },
+  "dependencies": {
+    "@valhalla/db": "workspace:*"
+  },
+  "devDependencies": {
+    "@better-fetch/fetch": "^1.1.12",
+    "@valhalla/core": "workspace:*",
+    "@valhalla/eslint": "workspace:*",
+    "@valhalla/tsconfig": "workspace:*",
+    "better-auth": "catalog:"
+  }
+}

@@ -9,10 +9,15 @@
 
 # On Linux and macOS you can run this script directly - `./start-database.sh`
 
-DB_CONTAINER_NAME="valhalla-postgres"
+DB_CONTAINER_NAME="val-postgres"
 
 if ! [ -x "$(command -v docker)" ]; then
   echo -e "Docker is not installed. Please install docker and try again.\nDocker install guide: https://docs.docker.com/engine/install/"
+  exit 1
+fi
+
+if ! docker info > /dev/null 2>&1; then
+  echo "Docker daemon is not running. Please start Docker and try again."
   exit 1
 fi
 
@@ -38,7 +43,7 @@ if [ "$DB_PASSWORD" = "password" ]; then
   echo "You are using the default database password"
   read -p "Should we generate a random password for you? [y/N]: " -r REPLY
   if ! [[ $REPLY =~ ^[Yy]$ ]]; then
-    echo "Please set a password in the .env file and try again"
+    echo "Please change the default password in the .env file and try again"
     exit 1
   fi
   # Generate a random URL-safe password

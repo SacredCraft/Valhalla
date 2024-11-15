@@ -1,0 +1,17 @@
+{
+  "name": "@valhalla/assets",
+  "version": "0.0.0",
+  "private": true,
+  "description": "valhalla's assets package",
+  "license": "MIT",
+  "author": "LioRael",
+  "exports": {
+    "./fonts/*": "./fonts/*",
+    "./types": "./types.d.ts"
+  },
+  "types": "types.d.ts",
+  "files": [
+    "fonts/**/*",
+    "types.d.ts"
+  ]
+}

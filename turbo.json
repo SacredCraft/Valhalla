@@ -1,42 +1,74 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "ui": "tui",
-  "globalEnv": [
+  "globalPassThroughEnv": [
+    "DATABASE_URL",
     "VERCEL_URL",
-    "ENV",
-    "PORT",
-    "HOSTNAME",
-    "AUTH_TRUST_HOST",
-    "NEXT_PUBLIC_SIGN_OUT_REDIRECT_URL"
+    "NODE_ENV",
+    "CI",
+    "SKIP_ENV_VALIDATION",
+    "PORT"
   ],
   "tasks": {
     "build": {
-      "dependsOn": ["^db:generate", "^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
-    },
-    "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": ["^build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "!CHANGELOG.md",
+        "!eslint.config.js",
+        "!eslint.config.mjs",
+        "!.env.example",
+        ".env.production.local",
+        ".env.local",
+        ".env.production",
+        ".env"
+      ],
+      "outputs": ["dist/**"]
     },
     "dev": {
-      "dependsOn": ["^db:generate", "^build"],
-      "persistent": true,
       "cache": false,
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      "persistent": true,
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env.development.local",
+        ".env.local",
+        ".env.development",
+        ".env"
+      ]
     },
-    "db:migrate:deploy": {
-      "cache": false
+    "start": {
+      "cache": false,
+      "persistent": true,
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env.production.local",
+        ".env.local",
+        ".env.production",
+        ".env"
+      ]
     },
-    "db:push": {
-      "cache": false
-    },
-    "db:seed": {
-      "cache": false
+    "db:migrate": {
+      "dependsOn": ["db:generate"],
+      "passThroughEnv": ["DATABASE_URL", "BETTER_AUTH_SECRET"],
+      "inputs": ["drizzle/**"]
     },
     "db:generate": {
-      "dependsOn": ["^db:generate"],
-      "cache": false
+      "passThroughEnv": ["DATABASE_URL", "BETTER_AUTH_SECRET"],
+      "inputs": ["src/schema/**", "drizzle.config.ts"],
+      "outputs": ["drizzle/**"]
+    },
+    "db:studio": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:check": { "cache": false },
+    "db:migrate:drop": { "cache": false },
+    "db:pull": { "cache": false },
+    "db:push": { "cache": false },
+    "db:up": { "cache": false },
+    "clean": { "cache": false },
+    "sync": { "cache": false },
+    "lint": {
+      "inputs": ["$TURBO_DEFAULT$", "!CHANGELOG.md"]
     }
   }
 }

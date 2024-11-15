@@ -1,0 +1,7 @@
+{
+  "extends": "@valhalla/tsconfig/base.json",
+  "compilerOptions": {
+    "declaration": false,
+    "declarationMap": false
+  }
+}

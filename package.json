@@ -1,43 +1,30 @@
 {
-  "name": "valhalla",
+  "name": "@valhalla/workspace",
+  "version": "0.0.0",
   "private": true,
+  "author": "LioRael",
   "type": "module",
   "scripts": {
-    "setup": "turbo run build --filter=!./apps/* && turbo run db:push && turbo run db:seed",
-    "start": "cd apps/web && pnpm start",
-    "build": "turbo build --filter=!./apps/docs",
-    "dev": "turbo dev --filter=!./apps/docs",
-    "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md,mdx}\"",
-    "clean": "pnpm -r exec rimraf node_modules .turbo .next dist && rimraf node_modules .turbo",
-    "db:migrate:deploy": "turbo run db:migrate:deploy",
-    "db:push": "turbo run db:push",
-    "db:seed": "turbo run db:seed",
-    "db:generate": "turbo run db:generate",
-    "changeset": "changeset",
-    "version-packages": "changeset version",
-    "release": "turbo build --filter=!./apps/* && changeset publish",
-    "docs": "turbo dev --filter=./apps/docs"
+    "format:check": "prettier --check .",
+    "format:write": "prettier --write .",
+    "prepare": "husky",
+    "workspaces": "tsx ./scripts/workspaces.ts"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.27.9",
-    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@ianvs/prettier-plugin-sort-imports": "^4.4.0",
+    "@inquirer/prompts": "^7.0.1",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^22.9.0",
+    "@valhalla/eslint": "workspace:*",
+    "@valhalla/tsconfig": "workspace:*",
+    "chalk": "^5.3.0",
+    "fs-extra": "^11.2.0",
+    "husky": "^9.1.6",
     "prettier": "^3.3.3",
-    "prettier-plugin-tailwindcss": "^0.6.8",
-    "rimraf": "^6.0.1",
+    "prettier-plugin-packagejson": "^2.5.3",
+    "tsx": "^4.19.2",
     "turbo": "^2.2.3",
-    "typescript": "^5.6.3"
+    "typescript": "5.6.3"
   },
-  "packageManager": "pnpm@9.9.0",
-  "engines": {
-    "node": ">=20"
-  },
-  "dependencies": {
-    "env-cmd": "^10.1.0"
-  },
-  "pnpm": {
-    "overrides": {
-      "cookie": "^0.7.0"
-    }
-  }
+  "packageManager": "pnpm@9.12.3"
 }
