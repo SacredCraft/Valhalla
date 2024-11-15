@@ -1,11 +1,11 @@
 import { createResource } from '@valhalla/core/resource'
 
 const [example, layouts] = createResource({
-  name: 'example',
+  name: 'Example',
 })
 
 layouts.push({
-  name: 'example',
+  name: 'Example',
 })
 
 export { example, layouts }

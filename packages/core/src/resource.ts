@@ -20,6 +20,12 @@ const createResource = (
         ...resource,
         ...options,
       }
+
+      // 检查同名资源是否已存在
+      if (resources[newResource.name]) {
+        throw new Error(`资源 ${newResource.name} 已存在`)
+      }
+
       if (newResource.config) {
         resourcesConfigs[newResource.name] = loadConfig(
           newResource.config,

@@ -5,12 +5,18 @@ import chalk from 'chalk'
 
 import { systemConfig } from '@valhalla/core/config'
 import { resources } from '@valhalla/core/resource'
+
 import { init } from './resources'
 
 const port = parseInt(process.env.PORT || '3000', 10)
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev, turbo: true })
 const handler = app.getRequestHandler()
+
+const plugins = {
+  Collaboration: {},
+  BetterAuth: {},
+}
 
 const version = process.env.npm_package_version
 
@@ -46,6 +52,7 @@ app.prepare().then(() => {
   console.log(` - Local:      http://localhost:${port}`)
   console.log(` - Network:    http://0.0.0.0:${port}`)
   console.log()
+  console.log(` - Plugins:    ${Object.keys(plugins).join(', ')}`)
   console.log(
     ` - Resources:  ${
       Object.keys(resources).length > 0
