@@ -73,6 +73,10 @@ catalogs:
 importers:
 
   .:
+    dependencies:
+      yaml:
+        specifier: ^2.6.0
+        version: 2.6.0
     devDependencies:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.4.0
@@ -394,9 +398,6 @@ importers:
       chokidar:
         specifier: ^4.0.1
         version: 4.0.1
-      yaml:
-        specifier: ^2.6.0
-        version: 2.6.0
       zod:
         specifier: 'catalog:'
         version: 3.23.8
