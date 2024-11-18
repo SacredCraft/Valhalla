@@ -1,62 +1,90 @@
+import { z } from 'zod'
+
 import { loadConfig } from './config'
 import { Layout } from './schema/layout'
-import { Resource } from './schema/resource'
+import { Resource, resourceSchema } from './schema/resource'
 
-const resources: Record<string, Resource> = {}
-const resourcesConfigs: Record<string, unknown> = {}
-const resourcesPaths: Record<string, string[]> = {}
-const resourcesLayouts: Record<string, Layout[]> = {}
+declare global {
+  // eslint-disable-next-line no-var
+  var _resourceRegistry: ResourceRegistry | undefined
+}
 
-const createResource = (
-  resource: Resource
-): [(options?: Partial<Resource>) => Resource, Layout[]] => {
-  if (!resourcesLayouts[resource.name]) {
-    resourcesLayouts[resource.name] = []
+class ResourceRegistry {
+  resources: Record<string, Resource> = {}
+  resourcesConfigs: Record<string, unknown> = {}
+  resourcesPaths: Record<string, string[]> = {}
+  resourcesLayouts: Record<string, Layout[]> = {}
+
+  static getInstance(): ResourceRegistry {
+    if (!global._resourceRegistry) {
+      global._resourceRegistry = new ResourceRegistry()
+    }
+    return global._resourceRegistry
+  }
+}
+
+const registry = ResourceRegistry.getInstance()
+
+const createResource = ({
+  name,
+  description,
+  contentSchema,
+}: Resource & {
+  contentSchema?: z.ZodObject<z.ZodRawShape>
+}): [(options?: Partial<Resource>) => Resource, Layout[]] => {
+  const schema = resourceSchema()
+
+  const resource: Resource = schema.parse({
+    name,
+    description,
+    config: {
+      name,
+      version: '0.0.1',
+      path: `resources/${name}/configs.yaml`,
+      content: contentSchema,
+    },
+  })
+
+  if (!registry.resourcesLayouts[resource.name]) {
+    registry.resourcesLayouts[resource.name] = []
   }
 
   return [
     (options?: Partial<Resource>) => {
-      const newResource = {
+      const newResource: Resource = {
         ...resource,
         ...options,
       }
 
+      if (newResource.config) {
+        newResource.config.name = options?.config?.version ?? name
+        newResource.config.path = `resources/${newResource.name}/configs.yaml`
+      }
+
       // 检查同名资源是否已存在
-      if (resources[newResource.name]) {
+      if (registry.resources[newResource.name]) {
         throw new Error(`资源 ${newResource.name} 已存在`)
       }
 
+      // 加载配置
       if (newResource.config) {
-        resourcesConfigs[newResource.name] = loadConfig(
+        registry.resourcesConfigs[newResource.name] = loadConfig(
           newResource.config,
-          false,
-          `resources/${newResource.name}`
+          true
         )
       }
-      resources[newResource.name] = newResource
-      if (!resourcesLayouts[newResource.name]) {
-        resourcesLayouts[newResource.name] = []
+      registry.resources[newResource.name] = newResource
+      if (!registry.resourcesLayouts[newResource.name]) {
+        registry.resourcesLayouts[newResource.name] =
+          registry.resourcesLayouts[resource.name]
       }
+
       return newResource
     },
-    resourcesLayouts[resource.name],
+    registry.resourcesLayouts[resource.name],
   ]
 }
 
-const createResources = (
-  resource: Resource,
-  names: string[]
-): [Resource[], Layout[][]] => {
-  const resources: Resource[] = []
-  const layouts: Layout[][] = []
-  const [creator, resourceLayouts] = createResource(resource)
-  for (const name of names) {
-    const newResource = creator({ name })
-    resources.push(newResource)
-    layouts.push(resourceLayouts)
-  }
-  return [resources, layouts]
-}
+const getRegistry = () => ResourceRegistry.getInstance()
 
-export { resources, resourcesConfigs, resourcesPaths, resourcesLayouts }
-export { createResource, createResources }
+export { createResource, getRegistry }

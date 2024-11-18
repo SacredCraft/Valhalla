@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { and, desc, eq, isNull } from '@valhalla/db'
 import { notification } from '@valhalla/db/schema'
 
-import { createRouter, protectedProcedure } from '../../trpc'
+import { createRouter, protectedProcedure } from './trpc'
 
 const notificationsRouter = createRouter({
   list: protectedProcedure.query(async ({ ctx }) => {

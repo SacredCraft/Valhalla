@@ -1,3 +1,4 @@
+import path from 'path'
 import chalk from 'chalk'
 import chokidar from 'chokidar'
 import fs from 'fs-extra'
@@ -75,20 +76,20 @@ const kebabToCamelCase = (obj: unknown): unknown => {
 const loadConfig = <T extends Config>(
   config: T,
   watch: boolean = false,
-  path?: string
+  defaultValue: unknown = {}
 ): z.infer<T['content']> => {
   try {
     let content: string
     try {
-      content = fs.readFileSync(
-        resolvePath(CONFIG_PATH, path ?? config.path),
-        'utf8'
-      )
+      content = fs.readFileSync(resolvePath(CONFIG_PATH, config.path), 'utf8')
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-        // 如果文件不存在,创建一个空文件
-        fs.writeFileSync(resolvePath(CONFIG_PATH, path ?? config.path), '')
-        content = ''
+        // 如果文件不存在,创建目录和空文件
+        const fullPath = resolvePath(CONFIG_PATH, config.path)
+        const dir = path.dirname(fullPath)
+        fs.ensureDirSync(dir)
+        fs.writeFileSync(fullPath, yaml.stringify(defaultValue))
+        content = yaml.stringify(defaultValue)
       } else {
         throw error
       }

@@ -1,6 +1,7 @@
 import type React from 'react'
 import { headers } from 'next/headers'
 import Link from 'next/link'
+
 import { auth } from '@valhalla/auth'
 import { Button } from '@valhalla/ui/button'
 import { RainbowButton } from '@valhalla/ui/rainbow-button'

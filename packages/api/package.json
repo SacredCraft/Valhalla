@@ -5,8 +5,8 @@
   "author": "LioRael",
   "type": "module",
   "exports": {
-    "./trpc": "./src/router/trpc/index.ts",
-    "./hono": "./src/router/hono/index.ts"
+    "./trpc": "./src/trpc/index.ts",
+    "./hono": "./src/hono/index.ts"
   },
   "scripts": {
     "dev": "tsx watch ./src/router/hono/generate-routes.ts",
@@ -30,6 +30,6 @@
     "@valhalla/core": "workspace:*",
     "@valhalla/eslint": "workspace:*",
     "@valhalla/tsconfig": "workspace:*",
-    "next": "^15.0.3"
+    "next": "catalog:"
   }
 }

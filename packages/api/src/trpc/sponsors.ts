@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { createRouter, publicProcedure } from '../../trpc'
+import { createRouter, publicProcedure } from './trpc'
 
 const sponsorsSchema = z.array(
   z.object({

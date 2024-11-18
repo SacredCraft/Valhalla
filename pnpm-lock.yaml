@@ -311,7 +311,7 @@ importers:
         specifier: workspace:*
         version: link:../config/typescript
       next:
-        specifier: ^15.0.3
+        specifier: 'catalog:'
         version: 15.0.3(react-dom@19.0.0-rc-69d4b800-20241021(react@19.0.0-rc-1631855f-20241023))(react@19.0.0-rc-1631855f-20241023)
 
   packages/assets: {}

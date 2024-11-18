@@ -1,9 +1,9 @@
-import { Schema, z } from 'zod'
+import { z } from 'zod'
 
 const configSchema = z.object({
   name: z.string(),
   version: z.string(),
-  content: z.instanceof(Schema),
+  content: z.instanceof(z.Schema),
   path: z.string(),
 })
 

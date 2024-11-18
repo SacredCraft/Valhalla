@@ -4,7 +4,7 @@ import next from 'next'
 import chalk from 'chalk'
 
 import { systemConfig } from '@valhalla/core/config'
-import { resources } from '@valhalla/core/resource'
+import { getRegistry } from '@valhalla/core/resource'
 
 import { init } from './resources'
 
@@ -28,6 +28,7 @@ const injectEnv = (env: Record<string, string>) => {
 
 injectEnv({
   BETTER_AUTH_URL: systemConfig.betterAuth.url || '',
+  NODE_ENV: 'development',
 })
 
 init()
@@ -43,7 +44,7 @@ app.prepare().then(() => {
   console.log()
   console.log(
     ` ${chalk.bold(
-      `${chalk.magenta('▲ Valhalla')} ${chalk.gray(version)} ${chalk.yellow(
+      `${chalk.magenta('▲ Valhalla')} ${chalk.gray(version)} ${chalk.blue(
         `[${process.env.NODE_ENV.toUpperCase()}]`
       )}`
     )}`
@@ -55,8 +56,8 @@ app.prepare().then(() => {
   console.log(` - Plugins:    ${Object.keys(plugins).join(', ')}`)
   console.log(
     ` - Resources:  ${
-      Object.keys(resources).length > 0
-        ? Object.keys(resources).join(', ')
+      Object.keys(getRegistry().resources).length > 0
+        ? Object.keys(getRegistry().resources).join(', ')
         : 'None'
     }`
   )
