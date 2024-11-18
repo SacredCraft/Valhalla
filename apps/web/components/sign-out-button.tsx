@@ -3,6 +3,7 @@
 import type React from 'react'
 import { useRouter } from 'next/navigation'
 import { Slot } from '@radix-ui/react-slot'
+
 import { toast } from '@valhalla/ui/sonner'
 
 import { authClient } from '@/lib/auth/client'

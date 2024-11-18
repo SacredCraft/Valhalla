@@ -2,14 +2,19 @@ import { z } from 'zod'
 
 import { configSchema } from './configs'
 
-const resourceSchema = () =>
-  z.object({
-    name: z.string(),
-    description: z.string().optional(),
-    config: configSchema.optional(),
-  })
+const resourceSchema = z.object({
+  name: z.string(),
+  description: z.string().optional(),
+  config: configSchema.optional(),
+})
 
-type Resource = z.infer<ReturnType<typeof resourceSchema>>
+const folderSchema = z.object({
+  name: z.string(),
+  path: z.string(),
+})
 
-export { resourceSchema }
-export type { Resource }
+type Resource = z.infer<typeof resourceSchema>
+type Folder = z.infer<typeof folderSchema>
+
+export { resourceSchema, folderSchema }
+export type { Resource, Folder }

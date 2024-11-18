@@ -1,7 +1,7 @@
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
 import { Handler } from 'hono'
 
-import { appRouter, createTRPCContext } from '@/trpc'
+import { appRouter, createTRPCContext } from '../../../trpc'
 
 const handler: Handler = async (c) => {
   return fetchRequestHandler({

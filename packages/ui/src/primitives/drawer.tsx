@@ -1,8 +1,9 @@
 'use client'
 
 import * as React from 'react'
-import { cn } from '@valhalla/ui/cn'
 import { Drawer as DrawerPrimitive } from 'vaul'
+
+import { cn } from '@valhalla/ui/cn'
 
 const Drawer = ({
   shouldScaleBackground = true,

@@ -1,4 +1,5 @@
 import React, { CSSProperties } from 'react'
+
 import { cn } from '@valhalla/ui/cn'
 
 export interface ShimmerButtonProps

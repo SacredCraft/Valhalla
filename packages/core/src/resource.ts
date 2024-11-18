@@ -1,8 +1,14 @@
 import { z } from 'zod'
 
 import { loadConfig } from './config'
+import { Config, configSchema } from './schema/configs'
 import { Layout } from './schema/layout'
-import { Resource, resourceSchema } from './schema/resource'
+import {
+  Folder,
+  folderSchema,
+  Resource,
+  resourceSchema,
+} from './schema/resource'
 
 declare global {
   // eslint-disable-next-line no-var
@@ -12,7 +18,7 @@ declare global {
 class ResourceRegistry {
   resources: Record<string, Resource> = {}
   resourcesConfigs: Record<string, unknown> = {}
-  resourcesPaths: Record<string, string[]> = {}
+  resourcesFolders: Record<string, Folder[]> = {}
   resourcesLayouts: Record<string, Layout[]> = {}
 
   static getInstance(): ResourceRegistry {
@@ -21,20 +27,24 @@ class ResourceRegistry {
     }
     return global._resourceRegistry
   }
+
+  getConfig<T extends Config>(config: T) {
+    return this.resourcesConfigs[config.name] as z.infer<T['content']>
+  }
 }
 
 const registry = ResourceRegistry.getInstance()
 
+type ResourceOptions = Partial<Resource>
+
 const createResource = ({
   name,
   description,
-  contentSchema,
+  contentSchema = z.object({}),
 }: Resource & {
   contentSchema?: z.ZodObject<z.ZodRawShape>
-}): [(options?: Partial<Resource>) => Resource, Layout[]] => {
-  const schema = resourceSchema()
-
-  const resource: Resource = schema.parse({
+}): [(options?: ResourceOptions) => Resource, Layout[]] => {
+  const resource: Resource = resourceSchema.parse({
     name,
     description,
     config: {
@@ -43,14 +53,14 @@ const createResource = ({
       path: `resources/${name}/configs.yaml`,
       content: contentSchema,
     },
-  })
+  } satisfies Resource)
 
   if (!registry.resourcesLayouts[resource.name]) {
     registry.resourcesLayouts[resource.name] = []
   }
 
   return [
-    (options?: Partial<Resource>) => {
+    (options: ResourceOptions = {}) => {
       const newResource: Resource = {
         ...resource,
         ...options,
@@ -66,13 +76,27 @@ const createResource = ({
         throw new Error(`资源 ${newResource.name} 已存在`)
       }
 
+      // registry.resourcesFolders[newResource.name] = folders
+
       // 加载配置
       if (newResource.config) {
         registry.resourcesConfigs[newResource.name] = loadConfig(
           newResource.config,
           true
         )
+
+        const folderConfig = configSchema.parse({
+          name: `${newResource.name}-folders`,
+          version: newResource.config.version,
+          path: `resources/${newResource.name}/folders.yaml`,
+          content: z.array(folderSchema).default([]),
+        })
+
+        const folders = loadConfig(folderConfig, true, [])
+
+        registry.resourcesFolders[newResource.name] = folders as Folder[]
       }
+
       registry.resources[newResource.name] = newResource
       if (!registry.resourcesLayouts[newResource.name]) {
         registry.resourcesLayouts[newResource.name] =

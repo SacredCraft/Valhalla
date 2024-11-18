@@ -8,7 +8,7 @@ catalog:
   '@types/react': 18.3.12
   '@types/react-dom': 18.3.1
   '@total-typescript/ts-reset': ^0.6.1
-  better-auth: 0.8.2
+  better-auth: 0.8.6
   dotenv-cli: ^7.4.2
   next: 15.0.3
   autoprefixer: ^10.4.20

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'motion/react'
 
 import { notification as notificationSchema } from '@valhalla/db/schema'
 import { badgeVariants } from '@valhalla/ui/badge'

@@ -2,8 +2,9 @@
 'use client'
 
 import type React from 'react'
+import { motion } from 'motion/react'
+
 import { cn } from '@valhalla/ui/cn'
-import { motion } from 'framer-motion'
 
 import { useIsTop } from '@/hooks/use-is-top'
 import { useScrollDir } from '@/hooks/use-scroll-dir'

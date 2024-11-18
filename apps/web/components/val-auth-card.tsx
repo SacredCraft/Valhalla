@@ -1,8 +1,9 @@
 'use client'
 
 import type React from 'react'
+import { motion } from 'motion/react'
+
 import { cn } from '@valhalla/ui/cn'
-import { motion } from 'framer-motion'
 
 interface valhallaAuthCardProps
   extends React.ComponentPropsWithoutRef<typeof motion.div> {

@@ -1,5 +1,6 @@
-import preset from '@valhalla/tailwind'
 import type { Config } from 'tailwindcss'
+
+import preset from '@valhalla/tailwind'
 
 const config = {
   content: preset.content,

@@ -1,6 +1,7 @@
 import { headers } from 'next/headers'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+
 import { auth } from '@valhalla/auth'
 import {
   CardContent,
