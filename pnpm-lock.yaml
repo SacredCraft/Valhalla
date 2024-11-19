@@ -104,9 +104,6 @@ importers:
       fs-extra:
         specifier: ^11.2.0
         version: 11.2.0
-      husky:
-        specifier: ^9.1.6
-        version: 9.1.6
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
@@ -3383,11 +3380,6 @@ packages:
   hono@4.6.10:
     resolution: {integrity: sha512-IXXNfRAZEahFnWBhUUlqKEGF9upeE6hZoRZszvNkyAz/CYp+iVbxm3viMvStlagRJohjlBRGOQ7f4jfcV0XMGg==}
     engines: {node: '>=16.9.0'}
-
-  husky@9.1.6:
-    resolution: {integrity: sha512-sqbjZKK7kf44hfdE94EoX8MZNk0n7HeW37O4YrVGCF4wzgQjp+akPAkfUK5LZ6KuR/6sqeAVuXHji+RzQgOn5A==}
-    engines: {node: '>=18'}
-    hasBin: true
 
   iconv-lite@0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
@@ -7358,8 +7350,6 @@ snapshots:
       function-bind: 1.1.2
 
   hono@4.6.10: {}
-
-  husky@9.1.6: {}
 
   iconv-lite@0.4.24:
     dependencies:
