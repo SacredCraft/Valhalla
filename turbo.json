@@ -69,6 +69,7 @@
     "sync": { "cache": false },
     "lint": {
       "inputs": ["$TURBO_DEFAULT$", "!CHANGELOG.md"]
-    }
+    },
+    "configure": { "cache": false }
   }
 }

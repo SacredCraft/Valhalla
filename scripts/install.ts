@@ -1,4 +1,4 @@
-import { checkbox, input, select } from '@inquirer/prompts'
+import { input } from '@inquirer/prompts'
 import chalk from 'chalk'
 import fs from 'fs-extra'
 import yaml from 'yaml'
@@ -10,10 +10,12 @@ let updates: any = {
   ...config,
 }
 
-if (!config?.database) {
-  updates.database = await input({
-    message: '请输入数据库 URL',
-  })
+if (!config?.database?.url) {
+  updates.database = {
+    url: await input({
+      message: '请输入数据库 URL',
+    }),
+  }
 }
 
 if (!config?.['better-auth']?.secret) {
@@ -50,4 +52,4 @@ if (!config?.users?.avatar) {
 
 fs.writeFileSync('configs/system.yaml', yaml.stringify(updates))
 
-console.log(chalk.green('配置文件已保存'))
+console.log(chalk.green('配置文件初始化完成'))

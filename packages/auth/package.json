@@ -12,6 +12,7 @@
     }
   },
   "scripts": {
+    "configure": "tsx scripts/install.ts",
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
@@ -19,9 +20,12 @@
   },
   "devDependencies": {
     "@better-fetch/fetch": "^1.1.12",
+    "@hono/node-server": "^1.13.7",
     "@valhalla/core": "workspace:*",
     "@valhalla/eslint": "workspace:*",
     "@valhalla/tsconfig": "workspace:*",
-    "better-auth": "catalog:"
+    "better-auth": "catalog:",
+    "drizzle-orm": "catalog:",
+    "hono": "catalog:"
   }
 }

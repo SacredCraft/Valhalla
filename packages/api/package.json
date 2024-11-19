@@ -20,7 +20,7 @@
     "@valhalla/utils": "workspace:*",
     "chokidar": "^4.0.1",
     "globby": "^14.0.2",
-    "hono": "^4.6.10",
+    "hono": "catalog:",
     "sharp": "^0.33.5",
     "superjson": "catalog:",
     "zod": "catalog:"
