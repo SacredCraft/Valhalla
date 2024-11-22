@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 
 import { Session } from '@valhalla/auth'
 import { Button } from '@valhalla/ui/button'
@@ -20,8 +19,6 @@ import {
 } from './ui/avatar-uploader'
 
 const ValUserProfile = ({ session }: { session: Session }) => {
-  const router = useRouter()
-
   const [avatar, setAvatar] = useState<File | null>(null)
   const [name, setName] = useState(session.user.name)
 
@@ -39,7 +36,6 @@ const ValUserProfile = ({ session }: { session: Session }) => {
       })
       utils.avatar.get.invalidate()
       toast.success('更新成功')
-      router.refresh()
     },
   })
 
