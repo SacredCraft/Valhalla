@@ -5,24 +5,22 @@
   "author": "LioRael",
   "type": "module",
   "exports": {
-    "./trpc": "./src/trpc/index.ts",
-    "./hono": "./src/hono/index.ts"
+    ".": "./src/index.ts",
+    "./router/*": "./src/router/*.ts"
   },
   "scripts": {
     "dev": "tsx watch ./src/router/hono/generate-routes.ts",
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
-    "@hono/zod-validator": "^0.4.1",
-    "@trpc/server": "11.0.0-rc.593",
+    "@orpc/server": "^0.1.2",
+    "@orpc/zod": "^0.0.1",
     "@valhalla/auth": "workspace:*",
     "@valhalla/db": "workspace:*",
     "@valhalla/utils": "workspace:*",
     "chokidar": "^4.0.1",
     "globby": "^14.0.2",
-    "hono": "catalog:",
     "sharp": "^0.33.5",
-    "superjson": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {

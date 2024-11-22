@@ -2,8 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useMutation } from '@tanstack/react-query'
-import ky from 'ky'
 
 import { Session } from '@valhalla/auth'
 import { Button } from '@valhalla/ui/button'
@@ -12,6 +10,7 @@ import { Label } from '@valhalla/ui/label'
 import { toast } from '@valhalla/ui/sonner'
 
 import { authClient } from '@/lib/auth/client'
+import { orpc } from '@/lib/orpc/react'
 
 import {
   AvatarUploader,
@@ -22,29 +21,33 @@ import {
 
 const ValUserProfile = ({ session }: { session: Session }) => {
   const router = useRouter()
+
   const [avatar, setAvatar] = useState<File | null>(null)
   const [name, setName] = useState(session.user.name)
-  const { mutateAsync } = useMutation({
-    mutationKey: ['user', 'avatar'],
-    mutationFn: async (file: File | null) => {
-      if (!file) {
-        return true
-      }
-      const formData = new FormData()
-      formData.append('avatar', file)
-      return ky.post(`/api/upload/avatar`, { body: formData }).json()
-    },
-    onSuccess: () => {
+
+  const { data: image } = orpc.avatar.get.useQuery({ userId: session.user.id })
+  const utils = orpc.useUtils()
+
+  const imageUrl = image
+    ? `data:image/jpeg;base64,${Buffer.from(image).toString('base64')}`
+    : undefined
+
+  const { mutateAsync } = orpc.avatar.upload.useMutation({
+    onSuccess: async () => {
       authClient.updateUser({
         name,
       })
+      utils.avatar.get.invalidate()
       toast.success('更新成功')
       router.refresh()
     },
   })
 
   const handleSubmit = async () => {
-    await mutateAsync(avatar)
+    if (!avatar) {
+      return
+    }
+    await mutateAsync({ avatar, userId: session.user.id })
   }
 
   return (
@@ -56,7 +59,7 @@ const ValUserProfile = ({ session }: { session: Session }) => {
       <div className="space-y-6">
         <AvatarUploader
           className="py-4"
-          src={session.user.image}
+          src={imageUrl}
           avatar={avatar}
           setAvatar={setAvatar}
         >

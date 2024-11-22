@@ -7,7 +7,7 @@ import './globals.css'
 
 import { Toaster } from '@valhalla/ui/sonner'
 
-import { TRPCReactProvider } from '@/lib/trpc/react'
+import { ORPCProvider } from '@/lib/orpc/react'
 
 export const metadata: Metadata = {
   title: 'Valhalla - 开拓者资源管理中心',
@@ -37,7 +37,7 @@ export default async function RootLayout({
         className={`${geistMono.variable} ${geistSans.variable} antialiased`}
       >
         <NuqsAdapter>
-          <TRPCReactProvider>{children}</TRPCReactProvider>
+          <ORPCProvider>{children}</ORPCProvider>
         </NuqsAdapter>
         <Toaster />
       </body>

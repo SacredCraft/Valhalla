@@ -1,7 +1,7 @@
 'use client'
 
 import type React from 'react'
-import { AppWindow, Database, FileIcon, Shield, Users } from 'lucide-react'
+import { Database, File, Shield, Users } from 'lucide-react'
 
 import type { Session } from '@valhalla/auth'
 import {
@@ -19,14 +19,9 @@ import { ValhallaNavUser } from '@/components/val-nav-user'
 const data = {
   navMain: [
     {
-      title: '文件管理器',
-      url: '#',
-      icon: FileIcon,
-    },
-    {
       title: '文件浏览器',
-      url: '#',
-      icon: AppWindow,
+      url: '/files',
+      icon: File,
     },
   ],
   navAdmin: [

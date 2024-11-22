@@ -7,13 +7,13 @@ import { notification as notificationSchema } from '@valhalla/db/schema'
 import { badgeVariants } from '@valhalla/ui/badge'
 import { cn } from '@valhalla/ui/cn'
 
-import { api } from '@/lib/trpc/react'
+import { orpc } from '@/lib/orpc/react'
 
 const ValUserNotifications = () => {
-  const { data: notifications } = api.notifications.list.useQuery(undefined, {
+  const { data: notifications } = orpc.notifications.list.useQuery(undefined, {
     refetchInterval: 20000,
   })
-  const utils = api.useUtils()
+  const utils = orpc.useUtils()
 
   useEffect(() => {
     if (notifications?.some((notification) => !notification.readAt)) {
@@ -45,8 +45,8 @@ const ValUserNotification = ({
   notification: typeof notificationSchema.$inferSelect
 }) => {
   const data = notification.data as NotificationData
-  const utils = api.useUtils()
-  const { mutate: read } = api.notifications.read.useMutation({
+  const utils = orpc.useUtils()
+  const { mutate: read } = orpc.notifications.read.useMutation({
     onSuccess: () => {
       utils.notifications.hasUnread.invalidate()
     },

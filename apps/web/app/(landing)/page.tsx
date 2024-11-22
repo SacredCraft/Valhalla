@@ -2,16 +2,14 @@ import type React from 'react'
 import { headers } from 'next/headers'
 import Link from 'next/link'
 
+import { getSponsors } from '@valhalla/api/router/sponsors'
 import { auth } from '@valhalla/auth'
 import { Button } from '@valhalla/ui/button'
 import { RainbowButton } from '@valhalla/ui/rainbow-button'
 import { Skeleton } from '@valhalla/ui/skeleton'
 
-import { api } from '@/lib/trpc/server'
-
 export default async function HomePage() {
-  // Fetch sponsors data from API in React Server Component (RSC)
-  const sponsors = await api.sponsors.getSponsors()
+  const sponsors = await getSponsors(undefined)
   return (
     <main className="container">
       <Introduction>

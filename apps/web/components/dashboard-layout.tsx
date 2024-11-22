@@ -5,6 +5,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from '@valhalla/ui/breadcrumb'
+import { cn } from '@valhalla/ui/cn'
 import { Separator } from '@valhalla/ui/separator'
 import { SidebarTrigger } from '@valhalla/ui/sidebar'
 
@@ -32,8 +33,14 @@ const DashboardHeader = ({ children }: { children: React.ReactNode }) => {
   )
 }
 
-const DashboardContent = ({ children }: { children: React.ReactNode }) => {
-  return <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
+const DashboardContent = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode
+  className?: string
+}) => {
+  return <div className={cn('flex flex-1 flex-col', className)}>{children}</div>
 }
 
 export { Dashboard, DashboardHeader, DashboardContent }

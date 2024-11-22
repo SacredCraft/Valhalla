@@ -6,44 +6,26 @@ import { UserIcon } from 'lucide-react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@valhalla/ui/avatar'
 
+import { orpc } from '@/lib/orpc/react'
+
 interface UserAvatarProps extends React.ComponentProps<typeof Avatar> {
-  src?: string
+  userId: string
 }
 
-const ValhallaUserAvatar = ({ src, ...props }: UserAvatarProps) => {
-  const [base64Src, setBase64Src] = useState<string>()
+const ValhallaUserAvatar = ({ userId, ...props }: UserAvatarProps) => {
+  const { data } = orpc.avatar.get.useQuery({ userId })
 
-  useEffect(() => {
-    const fetchImage = async () => {
-      if (!src) return
-
-      try {
-        const blob = await ky
-          .get(src, {
-            next: {
-              tags: ['avatar'],
-            },
-          })
-          .blob()
-        const reader = new FileReader()
-        reader.onloadend = () => {
-          setBase64Src(reader.result as string)
-        }
-        reader.readAsDataURL(blob)
-      } catch (error) {
-        console.error('获取头像失败:', error)
-      }
-    }
-
-    fetchImage()
-  }, [src])
+  // 将 Buffer 转换为 base64 字符串
+  const imageUrl = data
+    ? `data:image/jpeg;base64,${Buffer.from(data).toString('base64')}`
+    : undefined
 
   return (
     <Avatar {...props}>
       <AvatarFallback>
         <UserIcon className="size-4" />
       </AvatarFallback>
-      <AvatarImage src={base64Src} />
+      <AvatarImage src={imageUrl} />
     </Avatar>
   )
 }

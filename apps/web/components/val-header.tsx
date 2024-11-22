@@ -141,7 +141,7 @@ const ValhallaAccount = ({ session }: { session: Session }) => {
   return (
     <ValhallaUserAvatar
       className="size-9 cursor-pointer"
-      src={session.user.image}
+      userId={session.user.id}
     />
   )
 }

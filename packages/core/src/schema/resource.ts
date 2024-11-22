@@ -4,6 +4,7 @@ import { configSchema } from './configs'
 
 const resourceSchema = z.object({
   name: z.string(),
+  label: z.string().optional(),
   description: z.string().optional(),
   config: configSchema.optional(),
 })

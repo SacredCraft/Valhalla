@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import { loadConfig } from './config'
+import { getLayoutRegistry } from './layout'
 import { Config, configSchema } from './schema/configs'
 import { Layout } from './schema/layout'
 import {
@@ -19,7 +20,6 @@ class ResourceRegistry {
   resources: Record<string, Resource> = {}
   resourcesConfigs: Record<string, unknown> = {}
   resourcesFolders: Record<string, Folder[]> = {}
-  resourcesLayouts: Record<string, Layout[]> = {}
 
   static getInstance(): ResourceRegistry {
     if (!global._resourceRegistry) {
@@ -40,6 +40,7 @@ type ResourceOptions = Partial<Resource>
 const createResource = ({
   name,
   description,
+  label,
   contentSchema = z.object({}),
 }: Resource & {
   contentSchema?: z.ZodObject<z.ZodRawShape>
@@ -47,6 +48,7 @@ const createResource = ({
   const resource: Resource = resourceSchema.parse({
     name,
     description,
+    label,
     config: {
       name,
       version: '0.0.1',
@@ -55,8 +57,8 @@ const createResource = ({
     },
   } satisfies Resource)
 
-  if (!registry.resourcesLayouts[resource.name]) {
-    registry.resourcesLayouts[resource.name] = []
+  if (!getLayoutRegistry().layouts[resource.name]) {
+    getLayoutRegistry().layouts[resource.name] = []
   }
 
   return [
@@ -98,14 +100,14 @@ const createResource = ({
       }
 
       registry.resources[newResource.name] = newResource
-      if (!registry.resourcesLayouts[newResource.name]) {
-        registry.resourcesLayouts[newResource.name] =
-          registry.resourcesLayouts[resource.name]
+      if (!getLayoutRegistry().layouts[newResource.name]) {
+        getLayoutRegistry().layouts[newResource.name] =
+          getLayoutRegistry().layouts[resource.name]
       }
 
       return newResource
     },
-    registry.resourcesLayouts[resource.name],
+    getLayoutRegistry().layouts[resource.name],
   ]
 }
 

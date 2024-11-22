@@ -15,7 +15,9 @@
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@types/react": "catalog:",
     "@valhalla/eslint": "workspace:*",
-    "@valhalla/tsconfig": "workspace:*"
+    "@valhalla/tsconfig": "workspace:*",
+    "react": "catalog:"
   }
 }

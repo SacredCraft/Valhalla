@@ -40,7 +40,7 @@ import {
   SidebarProvider,
 } from '@valhalla/ui/sidebar'
 
-import { api } from '@/lib/trpc/react'
+import { orpc } from '@/lib/orpc/react'
 
 import { ValUserNotifications } from './val-user-notifications'
 import { ValUserProfile } from './val-user-profile'
@@ -144,7 +144,7 @@ const AccountItem = ({ session }: { session: Session }) => {
 }
 
 const NotificationsItem = ({ session }: { session: Session }) => {
-  const { data: hasUnread } = api.notifications.hasUnread.useQuery(undefined, {
+  const { data: hasUnread } = orpc.notifications.hasUnread.useQuery(undefined, {
     refetchInterval: 60000,
   })
   return (

@@ -15,7 +15,7 @@ import {
 } from '@valhalla/ui/dropdown-menu'
 import { SidebarMenuButton } from '@valhalla/ui/sidebar'
 
-import { api } from '@/lib/trpc/react'
+import { orpc } from '@/lib/orpc/react'
 
 import { SignOutButton } from '../sign-out-button'
 import { AccountItem, NotificationsItem } from '../val-account-dialog'
@@ -85,9 +85,15 @@ const ValhallaAccountDropdownSidebarTrigger = ({
   session,
   ...props
 }: React.ComponentProps<typeof SidebarMenuButton> & { session: Session }) => {
-  const { data: hasUnread } = api.notifications.hasUnread.useQuery(undefined, {
+  const { data: hasUnread } = orpc.notifications.hasUnread.useQuery(undefined, {
     refetchInterval: 60000,
   })
+
+  const { data: image } = orpc.avatar.get.useQuery({ userId: session.user.id })
+
+  const imageUrl = image
+    ? `data:image/jpeg;base64,${Buffer.from(image).toString('base64')}`
+    : undefined
 
   return (
     <SidebarMenuButton
@@ -96,7 +102,7 @@ const ValhallaAccountDropdownSidebarTrigger = ({
       {...props}
     >
       <Avatar className="size-8 rounded-lg">
-        <AvatarImage src={session.user.image} alt={session.user.name} />
+        <AvatarImage src={imageUrl} alt={session.user.name} />
         <AvatarFallback className="rounded-lg">
           <UserIcon />
         </AvatarFallback>

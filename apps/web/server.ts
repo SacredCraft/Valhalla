@@ -10,7 +10,10 @@ import { init } from './resources'
 
 const port = parseInt(process.env.PORT || '3000', 10)
 const dev = process.env.NODE_ENV !== 'production'
-const app = next({ dev, turbo: true })
+const app = next({
+  dev,
+  turbo: true,
+})
 const handler = app.getRequestHandler()
 
 const plugins = {
@@ -57,7 +60,12 @@ app.prepare().then(() => {
   console.log(
     ` - Resources:  ${
       Object.keys(getRegistry().resources).length > 0
-        ? Object.keys(getRegistry().resources).join(', ')
+        ? Object.keys(getRegistry().resources)
+            .map((key) => {
+              const resource = getRegistry().resources[key]
+              return `${resource.label || resource.name} (${key})`
+            })
+            .join(', ')
         : 'None'
     }`
   )
