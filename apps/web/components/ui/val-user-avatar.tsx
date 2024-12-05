@@ -1,7 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import ky from 'ky'
 import { UserIcon } from 'lucide-react'
 
 import {

@@ -11,10 +11,10 @@
     "cssVariables": true
   },
   "aliases": {
-    "components": "@nouz/design-system/components",
-    "utils": "@nouz/design-system/utils/cn",
-    "hooks": "@nouz/design-system/hooks",
-    "lib": "@nouz/design-system/lib",
-    "ui": "@nouz/design-system/components/ui"
+    "components": "@valhalla/design-system/components",
+    "utils": "@valhalla/design-system/utils/cn",
+    "hooks": "@valhalla/design-system/hooks",
+    "lib": "@valhalla/design-system/lib",
+    "ui": "@valhalla/design-system/components/ui"
   }
 }

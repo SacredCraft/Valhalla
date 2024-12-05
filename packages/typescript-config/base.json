@@ -6,7 +6,6 @@
     "declarationMap": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "incremental": false,
     "isolatedModules": true,
     "module": "ES2022",
     "moduleDetection": "force",
@@ -18,7 +17,10 @@
     "strictNullChecks": true,
     "allowJs": true,
     "checkJs": true,
-    "outDir": "dist",
+    "outDir": "./dist",
+    "rootDir": ".",
+    "composite": true,
+    "incremental": true,
     "paths": {
       "@/*": ["./src/*"],
 

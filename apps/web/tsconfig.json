@@ -1,8 +1,7 @@
 {
   "extends": "@valhalla/typescript-config/nextjs.json",
   "compilerOptions": {
-    "declaration": false,
-    "declarationMap": false,
+    "rootDir": ".",
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
@@ -25,9 +24,7 @@
 
       "@valhalla/design-system/*": ["../../packages/design-system/src/*"],
 
-      "@valhalla/tailwind-config/*": ["../../packages/tailwind-config/src/*"],
-
-      "@valhalla/*": ["../../packages/*"]
+      "@valhalla/tailwind-config/*": ["../../packages/tailwind-config/src/*"]
     }
   },
   "include": [
@@ -37,5 +34,12 @@
     "**/*.tsx",
     "**/*.mjs",
     "next.config.ts"
+  ],
+  "references": [
+    { "path": "../../packages/api" },
+    { "path": "../../packages/auth" },
+    { "path": "../../packages/core" },
+    { "path": "../../packages/design-system" },
+    { "path": "../../packages/tailwind-config" }
   ]
 }

@@ -4,7 +4,7 @@ import path from 'path'
 import React from 'react'
 import { File, Folder, Info } from 'lucide-react'
 
-import { useIsMobile } from '@valhalla/design-system/components/ui/hooks/use-mobile'
+import { Button } from '@valhalla/design-system/components/ui/button'
 import { ResizablePanel } from '@valhalla/design-system/components/ui/resizable'
 import {
   Sheet,
@@ -14,12 +14,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@valhalla/design-system/components/ui/sheet'
-import { Button } from '@valhalla/design-system/components/ui/src/primitives/button'
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@valhalla/design-system/components/ui/tooltip'
+import { useIsMobile } from '@valhalla/design-system/hooks/use-mobile'
 
 import { Icons } from '@/components/icons'
 import { orpc } from '@/lib/orpc/react'

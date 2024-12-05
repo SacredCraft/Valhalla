@@ -9,8 +9,8 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@valhalla/design-system/components/ui/collapsible'
-import { createContext } from '@valhalla/design-system/components/ui/context'
 import { cn } from '@valhalla/design-system/utils/cn'
+import { createContext } from '@valhalla/design-system/utils/context'
 
 import { FolderContextMenu } from './context-menus'
 

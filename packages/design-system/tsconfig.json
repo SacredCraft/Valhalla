@@ -1,18 +1,21 @@
 {
-  "extends": "@nouz/typescript-config/react-library.json",
+  "extends": "@valhalla/typescript-config/react-library.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "rootDir": ".",
+    "tsBuildInfoFile": "./dist/.tsbuildinfo",
     "plugins": [
       {
         "name": "next"
       }
     ],
     "paths": {
-      "@nouz/*": ["../*"],
-      "@nouz/design-system/*": ["./src/*"],
-      "@nouz/tailwind-config/*": ["../../packages/tailwind-config/src/*"]
+      "@valhalla/*": ["../*"],
+      "@valhalla/design-system/*": ["./src/*"],
+      "@valhalla/tailwind-config/*": ["../tailwind-config/src/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "references": [{ "path": "../tailwind-config" }]
 }

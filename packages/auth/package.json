@@ -5,6 +5,7 @@
   "author": "LioRael",
   "sideEffects": false,
   "type": "module",
+  "main": "src/index.ts",
   "scripts": {
     "configure": "tsx scripts/install.ts",
     "lint": "eslint . --max-warnings 0"

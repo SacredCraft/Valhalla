@@ -1,6 +1,13 @@
 {
   "extends": "@valhalla/typescript-config/base.json",
   "compilerOptions": {
-    "baseUrl": "."
-  }
+    "baseUrl": ".",
+    "rootDir": ".",
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
+  },
+  "references": [
+    { "path": "../auth" },
+    { "path": "../core" },
+    { "path": "../db" }
+  ]
 }
