@@ -9,7 +9,7 @@ import defaultTheme from 'tailwindcss/defaultTheme'
 export const config: Config = {
   darkMode: ['class'],
   content: [
-    './node_modules/@nouz/design-system/components/ui/**/*.{ts,tsx}',
+    './node_modules/@valhalla/design-system/components/ui/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './lib/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',

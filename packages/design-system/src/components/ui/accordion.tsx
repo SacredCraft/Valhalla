@@ -4,7 +4,7 @@ import * as React from 'react'
 import * as AccordionPrimitive from '@radix-ui/react-accordion'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
 
-import { cn } from '@nouz/design-system/utils/cn'
+import { cn } from '@valhalla/design-system/utils/cn'
 
 const Accordion = AccordionPrimitive.Root
 

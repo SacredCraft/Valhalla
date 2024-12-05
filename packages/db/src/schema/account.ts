@@ -11,7 +11,13 @@ export const account = pgTable('account', {
     .references(() => user.id),
   accessToken: text('accessToken'),
   refreshToken: text('refreshToken'),
-  idToken: text('idToken'),
-  expiresAt: timestamp('expiresAt'),
+  accessTokenExpiresAt: timestamp('accessTokenExpiresAt'),
+  refreshTokenExpiresAt: timestamp('refreshTokenExpiresAt'),
+  scope: text('scope'),
   password: text('password'),
+  createdAt: timestamp('createdAt').notNull().defaultNow(),
+  updatedAt: timestamp('updatedAt')
+    .notNull()
+    .defaultNow()
+    .$onUpdateFn(() => new Date()),
 })

@@ -18,11 +18,8 @@
     "allowJs": true,
     "checkJs": true,
     "outDir": "./dist",
-    "rootDir": ".",
-    "composite": true,
-    "incremental": true,
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["src/*"],
 
       "@valhalla/auth": ["../auth/src"],
       "@valhalla/auth/*": ["../auth/src/*"],

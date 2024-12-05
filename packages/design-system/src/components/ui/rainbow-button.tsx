@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { cn } from '@nouz/design-system/utils/cn'
+import { cn } from '@valhalla/design-system/utils/cn'
 
 type RainbowButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>
 

@@ -4,8 +4,8 @@ import * as React from 'react'
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons'
 import { DayPicker } from 'react-day-picker'
 
-import { buttonVariants } from '@nouz/design-system/components/ui/button'
-import { cn } from '@nouz/design-system/utils/cn'
+import { buttonVariants } from '@valhalla/design-system/components/ui/button'
+import { cn } from '@valhalla/design-system/utils/cn'
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 

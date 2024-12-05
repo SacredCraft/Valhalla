@@ -1,13 +1,27 @@
 {
   "extends": "@valhalla/typescript-config/base.json",
   "compilerOptions": {
+    "composite": true,
+    "incremental": true,
     "baseUrl": ".",
     "rootDir": ".",
-    "tsBuildInfoFile": "./dist/.tsbuildinfo"
+    "tsBuildInfoFile": "./dist/.tsbuildinfo",
+    "paths": {
+      "@/*": ["src/*"],
+
+      "@valhalla/core": ["../core/src"],
+      "@valhalla/core/*": ["../core/src/*"],
+
+      "@valhalla/db": ["../db/src"],
+      "@valhalla/db/*": ["../db/src/*"],
+
+      "@valhalla/utils": ["../utils/src"],
+      "@valhalla/utils/*": ["../utils/src/*"]
+    }
   },
   "references": [
-    { "path": "../auth" },
     { "path": "../core" },
-    { "path": "../db" }
+    { "path": "../db" },
+    { "path": "../utils" }
   ]
 }

@@ -6,8 +6,8 @@ import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from 'embla-carousel-react'
 
-import { Button } from '@nouz/design-system/components/ui/button'
-import { cn } from '@nouz/design-system/utils/cn'
+import { Button } from '@valhalla/design-system/components/ui/button'
+import { cn } from '@valhalla/design-system/utils/cn'
 
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>

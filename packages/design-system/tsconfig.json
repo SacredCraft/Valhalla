@@ -3,6 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "rootDir": ".",
+    "composite": true,
+    "incremental": true,
     "tsBuildInfoFile": "./dist/.tsbuildinfo",
     "plugins": [
       {

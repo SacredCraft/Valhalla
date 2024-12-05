@@ -8,8 +8,8 @@ import {
 import {
   ButtonProps,
   buttonVariants,
-} from '@nouz/design-system/components/ui/button'
-import { cn } from '@nouz/design-system/utils/cn'
+} from '@valhalla/design-system/components/ui/button'
+import { cn } from '@valhalla/design-system/utils/cn'
 
 const Pagination = ({ className, ...props }: React.ComponentProps<'nav'>) => (
   <nav

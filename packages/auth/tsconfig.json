@@ -1,6 +1,8 @@
 {
   "extends": "@valhalla/typescript-config/base.json",
   "compilerOptions": {
+    "baseUrl": ".",
+    "composite": false,
     "declaration": false,
     "declarationMap": false
   }

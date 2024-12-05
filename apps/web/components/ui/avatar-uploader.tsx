@@ -9,9 +9,9 @@ import {
   AvatarImage,
 } from '@valhalla/design-system/components/ui/avatar'
 import { Button } from '@valhalla/design-system/components/ui/button'
-import { createContext } from '@valhalla/design-system/components/ui/context'
 import { Input } from '@valhalla/design-system/components/ui/input'
-import { cn } from '@valhalla/design-system/components/ui/src/utils/cn'
+import { cn } from '@valhalla/design-system/utils/cn'
+import { createContext } from '@valhalla/design-system/utils/context'
 
 const AvatarUploader = ({
   src: initialSrc = null,

@@ -1,3 +1,9 @@
 {
-  "extends": "@valhalla/typescript-config/base.json"
+  "extends": "@valhalla/typescript-config/base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": ".",
+    "composite": true,
+    "incremental": true
+  }
 }

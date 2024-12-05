@@ -5,19 +5,22 @@ import { ViewVerticalIcon } from '@radix-ui/react-icons'
 import { Slot } from '@radix-ui/react-slot'
 import { cva, VariantProps } from 'class-variance-authority'
 
-import { Button } from '@nouz/design-system/components/ui/button'
-import { Input } from '@nouz/design-system/components/ui/input'
-import { Separator } from '@nouz/design-system/components/ui/separator'
-import { Sheet, SheetContent } from '@nouz/design-system/components/ui/sheet'
-import { Skeleton } from '@nouz/design-system/components/ui/skeleton'
+import { Button } from '@valhalla/design-system/components/ui/button'
+import { Input } from '@valhalla/design-system/components/ui/input'
+import { Separator } from '@valhalla/design-system/components/ui/separator'
+import {
+  Sheet,
+  SheetContent,
+} from '@valhalla/design-system/components/ui/sheet'
+import { Skeleton } from '@valhalla/design-system/components/ui/skeleton'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@nouz/design-system/components/ui/tooltip'
-import { useIsMobile } from '@nouz/design-system/hooks/use-mobile'
-import { cn } from '@nouz/design-system/utils/cn'
+} from '@valhalla/design-system/components/ui/tooltip'
+import { useIsMobile } from '@valhalla/design-system/hooks/use-mobile'
+import { cn } from '@valhalla/design-system/utils/cn'
 
 const SIDEBAR_COOKIE_NAME = 'sidebar:state'
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7

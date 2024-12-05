@@ -12,8 +12,8 @@ import {
   useFormContext,
 } from 'react-hook-form'
 
-import { Label } from '@nouz/design-system/components/ui/label'
-import { cn } from '@nouz/design-system/utils/cn'
+import { Label } from '@valhalla/design-system/components/ui/label'
+import { cn } from '@valhalla/design-system/utils/cn'
 
 const Form = FormProvider
 
