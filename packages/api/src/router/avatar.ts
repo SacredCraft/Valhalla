@@ -29,7 +29,7 @@ export const avatarRouter = authed
           userId: z.string(),
         })
       )
-      .handler(async (input, ctx) => {
+      .func(async (input, ctx) => {
         const user = ctx.user
 
         if (user.role !== 'admin' && input.userId !== user.id) {
@@ -81,7 +81,7 @@ export const avatarRouter = authed
         summary: '获取头像',
       })
       .input(z.object({ userId: z.string() }))
-      .handler(async (input) => {
+      .func(async (input) => {
         const userId = input.userId
         const avatarConfig = systemConfig.users.avatar
         const avatarPath = resolvePath(avatarConfig.path, `${userId}.jpg`)

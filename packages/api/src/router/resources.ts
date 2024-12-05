@@ -13,7 +13,7 @@ export const getResources = authed
     summary: '列出资源',
   })
   .output(z.record(z.string(), resourceSchema))
-  .handler(async (input, ctx) => {
+  .func(async (input, ctx) => {
     return ctx.registry.resources
   })
 
@@ -35,7 +35,7 @@ export const resourcesRouter = authed
           name: z.string(),
         })
       )
-      .handler(async (input, ctx) => {
+      .func(async (input, ctx) => {
         return ctx.registry.resourcesFolders[input.name].map((folder) => ({
           name: folder.name,
         }))

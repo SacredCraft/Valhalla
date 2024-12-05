@@ -5,12 +5,11 @@
   "author": "LioRael",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch ./src/router/hono/generate-routes.ts",
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
-    "@orpc/server": "^0.1.2",
-    "@orpc/zod": "^0.0.1",
+    "@orpc/server": "^0.12.0",
+    "@orpc/zod": "^0.12.0",
     "@valhalla/auth": "workspace:*",
     "@valhalla/db": "workspace:*",
     "@valhalla/utils": "workspace:*",

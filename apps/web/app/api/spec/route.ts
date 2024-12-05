@@ -6,10 +6,10 @@ export function GET() {
   const spec = generateOpenAPI({
     router,
     info: {
-      title: 'ORPC Playground',
+      title: 'Valhalla OpenAPI',
       version: '1.0.0',
       description: `
-The example OpenAPI Playground for ORPC.
+The example OpenAPI Playground for Valhalla.
 
 ## Resources
 

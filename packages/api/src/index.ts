@@ -1,3 +1,3 @@
 export { router } from './router'
 export { createRouterCaller } from '@orpc/server'
-export { createFetchHandler } from '@orpc/server/fetch'
+export { createORPCHandler, handleFetchRequest } from '@orpc/server/fetch'

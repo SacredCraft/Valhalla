@@ -20,10 +20,13 @@
     "checkJs": true,
     "outDir": "dist",
     "paths": {
-      "@/*": ["./*"],
+      "@/*": ["./src/*"],
 
       "@valhalla/auth": ["../auth/src"],
       "@valhalla/auth/*": ["../auth/src/*"],
+
+      "@valhalla/core": ["../core/src"],
+      "@valhalla/core/*": ["../core/src/*"],
 
       "@valhalla/db": ["../db/src"],
       "@valhalla/db/*": ["../db/src/*"],

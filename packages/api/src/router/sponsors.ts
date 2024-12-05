@@ -51,7 +51,7 @@ export const getSponsors = pub
     summary: '获取赞助商列表',
   })
   .output(sponsorsSchema)
-  .handler(() => {
+  .func(() => {
     return sponsors
   })
 

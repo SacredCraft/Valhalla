@@ -1,19 +1,18 @@
-import { createFetchHandler, router } from '@valhalla/api'
+import { createOpenAPIServerlessHandler } from '@orpc/openapi/fetch'
 
-const handler = createFetchHandler({
-  router,
-  serverless: true,
-})
+import { createORPCHandler, handleFetchRequest, router } from '@valhalla/api'
 
-async function handleRequest(request: Request) {
-  return handler({
+async function handler(request: Request) {
+  return handleFetchRequest({
+    router,
     request,
     prefix: '/api',
+    handlers: [createORPCHandler(), createOpenAPIServerlessHandler()],
   })
 }
 
-export const GET = handleRequest
-export const POST = handleRequest
-export const PUT = handleRequest
-export const DELETE = handleRequest
-export const PATCH = handleRequest
+export const GET = handler
+export const POST = handler
+export const PUT = handler
+export const DELETE = handler
+export const PATCH = handler

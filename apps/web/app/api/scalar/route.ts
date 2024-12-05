@@ -4,7 +4,7 @@ export function GET() {
         <!doctype html>
         <html>
         <head>
-            <title>ORPC Playground</title>
+            <title>Valhalla OpenAPI</title>
             <meta charset="utf-8" />
             <meta
             name="viewport"

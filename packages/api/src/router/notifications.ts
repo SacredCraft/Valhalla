@@ -15,7 +15,7 @@ export const notificationsRouter = authed
         path: '/list',
         summary: '列出通知',
       })
-      .handler(async (_, ctx) => {
+      .func(async (_, ctx) => {
         return await ctx.db.query.notification.findMany({
           where: eq(notification.recipientId, ctx.user.id),
           orderBy: [desc(notification.createdAt)],
@@ -29,7 +29,7 @@ export const notificationsRouter = authed
         summary: '标记通知为已读',
       })
       .input(z.object({ id: z.string() }))
-      .handler(async (input, ctx) => {
+      .func(async (input, ctx) => {
         await ctx.db
           .update(notification)
           .set({ readAt: new Date() })
@@ -42,7 +42,7 @@ export const notificationsRouter = authed
         path: '/has-unread',
         summary: '检查是否有未读通知',
       })
-      .handler(async (_, ctx) => {
+      .func(async (_, ctx) => {
         const [unread] = await ctx.db
           .select()
           .from(notification)

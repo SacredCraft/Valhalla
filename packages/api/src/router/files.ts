@@ -23,7 +23,7 @@ export const filesRouter = authed
           path: z.string(),
         })
       )
-      .handler(async (input, ctx) => {
+      .func(async (input, ctx) => {
         // 记得检查权限
 
         const folders = ctx.registry.resourcesFolders[input.resourceName]
