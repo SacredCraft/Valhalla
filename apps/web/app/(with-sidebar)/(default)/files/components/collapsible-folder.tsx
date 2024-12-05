@@ -4,13 +4,13 @@ import { useState } from 'react'
 import { cva } from 'class-variance-authority'
 import { ChevronRight, Folder, FolderOpen, Link } from 'lucide-react'
 
-import { cn } from '@valhalla/ui/cn'
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '@valhalla/ui/collapsible'
-import { createContext } from '@valhalla/ui/context'
+} from '@valhalla/design-system/components/ui/collapsible'
+import { createContext } from '@valhalla/design-system/components/ui/context'
+import { cn } from '@valhalla/design-system/utils/cn'
 
 import { FolderContextMenu } from './context-menus'
 

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Loader2, RefreshCcw } from 'lucide-react'
 
-import { Button } from '@valhalla/ui/src/primitives/button'
+import { Button } from '@valhalla/design-system/components/ui/src/primitives/button'
 
 const EmptyState = () => {
   return (

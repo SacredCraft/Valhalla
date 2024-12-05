@@ -1,0 +1,10 @@
+{
+  "name": "@valhalla/typescript-config",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "author": "LioRael",
+  "publishConfig": {
+    "access": "public"
+  }
+}

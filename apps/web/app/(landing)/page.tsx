@@ -4,9 +4,9 @@ import Link from 'next/link'
 
 import { getSponsors } from '@valhalla/api/router/sponsors'
 import { auth } from '@valhalla/auth'
-import { Button } from '@valhalla/ui/button'
-import { RainbowButton } from '@valhalla/ui/rainbow-button'
-import { Skeleton } from '@valhalla/ui/skeleton'
+import { Button } from '@valhalla/design-system/components/ui/button'
+import { RainbowButton } from '@valhalla/design-system/components/ui/rainbow-button'
+import { Skeleton } from '@valhalla/design-system/components/ui/skeleton'
 
 export default async function HomePage() {
   const sponsors = await getSponsors(undefined)

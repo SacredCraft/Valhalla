@@ -9,7 +9,7 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '@valhalla/ui/collapsible'
+} from '@valhalla/design-system/components/ui/collapsible'
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -19,7 +19,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from '@valhalla/ui/sidebar'
+} from '@valhalla/design-system/components/ui/sidebar'
 
 type NavItem = {
   title: string

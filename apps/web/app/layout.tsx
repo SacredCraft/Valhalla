@@ -5,7 +5,7 @@ import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 import './globals.css'
 
-import { Toaster } from '@valhalla/ui/sonner'
+import { Toaster } from '@valhalla/design-system/components/ui/sonner'
 
 import { ORPCProvider } from '@/lib/orpc/react'
 

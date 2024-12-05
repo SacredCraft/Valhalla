@@ -16,8 +16,8 @@
   },
   "devDependencies": {
     "@types/react": "catalog:",
-    "@valhalla/eslint": "workspace:*",
-    "@valhalla/tsconfig": "workspace:*",
+    "@valhalla/eslint-config": "workspace:*",
+    "@valhalla/typescript-config": "workspace:*",
     "react": "catalog:"
   }
 }

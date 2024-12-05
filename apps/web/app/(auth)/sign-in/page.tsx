@@ -9,7 +9,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@valhalla/ui/card'
+} from '@valhalla/design-system/components/ui/card'
 
 import { ValhallaAuthCard } from '@/components/val-auth-card'
 

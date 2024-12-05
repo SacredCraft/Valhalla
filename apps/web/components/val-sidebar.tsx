@@ -10,7 +10,7 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from '@valhalla/ui/sidebar'
+} from '@valhalla/design-system/components/ui/sidebar'
 
 import { SidebarLogo } from '@/components/sidebar-logo'
 import { ValhallaNavAdmin, ValhallaNavMain } from '@/components/val-nav-main'

@@ -1,4 +1,7 @@
-import { BreadcrumbItem, BreadcrumbPage } from '@valhalla/ui/breadcrumb'
+import {
+  BreadcrumbItem,
+  BreadcrumbPage,
+} from '@valhalla/design-system/components/ui/breadcrumb'
 
 import {
   Dashboard,

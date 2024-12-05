@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { resourceSchema } from '@valhalla/core/schema/resource'
+
 import { registryMiddleware } from '../middlewares/registry'
 import { authed } from '../orpc'
 
@@ -10,6 +12,7 @@ export const getResources = authed
     path: '/list',
     summary: '列出资源',
   })
+  .output(z.record(z.string(), resourceSchema))
   .handler(async (input, ctx) => {
     return ctx.registry.resources
   })

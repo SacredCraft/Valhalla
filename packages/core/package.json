@@ -4,12 +4,6 @@
   "private": true,
   "author": "LioRael",
   "type": "module",
-  "exports": {
-    "./config": "./src/config.ts",
-    "./resource": "./src/resource.ts",
-    "./schema": "./src/schema.ts",
-    "./layout": "./src/layout.ts"
-  },
   "scripts": {
     "lint": "eslint . --max-warnings 0"
   },
@@ -22,8 +16,8 @@
   "devDependencies": {
     "@total-typescript/ts-reset": "catalog:",
     "@types/react": "catalog:",
-    "@valhalla/eslint": "workspace:*",
-    "@valhalla/tsconfig": "workspace:*",
+    "@valhalla/eslint-config": "workspace:*",
+    "@valhalla/typescript-config": "workspace:*",
     "react": "catalog:"
   }
 }

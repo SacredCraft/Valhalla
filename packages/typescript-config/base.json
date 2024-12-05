@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Default",
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": false,
+    "isolatedModules": true,
+    "module": "ES2022",
+    "moduleDetection": "force",
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2022",
+    "strictNullChecks": true,
+    "allowJs": true,
+    "checkJs": true,
+    "outDir": "dist",
+    "paths": {
+      "@/*": ["./*"],
+
+      "@valhalla/auth": ["../auth/src"],
+      "@valhalla/auth/*": ["../auth/src/*"],
+
+      "@valhalla/db": ["../db/src"],
+      "@valhalla/db/*": ["../db/src/*"],
+
+      "@valhalla/env/*": ["../env/src/*"],
+
+      "@valhalla/api": ["../api/src"],
+      "@valhalla/api/*": ["../api/src/*"],
+
+      "@valhalla/utils/*": ["../utils/src/*"],
+
+      "@valhalla/design-system/*": ["../design-system/src/*"]
+    }
+  }
+}

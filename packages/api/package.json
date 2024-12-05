@@ -4,10 +4,6 @@
   "private": true,
   "author": "LioRael",
   "type": "module",
-  "exports": {
-    ".": "./src/index.ts",
-    "./router/*": "./src/router/*.ts"
-  },
   "scripts": {
     "dev": "tsx watch ./src/router/hono/generate-routes.ts",
     "lint": "eslint . --max-warnings 0"
@@ -26,8 +22,8 @@
   "devDependencies": {
     "@total-typescript/ts-reset": "catalog:",
     "@valhalla/core": "workspace:*",
-    "@valhalla/eslint": "workspace:*",
-    "@valhalla/tsconfig": "workspace:*",
+    "@valhalla/eslint-config": "workspace:*",
+    "@valhalla/typescript-config": "workspace:*",
     "next": "catalog:"
   }
 }

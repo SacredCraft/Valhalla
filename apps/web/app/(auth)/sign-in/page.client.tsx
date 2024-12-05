@@ -6,7 +6,7 @@ import { useFormStatus } from 'react-dom'
 import { useForm, useFormContext } from 'react-hook-form'
 import { z } from 'zod'
 
-import { Button } from '@valhalla/ui/button'
+import { Button } from '@valhalla/design-system/components/ui/button'
 import {
   Form,
   FormControl,
@@ -14,9 +14,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@valhalla/ui/form'
-import { Input } from '@valhalla/ui/input'
-import { toast } from '@valhalla/ui/sonner'
+} from '@valhalla/design-system/components/ui/form'
+import { Input } from '@valhalla/design-system/components/ui/input'
+import { toast } from '@valhalla/design-system/components/ui/sonner'
 
 import { signIn } from '@/lib/auth/client'
 

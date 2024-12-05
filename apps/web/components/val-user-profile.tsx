@@ -3,10 +3,10 @@
 import { useState } from 'react'
 
 import { Session } from '@valhalla/auth'
-import { Button } from '@valhalla/ui/button'
-import { Input } from '@valhalla/ui/input'
-import { Label } from '@valhalla/ui/label'
-import { toast } from '@valhalla/ui/sonner'
+import { Button } from '@valhalla/design-system/components/ui/button'
+import { Input } from '@valhalla/design-system/components/ui/input'
+import { Label } from '@valhalla/design-system/components/ui/label'
+import { toast } from '@valhalla/design-system/components/ui/sonner'
 
 import { authClient } from '@/lib/auth/client'
 import { orpc } from '@/lib/orpc/react'

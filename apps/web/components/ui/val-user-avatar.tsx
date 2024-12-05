@@ -4,7 +4,11 @@ import { useEffect, useState } from 'react'
 import ky from 'ky'
 import { UserIcon } from 'lucide-react'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@valhalla/ui/avatar'
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@valhalla/design-system/components/ui/avatar'
 
 import { orpc } from '@/lib/orpc/react'
 

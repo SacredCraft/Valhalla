@@ -2,7 +2,10 @@ import type React from 'react'
 import { cookies, headers } from 'next/headers'
 
 import { auth } from '@valhalla/auth'
-import { SidebarInset, SidebarProvider } from '@valhalla/ui/sidebar'
+import {
+  SidebarInset,
+  SidebarProvider,
+} from '@valhalla/design-system/components/ui/sidebar'
 
 import { ValhallaSidebar } from '@/components/val-sidebar'
 

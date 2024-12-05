@@ -1,7 +1,7 @@
 import { adminClient } from 'better-auth/client/plugins'
 import { createAuthClient } from 'better-auth/react'
 
-import { toast } from '@valhalla/ui/sonner'
+import { toast } from '@valhalla/design-system/components/ui/sonner'
 
 export const authClient = createAuthClient({
   plugins: [adminClient()],

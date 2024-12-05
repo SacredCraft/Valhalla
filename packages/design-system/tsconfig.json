@@ -1,0 +1,18 @@
+{
+  "extends": "@nouz/typescript-config/react-library.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@nouz/*": ["../*"],
+      "@nouz/design-system/*": ["./src/*"],
+      "@nouz/tailwind-config/*": ["../../packages/tailwind-config/src/*"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
+}

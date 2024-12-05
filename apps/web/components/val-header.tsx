@@ -3,8 +3,8 @@ import Link from 'next/link'
 import { AppleIcon, BoxIcon, TerminalIcon } from 'lucide-react'
 
 import { auth, type Session } from '@valhalla/auth'
-import { Button } from '@valhalla/ui/button'
-import ShimmerButton from '@valhalla/ui/shimmer-button'
+import { Button } from '@valhalla/design-system/components/ui/button'
+import ShimmerButton from '@valhalla/design-system/components/ui/shimmer-button'
 
 import {
   NavigationMenuContent,

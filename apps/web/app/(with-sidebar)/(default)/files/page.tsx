@@ -3,7 +3,7 @@ import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from '@valhalla/ui/resizable'
+} from '@valhalla/design-system/components/ui/resizable'
 
 import { Resource, ValResourcePanel } from './page.client'
 

@@ -1,4 +1,4 @@
 {
-  "extends": "@valhalla/tsconfig/base.json",
+  "extends": "@valhalla/typescript-config/base.json",
   "exclude": ["apps", "packages", "node_modules"]
 }

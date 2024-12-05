@@ -4,16 +4,6 @@
   "private": true,
   "author": "LioRael",
   "type": "module",
-  "exports": {
-    ".": {
-      "types": "./src/index.d.ts",
-      "default": "./src/index.ts"
-    },
-    "./schema": {
-      "types": "./src/schema/index.d.ts",
-      "default": "./src/schema/index.ts"
-    }
-  },
   "scripts": {
     "db:check": "pnpm with-env drizzle-kit check",
     "db:generate": "pnpm with-env drizzle-kit generate",
@@ -33,8 +23,8 @@
   "devDependencies": {
     "@types/pg": "^8.11.10",
     "@valhalla/core": "workspace:*",
-    "@valhalla/eslint": "workspace:*",
-    "@valhalla/tsconfig": "workspace:*",
+    "@valhalla/eslint-config": "workspace:*",
+    "@valhalla/typescript-config": "workspace:*",
     "dotenv-cli": "catalog:",
     "drizzle-kit": "^0.28.1",
     "pg": "catalog:"

@@ -1,4 +1,4 @@
-import next from '@valhalla/eslint/next.js'
+import next from '@valhalla/eslint-config/next.js'
 
 export default [
   {

@@ -1,7 +1,7 @@
 import {
   BreadcrumbItem,
   BreadcrumbPage,
-} from '@valhalla/ui/src/primitives/breadcrumb'
+} from '@valhalla/design-system/components/ui/src/primitives/breadcrumb'
 
 import {
   Dashboard,

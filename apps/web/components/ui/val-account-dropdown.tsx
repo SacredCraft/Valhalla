@@ -2,8 +2,12 @@ import { CaretSortIcon } from '@radix-ui/react-icons'
 import { LogOut, UserIcon } from 'lucide-react'
 
 import type { Session } from '@valhalla/auth'
-import { Avatar, AvatarFallback, AvatarImage } from '@valhalla/ui/avatar'
-import { Badge } from '@valhalla/ui/badge'
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@valhalla/design-system/components/ui/avatar'
+import { Badge } from '@valhalla/design-system/components/ui/badge'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,8 +16,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@valhalla/ui/dropdown-menu'
-import { SidebarMenuButton } from '@valhalla/ui/sidebar'
+} from '@valhalla/design-system/components/ui/dropdown-menu'
+import { SidebarMenuButton } from '@valhalla/design-system/components/ui/sidebar'
 
 import { orpc } from '@/lib/orpc/react'
 

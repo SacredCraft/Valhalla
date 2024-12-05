@@ -4,7 +4,7 @@
 import type React from 'react'
 import { motion } from 'motion/react'
 
-import { cn } from '@valhalla/ui/cn'
+import { cn } from '@valhalla/design-system/utils/cn'
 
 import { useIsTop } from '@/hooks/use-is-top'
 import { useScrollDir } from '@/hooks/use-scroll-dir'

@@ -6,7 +6,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   useSidebar,
-} from '@valhalla/ui/sidebar'
+} from '@valhalla/design-system/components/ui/sidebar'
 
 const SidebarLogo = () => {
   const { state } = useSidebar()

@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 
 import { Session } from '@valhalla/auth'
-import { Badge } from '@valhalla/ui/badge'
+import { Badge } from '@valhalla/design-system/components/ui/badge'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -20,15 +20,15 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@valhalla/ui/breadcrumb'
+} from '@valhalla/design-system/components/ui/breadcrumb'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
   DialogTrigger,
-} from '@valhalla/ui/dialog'
-import { DropdownMenuItem } from '@valhalla/ui/dropdown-menu'
+} from '@valhalla/design-system/components/ui/dialog'
+import { DropdownMenuItem } from '@valhalla/design-system/components/ui/dropdown-menu'
 import {
   Sidebar,
   SidebarContent,
@@ -38,7 +38,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
-} from '@valhalla/ui/sidebar'
+} from '@valhalla/design-system/components/ui/sidebar'
 
 import { orpc } from '@/lib/orpc/react'
 

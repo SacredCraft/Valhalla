@@ -4,10 +4,10 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from '@valhalla/ui/breadcrumb'
-import { cn } from '@valhalla/ui/cn'
-import { Separator } from '@valhalla/ui/separator'
-import { SidebarTrigger } from '@valhalla/ui/sidebar'
+} from '@valhalla/design-system/components/ui/breadcrumb'
+import { Separator } from '@valhalla/design-system/components/ui/separator'
+import { SidebarTrigger } from '@valhalla/design-system/components/ui/sidebar'
+import { cn } from '@valhalla/design-system/utils/cn'
 
 const Dashboard = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>

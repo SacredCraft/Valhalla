@@ -4,8 +4,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 
 import { notification as notificationSchema } from '@valhalla/db/schema'
-import { badgeVariants } from '@valhalla/ui/badge'
-import { cn } from '@valhalla/ui/cn'
+import { badgeVariants } from '@valhalla/design-system/components/ui/badge'
+import { cn } from '@valhalla/design-system/utils/cn'
 
 import { orpc } from '@/lib/orpc/react'
 

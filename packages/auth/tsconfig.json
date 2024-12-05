@@ -1,5 +1,5 @@
 {
-  "extends": "@valhalla/tsconfig/base.json",
+  "extends": "@valhalla/typescript-config/base.json",
   "compilerOptions": {
     "declaration": false,
     "declarationMap": false

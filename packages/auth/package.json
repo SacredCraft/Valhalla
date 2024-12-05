@@ -5,12 +5,6 @@
   "author": "LioRael",
   "sideEffects": false,
   "type": "module",
-  "exports": {
-    ".": {
-      "types": "./src/index.d.ts",
-      "default": "./src/index.ts"
-    }
-  },
   "scripts": {
     "configure": "tsx scripts/install.ts",
     "lint": "eslint . --max-warnings 0"
@@ -22,8 +16,8 @@
     "@better-fetch/fetch": "^1.1.12",
     "@hono/node-server": "^1.13.7",
     "@valhalla/core": "workspace:*",
-    "@valhalla/eslint": "workspace:*",
-    "@valhalla/tsconfig": "workspace:*",
+    "@valhalla/eslint-config": "workspace:*",
+    "@valhalla/typescript-config": "workspace:*",
     "better-auth": "catalog:",
     "drizzle-orm": "catalog:",
     "hono": "catalog:"

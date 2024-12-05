@@ -3,14 +3,14 @@
 import { useState } from 'react'
 import { Edit, FilePlus, FolderPlus, Trash2, Upload } from 'lucide-react'
 
-import { cn } from '@valhalla/ui/cn'
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuSeparator,
   ContextMenuTrigger,
-} from '@valhalla/ui/context-menu'
+} from '@valhalla/design-system/components/ui/context-menu'
+import { cn } from '@valhalla/design-system/utils/cn'
 
 const FolderContextMenu = ({
   children,

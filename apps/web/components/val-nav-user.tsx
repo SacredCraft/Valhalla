@@ -1,7 +1,11 @@
 'use client'
 
 import type { Session } from '@valhalla/auth'
-import { SidebarMenu, SidebarMenuItem, useSidebar } from '@valhalla/ui/sidebar'
+import {
+  SidebarMenu,
+  SidebarMenuItem,
+  useSidebar,
+} from '@valhalla/design-system/components/ui/sidebar'
 
 import {
   ValhallaAccountDropdown,

@@ -3,11 +3,15 @@
 import { useRef, useState } from 'react'
 import { Loader2, Upload, User } from 'lucide-react'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@valhalla/ui/avatar'
-import { Button } from '@valhalla/ui/button'
-import { createContext } from '@valhalla/ui/context'
-import { Input } from '@valhalla/ui/input'
-import { cn } from '@valhalla/ui/src/utils/cn'
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@valhalla/design-system/components/ui/avatar'
+import { Button } from '@valhalla/design-system/components/ui/button'
+import { createContext } from '@valhalla/design-system/components/ui/context'
+import { Input } from '@valhalla/design-system/components/ui/input'
+import { cn } from '@valhalla/design-system/components/ui/src/utils/cn'
 
 const AvatarUploader = ({
   src: initialSrc = null,

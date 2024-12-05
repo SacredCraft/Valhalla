@@ -3,7 +3,7 @@
 import type React from 'react'
 import { motion } from 'motion/react'
 
-import { cn } from '@valhalla/ui/cn'
+import { cn } from '@valhalla/design-system/utils/cn'
 
 interface valhallaAuthCardProps
   extends React.ComponentPropsWithoutRef<typeof motion.div> {

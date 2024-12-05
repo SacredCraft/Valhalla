@@ -1,14 +1,14 @@
 import React from 'react'
 import { ChevronRightIcon } from 'lucide-react'
 
-import { cn } from '@valhalla/ui/cn'
 import {
   navigationMenuTriggerStyle,
   NavigationMenuLink as ShadCNNavigationMenuLink,
   NavigationMenuRoot as ShadCNNavigationMenuRoot,
   NavigationMenuTrigger as ShadCNNavigationMenuTrigger,
   NavigationMenuViewport as ShadCNNavigationMenuViewport,
-} from '@valhalla/ui/navigation-menu'
+} from '@valhalla/design-system/components/ui/navigation-menu'
+import { cn } from '@valhalla/design-system/utils/cn'
 
 export {
   NavigationMenu,
@@ -17,7 +17,7 @@ export {
   NavigationMenuItem,
   NavigationMenuList,
   NavigationMenuViewport,
-} from '@valhalla/ui/navigation-menu'
+} from '@valhalla/design-system/components/ui/navigation-menu'
 
 const NavigationMenuRoot = React.forwardRef<
   React.ComponentRef<typeof ShadCNNavigationMenuRoot>,
