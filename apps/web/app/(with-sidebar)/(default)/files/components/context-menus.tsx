@@ -2,15 +2,25 @@
 
 import { useState } from 'react'
 import { Edit, FilePlus, FolderPlus, Trash2, Upload } from 'lucide-react'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuSeparator,
+  ContextMenuShortcut,
   ContextMenuTrigger,
 } from '@valhalla/design-system/components/ui/context-menu'
 import { cn } from '@valhalla/design-system/utils/cn'
+
+import { Shortcut, ShortcutGroup } from '@/components/ui/shortcut'
+
+import {
+  useRemoveAllTabs,
+  useRemoveOtherTabs,
+  useRemoveTab,
+} from '../hooks/use-remove-tab'
 
 const FolderContextMenu = ({
   children,
@@ -81,6 +91,56 @@ const FileContextMenu = ({ children }: { children: React.ReactNode }) => {
   )
 }
 
+const TabContextMenu = ({
+  children,
+  index,
+}: {
+  children: React.ReactNode
+  index: number
+}) => {
+  const removeOtherTabs = useRemoveOtherTabs()
+  const removeAllTabs = useRemoveAllTabs()
+  const removeTab = useRemoveTab()
+
+  useHotkeys('shift+w', () => {
+    removeTab(index)
+  })
+
+  useHotkeys('shift+d', () => {
+    removeOtherTabs(index)
+  })
+
+  useHotkeys('shift+a', () => {
+    removeAllTabs()
+  })
+
+  return (
+    <ContextMenu>
+      <ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
+      <MenuContent>
+        <MenuItem onClick={() => removeTab(index)}>
+          关闭
+          <ContextMenuShortcut>
+            <ShortcutGroup>⇧W</ShortcutGroup>
+          </ContextMenuShortcut>
+        </MenuItem>
+        <MenuItem onClick={() => removeOtherTabs(index)}>
+          关闭其他
+          <ContextMenuShortcut>
+            <ShortcutGroup>⇧D</ShortcutGroup>
+          </ContextMenuShortcut>
+        </MenuItem>
+        <MenuItem onClick={() => removeAllTabs()}>
+          关闭所有
+          <ContextMenuShortcut>
+            <ShortcutGroup>⇧A</ShortcutGroup>
+          </ContextMenuShortcut>
+        </MenuItem>
+      </MenuContent>
+    </ContextMenu>
+  )
+}
+
 const MenuContent = ({
   children,
   className,
@@ -98,9 +158,11 @@ const MenuContent = ({
 const MenuItem = ({
   children,
   className,
+  onClick,
 }: {
   children?: React.ReactNode
   className?: string
+  onClick?: () => void
 }) => {
   return (
     <ContextMenuItem
@@ -108,10 +170,11 @@ const MenuItem = ({
         'min-w-48 gap-2 rounded-none py-1 first:rounded-t last:rounded-b',
         className
       )}
+      onClick={onClick}
     >
       {children}
     </ContextMenuItem>
   )
 }
 
-export { FolderContextMenu, FileContextMenu, MenuItem }
+export { FolderContextMenu, FileContextMenu, MenuItem, TabContextMenu }

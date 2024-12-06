@@ -31,6 +31,7 @@
     "better-auth": "catalog:",
     "class-variance-authority": "^0.7.0",
     "fs-extra": "^11.2.0",
+    "idb-keyval": "^6.2.1",
     "ky": "^1.7.2",
     "lenis": "^1.1.16",
     "lucide-react": "catalog:",
@@ -42,10 +43,12 @@
     "react": "catalog:",
     "react-dom": "catalog:",
     "react-hook-form": "catalog:",
+    "react-hotkeys-hook": "^4.6.1",
     "sharp": "^0.33.5",
     "superjson": "catalog:",
     "ws": "^8.18.0",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "zustand": "^5.0.2"
   },
   "devDependencies": {
     "@total-typescript/ts-reset": "catalog:",

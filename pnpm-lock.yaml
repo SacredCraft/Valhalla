@@ -24,18 +24,9 @@ catalogs:
     better-auth:
       specifier: 1.0.10
       version: 1.0.10
-    class-variance-authority:
-      specifier: ^0.7.0
-      version: 0.7.0
-    clsx:
-      specifier: ^2.1.1
-      version: 2.1.1
     dotenv-cli:
       specifier: ^7.4.2
       version: 7.4.2
-    drizzle-orm:
-      specifier: ^0.37.0
-      version: 0.37.0
     lucide-react:
       specifier: ^0.454.0
       version: 0.454.0
@@ -60,15 +51,9 @@ catalogs:
     superjson:
       specifier: ^2.2.1
       version: 2.2.1
-    tailwind-merge:
-      specifier: ^2.5.4
-      version: 2.5.4
     tailwindcss:
       specifier: ^3.4.14
       version: 3.4.14
-    tailwindcss-animate:
-      specifier: ^1.0.7
-      version: 1.0.7
     zod:
       specifier: ^3.23.8
       version: 3.23.8
@@ -176,6 +161,9 @@ importers:
       fs-extra:
         specifier: ^11.2.0
         version: 11.2.0
+      idb-keyval:
+        specifier: ^6.2.1
+        version: 6.2.1
       ky:
         specifier: ^1.7.2
         version: 1.7.2
@@ -209,6 +197,9 @@ importers:
       react-hook-form:
         specifier: 'catalog:'
         version: 7.53.1(react@19.0.0)
+      react-hotkeys-hook:
+        specifier: ^4.6.1
+        version: 4.6.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       sharp:
         specifier: ^0.33.5
         version: 0.33.5
@@ -221,6 +212,9 @@ importers:
       zod:
         specifier: 'catalog:'
         version: 3.23.8
+      zustand:
+        specifier: ^5.0.2
+        version: 5.0.2(@types/react@19.0.0)(react@19.0.0)
     devDependencies:
       '@total-typescript/ts-reset':
         specifier: 'catalog:'
@@ -3563,6 +3557,9 @@ packages:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
     engines: {node: '>=0.10.0'}
 
+  idb-keyval@6.2.1:
+    resolution: {integrity: sha512-8Sb3veuYCyrZL+VBt9LJfZjLUPWVvqn8tG28VqYNFCo43KHcKuq+b4EiXGeuaLAQWL2YmyDgMp2aSpH9JHsEQg==}
+
   ignore@5.3.2:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
     engines: {node: '>= 4'}
@@ -4304,6 +4301,12 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
 
+  react-hotkeys-hook@4.6.1:
+    resolution: {integrity: sha512-XlZpbKUj9tkfgPgT9gA+1p7Ey6vFIZHttUjPqpTdyT5nqQ8mHL7elxvSbaC+dpSiHUSmr21Ya1mDxBZG3aje4Q==}
+    peerDependencies:
+      react: '>=16.8.1'
+      react-dom: '>=16.8.1'
+
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
@@ -4876,6 +4879,24 @@ packages:
 
   zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
+
+  zustand@5.0.2:
+    resolution: {integrity: sha512-8qNdnJVJlHlrKXi50LDqqUNmUbuBjoKLrYQBnoChIbVph7vni+sY+YpvdjXG9YLd/Bxr6scMcR+rm5H3aSqPaw==}
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      '@types/react': '>=18.0.0'
+      immer: '>=9.0.6'
+      react: '>=18.0.0'
+      use-sync-external-store: '>=1.2.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      immer:
+        optional: true
+      react:
+        optional: true
+      use-sync-external-store:
+        optional: true
 
 snapshots:
 
@@ -7713,6 +7734,8 @@ snapshots:
     dependencies:
       safer-buffer: 2.1.2
 
+  idb-keyval@6.2.1: {}
+
   ignore@5.3.2: {}
 
   import-fresh@3.3.0:
@@ -8333,6 +8356,11 @@ snapshots:
   react-hook-form@7.53.1(react@19.0.0):
     dependencies:
       react: 19.0.0
+
+  react-hotkeys-hook@4.6.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+    dependencies:
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
 
   react-is@16.13.1: {}
 
@@ -8990,3 +9018,8 @@ snapshots:
   yoctocolors-cjs@2.1.2: {}
 
   zod@3.23.8: {}
+
+  zustand@5.0.2(@types/react@19.0.0)(react@19.0.0):
+    optionalDependencies:
+      '@types/react': 19.0.0
+      react: 19.0.0

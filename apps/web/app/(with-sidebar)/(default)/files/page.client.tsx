@@ -1,9 +1,10 @@
 'use client'
 
 import path from 'path'
-import React, { Suspense } from 'react'
-import { File, Folder, Info } from 'lucide-react'
+import React, { Suspense, useState } from 'react'
+import { File, Folder, Info, X } from 'lucide-react'
 import { parseAsInteger, useQueryState } from 'nuqs'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import { Button } from '@valhalla/design-system/components/ui/button'
 import { ResizablePanel } from '@valhalla/design-system/components/ui/resizable'
@@ -29,16 +30,28 @@ import { cn } from '@valhalla/design-system/utils/cn'
 
 import { Components } from '@/__cache__/components'
 import { Icons } from '@/components/icons'
+import { useDoubleClick } from '@/hooks/use-double-click'
 import { orpc } from '@/lib/orpc/react'
+import { useFileTabsStore } from '@/providers/file-tabs-provider'
 
 import {
   CollapsibleFolder,
   useFolderContext,
 } from './components/collapsible-folder'
-import { FileContextMenu } from './components/context-menus'
+import { FileContextMenu, TabContextMenu } from './components/context-menus'
+import { useAddTabs } from './hooks/use-add-tabs'
+import { useRemoveTab } from './hooks/use-remove-tab'
 
-export const Test = () => {
-  const { data } = orpc.resources.layout.useQuery({})
+export const Layout = () => {
+  const [currentTabIndex] = useQueryState('tab', parseAsInteger.withDefault(0))
+  const { tabs, addTab, removeTab } = useFileTabsStore((state) => state)
+  const currentTab = tabs[currentTabIndex]
+  const { data } = orpc.resources.layout.useQuery({
+    resourceName: currentTab?.resourceName,
+    resourceFolder: currentTab?.resourceFolder,
+    filePath: currentTab?.filePath,
+    fileName: currentTab?.fileName,
+  })
 
   const Comp = Components[data?.component ?? '']
 
@@ -247,11 +260,40 @@ const ResourceFile = ({
   fileName: string
   resourceName: string
 }) => {
+  const handleDoubleClick = useDoubleClick({ delay: 300 })
+  const addTab = useAddTabs()
+  const { tabs } = useFileTabsStore((state) => state)
+  const [currentTabIndex] = useQueryState('tab', parseAsInteger.withDefault(0))
+  const index = tabs.findIndex(
+    (tab) =>
+      tab.filePath === filePath &&
+      tab.fileName === fileName &&
+      tab.resourceName === resourceName &&
+      tab.resourceFolder === resourceFolder
+  )
+  const isActive = index !== -1 && index === currentTabIndex
   const { level } = useFolderContext()
   const Icon = matchFileIcon(fileName)
+
   return (
     <FileContextMenu>
-      <button className="flex w-full items-center gap-1.5 px-1.5 py-1 text-sm transition-colors hover:bg-muted data-[context-menu-state=open]:bg-muted">
+      <button
+        onClick={() =>
+          handleDoubleClick(() => {
+            addTab({
+              resourceName,
+              resourceFolder,
+              filePath,
+              fileName,
+              currentTabIndex,
+            })
+          })
+        }
+        className={cn(
+          'flex w-full items-center gap-1.5 px-1.5 py-1 text-sm transition-colors hover:bg-muted data-[context-menu-state=open]:bg-muted',
+          isActive && 'bg-primary/10 text-primary'
+        )}
+      >
         <Icon
           style={{ marginLeft: `${level * 8 + 22}px` }}
           className="size-4"
@@ -271,91 +313,39 @@ const matchFileIcon = (fileName: string): React.ElementType => {
 }
 
 const Tabs = () => {
-  const [tabs, setTabs] = useQueryState('tabs', parseAsInteger.withDefault(0))
+  const [currentTab, setCurrentTab] = useQueryState(
+    'tab',
+    parseAsInteger.withDefault(0)
+  )
+  const { tabs } = useFileTabsStore((state) => state)
+
+  useHotkeys('arrowleft', () => {
+    if (currentTab > 0) {
+      setCurrentTab(currentTab - 1)
+    }
+  })
+
+  useHotkeys('arrowright', () => {
+    if (currentTab < tabs.length - 1) {
+      setCurrentTab(currentTab + 1)
+    }
+  })
+
   return (
     <ScrollArea type="hover">
       <header className="flex items-center">
-        <Tab
-          isActive={tabs === 0}
-          setTabs={() => {
-            setTabs(0)
-          }}
-        >
-          <Icons.YAML className="size-4" />
-          abc.yaml
-        </Tab>
-        <Tab
-          isActive={tabs === 1}
-          setTabs={() => {
-            setTabs(1)
-          }}
-        >
-          <File className="size-4" />
-          ab.java
-        </Tab>
-        <Tab
-          isActive={tabs === 1}
-          setTabs={() => {
-            setTabs(1)
-          }}
-        >
-          <File className="size-4" />
-          ab.java
-        </Tab>
-        <Tab
-          isActive={tabs === 1}
-          setTabs={() => {
-            setTabs(1)
-          }}
-        >
-          <File className="size-4" />
-          ab.java
-        </Tab>
-        <Tab
-          isActive={tabs === 1}
-          setTabs={() => {
-            setTabs(1)
-          }}
-        >
-          <File className="size-4" />
-          ab.java
-        </Tab>
-        <Tab
-          isActive={tabs === 1}
-          setTabs={() => {
-            setTabs(1)
-          }}
-        >
-          <File className="size-4" />
-          ab.java
-        </Tab>
-        <Tab
-          isActive={tabs === 1}
-          setTabs={() => {
-            setTabs(1)
-          }}
-        >
-          <File className="size-4" />
-          ab.java
-        </Tab>
-        <Tab
-          isActive={tabs === 1}
-          setTabs={() => {
-            setTabs(1)
-          }}
-        >
-          <File className="size-4" />
-          ab.java
-        </Tab>
-        <Tab
-          isActive={tabs === 1}
-          setTabs={() => {
-            setTabs(1)
-          }}
-        >
-          <File className="size-4" />
-          ab.java
-        </Tab>
+        {tabs.map((tab, index) => (
+          <Tab
+            key={tab.filePath}
+            index={index}
+            isActive={currentTab === index}
+            isModified={tab.isModified}
+            setTabs={() => setCurrentTab(index)}
+          >
+            <Icons.YAML className="size-4" />
+            {tab.fileName}
+          </Tab>
+        ))}
       </header>
       <ScrollBar className="h-1.5" orientation="horizontal" />
     </ScrollArea>
@@ -365,27 +355,66 @@ const Tabs = () => {
 const Tab = ({
   children,
   isActive,
+  isModified,
   setTabs,
+  index,
 }: {
   children: React.ReactNode
   isActive: boolean
+  isModified: boolean
   setTabs: () => void
+  index: number
 }) => {
+  const [isCloseHovered, setIsCloseHovered] = useState(false)
+  const removeTab = useRemoveTab()
+
+  useHotkeys(`shift+${index + 1}`, () => {
+    setTabs()
+  })
+
   return (
-    <button
-      onClick={setTabs}
-      className={cn(
-        'relative flex h-9 min-w-[112px] items-center gap-1 bg-transparent px-2 text-start text-sm transition-colors hover:bg-primary/10',
-        isActive
-          ? 'fill-primary text-primary'
-          : 'fill-muted-foreground text-muted-foreground'
-      )}
-    >
-      {children}
-      {isActive && (
-        <span className="absolute inset-x-0 bottom-0 z-[1] h-[2px] w-full bg-primary" />
-      )}
-    </button>
+    <TabContextMenu index={index}>
+      <div
+        onClick={setTabs}
+        className={cn(
+          'group relative flex h-9 min-w-[112px] cursor-pointer items-center gap-1 bg-transparent px-2 text-start text-sm transition-colors hover:bg-primary/10',
+          isActive
+            ? 'fill-primary text-primary'
+            : 'fill-muted-foreground text-muted-foreground'
+        )}
+      >
+        {children}
+        {isActive && (
+          <span className="absolute inset-x-0 bottom-0 z-[1] h-[2px] w-full bg-primary" />
+        )}
+        {isModified && (
+          <span
+            className={cn(
+              'absolute right-[14px] size-2 rounded-full',
+              isActive ? 'bg-primary' : 'bg-muted-foreground',
+              !isModified && 'group-hover:hidden',
+              isCloseHovered && 'hidden'
+            )}
+          />
+        )}
+
+        <button
+          className={cn(
+            'absolute right-[8px] z-[1] flex size-5 items-center justify-center rounded-md opacity-0 hover:bg-primary/10',
+            isCloseHovered && 'opacity-100',
+            !isModified && 'group-hover:opacity-100'
+          )}
+          onMouseEnter={() => setIsCloseHovered(true)}
+          onMouseLeave={() => setIsCloseHovered(false)}
+          onClick={(e) => {
+            e.stopPropagation()
+            removeTab(index)
+          }}
+        >
+          <X className="size-4" />
+        </button>
+      </div>
+    </TabContextMenu>
   )
 }
 

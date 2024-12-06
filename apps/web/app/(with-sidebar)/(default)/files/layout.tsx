@@ -8,6 +8,7 @@ import {
   DashboardContent,
   DashboardHeader,
 } from '@/components/dashboard-layout'
+import { FileTabsStoreProvider } from '@/providers/file-tabs-provider'
 
 export default function FilesLayout({
   children,
@@ -21,7 +22,9 @@ export default function FilesLayout({
           <BreadcrumbPage>文件管理器</BreadcrumbPage>
         </BreadcrumbItem>
       </DashboardHeader>
-      <DashboardContent>{children}</DashboardContent>
+      <DashboardContent>
+        <FileTabsStoreProvider>{children}</FileTabsStoreProvider>
+      </DashboardContent>
     </Dashboard>
   )
 }

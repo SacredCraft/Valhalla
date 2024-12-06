@@ -22,7 +22,15 @@ export const getLayout = authed
     path: '/layout',
     summary: '获取资源布局',
   })
-  .func(() => {
+  .input(
+    z.object({
+      resourceName: z.string(),
+      resourceFolder: z.string(),
+      filePath: z.string(),
+      fileName: z.string(),
+    })
+  )
+  .func((input, ctx) => {
     const layouts = getLayoutRegistry()
     return layouts.layouts['example']
   })
