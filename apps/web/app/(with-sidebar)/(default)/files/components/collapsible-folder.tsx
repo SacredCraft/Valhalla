@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { cva } from 'class-variance-authority'
 import { ChevronRight, Folder, FolderOpen, Link } from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
 
 import {
   Collapsible,
@@ -74,7 +75,20 @@ export const CollapsibleFolder = ({
             Trigger
           )}
         </CollapsibleTrigger>
-        <CollapsibleContent>{children}</CollapsibleContent>
+        <CollapsibleContent forceMount>
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.1 }}
+              >
+                {children}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </CollapsibleContent>
       </Collapsible>
     </FolderProvider>
   )

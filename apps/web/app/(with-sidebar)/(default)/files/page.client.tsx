@@ -3,9 +3,14 @@
 import path from 'path'
 import React, { Suspense } from 'react'
 import { File, Folder, Info } from 'lucide-react'
+import { parseAsInteger, useQueryState } from 'nuqs'
 
 import { Button } from '@valhalla/design-system/components/ui/button'
 import { ResizablePanel } from '@valhalla/design-system/components/ui/resizable'
+import {
+  ScrollArea,
+  ScrollBar,
+} from '@valhalla/design-system/components/ui/scroll-area'
 import {
   Sheet,
   SheetContent,
@@ -20,6 +25,7 @@ import {
   TooltipTrigger,
 } from '@valhalla/design-system/components/ui/tooltip'
 import { useIsMobile } from '@valhalla/design-system/hooks/use-mobile'
+import { cn } from '@valhalla/design-system/utils/cn'
 
 import { Components } from '@/__cache__/components'
 import { Icons } from '@/components/icons'
@@ -34,7 +40,7 @@ import { FileContextMenu } from './components/context-menus'
 export const Test = () => {
   const { data } = orpc.resources.layout.useQuery({})
 
-  const Comp = Components[data?.menus[0].render ?? '']
+  const Comp = Components[data?.component ?? '']
 
   return (
     <Suspense fallback={<div>加载中...</div>}>
@@ -264,4 +270,123 @@ const matchFileIcon = (fileName: string): React.ElementType => {
   return File
 }
 
-export { Resource, ResourceDescription, ValResourcePanel }
+const Tabs = () => {
+  const [tabs, setTabs] = useQueryState('tabs', parseAsInteger.withDefault(0))
+  return (
+    <ScrollArea type="hover">
+      <header className="flex items-center">
+        <Tab
+          isActive={tabs === 0}
+          setTabs={() => {
+            setTabs(0)
+          }}
+        >
+          <Icons.YAML className="size-4" />
+          abc.yaml
+        </Tab>
+        <Tab
+          isActive={tabs === 1}
+          setTabs={() => {
+            setTabs(1)
+          }}
+        >
+          <File className="size-4" />
+          ab.java
+        </Tab>
+        <Tab
+          isActive={tabs === 1}
+          setTabs={() => {
+            setTabs(1)
+          }}
+        >
+          <File className="size-4" />
+          ab.java
+        </Tab>
+        <Tab
+          isActive={tabs === 1}
+          setTabs={() => {
+            setTabs(1)
+          }}
+        >
+          <File className="size-4" />
+          ab.java
+        </Tab>
+        <Tab
+          isActive={tabs === 1}
+          setTabs={() => {
+            setTabs(1)
+          }}
+        >
+          <File className="size-4" />
+          ab.java
+        </Tab>
+        <Tab
+          isActive={tabs === 1}
+          setTabs={() => {
+            setTabs(1)
+          }}
+        >
+          <File className="size-4" />
+          ab.java
+        </Tab>
+        <Tab
+          isActive={tabs === 1}
+          setTabs={() => {
+            setTabs(1)
+          }}
+        >
+          <File className="size-4" />
+          ab.java
+        </Tab>
+        <Tab
+          isActive={tabs === 1}
+          setTabs={() => {
+            setTabs(1)
+          }}
+        >
+          <File className="size-4" />
+          ab.java
+        </Tab>
+        <Tab
+          isActive={tabs === 1}
+          setTabs={() => {
+            setTabs(1)
+          }}
+        >
+          <File className="size-4" />
+          ab.java
+        </Tab>
+      </header>
+      <ScrollBar className="h-2" orientation="horizontal" />
+    </ScrollArea>
+  )
+}
+
+const Tab = ({
+  children,
+  isActive,
+  setTabs,
+}: {
+  children: React.ReactNode
+  isActive: boolean
+  setTabs: () => void
+}) => {
+  return (
+    <button
+      onClick={setTabs}
+      className={cn(
+        'relative flex h-9 min-w-[112px] items-center gap-1 bg-transparent px-2 text-start text-sm transition-colors hover:bg-primary/10',
+        isActive
+          ? 'fill-primary text-primary'
+          : 'fill-muted-foreground text-muted-foreground'
+      )}
+    >
+      {children}
+      {isActive && (
+        <span className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-primary" />
+      )}
+    </button>
+  )
+}
+
+export { Resource, ResourceDescription, ValResourcePanel, Tabs }
