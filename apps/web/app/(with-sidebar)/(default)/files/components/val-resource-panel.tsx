@@ -1,9 +1,13 @@
 'use client'
 
-import { Folder } from 'lucide-react'
+import { useState } from 'react'
+import { Folder, Sidebar } from 'lucide-react'
 
 import { Button } from '@valhalla/design-system/components/ui/button'
-import { ResizablePanel } from '@valhalla/design-system/components/ui/resizable'
+import {
+  ResizableHandle,
+  ResizablePanel,
+} from '@valhalla/design-system/components/ui/resizable'
 import {
   Sheet,
   SheetContent,
@@ -24,6 +28,16 @@ export const ValResourcePanel = ({
   maxSize?: number
 }) => {
   const isMobile = useIsMobile()
+  const [collapsed, setCollapsed] = useState(false)
+
+  if (collapsed) {
+    return (
+      <div className="absolute bottom-2 left-2">
+        <CollapseButton collapsed={collapsed} setCollapsed={setCollapsed} />
+      </div>
+    )
+  }
+
   return isMobile ? (
     <Sheet>
       <SheetTrigger asChild>
@@ -42,8 +56,36 @@ export const ValResourcePanel = ({
       </SheetContent>
     </Sheet>
   ) : (
-    <ResizablePanel defaultSize={defaultSize} maxSize={maxSize}>
-      {children}
-    </ResizablePanel>
+    <>
+      <ResizablePanel
+        className="relative"
+        defaultSize={defaultSize}
+        maxSize={maxSize}
+      >
+        {children}
+        <div className="absolute bottom-2 right-2">
+          <CollapseButton collapsed={collapsed} setCollapsed={setCollapsed} />
+        </div>
+      </ResizablePanel>
+      <ResizableHandle className="transition-colors hover:w-1 hover:bg-primary/30" />
+    </>
+  )
+}
+
+const CollapseButton = ({
+  collapsed,
+  setCollapsed,
+}: {
+  collapsed: boolean
+  setCollapsed: (collapsed: boolean) => void
+}) => {
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={() => setCollapsed(!collapsed)}
+    >
+      <Sidebar className="size-5" />
+    </Button>
   )
 }

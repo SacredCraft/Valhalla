@@ -1,6 +1,5 @@
 import { getResources } from '@valhalla/api/router/resources'
 import {
-  ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from '@valhalla/design-system/components/ui/resizable'
@@ -12,11 +11,13 @@ import { ValResourcePanel } from './components/val-resource-panel'
 
 export default async function FilesPage() {
   return (
-    <ResizablePanelGroup direction="horizontal" className="border border-x-0">
+    <ResizablePanelGroup
+      direction="horizontal"
+      className="relative border border-x-0"
+    >
       <ValResourcePanel defaultSize={20} maxSize={30}>
         <Resources />
       </ValResourcePanel>
-      <ResizableHandle className="transition-colors hover:w-1 hover:bg-primary/30" />
       <ResizablePanel className="flex flex-col" defaultSize={80}>
         <Tabs />
         <ContentLayout />
