@@ -14,7 +14,7 @@ import {
 } from '@valhalla/design-system/components/ui/context-menu'
 import { cn } from '@valhalla/design-system/utils/cn'
 
-import { Shortcut, ShortcutGroup } from '@/components/ui/shortcut'
+import { ShortcutGroup } from '@/components/ui/shortcut'
 
 import {
   useRemoveAllTabs,
