@@ -357,7 +357,7 @@ const Tabs = () => {
           ab.java
         </Tab>
       </header>
-      <ScrollBar className="h-2" orientation="horizontal" />
+      <ScrollBar className="h-1.5" orientation="horizontal" />
     </ScrollArea>
   )
 }
@@ -383,7 +383,7 @@ const Tab = ({
     >
       {children}
       {isActive && (
-        <span className="absolute inset-x-0 bottom-0 h-[2px] w-full bg-primary" />
+        <span className="absolute inset-x-0 bottom-0 z-[1] h-[2px] w-full bg-primary" />
       )}
     </button>
   )
