@@ -3,7 +3,6 @@ import { z } from 'zod'
 import { loadConfig } from './config'
 import { getLayoutRegistry } from './layout'
 import { Config, configSchema } from './schema/configs'
-import { Layout } from './schema/layout'
 import {
   Folder,
   folderSchema,
@@ -44,7 +43,7 @@ const createResource = ({
   contentSchema = z.object({}),
 }: Resource & {
   contentSchema?: z.ZodObject<z.ZodRawShape>
-}): [(options?: ResourceOptions) => Resource, Layout[]] => {
+}): ((options?: ResourceOptions) => Resource) => {
   const resource: Resource = resourceSchema.parse({
     name,
     description,
@@ -57,58 +56,51 @@ const createResource = ({
     },
   } satisfies Resource)
 
-  if (!getLayoutRegistry().layouts[resource.name]) {
-    getLayoutRegistry().layouts[resource.name] = []
+  return (options: ResourceOptions = {}) => {
+    const newResource: Resource = {
+      ...resource,
+      ...options,
+    }
+
+    if (newResource.config) {
+      newResource.config.name = options?.config?.version ?? name
+      newResource.config.path = `resources/${newResource.name}/configs.yaml`
+    }
+
+    // 检查同名资源是否已存在
+    if (registry.resources[newResource.name]) {
+      throw new Error(`资源 ${newResource.name} 已存在`)
+    }
+
+    // registry.resourcesFolders[newResource.name] = folders
+
+    // 加载配置
+    if (newResource.config) {
+      registry.resourcesConfigs[newResource.name] = loadConfig(
+        newResource.config,
+        true
+      )
+
+      const folderConfig = configSchema.parse({
+        name: `${newResource.name}-folders`,
+        version: newResource.config.version,
+        path: `resources/${newResource.name}/folders.yaml`,
+        content: z.array(folderSchema).default([]),
+      })
+
+      const folders = loadConfig(folderConfig, true, [])
+
+      registry.resourcesFolders[newResource.name] = folders as Folder[]
+    }
+
+    registry.resources[newResource.name] = newResource
+    if (!getLayoutRegistry().layouts[newResource.name]) {
+      getLayoutRegistry().layouts[newResource.name] =
+        getLayoutRegistry().layouts[resource.name]
+    }
+
+    return newResource
   }
-
-  return [
-    (options: ResourceOptions = {}) => {
-      const newResource: Resource = {
-        ...resource,
-        ...options,
-      }
-
-      if (newResource.config) {
-        newResource.config.name = options?.config?.version ?? name
-        newResource.config.path = `resources/${newResource.name}/configs.yaml`
-      }
-
-      // 检查同名资源是否已存在
-      if (registry.resources[newResource.name]) {
-        throw new Error(`资源 ${newResource.name} 已存在`)
-      }
-
-      // registry.resourcesFolders[newResource.name] = folders
-
-      // 加载配置
-      if (newResource.config) {
-        registry.resourcesConfigs[newResource.name] = loadConfig(
-          newResource.config,
-          true
-        )
-
-        const folderConfig = configSchema.parse({
-          name: `${newResource.name}-folders`,
-          version: newResource.config.version,
-          path: `resources/${newResource.name}/folders.yaml`,
-          content: z.array(folderSchema).default([]),
-        })
-
-        const folders = loadConfig(folderConfig, true, [])
-
-        registry.resourcesFolders[newResource.name] = folders as Folder[]
-      }
-
-      registry.resources[newResource.name] = newResource
-      if (!getLayoutRegistry().layouts[newResource.name]) {
-        getLayoutRegistry().layouts[newResource.name] =
-          getLayoutRegistry().layouts[resource.name]
-      }
-
-      return newResource
-    },
-    getLayoutRegistry().layouts[resource.name],
-  ]
 }
 
 const getRegistry = () => ResourceRegistry.getInstance()

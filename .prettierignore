@@ -5,3 +5,5 @@ drizzle/
 *.env.example
 
 .changeset/
+
+apps/web/__cache__/components.ts

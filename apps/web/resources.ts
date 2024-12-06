@@ -1,3 +1,4 @@
+import { generateComponents } from '@valhalla/core/components'
 import { example } from '@valhalla/example'
 
 example({
@@ -10,6 +11,8 @@ example({
   description: '这里是开拓者服务器的属性配置',
 })
 
-const init = () => {}
+const init = () => {
+  generateComponents()
+}
 
 export { init }

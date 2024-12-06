@@ -1,3 +1,15 @@
 {
-  "extends": "@valhalla/typescript-config/react-library.json"
+  "extends": "@valhalla/typescript-config/resource.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": "."
+  },
+  "references": [
+    {
+      "path": "../../packages/core"
+    },
+    {
+      "path": "../../packages/design-system"
+    }
+  ]
 }

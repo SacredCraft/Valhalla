@@ -2,9 +2,10 @@ import { z } from 'zod'
 
 import { createResource } from '@valhalla/core/resource'
 
+import { initComponents } from './components'
 import { initLayouts } from './layouts'
 
-const [example, layouts] = createResource({
+const example = createResource({
   name: 'example',
   description: '存储了一些美术资源',
   label: '美术资源',
@@ -13,6 +14,7 @@ const [example, layouts] = createResource({
   }),
 })
 
+initComponents()
 initLayouts()
 
-export { example, layouts }
+export { example }

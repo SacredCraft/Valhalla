@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Resource",
+  "extends": "./react-library.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["src/*"],
+
+      "@valhalla/core": ["../../packages/core/src"],
+      "@valhalla/core/*": ["../../packages/core/src/*"],
+
+      "@valhalla/env/*": ["../../packages/env/src/*"],
+
+      "@valhalla/api": ["../../packages/api/src"],
+      "@valhalla/api/*": ["../../packages/api/src/*"],
+
+      "@valhalla/utils/*": ["../../packages/utils/src/*"],
+
+      "@valhalla/design-system/*": ["../../packages/design-system/src/*"]
+    }
+  }
+}

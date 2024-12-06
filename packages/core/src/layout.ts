@@ -6,7 +6,7 @@ declare global {
 }
 
 class LayoutRegistry {
-  layouts: Record<string, Layout[]> = {}
+  layouts: Record<string, Layout> = {}
 
   static getInstance(): LayoutRegistry {
     if (!global._layoutRegistry) {
@@ -22,9 +22,7 @@ const getLayoutRegistry = () => {
 
 const createLayout = (layout: Layout) => {
   const registry = getLayoutRegistry()
-  const layouts = registry.layouts[layout.name] || []
-  layouts.push(layout)
-  registry.layouts[layout.name] = layouts
+  registry.layouts[layout.name] = layout
   return layout
 }
 

@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { getLayoutRegistry } from '@valhalla/core/layout'
+
 import { registryMiddleware } from '../middlewares/registry'
 import { authed } from '../orpc'
 
@@ -14,11 +16,24 @@ export const getResources = authed
     return ctx.registry.resources
   })
 
+export const getLayout = authed
+  .route({
+    method: 'GET',
+    path: '/layout',
+    summary: '获取资源布局',
+  })
+  .func(() => {
+    const layouts = getLayoutRegistry()
+    return layouts.layouts['example']
+  })
+
 export const resourcesRouter = authed
   .tags('Resources')
   .prefix('/resources')
   .router({
     list: getResources,
+
+    layout: getLayout,
 
     folders: authed
       .use(registryMiddleware)

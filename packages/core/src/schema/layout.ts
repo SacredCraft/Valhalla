@@ -1,11 +1,10 @@
-import { ReactElement, ReactNode } from 'react'
 import { z } from 'zod'
 
 const menuSchema = z.object({
   label: z.string(),
   value: z.string(),
-  icon: z.function().args(z.unknown()).returns(z.custom<ReactElement>()),
-  render: z.function().args(z.unknown()).returns(z.custom<ReactNode>()),
+  icon: z.string(),
+  render: z.string(),
 })
 
 const layoutSchema = z.object({

@@ -1,7 +1,7 @@
 'use client'
 
 import path from 'path'
-import React from 'react'
+import React, { Suspense } from 'react'
 import { File, Folder, Info } from 'lucide-react'
 
 import { Button } from '@valhalla/design-system/components/ui/button'
@@ -21,6 +21,7 @@ import {
 } from '@valhalla/design-system/components/ui/tooltip'
 import { useIsMobile } from '@valhalla/design-system/hooks/use-mobile'
 
+import { Components } from '@/__cache__/components'
 import { Icons } from '@/components/icons'
 import { orpc } from '@/lib/orpc/react'
 
@@ -29,6 +30,18 @@ import {
   useFolderContext,
 } from './components/collapsible-folder'
 import { FileContextMenu } from './components/context-menus'
+
+export const Test = () => {
+  const { data } = orpc.resources.layout.useQuery({})
+
+  const Comp = Components[data?.menus[0].render ?? '']
+
+  return (
+    <Suspense fallback={<div>加载中...</div>}>
+      {Comp ? <Comp.default /> : null}
+    </Suspense>
+  )
+}
 
 const ValResourcePanel = ({
   children,

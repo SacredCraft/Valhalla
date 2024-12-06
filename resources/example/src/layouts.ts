@@ -1,7 +1,5 @@
 import { createLayout } from '@valhalla/core/layout'
 
-const Icon = () => <div>美术资源</div>
-
 const initLayouts = () => {
   createLayout({
     name: 'example',
@@ -10,8 +8,8 @@ const initLayouts = () => {
       {
         label: '美术资源',
         value: 'example',
-        icon: Icon,
-        render: () => <div>美术资源</div>,
+        icon: 'Box',
+        render: 'Example',
       },
     ],
   })
