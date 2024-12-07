@@ -27,4 +27,11 @@ export const Icons: Record<string, any> = {
     ),
     name: 'File',
   },
+  Kotlin: {
+    default: React.lazy(() =>
+      import('@/components/icons').then((m) => ({
+        default: () => <m.Icons.Kotlin />,
+      }))
+    ),
+  },
 }

@@ -38,7 +38,7 @@ export const resourcesRouter = authed
         })
       )
       .use(matchLayoutMiddleware)
-      .func((input, ctx) => {
+      .func((_input, ctx) => {
         return ctx.matchLayout ?? null
       }),
 

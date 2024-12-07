@@ -25,6 +25,13 @@ const createDefaultIcons = () => {
     defaultExport: false,
     exportName: 'File',
   })
+  createIcon({
+    name: 'Kotlin',
+    component: '@/components/icons',
+    names: ['Kotlin'],
+    defaultExport: false,
+    exportName: 'Icons',
+  })
 }
 
 const createDefaultComponents = () => {}
@@ -41,5 +48,11 @@ export const initGlobalLayouts = () => {
     match: (ctx) => ctx.fileName.endsWith('.json'),
     priority: 0,
     icon: 'JSON',
+  })
+  createGlobalLayout({
+    name: 'GlobalKotlin',
+    match: (ctx) => ctx.fileName.endsWith('.kt'),
+    priority: 0,
+    icon: 'Kotlin',
   })
 }
