@@ -1,7 +1,7 @@
 'use client'
 
 import path from 'path'
-import { File, Info } from 'lucide-react'
+import { Info } from 'lucide-react'
 import { parseAsInteger, useQueryState } from 'nuqs'
 
 import {
@@ -11,7 +11,7 @@ import {
 } from '@valhalla/design-system/components/ui/tooltip'
 import { cn } from '@valhalla/design-system/utils/cn'
 
-import { Icons } from '@/components/icons'
+import { Icons } from '@/__cache__/icons'
 import { useDoubleClick } from '@/hooks/use-double-click'
 import { orpc } from '@/lib/orpc/react'
 import { useFileTabsStore } from '@/providers/file-tabs-provider'
@@ -123,6 +123,7 @@ const ResourceLinkedFolder = ({
             filePath={file.name}
             fileName={file.name}
             resourceName={resourceName}
+            icon={file.icon}
           />
         ))}
     </CollapsibleFolder>
@@ -168,6 +169,7 @@ const ResourceFolder = ({
             resourceName={resourceName}
             filePath={path.join(folderPath, file.name)}
             fileName={file.name}
+            icon={file.icon}
           />
         ))}
     </CollapsibleFolder>
@@ -179,11 +181,13 @@ const ResourceFile = ({
   fileName,
   resourceFolder,
   resourceName,
+  icon,
 }: {
   resourceFolder: string
   filePath: string
   fileName: string
   resourceName: string
+  icon: string
 }) => {
   const handleDoubleClick = useDoubleClick({ delay: 300 })
   const addTab = useAddTabs()
@@ -198,7 +202,7 @@ const ResourceFile = ({
   )
   const isActive = index !== -1 && index === currentTabIndex
   const { level } = useFolderContext()
-  const Icon = matchFileIcon(fileName)
+  const Icon = Icons[icon]
 
   return (
     <FileContextMenu>
@@ -219,20 +223,14 @@ const ResourceFile = ({
           isActive && 'bg-primary/10 text-primary'
         )}
       >
-        <Icon
+        <span
+          className="[&>svg]:size-4"
           style={{ marginLeft: `${level * 8 + 22}px` }}
-          className="size-4"
-        />
+        >
+          {Icon ? <Icon.default /> : null}
+        </span>
         {fileName}
       </button>
     </FileContextMenu>
   )
-}
-
-const matchFileIcon = (fileName: string): React.ElementType => {
-  if (fileName.endsWith('.yaml') || fileName.endsWith('.yml')) {
-    return Icons.YAML
-  }
-
-  return File
 }

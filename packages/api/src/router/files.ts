@@ -2,7 +2,7 @@ import path from 'path'
 import fs from 'fs-extra'
 import { z } from 'zod'
 
-import { registryMiddleware } from '../middlewares/registry'
+import { layoutsMiddleware } from '../middlewares/registry'
 import { authed } from '../orpc'
 
 export const filesRouter = authed
@@ -10,7 +10,7 @@ export const filesRouter = authed
   .prefix('/files')
   .router({
     list: authed
-      .use(registryMiddleware)
+      .use(layoutsMiddleware)
       .route({
         method: 'GET',
         path: '/list',
@@ -43,18 +43,33 @@ export const filesRouter = authed
           return []
         }
 
+        const resourceLayouts = ctx.resourceLayouts[input.resourceName]
+        const layouts = [...ctx.layouts, ...resourceLayouts].sort(
+          (a, b) => b.priority - a.priority
+        )
+
         // 获取目录下的文件基础信息 不读取文件内容
         const files = fs
           .readdirSync(resolvedPath)
           .filter((file) => !file.startsWith('.DS_Store'))
           .map((file) => {
+            const layout = layouts.find((layout) =>
+              layout.match({
+                resourceName: input.resourceName,
+                resourceFolder: input.resourceFolder,
+                filePath: path.join(input.path, file),
+                fileName: file,
+              })
+            )
             const filePath = path.join(resolvedPath, file)
             const stat = fs.statSync(filePath)
+
             return {
               name: file,
               isDirectory: stat.isDirectory(),
               size: stat.size,
               modifiedTime: stat.mtime.toISOString(),
+              icon: layout?.icon ?? 'File',
             }
           })
 

@@ -1,8 +1,9 @@
 import { z } from 'zod'
 
-import { getLayoutRegistry } from '@valhalla/core/layout'
-
-import { registryMiddleware } from '../middlewares/registry'
+import {
+  matchLayoutMiddleware,
+  registryMiddleware,
+} from '../middlewares/registry'
 import { authed } from '../orpc'
 
 export const getResources = authed
@@ -16,32 +17,30 @@ export const getResources = authed
     return ctx.registry.resources
   })
 
-export const getLayout = authed
-  .route({
-    method: 'GET',
-    path: '/layout',
-    summary: '获取资源布局',
-  })
-  .input(
-    z.object({
-      resourceName: z.string(),
-      resourceFolder: z.string(),
-      filePath: z.string(),
-      fileName: z.string(),
-    })
-  )
-  .func((input, ctx) => {
-    const layouts = getLayoutRegistry()
-    return layouts.layouts['example']
-  })
-
 export const resourcesRouter = authed
   .tags('Resources')
   .prefix('/resources')
   .router({
     list: getResources,
 
-    layout: getLayout,
+    layout: authed
+      .route({
+        method: 'GET',
+        path: '/layout',
+        summary: '获取资源布局',
+      })
+      .input(
+        z.object({
+          resourceName: z.string(),
+          resourceFolder: z.string(),
+          filePath: z.string(),
+          fileName: z.string(),
+        })
+      )
+      .use(matchLayoutMiddleware)
+      .func((input, ctx) => {
+        return ctx.matchLayout ?? null
+      }),
 
     folders: authed
       .use(registryMiddleware)
@@ -59,14 +58,5 @@ export const resourcesRouter = authed
         return ctx.registry.resourcesFolders[input.name].map((folder) => ({
           name: folder.name,
         }))
-      }),
-
-    foo: authed
-      .use(registryMiddleware)
-      .input(z.object({}))
-      .func(() => {
-        return {
-          a: '',
-        }
       }),
   })

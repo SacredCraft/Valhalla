@@ -1,8 +1,10 @@
 import { z } from 'zod'
 
 import { loadConfig } from './config'
-import { getLayoutRegistry } from './layout'
+import { Component } from './schema/component'
 import { Config, configSchema } from './schema/configs'
+import { Icon } from './schema/icon'
+import { Layout } from './schema/layout'
 import {
   Folder,
   folderSchema,
@@ -16,7 +18,12 @@ declare global {
 }
 
 class ResourceRegistry {
+  components: Record<string, Component> = {}
+  icons: Record<string, Icon> = {}
+  layouts: Layout[] = []
+
   resources: Record<string, Resource> = {}
+  resourceLayouts: Record<string, Layout[]> = {}
   resourcesConfigs: Record<string, unknown> = {}
   resourcesFolders: Record<string, Folder[]> = {}
 
@@ -41,8 +48,10 @@ const createResource = ({
   description,
   label,
   contentSchema = z.object({}),
+  layouts,
 }: Resource & {
   contentSchema?: z.ZodObject<z.ZodRawShape>
+  layouts?: Layout[]
 }): ((options?: ResourceOptions) => Resource) => {
   const resource: Resource = resourceSchema.parse({
     name,
@@ -94,9 +103,9 @@ const createResource = ({
     }
 
     registry.resources[newResource.name] = newResource
-    if (!getLayoutRegistry().layouts[newResource.name]) {
-      getLayoutRegistry().layouts[newResource.name] =
-        getLayoutRegistry().layouts[resource.name]
+
+    if (layouts) {
+      registry.resourceLayouts[newResource.name] = layouts
     }
 
     return newResource
@@ -104,5 +113,23 @@ const createResource = ({
 }
 
 const getRegistry = () => ResourceRegistry.getInstance()
+
+export const createGlobalLayout = (layout: Layout) => {
+  const registry = getRegistry()
+  registry.layouts.push(layout)
+  return layout
+}
+
+export const createComponent = (component: Component) => {
+  const registry = getRegistry()
+  registry.components[component.name] = component
+  return component
+}
+
+export const createIcon = (icon: Icon) => {
+  const registry = getRegistry()
+  registry.icons[icon.name] = icon
+  return icon
+}
 
 export { createResource, getRegistry }

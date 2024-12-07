@@ -2,8 +2,7 @@ import { z } from 'zod'
 
 import { createResource } from '@valhalla/core/resource'
 
-import { initComponents } from './components'
-import { initLayouts } from './layouts'
+import { initComponents, initIcons } from './components'
 
 const example = createResource({
   name: 'example',
@@ -12,9 +11,10 @@ const example = createResource({
   contentSchema: z.object({
     name: z.string().default('Bkm016'),
   }),
+  layouts: [],
 })
 
 initComponents()
-initLayouts()
+initIcons()
 
 export { example }

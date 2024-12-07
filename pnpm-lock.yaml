@@ -24,15 +24,24 @@ catalogs:
     better-auth:
       specifier: 1.0.10
       version: 1.0.10
+    class-variance-authority:
+      specifier: ^0.7.0
+      version: 0.7.0
+    clsx:
+      specifier: ^2.1.1
+      version: 2.1.1
     dotenv-cli:
       specifier: ^7.4.2
       version: 7.4.2
+    drizzle-orm:
+      specifier: ^0.37.0
+      version: 0.37.0
     lucide-react:
       specifier: ^0.454.0
       version: 0.454.0
     next:
-      specifier: 15.0.3
-      version: 15.0.3
+      specifier: 15.0.4
+      version: 15.0.4
     pg:
       specifier: ^8.13.1
       version: 8.13.1
@@ -51,9 +60,15 @@ catalogs:
     superjson:
       specifier: ^2.2.1
       version: 2.2.1
+    tailwind-merge:
+      specifier: ^2.5.4
+      version: 2.5.4
     tailwindcss:
       specifier: ^3.4.14
       version: 3.4.14
+    tailwindcss-animate:
+      specifier: ^1.0.7
+      version: 1.0.7
     zod:
       specifier: ^3.23.8
       version: 3.23.8
@@ -111,14 +126,14 @@ importers:
         specifier: ^3.9.1
         version: 3.9.1(react-hook-form@7.53.1(react@19.0.0))
       '@orpc/client':
-        specifier: ^0.12.0
-        version: 0.12.0(@orpc/contract@0.12.0(zod@3.23.8))(@orpc/server@0.12.0(@orpc/zod@0.12.0)(zod@3.23.8))
+        specifier: ^0.13.0
+        version: 0.13.0(@orpc/contract@0.13.0(zod@3.23.8))(@orpc/server@0.13.0(@orpc/zod@0.13.0)(zod@3.23.8))
       '@orpc/openapi':
-        specifier: ^0.12.0
-        version: 0.12.0(zod@3.23.8)
+        specifier: ^0.13.0
+        version: 0.13.0(zod@3.23.8)
       '@orpc/react':
-        specifier: ^0.12.0
-        version: 0.12.0(@orpc/client@0.12.0(@orpc/contract@0.12.0(zod@3.23.8))(@orpc/server@0.12.0(@orpc/zod@0.12.0)(zod@3.23.8)))(@orpc/contract@0.12.0(zod@3.23.8))(@orpc/server@0.12.0(@orpc/zod@0.12.0)(zod@3.23.8))(@tanstack/react-query@5.61.0(react@19.0.0))(react@19.0.0)
+        specifier: ^0.13.0
+        version: 0.13.0(@orpc/client@0.13.0(@orpc/contract@0.13.0(zod@3.23.8))(@orpc/server@0.13.0(@orpc/zod@0.13.0)(zod@3.23.8)))(@orpc/contract@0.13.0(zod@3.23.8))(@orpc/server@0.13.0(@orpc/zod@0.13.0)(zod@3.23.8))(@tanstack/react-query@5.61.0(react@19.0.0))(react@19.0.0)
       '@radix-ui/react-icons':
         specifier: 'catalog:'
         version: 1.3.1(react@19.0.0)
@@ -178,10 +193,10 @@ importers:
         version: 11.11.17(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       next:
         specifier: 'catalog:'
-        version: 15.0.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        version: 15.0.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       nuqs:
         specifier: ^2.2.1
-        version: 2.2.1(next@15.0.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)
+        version: 2.2.1(next@15.0.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)
       oslo:
         specifier: ^1.2.1
         version: 1.2.1
@@ -256,11 +271,11 @@ importers:
   packages/api:
     dependencies:
       '@orpc/server':
-        specifier: ^0.12.0
-        version: 0.12.0(@orpc/zod@0.12.0)(zod@3.23.8)
+        specifier: ^0.13.0
+        version: 0.13.0(@orpc/zod@0.13.0)(zod@3.23.8)
       '@orpc/zod':
-        specifier: ^0.12.0
-        version: 0.12.0
+        specifier: ^0.13.0
+        version: 0.13.0
       '@valhalla/auth':
         specifier: workspace:*
         version: link:../auth
@@ -297,7 +312,7 @@ importers:
         version: link:../typescript-config
       next:
         specifier: 'catalog:'
-        version: 15.0.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        version: 15.0.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
 
   packages/assets: {}
 
@@ -1444,57 +1459,57 @@ packages:
   '@libsql/core@0.14.0':
     resolution: {integrity: sha512-nhbuXf7GP3PSZgdCY2Ecj8vz187ptHlZQ0VRc751oB2C1W8jQUXKKklvt7t1LJiUTQBVJuadF628eUk+3cRi4Q==}
 
-  '@next/env@15.0.3':
-    resolution: {integrity: sha512-t9Xy32pjNOvVn2AS+Utt6VmyrshbpfUMhIjFO60gI58deSo/KgLOp31XZ4O+kY/Is8WAGYwA5gR7kOb1eORDBA==}
+  '@next/env@15.0.4':
+    resolution: {integrity: sha512-WNRvtgnRVDD4oM8gbUcRc27IAhaL4eXQ/2ovGbgLnPGUvdyDr8UdXP4Q/IBDdAdojnD2eScryIDirv0YUCjUVw==}
 
-  '@next/swc-darwin-arm64@15.0.3':
-    resolution: {integrity: sha512-s3Q/NOorCsLYdCKvQlWU+a+GeAd3C8Rb3L1YnetsgwXzhc3UTWrtQpB/3eCjFOdGUj5QmXfRak12uocd1ZiiQw==}
+  '@next/swc-darwin-arm64@15.0.4':
+    resolution: {integrity: sha512-QecQXPD0yRHxSXWL5Ff80nD+A56sUXZG9koUsjWJwA2Z0ZgVQfuy7gd0/otjxoOovPVHR2eVEvPMHbtZP+pf9w==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [darwin]
 
-  '@next/swc-darwin-x64@15.0.3':
-    resolution: {integrity: sha512-Zxl/TwyXVZPCFSf0u2BNj5sE0F2uR6iSKxWpq4Wlk/Sv9Ob6YCKByQTkV2y6BCic+fkabp9190hyrDdPA/dNrw==}
+  '@next/swc-darwin-x64@15.0.4':
+    resolution: {integrity: sha512-pb7Bye3y1Og3PlCtnz2oO4z+/b3pH2/HSYkLbL0hbVuTGil7fPen8/3pyyLjdiTLcFJ+ymeU3bck5hd4IPFFCA==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [darwin]
 
-  '@next/swc-linux-arm64-gnu@15.0.3':
-    resolution: {integrity: sha512-T5+gg2EwpsY3OoaLxUIofmMb7ohAUlcNZW0fPQ6YAutaWJaxt1Z1h+8zdl4FRIOr5ABAAhXtBcpkZNwUcKI2fw==}
+  '@next/swc-linux-arm64-gnu@15.0.4':
+    resolution: {integrity: sha512-12oSaBFjGpB227VHzoXF3gJoK2SlVGmFJMaBJSu5rbpaoT5OjP5OuCLuR9/jnyBF1BAWMs/boa6mLMoJPRriMA==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@next/swc-linux-arm64-musl@15.0.3':
-    resolution: {integrity: sha512-WkAk6R60mwDjH4lG/JBpb2xHl2/0Vj0ZRu1TIzWuOYfQ9tt9NFsIinI1Epma77JVgy81F32X/AeD+B2cBu/YQA==}
+  '@next/swc-linux-arm64-musl@15.0.4':
+    resolution: {integrity: sha512-QARO88fR/a+wg+OFC3dGytJVVviiYFEyjc/Zzkjn/HevUuJ7qGUUAUYy5PGVWY1YgTzeRYz78akQrVQ8r+sMjw==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
 
-  '@next/swc-linux-x64-gnu@15.0.3':
-    resolution: {integrity: sha512-gWL/Cta1aPVqIGgDb6nxkqy06DkwJ9gAnKORdHWX1QBbSZZB+biFYPFti8aKIQL7otCE1pjyPaXpFzGeG2OS2w==}
+  '@next/swc-linux-x64-gnu@15.0.4':
+    resolution: {integrity: sha512-Z50b0gvYiUU1vLzfAMiChV8Y+6u/T2mdfpXPHraqpypP7yIT2UV9YBBhcwYkxujmCvGEcRTVWOj3EP7XW/wUnw==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@next/swc-linux-x64-musl@15.0.3':
-    resolution: {integrity: sha512-QQEMwFd8r7C0GxQS62Zcdy6GKx999I/rTO2ubdXEe+MlZk9ZiinsrjwoiBL5/57tfyjikgh6GOU2WRQVUej3UA==}
+  '@next/swc-linux-x64-musl@15.0.4':
+    resolution: {integrity: sha512-7H9C4FAsrTAbA/ENzvFWsVytqRYhaJYKa2B3fyQcv96TkOGVMcvyS6s+sj4jZlacxxTcn7ygaMXUPkEk7b78zw==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
     libc: [musl]
 
-  '@next/swc-win32-arm64-msvc@15.0.3':
-    resolution: {integrity: sha512-9TEp47AAd/ms9fPNgtgnT7F3M1Hf7koIYYWCMQ9neOwjbVWJsHZxrFbI3iEDJ8rf1TDGpmHbKxXf2IFpAvheIQ==}
+  '@next/swc-win32-arm64-msvc@15.0.4':
+    resolution: {integrity: sha512-Z/v3WV5xRaeWlgJzN9r4PydWD8sXV35ywc28W63i37G2jnUgScA4OOgS8hQdiXLxE3gqfSuHTicUhr7931OXPQ==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [win32]
 
-  '@next/swc-win32-x64-msvc@15.0.3':
-    resolution: {integrity: sha512-VNAz+HN4OGgvZs6MOoVfnn41kBzT+M+tB+OK4cww6DNyWS6wKaDpaAm/qLeOUbnMh0oVx1+mg0uoYARF69dJyA==}
+  '@next/swc-win32-x64-msvc@15.0.4':
+    resolution: {integrity: sha512-NGLchGruagh8lQpDr98bHLyWJXOBSmkEAfK980OiNBa7vNm6PsNoPvzTfstT78WyOeMRQphEQ455rggd7Eo+Dw==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
@@ -1700,43 +1715,43 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@orpc/client@0.12.0':
-    resolution: {integrity: sha512-RRowGiT2cZAubQc7rUeWjf9nPPW2T4N2vpgdPWQo+KBcSLypfXz3gBsFdJYPyu658OL3omS4hWpmMYCvicp+YQ==}
+  '@orpc/client@0.13.0':
+    resolution: {integrity: sha512-FhHXrAQMFEdoRzK/G6AsYq/8nIQ32sisTND6YsTcwKlXxEveQ7utNQeDLxv9cSBeZQTfa1uFQSG6lEBjFFJgng==}
     peerDependencies:
-      '@orpc/contract': 0.12.0
-      '@orpc/server': 0.12.0
+      '@orpc/contract': 0.13.0
+      '@orpc/server': 0.13.0
 
-  '@orpc/contract@0.12.0':
-    resolution: {integrity: sha512-sEJSe9O26nH26c+yO43NcDRQr6d1hldB0BRphtmDgKlwWA5sOtPS7iU0DY745VAg4UKB85SOBIFVz2yguVcbPQ==}
+  '@orpc/contract@0.13.0':
+    resolution: {integrity: sha512-AhdSdbFqfyLdRSPPgn5Y+fyq44bKzC7EvwhLo13YkupwRCd1VfRJsANPuv9BzbHlYbmoJecj+H345XRgBN2JRg==}
     peerDependencies:
       zod: '>=3.23.0'
 
-  '@orpc/openapi@0.12.0':
-    resolution: {integrity: sha512-S6PfzjF8DFzVg/IwurtwuYF1/vtU905gGcz5qb+iLsBwXWeklrSCs64Pt0IC7cjR0oH57WTNjiWqISIoCXxPrQ==}
+  '@orpc/openapi@0.13.0':
+    resolution: {integrity: sha512-t0IpOKhwYGQRKAmHZ46UTrr2GagWeKEadKf8jVpzAvZ2SMvIvOqcZCbqfV0RJbfMF3/3gnOfYjLac4Lj8usY7Q==}
 
-  '@orpc/react@0.12.0':
-    resolution: {integrity: sha512-UmBXvqDvjrZ5sUkyq0D8qt2YoyHSSFUwQ3XtCzAy0qf3+DecBlGFcIjvDWRWAfTLigvt8lhEwRpQAROCy7vl3Q==}
+  '@orpc/react@0.13.0':
+    resolution: {integrity: sha512-XcVE6q9KZjbbA1NeKAnmdt/xjnDLmZ3vatpAi1sDJc6YqAcFXE4QfdjhHIozyVlXTndIXoCvcWQhgKLW2CVpVg==}
     peerDependencies:
-      '@orpc/client': 0.12.0
-      '@orpc/contract': 0.12.0
-      '@orpc/server': 0.12.0
+      '@orpc/client': 0.13.0
+      '@orpc/contract': 0.13.0
+      '@orpc/server': 0.13.0
       '@tanstack/react-query': '>=5.59.0'
       react: '>=18.3.0'
 
-  '@orpc/server@0.12.0':
-    resolution: {integrity: sha512-39ibFUd27LvnneHbgnLGNVQk6BPJqCWfViQ+i/kD7lD3fNW/fmhOwFsLjbYRMTAM5pvD2X2ZyNnrxsf+Hp81Kg==}
+  '@orpc/server@0.13.0':
+    resolution: {integrity: sha512-QkznoXnAVzU6fTeb9ED2iQulweq/nwXljNyaYwwEjcLSIMFsuqTGmvDTklg0sOxhcFj8hxyOCi0A/qyONO5ADg==}
     peerDependencies:
-      '@orpc/zod': 0.12.0
+      '@orpc/zod': 0.13.0
       zod: '>=3.23.0'
 
-  '@orpc/shared@0.12.0':
-    resolution: {integrity: sha512-6ho9nHyE6BOy5pFibV9NtS5A+i9uCQBZ+ae2kozfznAzSSfs7ODvhrIHhuYFPtfZxuJvVpjV/Io1TXTAiS3MtA==}
+  '@orpc/shared@0.13.0':
+    resolution: {integrity: sha512-uVdvsTIqHhkog6ahoBOc1XmNzFff1XRfj/4udBmAkOEK1EwwcMsB0lW972GDpMRrSFYLBCW22I37sRK9sN5B2g==}
 
-  '@orpc/transformer@0.12.0':
-    resolution: {integrity: sha512-CcNLSoykdt82iVats/VMof6on6qRCprUmquGquUiTB6qtmCUHkuKrElF7guBIKwBsa2Jru9nz2rn2tYy+jg7gg==}
+  '@orpc/transformer@0.13.0':
+    resolution: {integrity: sha512-8go505lOtHd1GmgGdFFQz2TVU+sXG0RVT0IZlbfcxnQqjDbhcaQm8LhKCrua6J8vNrzYcqd277TJiYTkUpDJeg==}
 
-  '@orpc/zod@0.12.0':
-    resolution: {integrity: sha512-yXXdLETkpVX/BokkOYs5EDDpddQP/BHsf0M4K0OzwZVP1byW7FQtQHGfMOtV2NGlh3ztoTvdGoFIHsN5ae94Dg==}
+  '@orpc/zod@0.13.0':
+    resolution: {integrity: sha512-KDidT1EmE4NzX/nuUs5lJviMkWQX7nzhb9dfIT4cirjMywBhQm0WPx3t8ZDQKRfQVR0TSHRDjusc0fg4CUxP0g==}
 
   '@peculiar/asn1-android@2.3.13':
     resolution: {integrity: sha512-0VTNazDGKrLS6a3BwTDZanqq6DR/I3SbvmDMuS8Be+OYpvM6x1SRDh9AGDsHVnaCOIztOspCPc6N1m+iUv1Xxw==}
@@ -3936,16 +3951,16 @@ packages:
       react: ^16.8 || ^17 || ^18
       react-dom: ^16.8 || ^17 || ^18
 
-  next@15.0.3:
-    resolution: {integrity: sha512-ontCbCRKJUIoivAdGB34yCaOcPgYXr9AAkV/IwqFfWWTXEPUgLYkSkqBhIk9KK7gGmgjc64B+RdoeIDM13Irnw==}
+  next@15.0.4:
+    resolution: {integrity: sha512-nuy8FH6M1FG0lktGotamQDCXhh5hZ19Vo0ht1AOIQWrYJLP598TIUagKtvJrfJ5AGwB/WmDqkKaKhMpVifvGPA==}
     engines: {node: ^18.18.0 || ^19.8.0 || >= 20.0.0}
     hasBin: true
     peerDependencies:
       '@opentelemetry/api': ^1.1.0
       '@playwright/test': ^1.41.2
       babel-plugin-react-compiler: '*'
-      react: ^18.2.0 || 19.0.0-rc-66855b96-20241106
-      react-dom: ^18.2.0 || 19.0.0-rc-66855b96-20241106
+      react: ^18.2.0 || 19.0.0-rc-66855b96-20241106 || ^19.0.0
+      react-dom: ^18.2.0 || 19.0.0-rc-66855b96-20241106 || ^19.0.0
       sass: ^1.3.0
     peerDependenciesMeta:
       '@opentelemetry/api':
@@ -5494,30 +5509,30 @@ snapshots:
       js-base64: 3.7.7
     optional: true
 
-  '@next/env@15.0.3': {}
+  '@next/env@15.0.4': {}
 
-  '@next/swc-darwin-arm64@15.0.3':
+  '@next/swc-darwin-arm64@15.0.4':
     optional: true
 
-  '@next/swc-darwin-x64@15.0.3':
+  '@next/swc-darwin-x64@15.0.4':
     optional: true
 
-  '@next/swc-linux-arm64-gnu@15.0.3':
+  '@next/swc-linux-arm64-gnu@15.0.4':
     optional: true
 
-  '@next/swc-linux-arm64-musl@15.0.3':
+  '@next/swc-linux-arm64-musl@15.0.4':
     optional: true
 
-  '@next/swc-linux-x64-gnu@15.0.3':
+  '@next/swc-linux-x64-gnu@15.0.4':
     optional: true
 
-  '@next/swc-linux-x64-musl@15.0.3':
+  '@next/swc-linux-x64-musl@15.0.4':
     optional: true
 
-  '@next/swc-win32-arm64-msvc@15.0.3':
+  '@next/swc-win32-arm64-msvc@15.0.4':
     optional: true
 
-  '@next/swc-win32-x64-msvc@15.0.3':
+  '@next/swc-win32-x64-msvc@15.0.4':
     optional: true
 
   '@noble/ciphers@0.6.0': {}
@@ -5664,66 +5679,66 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
-  '@orpc/client@0.12.0(@orpc/contract@0.12.0(zod@3.23.8))(@orpc/server@0.12.0(@orpc/zod@0.12.0)(zod@3.23.8))':
+  '@orpc/client@0.13.0(@orpc/contract@0.13.0(zod@3.23.8))(@orpc/server@0.13.0(@orpc/zod@0.13.0)(zod@3.23.8))':
     dependencies:
-      '@orpc/contract': 0.12.0(zod@3.23.8)
-      '@orpc/server': 0.12.0(@orpc/zod@0.12.0)(zod@3.23.8)
-      '@orpc/shared': 0.12.0
-      '@orpc/transformer': 0.12.0
+      '@orpc/contract': 0.13.0(zod@3.23.8)
+      '@orpc/server': 0.13.0(@orpc/zod@0.13.0)(zod@3.23.8)
+      '@orpc/shared': 0.13.0
+      '@orpc/transformer': 0.13.0
 
-  '@orpc/contract@0.12.0(zod@3.23.8)':
+  '@orpc/contract@0.13.0(zod@3.23.8)':
     dependencies:
-      '@orpc/shared': 0.12.0
+      '@orpc/shared': 0.13.0
       zod: 3.23.8
 
-  '@orpc/openapi@0.12.0(zod@3.23.8)':
+  '@orpc/openapi@0.13.0(zod@3.23.8)':
     dependencies:
-      '@orpc/contract': 0.12.0(zod@3.23.8)
-      '@orpc/server': 0.12.0(@orpc/zod@0.12.0)(zod@3.23.8)
-      '@orpc/shared': 0.12.0
-      '@orpc/transformer': 0.12.0
-      '@orpc/zod': 0.12.0
+      '@orpc/contract': 0.13.0(zod@3.23.8)
+      '@orpc/server': 0.13.0(@orpc/zod@0.13.0)(zod@3.23.8)
+      '@orpc/shared': 0.13.0
+      '@orpc/transformer': 0.13.0
+      '@orpc/zod': 0.13.0
       escape-string-regexp: 5.0.0
       json-schema-typed: 8.0.1
       openapi3-ts: 4.4.0
     transitivePeerDependencies:
       - zod
 
-  '@orpc/react@0.12.0(@orpc/client@0.12.0(@orpc/contract@0.12.0(zod@3.23.8))(@orpc/server@0.12.0(@orpc/zod@0.12.0)(zod@3.23.8)))(@orpc/contract@0.12.0(zod@3.23.8))(@orpc/server@0.12.0(@orpc/zod@0.12.0)(zod@3.23.8))(@tanstack/react-query@5.61.0(react@19.0.0))(react@19.0.0)':
+  '@orpc/react@0.13.0(@orpc/client@0.13.0(@orpc/contract@0.13.0(zod@3.23.8))(@orpc/server@0.13.0(@orpc/zod@0.13.0)(zod@3.23.8)))(@orpc/contract@0.13.0(zod@3.23.8))(@orpc/server@0.13.0(@orpc/zod@0.13.0)(zod@3.23.8))(@tanstack/react-query@5.61.0(react@19.0.0))(react@19.0.0)':
     dependencies:
-      '@orpc/client': 0.12.0(@orpc/contract@0.12.0(zod@3.23.8))(@orpc/server@0.12.0(@orpc/zod@0.12.0)(zod@3.23.8))
-      '@orpc/contract': 0.12.0(zod@3.23.8)
-      '@orpc/server': 0.12.0(@orpc/zod@0.12.0)(zod@3.23.8)
-      '@orpc/shared': 0.12.0
+      '@orpc/client': 0.13.0(@orpc/contract@0.13.0(zod@3.23.8))(@orpc/server@0.13.0(@orpc/zod@0.13.0)(zod@3.23.8))
+      '@orpc/contract': 0.13.0(zod@3.23.8)
+      '@orpc/server': 0.13.0(@orpc/zod@0.13.0)(zod@3.23.8)
+      '@orpc/shared': 0.13.0
       '@tanstack/react-query': 5.61.0(react@19.0.0)
       react: 19.0.0
 
-  '@orpc/server@0.12.0(@orpc/zod@0.12.0)(zod@3.23.8)':
+  '@orpc/server@0.13.0(@orpc/zod@0.13.0)(zod@3.23.8)':
     dependencies:
-      '@orpc/contract': 0.12.0(zod@3.23.8)
-      '@orpc/shared': 0.12.0
-      '@orpc/transformer': 0.12.0
-      '@orpc/zod': 0.12.0
+      '@orpc/contract': 0.13.0(zod@3.23.8)
+      '@orpc/shared': 0.13.0
+      '@orpc/transformer': 0.13.0
+      '@orpc/zod': 0.13.0
       zod: 3.23.8
 
-  '@orpc/shared@0.12.0':
+  '@orpc/shared@0.13.0':
     dependencies:
       is-what: 5.0.2
       radash: 12.1.0
       type-fest: 4.27.0
       zod: 3.23.8
 
-  '@orpc/transformer@0.12.0':
+  '@orpc/transformer@0.13.0':
     dependencies:
-      '@orpc/shared': 0.12.0
-      '@orpc/zod': 0.12.0
+      '@orpc/shared': 0.13.0
+      '@orpc/zod': 0.13.0
       '@types/content-disposition': 0.5.8
       content-disposition: 0.5.4
       fast-content-type-parse: 2.0.0
       wildcard-match: 5.1.3
       zod: 3.23.8
 
-  '@orpc/zod@0.12.0':
+  '@orpc/zod@0.13.0':
     dependencies:
       json-schema-typed: 8.0.1
       wildcard-match: 5.1.3
@@ -8045,9 +8060,9 @@ snapshots:
     dependencies:
       react: 19.0.0
 
-  next@15.0.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  next@15.0.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
-      '@next/env': 15.0.3
+      '@next/env': 15.0.4
       '@swc/counter': 0.1.3
       '@swc/helpers': 0.5.13
       busboy: 1.6.0
@@ -8057,14 +8072,14 @@ snapshots:
       react-dom: 19.0.0(react@19.0.0)
       styled-jsx: 5.1.6(react@19.0.0)
     optionalDependencies:
-      '@next/swc-darwin-arm64': 15.0.3
-      '@next/swc-darwin-x64': 15.0.3
-      '@next/swc-linux-arm64-gnu': 15.0.3
-      '@next/swc-linux-arm64-musl': 15.0.3
-      '@next/swc-linux-x64-gnu': 15.0.3
-      '@next/swc-linux-x64-musl': 15.0.3
-      '@next/swc-win32-arm64-msvc': 15.0.3
-      '@next/swc-win32-x64-msvc': 15.0.3
+      '@next/swc-darwin-arm64': 15.0.4
+      '@next/swc-darwin-x64': 15.0.4
+      '@next/swc-linux-arm64-gnu': 15.0.4
+      '@next/swc-linux-arm64-musl': 15.0.4
+      '@next/swc-linux-x64-gnu': 15.0.4
+      '@next/swc-linux-x64-musl': 15.0.4
+      '@next/swc-win32-arm64-msvc': 15.0.4
+      '@next/swc-win32-x64-msvc': 15.0.4
       sharp: 0.33.5
     transitivePeerDependencies:
       - '@babel/core'
@@ -8080,12 +8095,12 @@ snapshots:
 
   normalize-range@0.1.2: {}
 
-  nuqs@2.2.1(next@15.0.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0):
+  nuqs@2.2.1(next@15.0.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0):
     dependencies:
       mitt: 3.0.1
       react: 19.0.0
     optionalDependencies:
-      next: 15.0.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      next: 15.0.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
 
   object-assign@4.1.1: {}
 

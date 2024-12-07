@@ -1,4 +1,4 @@
-import { createComponent } from '@valhalla/core/components'
+import { createComponent } from '@valhalla/core/resource'
 
 export const initComponents = () => {
   createComponent({
@@ -6,3 +6,5 @@ export const initComponents = () => {
     component: '@valhalla/example/components/test',
   })
 }
+
+export const initIcons = () => {}
