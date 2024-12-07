@@ -11,7 +11,8 @@ import {
 } from '@valhalla/design-system/components/ui/scroll-area'
 import { cn } from '@valhalla/design-system/utils/cn'
 
-import { Icons } from '@/components/icons'
+import { Icons } from '@/__cache__/icons'
+import { orpc } from '@/lib/orpc/react'
 import { useFileTabsStore } from '@/providers/file-tabs-provider'
 
 import { useRemoveTab } from '../hooks/use-remove-tab'
@@ -41,13 +42,16 @@ export const Tabs = () => {
       <header className="flex items-center">
         {tabs.map((tab, index) => (
           <Tab
-            key={tab.filePath}
+            key={`${tab.resourceName}-${tab.resourceFolder}-${tab.filePath}-${tab.fileName}`}
+            resourceName={tab.resourceName}
+            resourceFolder={tab.resourceFolder}
+            filePath={tab.filePath}
+            fileName={tab.fileName}
             index={index}
             isActive={currentTab === index}
             isModified={tab.isModified}
             setTabs={() => setCurrentTab(index)}
           >
-            <Icons.YAML className="size-4" />
             {tab.fileName}
           </Tab>
         ))}
@@ -63,19 +67,40 @@ const Tab = ({
   isModified,
   setTabs,
   index,
+  resourceName,
+  resourceFolder,
+  filePath,
+  fileName,
 }: {
   children: React.ReactNode
   isActive: boolean
   isModified: boolean
   setTabs: () => void
   index: number
+  resourceName: string
+  resourceFolder: string
+  filePath: string
+  fileName: string
 }) => {
   const [isCloseHovered, setIsCloseHovered] = useState(false)
   const removeTab = useRemoveTab()
+  const { data: matchLayout } = orpc.files.query.useQuery({
+    resourceName,
+    resourceFolder,
+    filePath,
+    fileName,
+  })
 
   useHotkeys(`shift+${index + 1}`, () => {
     setTabs()
   })
+
+  if (!matchLayout) {
+    // TODO: 文件可能已被删除或重命名
+    return null
+  }
+
+  const Icon = Icons[matchLayout.icon ?? 'File']
 
   return (
     <TabContextMenu index={index}>
@@ -83,11 +108,13 @@ const Tab = ({
         onClick={setTabs}
         className={cn(
           'group relative flex h-9 min-w-[112px] cursor-pointer select-none items-center gap-1 bg-transparent px-2 text-start text-sm transition-colors hover:bg-primary/10',
+          '[&>svg]:size-4',
           isActive
             ? 'fill-primary text-primary'
             : 'fill-muted-foreground text-muted-foreground'
         )}
       >
+        {Icon && <Icon.default />}
         {children}
         {isActive && (
           <span className="absolute inset-x-0 bottom-0 z-[1] h-[2px] w-full bg-primary" />

@@ -30,7 +30,7 @@ export const matchLayoutMiddleware = layoutsMiddleware.concat(
     const layouts = [...ctx.layouts, ...resourceLayouts].sort(
       (a, b) => b.priority - a.priority
     )
-    const matchLayout = layouts.find((layout) => layout.match(input))
+    const matchLayout = layouts.find((layout) => layout.match(input)) ?? null
 
     return meta.next({
       context: {

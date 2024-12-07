@@ -39,7 +39,7 @@ export const resourcesRouter = authed
       )
       .use(matchLayoutMiddleware)
       .func((_input, ctx) => {
-        return ctx.matchLayout ?? null
+        return ctx.matchLayout
       }),
 
     folders: authed

@@ -2,13 +2,35 @@ import path from 'path'
 import fs from 'fs-extra'
 import { z } from 'zod'
 
-import { layoutsMiddleware } from '../middlewares/registry'
+import {
+  layoutsMiddleware,
+  matchLayoutMiddleware,
+} from '../middlewares/registry'
 import { authed } from '../orpc'
 
 export const filesRouter = authed
   .tags('Files')
   .prefix('/files')
   .router({
+    query: authed
+      .route({
+        method: 'GET',
+        path: '/query',
+        summary: '查询文件',
+      })
+      .input(
+        z.object({
+          resourceName: z.string(),
+          resourceFolder: z.string(),
+          filePath: z.string(),
+          fileName: z.string(),
+        })
+      )
+      .use(matchLayoutMiddleware)
+      .func(async (_input, ctx) => {
+        return ctx.matchLayout
+      }),
+
     list: authed
       .use(layoutsMiddleware)
       .route({
