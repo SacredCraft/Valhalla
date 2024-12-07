@@ -124,7 +124,6 @@ const ResourceLinkedFolder = ({
             fileName={file.name}
             resourceName={resourceName}
             icon={file.icon}
-            openable={file.openable}
           />
         ))}
     </CollapsibleFolder>
@@ -171,7 +170,6 @@ const ResourceFolder = ({
             filePath={path.join(folderPath, file.name)}
             fileName={file.name}
             icon={file.icon}
-            openable={file.openable}
           />
         ))}
     </CollapsibleFolder>
@@ -184,14 +182,12 @@ const ResourceFile = ({
   resourceFolder,
   resourceName,
   icon,
-  openable,
 }: {
   resourceFolder: string
   filePath: string
   fileName: string
   resourceName: string
   icon: string
-  openable: boolean
 }) => {
   const handleDoubleClick = useDoubleClick({ delay: 300 })
   const addTab = useAddTabs()
@@ -213,7 +209,6 @@ const ResourceFile = ({
       <button
         onClick={() =>
           handleDoubleClick(() => {
-            if (!openable) return
             addTab({
               resourceName,
               resourceFolder,
@@ -225,8 +220,7 @@ const ResourceFile = ({
         }
         className={cn(
           'flex w-full items-center gap-1.5 px-1.5 py-1 text-sm transition-colors hover:bg-muted data-[context-menu-state=open]:bg-muted',
-          isActive && 'bg-primary/10 text-primary',
-          !openable && 'cursor-default'
+          isActive && 'bg-primary/10 text-primary'
         )}
       >
         <span

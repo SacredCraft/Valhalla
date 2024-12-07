@@ -70,7 +70,6 @@ export const filesRouter = authed
               size: stat.size,
               modifiedTime: stat.mtime.toISOString(),
               icon: layout?.icon ?? 'File',
-              openable: layout?.component !== undefined,
             }
           })
 
