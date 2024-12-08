@@ -4,10 +4,9 @@ import {
   ResizablePanelGroup,
 } from '@valhalla/design-system/components/ui/resizable'
 
-import { ContentLayout } from './components/content-layout'
 import { Resource } from './components/resource'
-import { Tabs } from './components/tabs'
 import { ValResourcePanel } from './components/val-resource-panel'
+import { FilesPageContent } from './page.client'
 
 export default async function FilesPage() {
   return (
@@ -19,8 +18,7 @@ export default async function FilesPage() {
         <Resources />
       </ValResourcePanel>
       <ResizablePanel className="flex flex-col" defaultSize={80}>
-        <Tabs />
-        <ContentLayout />
+        <FilesPageContent />
       </ResizablePanel>
     </ResizablePanelGroup>
   )

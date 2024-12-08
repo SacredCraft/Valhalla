@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { X } from 'lucide-react'
-import { parseAsInteger, useQueryState } from 'nuqs'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import {
@@ -18,11 +17,13 @@ import { useFileTabsStore } from '@/providers/file-tabs-provider'
 import { useRemoveTab } from '../hooks/use-remove-tab'
 import { TabContextMenu } from './context-menus'
 
-export const Tabs = () => {
-  const [currentTab, setCurrentTab] = useQueryState(
-    'tab',
-    parseAsInteger.withDefault(0)
-  )
+export const Tabs = ({
+  currentTab,
+  setCurrentTab,
+}: {
+  currentTab: number
+  setCurrentTab: (index: number) => void
+}) => {
   const { tabs } = useFileTabsStore((state) => state)
 
   useHotkeys('arrowleft', () => {
