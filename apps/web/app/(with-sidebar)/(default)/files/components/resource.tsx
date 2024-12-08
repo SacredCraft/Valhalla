@@ -75,9 +75,9 @@ export const ResourceDescription = ({
 
 const ResourceLinkedFolders = ({ name }: { name: string }) => {
   const { data } = orpc.resources.folders.useQuery({ name })
-  return (
+  return data !== undefined ? (
     <div className="flex flex-col gap-1">
-      {data?.map((folder) => (
+      {data.map((folder) => (
         <ResourceLinkedFolder
           key={folder.name}
           resourceFolder={folder.name}
@@ -85,6 +85,8 @@ const ResourceLinkedFolders = ({ name }: { name: string }) => {
         />
       ))}
     </div>
+  ) : (
+    <p className="py-2 text-center text-sm text-muted-foreground">加载中...</p>
   )
 }
 
