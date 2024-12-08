@@ -8,6 +8,8 @@
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
+    "@orpc/client": "^0.13.0",
+    "@orpc/react": "^0.13.0",
     "@orpc/server": "^0.13.0",
     "@orpc/zod": "^0.13.0",
     "@valhalla/auth": "workspace:*",
@@ -19,7 +21,9 @@
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@tanstack/react-query": "catalog:",
     "@total-typescript/ts-reset": "catalog:",
+    "@types/react": "catalog:",
     "@valhalla/core": "workspace:*",
     "@valhalla/eslint-config": "workspace:*",
     "@valhalla/typescript-config": "workspace:*",

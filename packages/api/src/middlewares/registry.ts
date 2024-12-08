@@ -26,11 +26,13 @@ export const layoutsMiddleware = registryMiddleware.concat(
 
 export const matchLayoutMiddleware = layoutsMiddleware.concat(
   (input: MatchLayoutInput, ctx, meta) => {
+    const resourceConfig = ctx.registry.resourcesConfigs[input.resourceName]
     const resourceLayouts = ctx.resourceLayouts[input.resourceName]
     const layouts = [...ctx.layouts, ...resourceLayouts].sort(
       (a, b) => b.priority - a.priority
     )
-    const matchLayout = layouts.find((layout) => layout.match(input)) ?? null
+    const matchLayout =
+      layouts.find((layout) => layout.match(input, resourceConfig)) ?? null
 
     return meta.next({
       context: {

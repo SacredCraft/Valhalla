@@ -43,13 +43,16 @@ export const FilesPageContent = () => {
 const FilesPageContentInner = ({
   resourceParams,
 }: {
-  resourceParams: Parameters<typeof orpc.resources.layout.useQuery>[0]
+  resourceParams: Parameters<typeof orpc.files.layout.useQuery>[0]
 }) => {
-  const { data: layout } = orpc.resources.layout.useQuery(resourceParams)
-  const { data: isFileExist } =
-    orpc.resources.isFileExist.useQuery(resourceParams)
+  const { data: layout } = orpc.files.layout.useQuery(resourceParams)
+  const { data: isFileExist } = orpc.files.exist.useQuery(resourceParams)
 
   return layout !== undefined && isFileExist !== undefined ? (
-    <ContentLayout data={layout} isFileExist={isFileExist} />
+    <ContentLayout
+      data={layout}
+      isFileExist={isFileExist}
+      resourceParams={resourceParams}
+    />
   ) : null
 }

@@ -9,6 +9,7 @@ const config = {
     './lib/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './providers/**/*.{ts,tsx}',
+    './node_modules/@valhalla/example/src/**/*.{ts,tsx}',
   ],
   presets: [preset],
   theme: {

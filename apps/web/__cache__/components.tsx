@@ -4,8 +4,8 @@
 import * as React from "react"
 
 export const Components: Record<string, any> = {
-  Example: {
-    default: React.lazy(() => import('@valhalla/example/components/test')),
-    name: 'Example',
+  ImagePreview: {
+    default: React.lazy(() => import('@valhalla/example/components/image-preview')),
+    name: 'ImagePreview',
   },
 }

@@ -71,24 +71,21 @@ const createResource = ({
       ...options,
     }
 
-    if (newResource.config) {
-      newResource.config.name = options?.config?.version ?? name
-      newResource.config.path = `resources/${newResource.name}/configs.yaml`
-    }
-
     // 检查同名资源是否已存在
     if (registry.resources[newResource.name]) {
       throw new Error(`资源 ${newResource.name} 已存在`)
     }
 
-    // registry.resourcesFolders[newResource.name] = folders
+    const config = configSchema.parse({
+      name: newResource.name,
+      version: newResource.config?.version,
+      path: `resources/${newResource.name}/configs.yaml`,
+      content: newResource.config?.content,
+    })
 
     // 加载配置
     if (newResource.config) {
-      registry.resourcesConfigs[newResource.name] = loadConfig(
-        newResource.config,
-        true
-      )
+      registry.resourcesConfigs[newResource.name] = loadConfig(config, true)
 
       const folderConfig = configSchema.parse({
         name: `${newResource.name}-folders`,

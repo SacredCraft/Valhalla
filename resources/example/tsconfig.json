@@ -6,10 +6,16 @@
   },
   "references": [
     {
+      "path": "../../packages/api"
+    },
+    {
       "path": "../../packages/core"
     },
     {
       "path": "../../packages/design-system"
+    },
+    {
+      "path": "../../packages/tailwind-config"
     }
   ]
 }

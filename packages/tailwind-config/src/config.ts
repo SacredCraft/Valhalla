@@ -14,6 +14,7 @@ export const config: Config = {
     './lib/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './providers/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
   ],
   theme: {
     container: {

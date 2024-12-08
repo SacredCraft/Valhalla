@@ -11,15 +11,20 @@
   "scripts": {
     "lint": "eslint . --max-warnings 0"
   },
-  "dependencies": {
-    "@valhalla/core": "workspace:*",
-    "react": "catalog:",
-    "zod": "catalog:"
-  },
   "devDependencies": {
     "@types/react": "catalog:",
+    "@valhalla/api": "workspace:*",
+    "@valhalla/core": "workspace:*",
+    "@valhalla/design-system": "workspace:*",
     "@valhalla/eslint-config": "workspace:*",
+    "@valhalla/tailwind-config": "workspace:*",
     "@valhalla/typescript-config": "workspace:*",
-    "lucide-react": "catalog:"
+    "lucide-react": "catalog:",
+    "next": "catalog:",
+    "postcss": "catalog:",
+    "postcss-load-config": "6.0.1",
+    "react": "catalog:",
+    "tailwindcss": "catalog:",
+    "zod": "catalog:"
   }
 }

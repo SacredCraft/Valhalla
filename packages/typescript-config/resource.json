@@ -16,7 +16,9 @@
 
       "@valhalla/utils/*": ["../../packages/utils/src/*"],
 
-      "@valhalla/design-system/*": ["../../packages/design-system/src/*"]
+      "@valhalla/design-system/*": ["../../packages/design-system/src/*"],
+      
+      "@valhalla/tailwind-config/*": ["../../packages/tailwind-config/src/*"]
     }
   }
 }

@@ -12,7 +12,7 @@ const layoutSchema = z.object({
   component: z.string().optional(),
   icon: z.string().optional(),
   priority: z.number().default(0),
-  match: z.function().args(matchContextSchema).returns(z.boolean()),
+  match: z.function().args(matchContextSchema, z.any()).returns(z.boolean()),
 })
 
 type Layout = z.infer<typeof layoutSchema>

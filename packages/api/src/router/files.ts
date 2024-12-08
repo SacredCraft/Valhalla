@@ -2,6 +2,9 @@ import path from 'path'
 import fs from 'fs-extra'
 import { z } from 'zod'
 
+import { checkFileExistMiddleware } from '@/middlewares/file'
+import { matchLayoutInput } from '@/schemas'
+
 import {
   layoutsMiddleware,
   matchLayoutMiddleware,
@@ -12,7 +15,7 @@ export const filesRouter = authed
   .tags('Files')
   .prefix('/files')
   .router({
-    query: authed
+    layout: authed
       .route({
         method: 'GET',
         path: '/query',
@@ -29,6 +32,18 @@ export const filesRouter = authed
       .use(matchLayoutMiddleware)
       .func(async (_input, ctx) => {
         return ctx.matchLayout
+      }),
+
+    exist: authed
+      .route({
+        method: 'GET',
+        path: '/is-file-exist',
+        summary: '判断文件是否存在',
+      })
+      .input(matchLayoutInput)
+      .use(checkFileExistMiddleware(false))
+      .func((_input, ctx) => {
+        return ctx.fileExist
       }),
 
     list: authed
@@ -65,6 +80,7 @@ export const filesRouter = authed
           return []
         }
 
+        const resourceConfig = ctx.registry.resourcesConfigs[input.resourceName]
         const resourceLayouts = ctx.resourceLayouts[input.resourceName]
         const layouts = [...ctx.layouts, ...resourceLayouts].sort(
           (a, b) => b.priority - a.priority
@@ -76,13 +92,17 @@ export const filesRouter = authed
           .filter((file) => !file.startsWith('.DS_Store'))
           .map((file) => {
             const layout = layouts.find((layout) =>
-              layout.match({
-                resourceName: input.resourceName,
-                resourceFolder: input.resourceFolder,
-                filePath: path.join(input.path, file),
-                fileName: file,
-              })
+              layout.match(
+                {
+                  resourceName: input.resourceName,
+                  resourceFolder: input.resourceFolder,
+                  filePath: path.join(input.path, file),
+                  fileName: file,
+                },
+                resourceConfig
+              )
             )
+
             const filePath = path.join(resolvedPath, file)
             const stat = fs.statSync(filePath)
 
@@ -96,5 +116,43 @@ export const filesRouter = authed
           })
 
         return files
+      }),
+
+    read: authed
+      .route({
+        method: 'GET',
+        path: '/read',
+        summary: '读取文件',
+      })
+      .input(
+        matchLayoutInput.extend({
+          readFileOptions: z.any().optional(),
+        })
+      )
+      .output(z.unknown())
+      .use(checkFileExistMiddleware(true))
+      .func(async (input, ctx) => {
+        return fs.readFileSync(ctx.filePath!, input.readFileOptions)
+      }),
+
+    save: authed
+      .route({
+        method: 'POST',
+        path: '/save',
+        summary: '保存文件',
+      })
+      .input(
+        matchLayoutInput.extend({
+          data: z.any(),
+          writeFileOptions: z.any().optional(),
+        })
+      )
+      .use(checkFileExistMiddleware(true))
+      .func(async (input, ctx) => {
+        return fs.writeFileSync(
+          ctx.filePath!,
+          input.data,
+          input.writeFileOptions
+        )
       }),
   })

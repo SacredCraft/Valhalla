@@ -14,10 +14,11 @@
     "paths": {
       "@valhalla/*": ["../*"],
       "@valhalla/design-system/*": ["./src/*"],
-      "@valhalla/tailwind-config/*": ["../tailwind-config/src/*"]
+      "@valhalla/tailwind-config/*": ["../tailwind-config/src/*"],
+      "@valhalla/api/*": ["../api/src/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"],
-  "references": [{ "path": "../tailwind-config" }]
+  "references": [{ "path": "../tailwind-config" }, { "path": "../api" }]
 }

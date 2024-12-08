@@ -57,8 +57,10 @@
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@tanstack/react-query": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
+    "@valhalla/api": "workspace:*",
     "@valhalla/eslint-config": "workspace:*",
     "@valhalla/tailwind-config": "workspace:*",
     "@valhalla/typescript-config": "workspace:*",

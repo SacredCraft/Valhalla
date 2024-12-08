@@ -85,7 +85,7 @@ const Tab = ({
 }) => {
   const [isCloseHovered, setIsCloseHovered] = useState(false)
   const removeTab = useRemoveTab()
-  const { data: matchLayout } = orpc.files.query.useQuery({
+  const { data: matchLayout } = orpc.files.layout.useQuery({
     resourceName,
     resourceFolder,
     filePath,
