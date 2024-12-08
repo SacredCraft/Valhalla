@@ -4,9 +4,11 @@ import next from 'next'
 import chalk from 'chalk'
 
 import { systemConfig } from '@valhalla/core/config'
+import { initLifeCycle } from '@valhalla/core/life-cycle'
 import { getRegistry } from '@valhalla/core/resource'
 
-import { init } from './resources'
+import './resources'
+import '@valhalla/core/init'
 
 const port = parseInt(process.env.PORT || '3000', 10)
 const dev = process.env.NODE_ENV !== 'production'
@@ -34,7 +36,7 @@ injectEnv({
   NODE_ENV: 'development',
 })
 
-init()
+initLifeCycle()
 
 app.prepare().then(() => {
   const server = createServer((req, res) => {

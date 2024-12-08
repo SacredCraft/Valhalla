@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { createResource } from '@valhalla/core/resource'
 
-import { initComponents, initIcons } from './components'
+import './components'
 
 const example = createResource({
   name: 'example',
@@ -13,8 +13,5 @@ const example = createResource({
   }),
   layouts: [],
 })
-
-initComponents()
-initIcons()
 
 export { example }

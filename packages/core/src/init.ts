@@ -1,9 +1,12 @@
+import { generateComponents, generateIcons } from './components'
+import { registerLifeCycle } from './life-cycle'
 import { createGlobalLayout, createIcon } from './resource'
 
-export const initDefaultIconsAndComponents = () => {
+registerLifeCycle('beforeInit', () => {
   createDefaultIcons()
   createDefaultComponents()
-}
+  createGlobalLayouts()
+})
 
 const createDefaultIcons = () => {
   createIcon({
@@ -36,7 +39,7 @@ const createDefaultIcons = () => {
 
 const createDefaultComponents = () => {}
 
-export const initGlobalLayouts = () => {
+const createGlobalLayouts = () => {
   createGlobalLayout({
     name: 'GlobalYAML',
     match: (ctx) => ctx.fileName.endsWith('.yaml'),
@@ -56,3 +59,8 @@ export const initGlobalLayouts = () => {
     icon: 'Kotlin',
   })
 }
+
+registerLifeCycle('afterInit', () => {
+  generateComponents()
+  generateIcons()
+})
