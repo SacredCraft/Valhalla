@@ -2,7 +2,6 @@
 
 import path from 'path'
 import { Info } from 'lucide-react'
-import { parseAsInteger, useQueryState } from 'nuqs'
 
 import {
   Tooltip,
@@ -17,6 +16,7 @@ import { orpc } from '@/lib/orpc/react'
 import { useFileTabsStore } from '@/providers/file-tabs-provider'
 
 import { useAddTabs } from '../hooks/use-add-tabs'
+import { useTabs } from '../hooks/use-tabs'
 import { CollapsibleFolder, useFolderContext } from './collapsible-folder'
 import { FileContextMenu } from './context-menus'
 
@@ -192,7 +192,7 @@ const ResourceFile = ({
   const handleDoubleClick = useDoubleClick({ delay: 300 })
   const addTab = useAddTabs()
   const { tabs } = useFileTabsStore((state) => state)
-  const [currentTabIndex] = useQueryState('tab', parseAsInteger.withDefault(0))
+  const { currentTabIndex } = useTabs()
   const index = tabs.findIndex(
     (tab) =>
       tab.filePath === filePath &&

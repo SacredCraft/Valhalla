@@ -118,7 +118,7 @@ const Tab = ({
         {Icon && <Icon.default />}
         {children}
         {isActive && (
-          <span className="absolute inset-x-0 bottom-0 z-[1] h-[2px] w-full bg-primary" />
+          <span className="absolute inset-x-0 bottom-[2px] z-[1] h-[2px] w-full bg-primary" />
         )}
         {isModified && (
           <span

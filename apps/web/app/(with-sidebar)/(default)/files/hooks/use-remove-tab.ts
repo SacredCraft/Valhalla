@@ -1,15 +1,12 @@
 'use client'
 
-import { parseAsInteger, useQueryState } from 'nuqs'
-
 import { useFileTabsStore } from '@/providers/file-tabs-provider'
+
+import { useTabs } from './use-tabs'
 
 export const useRemoveTab = () => {
   const { removeTab } = useFileTabsStore((state) => state)
-  const [currentTabIndex, setCurrentTabIndex] = useQueryState(
-    'tab',
-    parseAsInteger.withDefault(0)
-  )
+  const { currentTabIndex, setCurrentTabIndex } = useTabs()
 
   const handleRemoveTab = (tabIndex: number) => {
     if (tabIndex === currentTabIndex) {

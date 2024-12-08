@@ -1,31 +1,55 @@
 'use client'
 
-import { parseAsInteger, useQueryState } from 'nuqs'
-
 import { orpc } from '@/lib/orpc/react'
 import { useFileTabsStore } from '@/providers/file-tabs-provider'
+import { FileTabsStore } from '@/store/file-tabs'
 
 import { ContentLayout } from './components/content-layout'
 import { Tabs } from './components/tabs'
+import { useTabs } from './hooks/use-tabs'
+
+const getResourceParams = (
+  currentTab: FileTabsStore['tabs'][number] | undefined
+) => {
+  if (!currentTab) {
+    return undefined
+  }
+
+  return {
+    resourceName: currentTab.resourceName,
+    resourceFolder: currentTab.resourceFolder,
+    filePath: currentTab.filePath,
+    fileName: currentTab.fileName,
+  }
+}
 
 export const FilesPageContent = () => {
-  const [currentTabIndex, setCurrentTabIndex] = useQueryState(
-    'tab',
-    parseAsInteger.withDefault(0)
-  )
+  const { currentTabIndex, setCurrentTabIndex } = useTabs()
   const { tabs } = useFileTabsStore((state) => state)
   const currentTab = tabs[currentTabIndex]
-  const { data } = orpc.resources.layout.useQuery({
-    resourceName: currentTab?.resourceName,
-    resourceFolder: currentTab?.resourceFolder,
-    filePath: currentTab?.filePath,
-    fileName: currentTab?.fileName,
-  })
+
+  const resourceParams = getResourceParams(currentTab)
 
   return (
     <>
       <Tabs currentTab={currentTabIndex} setCurrentTab={setCurrentTabIndex} />
-      <ContentLayout data={data} />
+      {resourceParams && (
+        <FilesPageContentInner resourceParams={resourceParams} />
+      )}
     </>
   )
+}
+
+const FilesPageContentInner = ({
+  resourceParams,
+}: {
+  resourceParams: Parameters<typeof orpc.resources.layout.useQuery>[0]
+}) => {
+  const { data: layout } = orpc.resources.layout.useQuery(resourceParams)
+  const { data: isFileExist } =
+    orpc.resources.isFileExist.useQuery(resourceParams)
+
+  return layout !== undefined && isFileExist !== undefined ? (
+    <ContentLayout data={layout} isFileExist={isFileExist} />
+  ) : null
 }

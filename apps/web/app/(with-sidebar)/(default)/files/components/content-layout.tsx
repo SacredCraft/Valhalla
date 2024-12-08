@@ -5,18 +5,24 @@ import { Suspense } from 'react'
 import { Layout } from '@valhalla/core/schema/layout'
 
 import { Components } from '@/__cache__/components'
+import { NotFoundFileState, NotFoundLayoutState } from '@/components/states'
 
 export const ContentLayout = ({
   data,
+  isFileExist,
 }: {
   data: Layout | null | undefined
+  isFileExist: boolean
 }) => {
-  if (!data) {
-    // TODO: 文件可能已被删除或重命名
-    return null
+  if (!isFileExist) {
+    return <NotFoundFileState />
   }
 
-  const Comp = Components[data.component ?? '']
+  if (!data || !data.component) {
+    return <NotFoundLayoutState />
+  }
+
+  const Comp = Components[data.component]
 
   return (
     <Suspense fallback={<div>加载中...</div>}>

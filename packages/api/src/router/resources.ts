@@ -1,4 +1,8 @@
+import path from 'path'
+import fs from 'fs-extra'
 import { z } from 'zod'
+
+import { matchLayoutInput } from '@/schemas'
 
 import {
   matchLayoutMiddleware,
@@ -29,17 +33,32 @@ export const resourcesRouter = authed
         path: '/layout',
         summary: '获取资源布局',
       })
-      .input(
-        z.object({
-          resourceName: z.string(),
-          resourceFolder: z.string(),
-          filePath: z.string(),
-          fileName: z.string(),
-        })
-      )
+      .input(matchLayoutInput)
       .use(matchLayoutMiddleware)
-      .func((_input, ctx) => {
+      .func((input, ctx) => {
         return ctx.matchLayout
+      }),
+
+    isFileExist: authed
+      .use(registryMiddleware)
+      .route({
+        method: 'GET',
+        path: '/is-file-exist',
+        summary: '判断文件是否存在',
+      })
+      .input(matchLayoutInput)
+      .func((input, ctx) => {
+        const folders = ctx.registry.resourcesFolders[input.resourceName]
+        if (!folders) {
+          return false
+        }
+        const folder = folders.find(
+          (folder) => folder.name === input.resourceFolder
+        )
+        if (!folder) {
+          return false
+        }
+        return fs.existsSync(path.join(folder.path, input.filePath))
       }),
 
     folders: authed
