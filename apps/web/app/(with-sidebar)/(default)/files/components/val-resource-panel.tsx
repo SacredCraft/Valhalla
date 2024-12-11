@@ -32,7 +32,7 @@ export const ValResourcePanel = ({
 
   if (collapsed) {
     return (
-      <div className="absolute bottom-2 left-2">
+      <div className="absolute bottom-2 left-2 z-[9999]">
         <CollapseButton collapsed={collapsed} setCollapsed={setCollapsed} />
       </div>
     )

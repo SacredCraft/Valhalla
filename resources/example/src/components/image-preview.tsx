@@ -88,8 +88,8 @@ const ToolBar = ({ data }: { data: Buffer }) => {
   }
 
   return (
-    <div className="absolute bottom-8 w-full flex justify-center items-center">
-      <div className="mx-auto flex items-center gap-2 bg-accent p-2 rounded-lg">
+    <div className="absolute bottom-8 w-full flex justify-center items-center pointer-events-none">
+      <div className="mx-auto flex items-center gap-2 bg-accent p-2 rounded-lg pointer-events-auto">
         <Button variant="outline" size="icon" onClick={handleDownload}>
           <DownloadIcon />
         </Button>
