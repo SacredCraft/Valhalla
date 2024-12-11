@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Loader2, RefreshCcw } from 'lucide-react'
 
 import { Button } from '@valhalla/design-system/components/ui/button'
+import { cn } from '@valhalla/design-system/utils/cn'
 
 const CrossIcon = () => (
   <svg
@@ -36,9 +37,14 @@ const EmptyState = () => {
   )
 }
 
-const LoadingState = () => {
+const LoadingState = ({ className }: { className?: string }) => {
   return (
-    <div className="flex h-[calc(100vh-10rem)] flex-col items-center justify-center gap-4">
+    <div
+      className={cn(
+        'flex h-[calc(100vh-10rem)] flex-col items-center justify-center gap-4',
+        className
+      )}
+    >
       <div className="flex size-20 items-center justify-center rounded-full bg-secondary">
         <Loader2 className="size-10 animate-spin text-muted-foreground" />
       </div>

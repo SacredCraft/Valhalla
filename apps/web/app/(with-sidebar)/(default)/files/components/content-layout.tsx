@@ -6,7 +6,11 @@ import { Layout } from '@valhalla/core/schema/layout'
 import { ResourceCoreContext } from '@valhalla/design-system/resources/providers/resource-core-provider'
 
 import { Components } from '@/__cache__/components'
-import { NotFoundFileState, NotFoundLayoutState } from '@/components/states'
+import {
+  LoadingState,
+  NotFoundFileState,
+  NotFoundLayoutState,
+} from '@/components/states'
 import { orpc } from '@/lib/orpc/react'
 
 export const ContentLayout = ({
@@ -29,7 +33,7 @@ export const ContentLayout = ({
   const Comp = Components[data.component]
 
   return (
-    <Suspense fallback={<div>加载中...</div>}>
+    <Suspense fallback={<LoadingState className="h-full" />}>
       <ResourceCoreContext
         resourceName={resourceParams.resourceName}
         resourceFolder={resourceParams.resourceFolder}
