@@ -13,7 +13,7 @@ catalog:
   hono: ^4.6.10
   better-auth: 1.0.10
   dotenv-cli: ^7.4.2
-  next: 15.0.4
+  next: 15.1.0
   autoprefixer: ^10.4.20
   react: 19.0.0
   react-dom: 19.0.0
