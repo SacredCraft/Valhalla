@@ -20,6 +20,9 @@ import { useTabs } from '../hooks/use-tabs'
 import { CollapsibleFolder, useFolderContext } from './collapsible-folder'
 import { FileContextMenu } from './context-menus'
 
+// 10 seconds
+const REFETCH_INTERVAL = 10000
+
 export const Resource = ({
   name,
   description,
@@ -74,7 +77,12 @@ export const ResourceDescription = ({
 }
 
 const ResourceLinkedFolders = ({ name }: { name: string }) => {
-  const { data } = orpc.resources.folders.useQuery({ name })
+  const { data } = orpc.resources.folders.useQuery(
+    { name },
+    {
+      refetchInterval: REFETCH_INTERVAL,
+    }
+  )
   return data !== undefined ? (
     <div className="flex flex-col gap-1">
       {data.map((folder) => (
@@ -97,11 +105,16 @@ const ResourceLinkedFolder = ({
   resourceFolder: string
   resourceName: string
 }) => {
-  const { data } = orpc.files.list.useQuery({
-    resourceName,
-    resourceFolder,
-    path: '',
-  })
+  const { data } = orpc.files.list.useQuery(
+    {
+      resourceName,
+      resourceFolder,
+      path: '',
+    },
+    {
+      refetchInterval: REFETCH_INTERVAL,
+    }
+  )
 
   return (
     <CollapsibleFolder linkIcon trigger={<>{resourceFolder}</>}>
@@ -143,11 +156,16 @@ const ResourceFolder = ({
   resourceName: string
   folderName: string
 }) => {
-  const { data } = orpc.files.list.useQuery({
-    resourceName,
-    resourceFolder,
-    path: folderPath,
-  })
+  const { data } = orpc.files.list.useQuery(
+    {
+      resourceName,
+      resourceFolder,
+      path: folderPath,
+    },
+    {
+      refetchInterval: REFETCH_INTERVAL,
+    }
+  )
 
   return (
     <CollapsibleFolder trigger={folderName}>
