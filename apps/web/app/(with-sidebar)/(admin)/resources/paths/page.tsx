@@ -1,3 +1,9 @@
+import { PathsList } from './components/list'
+
 export default function ResourcesPathsPage() {
-  return <div>ResourcesPathsPage</div>
+  return (
+    <div className="flex flex-col gap-2">
+      <PathsList />
+    </div>
+  )
 }

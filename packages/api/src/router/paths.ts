@@ -8,32 +8,22 @@ import { resolvePath } from '@valhalla/utils/path'
 import { registryMiddleware } from '@/middlewares/registry'
 import { admin, authed } from '@/orpc'
 
+import { pathsSchema } from './paths.schemas'
+
 export const pathsRouter = authed
   .tags('Paths')
   .prefix('/paths')
   .router({
-    list: admin
-      .use(registryMiddleware)
-      .input(
-        z.object({
-          resourceName: z.string(),
-        })
-      )
-      .func(async (input, ctx) => {
-        return ctx.registry.resourcesFolders[input.resourceName]
-      }),
+    list: admin.use(registryMiddleware).func(async (input, ctx) => {
+      return ctx.registry.resourcesFolders
+    }),
 
     update: admin
       .use(registryMiddleware)
       .input(
         z.object({
           resourceName: z.string(),
-          data: z.array(
-            z.object({
-              path: z.string(),
-              name: z.string(),
-            })
-          ),
+          data: pathsSchema,
         })
       )
       .func(async (input, ctx) => {

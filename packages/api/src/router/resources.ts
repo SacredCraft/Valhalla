@@ -18,6 +18,17 @@ export const resourcesRouter = authed
   .tags('Resources')
   .prefix('/resources')
   .router({
+    get: authed
+      .use(registryMiddleware)
+      .input(
+        z.object({
+          name: z.string(),
+        })
+      )
+      .func(async (input, ctx) => {
+        return ctx.registry.resources[input.name]
+      }),
+
     list: getResources,
 
     folders: authed

@@ -16,7 +16,7 @@ export const ResourcesGridItem = ({
   label,
 }: ResourcesItemProps) => {
   return (
-    <Card className="flex h-[112px] flex-col rounded-md border p-0">
+    <Card className="flex h-[112px] flex-col rounded-none shadow-none">
       <CardHeader className="p-4 pb-2">
         <CardTitle>{label}</CardTitle>
         <CardDescription>{name}</CardDescription>
@@ -38,7 +38,7 @@ export const ResourcesListItem = ({
   label,
 }: ResourcesItemProps) => {
   return (
-    <Card className="flex flex-col gap-1 rounded-md border p-0">
+    <Card className="flex flex-col gap-1 rounded-none border p-0 shadow-none">
       <CardHeader className="flex-row items-center gap-4 space-y-0 p-3 pb-0">
         <CardTitle>{label}</CardTitle>
         <CardDescription>{name}</CardDescription>
