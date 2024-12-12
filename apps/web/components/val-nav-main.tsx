@@ -43,7 +43,10 @@ const renderItems = (items: NavItem[]) => {
           >
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip={item.title}>
+                <SidebarMenuButton
+                  isActive={item.isActive}
+                  tooltip={item.title}
+                >
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
                   <ChevronRightIcon className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
@@ -53,7 +56,7 @@ const renderItems = (items: NavItem[]) => {
                 <SidebarMenuSub>
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
-                      <SidebarMenuSubButton asChild>
+                      <SidebarMenuSubButton isActive={subItem.isActive} asChild>
                         <Link href={subItem.url}>
                           <span>{subItem.title}</span>
                         </Link>
@@ -69,7 +72,12 @@ const renderItems = (items: NavItem[]) => {
       {items
         .filter((item) => !item.items)
         .map((item) => (
-          <SidebarMenuButton key={item.title} tooltip={item.title} asChild>
+          <SidebarMenuButton
+            key={item.title}
+            isActive={item.isActive}
+            tooltip={item.title}
+            asChild
+          >
             <Link href={item.url}>
               {item.icon && <item.icon />}
               <span>{item.title}</span>

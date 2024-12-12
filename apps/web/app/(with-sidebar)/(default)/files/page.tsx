@@ -12,7 +12,7 @@ export default async function FilesPage() {
   return (
     <ResizablePanelGroup
       direction="horizontal"
-      className="relative border border-x-0"
+      className="relative border border-x-0 border-t-0"
     >
       <ValResourcePanel defaultSize={20} maxSize={30}>
         <Resources />
