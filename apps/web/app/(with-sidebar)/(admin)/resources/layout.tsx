@@ -1,4 +1,4 @@
-import { List, Settings } from 'lucide-react'
+import { List, Route, Settings } from 'lucide-react'
 
 import {
   BreadcrumbItem,
@@ -57,6 +57,10 @@ const ResourcesPageSidebar = () => {
               <ResourcesPageSidebarItem href="/resources/configs">
                 <Settings />
                 配置管理
+              </ResourcesPageSidebarItem>
+              <ResourcesPageSidebarItem href="/resources/paths">
+                <Route />
+                路径管理
               </ResourcesPageSidebarItem>
             </SidebarMenu>
           </SidebarGroupContent>

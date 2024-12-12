@@ -13,7 +13,7 @@ import { systemConfigMeta } from './schema/system-config'
 export * from './schema/system-config'
 
 // 配置文件路径常量
-const CONFIG_PATH = resolvePath('configs')
+export const CONFIG_PATH = resolvePath('configs')
 
 /**
  * 监听配置文件变更

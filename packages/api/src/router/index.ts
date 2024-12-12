@@ -2,6 +2,7 @@ import { pub } from '../orpc'
 import { avatarRouter } from './avatar'
 import { filesRouter } from './files'
 import { notificationsRouter } from './notifications'
+import { pathsRouter } from './paths'
 import { resourcesRouter } from './resources'
 import { sponsorsRouter } from './sponsors'
 
@@ -11,4 +12,5 @@ export const router = pub.router({
   resources: resourcesRouter,
   sponsors: sponsorsRouter,
   avatar: avatarRouter,
+  paths: pathsRouter,
 })

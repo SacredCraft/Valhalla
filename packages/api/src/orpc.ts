@@ -40,3 +40,15 @@ export const authed = pub.use((_input, context, meta) => {
     },
   })
 })
+
+export const admin = authed.use((_input, context, meta) => {
+  if (context.user?.role !== 'admin') {
+    throw new ORPCError({
+      code: 'UNAUTHORIZED',
+    })
+  }
+
+  return meta.next({
+    context,
+  })
+})
