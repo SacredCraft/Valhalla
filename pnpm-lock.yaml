@@ -129,8 +129,8 @@ importers:
         specifier: ^3.9.1
         version: 3.9.1(react-hook-form@7.53.1(react@19.0.0))
       '@orpc/openapi':
-        specifier: ^0.13.0
-        version: 0.13.0(zod@3.23.8)
+        specifier: ^0.15.0
+        version: 0.15.0(zod@3.23.8)
       '@radix-ui/react-icons':
         specifier: 'catalog:'
         version: 1.3.1(react@19.0.0)
@@ -268,17 +268,17 @@ importers:
   packages/api:
     dependencies:
       '@orpc/client':
-        specifier: ^0.13.0
-        version: 0.13.0(@orpc/contract@0.13.0(zod@3.23.8))(@orpc/server@0.13.0(@orpc/zod@0.13.0)(zod@3.23.8))
+        specifier: ^0.15.0
+        version: 0.15.0(@orpc/contract@0.15.0(zod@3.23.8))(@orpc/server@0.15.0(@orpc/zod@0.15.0)(zod@3.23.8))
       '@orpc/react':
-        specifier: ^0.13.0
-        version: 0.13.0(@orpc/client@0.13.0(@orpc/contract@0.13.0(zod@3.23.8))(@orpc/server@0.13.0(@orpc/zod@0.13.0)(zod@3.23.8)))(@orpc/contract@0.13.0(zod@3.23.8))(@orpc/server@0.13.0(@orpc/zod@0.13.0)(zod@3.23.8))(@tanstack/react-query@5.62.3(react@19.0.0))(react@19.0.0)
+        specifier: ^0.15.0
+        version: 0.15.0(@orpc/client@0.15.0(@orpc/contract@0.15.0(zod@3.23.8))(@orpc/server@0.15.0(@orpc/zod@0.15.0)(zod@3.23.8)))(@orpc/contract@0.15.0(zod@3.23.8))(@orpc/server@0.15.0(@orpc/zod@0.15.0)(zod@3.23.8))(@tanstack/react-query@5.62.3(react@19.0.0))(react@19.0.0)
       '@orpc/server':
-        specifier: ^0.13.0
-        version: 0.13.0(@orpc/zod@0.13.0)(zod@3.23.8)
+        specifier: ^0.15.0
+        version: 0.15.0(@orpc/zod@0.15.0)(zod@3.23.8)
       '@orpc/zod':
-        specifier: ^0.13.0
-        version: 0.13.0
+        specifier: ^0.15.0
+        version: 0.15.0
       '@valhalla/auth':
         specifier: workspace:*
         version: link:../auth
@@ -1750,43 +1750,43 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@orpc/client@0.13.0':
-    resolution: {integrity: sha512-FhHXrAQMFEdoRzK/G6AsYq/8nIQ32sisTND6YsTcwKlXxEveQ7utNQeDLxv9cSBeZQTfa1uFQSG6lEBjFFJgng==}
+  '@orpc/client@0.15.0':
+    resolution: {integrity: sha512-drzHN5Vq5+FUjTYH4+7IU17HZa3pNgPHJEvSRCBUmpxe5gL+qdSZl+d4Ord72WbbTEFQFBNaktOk33WrWgm5TA==}
     peerDependencies:
-      '@orpc/contract': 0.13.0
-      '@orpc/server': 0.13.0
+      '@orpc/contract': 0.15.0
+      '@orpc/server': 0.15.0
 
-  '@orpc/contract@0.13.0':
-    resolution: {integrity: sha512-AhdSdbFqfyLdRSPPgn5Y+fyq44bKzC7EvwhLo13YkupwRCd1VfRJsANPuv9BzbHlYbmoJecj+H345XRgBN2JRg==}
+  '@orpc/contract@0.15.0':
+    resolution: {integrity: sha512-faYWQJSg5hlCX7tF6PAIvATbV5ZiGJ6ZXb6Er1OKt1MDsLsmsSXV9bO52IURyMJJmBvbG8j9f+bKwfasL3v/iw==}
     peerDependencies:
       zod: '>=3.23.0'
 
-  '@orpc/openapi@0.13.0':
-    resolution: {integrity: sha512-t0IpOKhwYGQRKAmHZ46UTrr2GagWeKEadKf8jVpzAvZ2SMvIvOqcZCbqfV0RJbfMF3/3gnOfYjLac4Lj8usY7Q==}
+  '@orpc/openapi@0.15.0':
+    resolution: {integrity: sha512-+ibuJyWlNaWbUfLW8O6SG+rQRCnaxVu8cuZWwh2i9Svt7Padig5y07Bh48NwY6X6qrjtVt6JFIoLh8VPrKvm7w==}
 
-  '@orpc/react@0.13.0':
-    resolution: {integrity: sha512-XcVE6q9KZjbbA1NeKAnmdt/xjnDLmZ3vatpAi1sDJc6YqAcFXE4QfdjhHIozyVlXTndIXoCvcWQhgKLW2CVpVg==}
+  '@orpc/react@0.15.0':
+    resolution: {integrity: sha512-GDW5Hd0J/lqIC/V+l9jF8JQSS0bGpUmpOmt0Kd/OgNu/s1kAFFeuqomcKBBgGBN58K1T1/XB5JR8ZnyZcFaUpQ==}
     peerDependencies:
-      '@orpc/client': 0.13.0
-      '@orpc/contract': 0.13.0
-      '@orpc/server': 0.13.0
-      '@tanstack/react-query': '>=5.59.0'
+      '@orpc/client': 0.15.0
+      '@orpc/contract': 0.15.0
+      '@orpc/server': 0.15.0
+      '@tanstack/react-query': '>=5.55.0'
       react: '>=18.3.0'
 
-  '@orpc/server@0.13.0':
-    resolution: {integrity: sha512-QkznoXnAVzU6fTeb9ED2iQulweq/nwXljNyaYwwEjcLSIMFsuqTGmvDTklg0sOxhcFj8hxyOCi0A/qyONO5ADg==}
+  '@orpc/server@0.15.0':
+    resolution: {integrity: sha512-246JJIidiOiUaJzt5ShS5/yHVGJ8bmhqK1992aAmVHed/ohj90Ng65lYV2GYXWMEKXmKlD9DeYz16Np/XTLyTw==}
     peerDependencies:
-      '@orpc/zod': 0.13.0
+      '@orpc/zod': 0.15.0
       zod: '>=3.23.0'
 
-  '@orpc/shared@0.13.0':
-    resolution: {integrity: sha512-uVdvsTIqHhkog6ahoBOc1XmNzFff1XRfj/4udBmAkOEK1EwwcMsB0lW972GDpMRrSFYLBCW22I37sRK9sN5B2g==}
+  '@orpc/shared@0.15.0':
+    resolution: {integrity: sha512-3Y8iDFyLJUBh4DHk8IzCbkmhBq+8Zy6iNTOsv2uP4gGvgjz4Y78dsuRopkwWILxxgk3/VoBqzPDsdstQVxLT4w==}
 
-  '@orpc/transformer@0.13.0':
-    resolution: {integrity: sha512-8go505lOtHd1GmgGdFFQz2TVU+sXG0RVT0IZlbfcxnQqjDbhcaQm8LhKCrua6J8vNrzYcqd277TJiYTkUpDJeg==}
+  '@orpc/transformer@0.15.0':
+    resolution: {integrity: sha512-wgD/ihsj1mz1M0bv6qArLspz481OOadEERsPvWHG37k9XRsutAFE4O0G/Cloc10bHtUWUIDC7Y8SlXfmkzf/2A==}
 
-  '@orpc/zod@0.13.0':
-    resolution: {integrity: sha512-KDidT1EmE4NzX/nuUs5lJviMkWQX7nzhb9dfIT4cirjMywBhQm0WPx3t8ZDQKRfQVR0TSHRDjusc0fg4CUxP0g==}
+  '@orpc/zod@0.15.0':
+    resolution: {integrity: sha512-bD3Kaqhqy7fF/r1/HSI6LRgpk7iiaOX/WzHKdzYwtPUEq+YpM3PclHAd48c/JW2jsaP9OjASEo4KX8p1zYK1cA==}
 
   '@peculiar/asn1-android@2.3.13':
     resolution: {integrity: sha512-0VTNazDGKrLS6a3BwTDZanqq6DR/I3SbvmDMuS8Be+OYpvM6x1SRDh9AGDsHVnaCOIztOspCPc6N1m+iUv1Xxw==}
@@ -4930,6 +4930,9 @@ packages:
   zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
 
+  zod@3.24.1:
+    resolution: {integrity: sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A==}
+
   zustand@5.0.2:
     resolution: {integrity: sha512-8qNdnJVJlHlrKXi50LDqqUNmUbuBjoKLrYQBnoChIbVph7vni+sY+YpvdjXG9YLd/Bxr6scMcR+rm5H3aSqPaw==}
     engines: {node: '>=12.20.0'}
@@ -5714,70 +5717,70 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
-  '@orpc/client@0.13.0(@orpc/contract@0.13.0(zod@3.23.8))(@orpc/server@0.13.0(@orpc/zod@0.13.0)(zod@3.23.8))':
+  '@orpc/client@0.15.0(@orpc/contract@0.15.0(zod@3.23.8))(@orpc/server@0.15.0(@orpc/zod@0.15.0)(zod@3.23.8))':
     dependencies:
-      '@orpc/contract': 0.13.0(zod@3.23.8)
-      '@orpc/server': 0.13.0(@orpc/zod@0.13.0)(zod@3.23.8)
-      '@orpc/shared': 0.13.0
-      '@orpc/transformer': 0.13.0
+      '@orpc/contract': 0.15.0(zod@3.23.8)
+      '@orpc/server': 0.15.0(@orpc/zod@0.15.0)(zod@3.23.8)
+      '@orpc/shared': 0.15.0
+      '@orpc/transformer': 0.15.0
 
-  '@orpc/contract@0.13.0(zod@3.23.8)':
+  '@orpc/contract@0.15.0(zod@3.23.8)':
     dependencies:
-      '@orpc/shared': 0.13.0
+      '@orpc/shared': 0.15.0
       zod: 3.23.8
 
-  '@orpc/openapi@0.13.0(zod@3.23.8)':
+  '@orpc/openapi@0.15.0(zod@3.23.8)':
     dependencies:
-      '@orpc/contract': 0.13.0(zod@3.23.8)
-      '@orpc/server': 0.13.0(@orpc/zod@0.13.0)(zod@3.23.8)
-      '@orpc/shared': 0.13.0
-      '@orpc/transformer': 0.13.0
-      '@orpc/zod': 0.13.0
+      '@orpc/contract': 0.15.0(zod@3.23.8)
+      '@orpc/server': 0.15.0(@orpc/zod@0.15.0)(zod@3.23.8)
+      '@orpc/shared': 0.15.0
+      '@orpc/transformer': 0.15.0
+      '@orpc/zod': 0.15.0
       escape-string-regexp: 5.0.0
       json-schema-typed: 8.0.1
       openapi3-ts: 4.4.0
     transitivePeerDependencies:
       - zod
 
-  '@orpc/react@0.13.0(@orpc/client@0.13.0(@orpc/contract@0.13.0(zod@3.23.8))(@orpc/server@0.13.0(@orpc/zod@0.13.0)(zod@3.23.8)))(@orpc/contract@0.13.0(zod@3.23.8))(@orpc/server@0.13.0(@orpc/zod@0.13.0)(zod@3.23.8))(@tanstack/react-query@5.62.3(react@19.0.0))(react@19.0.0)':
+  '@orpc/react@0.15.0(@orpc/client@0.15.0(@orpc/contract@0.15.0(zod@3.23.8))(@orpc/server@0.15.0(@orpc/zod@0.15.0)(zod@3.23.8)))(@orpc/contract@0.15.0(zod@3.23.8))(@orpc/server@0.15.0(@orpc/zod@0.15.0)(zod@3.23.8))(@tanstack/react-query@5.62.3(react@19.0.0))(react@19.0.0)':
     dependencies:
-      '@orpc/client': 0.13.0(@orpc/contract@0.13.0(zod@3.23.8))(@orpc/server@0.13.0(@orpc/zod@0.13.0)(zod@3.23.8))
-      '@orpc/contract': 0.13.0(zod@3.23.8)
-      '@orpc/server': 0.13.0(@orpc/zod@0.13.0)(zod@3.23.8)
-      '@orpc/shared': 0.13.0
+      '@orpc/client': 0.15.0(@orpc/contract@0.15.0(zod@3.23.8))(@orpc/server@0.15.0(@orpc/zod@0.15.0)(zod@3.23.8))
+      '@orpc/contract': 0.15.0(zod@3.23.8)
+      '@orpc/server': 0.15.0(@orpc/zod@0.15.0)(zod@3.23.8)
+      '@orpc/shared': 0.15.0
       '@tanstack/react-query': 5.62.3(react@19.0.0)
       react: 19.0.0
 
-  '@orpc/server@0.13.0(@orpc/zod@0.13.0)(zod@3.23.8)':
+  '@orpc/server@0.15.0(@orpc/zod@0.15.0)(zod@3.23.8)':
     dependencies:
-      '@orpc/contract': 0.13.0(zod@3.23.8)
-      '@orpc/shared': 0.13.0
-      '@orpc/transformer': 0.13.0
-      '@orpc/zod': 0.13.0
+      '@orpc/contract': 0.15.0(zod@3.23.8)
+      '@orpc/shared': 0.15.0
+      '@orpc/transformer': 0.15.0
+      '@orpc/zod': 0.15.0
       zod: 3.23.8
 
-  '@orpc/shared@0.13.0':
+  '@orpc/shared@0.15.0':
     dependencies:
       is-what: 5.0.2
       radash: 12.1.0
       type-fest: 4.27.0
-      zod: 3.23.8
+      zod: 3.24.1
 
-  '@orpc/transformer@0.13.0':
+  '@orpc/transformer@0.15.0':
     dependencies:
-      '@orpc/shared': 0.13.0
-      '@orpc/zod': 0.13.0
+      '@orpc/shared': 0.15.0
+      '@orpc/zod': 0.15.0
       '@types/content-disposition': 0.5.8
       content-disposition: 0.5.4
       fast-content-type-parse: 2.0.0
       wildcard-match: 5.1.3
-      zod: 3.23.8
+      zod: 3.24.1
 
-  '@orpc/zod@0.13.0':
+  '@orpc/zod@0.15.0':
     dependencies:
       json-schema-typed: 8.0.1
       wildcard-match: 5.1.3
-      zod: 3.23.8
+      zod: 3.24.1
 
   '@peculiar/asn1-android@2.3.13':
     dependencies:
@@ -9068,6 +9071,8 @@ snapshots:
   yoctocolors-cjs@2.1.2: {}
 
   zod@3.23.8: {}
+
+  zod@3.24.1: {}
 
   zustand@5.0.2(@types/react@19.0.0)(react@19.0.0):
     optionalDependencies:

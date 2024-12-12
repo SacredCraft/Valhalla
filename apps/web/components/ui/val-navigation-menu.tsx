@@ -84,7 +84,7 @@ const NavigationMenuLink = React.forwardRef<
 NavigationMenuLink.displayName = ShadCNNavigationMenuLink.displayName
 
 const NavigationMenuSubItem = React.forwardRef<
-  React.ElementRef<'div'>,
+  React.ComponentRef<'div'>,
   React.ComponentPropsWithoutRef<'div'>
 >(({ className, children, ...props }, ref) => (
   <div
@@ -104,7 +104,7 @@ const NavigationMenuSubItem = React.forwardRef<
 NavigationMenuSubItem.displayName = 'NavigationMenuSubItem'
 
 const NavigationMenuSubItemIcon = React.forwardRef<
-  React.ElementRef<'span'>,
+  React.ComponentRef<'span'>,
   React.ComponentPropsWithoutRef<'span'>
 >(({ className, children, ...props }, ref) => (
   <span
@@ -121,7 +121,7 @@ const NavigationMenuSubItemIcon = React.forwardRef<
 NavigationMenuSubItemIcon.displayName = 'NavigationMenuSubItemIcon'
 
 const NavigationMenuSubItemTitle = React.forwardRef<
-  React.ElementRef<'h3'>,
+  React.ComponentRef<'h3'>,
   React.ComponentPropsWithoutRef<'h3'>
 >(({ className, children, ...props }, ref) => (
   <h3
@@ -138,7 +138,7 @@ const NavigationMenuSubItemTitle = React.forwardRef<
 NavigationMenuSubItemTitle.displayName = 'NavigationMenuSubItemTitle'
 
 const NavigationMenuSubItemDescription = React.forwardRef<
-  React.ElementRef<'p'>,
+  React.ComponentRef<'p'>,
   React.ComponentPropsWithoutRef<'p'>
 >(({ className, children, ...props }, ref) => (
   <p

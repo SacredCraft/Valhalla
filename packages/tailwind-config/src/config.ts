@@ -151,14 +151,5 @@ export const config: Config = {
       },
     },
   },
-  plugins: [
-    animate,
-    typography,
-    forms,
-    aspectRatio,
-    {
-      config: containerQueries.config ?? {},
-      handler: containerQueries.handler,
-    },
-  ],
+  plugins: [animate, typography, forms, aspectRatio, containerQueries],
 }

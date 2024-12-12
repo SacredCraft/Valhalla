@@ -1,10 +1,8 @@
-import Link from 'next/link'
 import { List, Settings } from 'lucide-react'
 
 import {
   BreadcrumbItem,
   BreadcrumbLink,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@valhalla/design-system/components/ui/breadcrumb'
 import {
@@ -13,8 +11,6 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
 } from '@valhalla/design-system/components/ui/sidebar'
 
 import {
@@ -23,18 +19,13 @@ import {
   DashboardHeader,
 } from '@/components/dashboard-layout'
 
-import { matchMenu } from './utils/match-menu'
+import { ResourcesBreadcrumb, ResourcesPageSidebarItem } from './layout.client'
 
 export default async function ResourcesLayout({
   children,
-  params,
 }: {
   children: React.ReactNode
-  params: Promise<{ menu: string }>
 }) {
-  const menu = (await params).menu
-  const title = matchMenu(menu)
-
   return (
     <Dashboard>
       <DashboardHeader>
@@ -42,36 +33,28 @@ export default async function ResourcesLayout({
           <BreadcrumbLink href="#">资源管理</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbPage>{title}</BreadcrumbPage>
-        </BreadcrumbItem>
+        <ResourcesBreadcrumb />
       </DashboardHeader>
       <DashboardContent className="flex-row">
-        <ResourcesPageSidebar menu={menu} />
-        <div className="p-2">{children}</div>
+        <ResourcesPageSidebar />
+        <div className="flex-1 p-2">{children}</div>
       </DashboardContent>
     </Dashboard>
   )
 }
 
-const ResourcesPageSidebar = ({ menu }: { menu: string }) => {
+const ResourcesPageSidebar = () => {
   return (
     <Sidebar collapsible="none" className="bg-transparent">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              <ResourcesPageSidebarItem
-                href="/resources/list"
-                isActive={menu === 'list'}
-              >
+              <ResourcesPageSidebarItem href="/resources/list">
                 <List />
                 资源列表
               </ResourcesPageSidebarItem>
-              <ResourcesPageSidebarItem
-                href="/resources/configs"
-                isActive={menu === 'configs'}
-              >
+              <ResourcesPageSidebarItem href="/resources/configs">
                 <Settings />
                 配置管理
               </ResourcesPageSidebarItem>
@@ -80,23 +63,5 @@ const ResourcesPageSidebar = ({ menu }: { menu: string }) => {
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
-}
-
-const ResourcesPageSidebarItem = ({
-  children,
-  href,
-  isActive,
-}: {
-  children: React.ReactNode
-  href: string
-  isActive: boolean
-}) => {
-  return (
-    <SidebarMenuItem>
-      <SidebarMenuButton isActive={isActive} asChild>
-        <Link href={href}>{children}</Link>
-      </SidebarMenuButton>
-    </SidebarMenuItem>
   )
 }

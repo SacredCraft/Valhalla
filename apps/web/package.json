@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
-    "@orpc/openapi": "^0.13.0",
+    "@orpc/openapi": "^0.15.0",
     "@radix-ui/react-icons": "catalog:",
     "@radix-ui/react-slot": "^1.1.0",
     "@tanstack/react-query": "catalog:",

@@ -8,10 +8,10 @@
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
-    "@orpc/client": "^0.13.0",
-    "@orpc/react": "^0.13.0",
-    "@orpc/server": "^0.13.0",
-    "@orpc/zod": "^0.13.0",
+    "@orpc/client": "^0.15.0",
+    "@orpc/react": "^0.15.0",
+    "@orpc/server": "^0.15.0",
+    "@orpc/zod": "^0.15.0",
     "@valhalla/auth": "workspace:*",
     "@valhalla/db": "workspace:*",
     "@valhalla/utils": "workspace:*",

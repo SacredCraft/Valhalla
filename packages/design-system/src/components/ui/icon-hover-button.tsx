@@ -8,7 +8,7 @@ import { cn } from '@valhalla/design-system/utils/cn'
 import { createContext } from '@valhalla/design-system/utils/context'
 
 const IconHoverButton = React.forwardRef<
-  React.ElementRef<typeof Button>,
+  React.ComponentRef<typeof Button>,
   React.ComponentPropsWithoutRef<typeof Button>
 >(({ className, children, ...props }, ref) => {
   const [isHover, setIsHover] = React.useState(false)
@@ -30,7 +30,7 @@ const IconHoverButton = React.forwardRef<
 IconHoverButton.displayName = 'IconHoverButton'
 
 const IconHoverButtonIcon = React.forwardRef<
-  React.ElementRef<'span'>,
+  React.ComponentRef<'span'>,
   React.ComponentPropsWithoutRef<'span'>
 >(({ className, ...props }, ref) => (
   <span ref={ref} className={className} {...props} />
@@ -38,7 +38,7 @@ const IconHoverButtonIcon = React.forwardRef<
 IconHoverButtonIcon.displayName = 'IconHoverButtonIcon'
 
 const IconHoverButtonText = React.forwardRef<
-  React.ElementRef<typeof motion.div>,
+  React.ComponentRef<typeof motion.div>,
   React.ComponentPropsWithoutRef<typeof motion.div> & {
     children?: React.ReactNode
     spanClassName?: string
