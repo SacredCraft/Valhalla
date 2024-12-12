@@ -98,6 +98,7 @@ const Tab = ({
 
   if (!matchLayout) {
     // TODO: 文件可能已被删除或重命名
+    // TODO: remove from store
     return null
   }
 
@@ -131,6 +132,7 @@ const Tab = ({
           />
         )}
 
+        <span className="size-5" />
         <button
           className={cn(
             'absolute right-[8px] z-[1] flex size-5 items-center justify-center rounded-md opacity-0 hover:bg-primary/10',
