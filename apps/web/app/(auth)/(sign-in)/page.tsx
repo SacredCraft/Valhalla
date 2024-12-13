@@ -32,7 +32,7 @@ export default async function LoginPage() {
 
   return (
     <SignInForm className="flex size-full max-h-[42rem] max-w-6xl items-center overflow-hidden border-4 border-card bg-card text-card-foreground sm:m-4 sm:rounded-3xl md:m-8 lg:m-12">
-      <div className="relative h-full w-1/2 overflow-hidden rounded-r-[32px]">
+      <div className="relative h-full w-1/2 overflow-hidden rounded-r-[32px] max-md:hidden">
         <Image
           src="/auth-background.jpg?height=1080&width=1920"
           alt="Auth background"
@@ -58,7 +58,7 @@ export default async function LoginPage() {
           </p>
         </div>
       </div>
-      <ValhallaAuthCard className="flex h-full w-1/2 flex-col rounded-r-[2rem] border-none shadow-none">
+      <ValhallaAuthCard className="flex h-full flex-col rounded-r-[2rem] border-none shadow-none md:w-1/2">
         <CardHeader className="text-center">
           <Image
             src="/logo.png"
