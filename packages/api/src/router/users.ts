@@ -79,4 +79,50 @@ export const usersRouter = admin.router({
         .execute()
     }
   }),
+
+  banUsers: admin
+    .input(
+      z.object({
+        ids: z.array(z.string()),
+        reason: z.string().optional(),
+        expiresAt: z.date().optional(),
+      })
+    )
+    .func(async (input, ctx) => {
+      let containsSelf = false
+
+      if (input.ids.includes(ctx.user.id)) {
+        containsSelf = true
+      }
+
+      const ids = input.ids.filter((id) => id !== ctx.user.id)
+      await ctx.db
+        .update(user)
+        .set({
+          banned: true,
+          banReason: input.reason,
+          banExpires: input.expiresAt,
+        })
+        .where(inArray(user.id, ids))
+        .execute()
+
+      if (containsSelf) {
+        throw new ORPCError({
+          code: 'BAD_REQUEST',
+          message: '不能封禁自己',
+        })
+      }
+    }),
+
+  unbanUsers: admin
+    .input(z.object({ ids: z.array(z.string()) }))
+    .func(async (input, ctx) => {
+      await ctx.db
+        .update(user)
+        .set({
+          banned: false,
+        })
+        .where(inArray(user.id, input.ids))
+        .execute()
+    }),
 })
