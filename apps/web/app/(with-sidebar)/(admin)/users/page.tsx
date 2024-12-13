@@ -8,7 +8,8 @@ import {
   DashboardContent,
   DashboardHeader,
 } from '@/components/dashboard-layout'
-import { EmptyState } from '@/components/states'
+
+import { UsersTable } from './page.client'
 
 export default function UsersPage() {
   return (
@@ -19,7 +20,7 @@ export default function UsersPage() {
         </BreadcrumbItem>
       </DashboardHeader>
       <DashboardContent>
-        <EmptyState />
+        <UsersTable />
       </DashboardContent>
     </Dashboard>
   )

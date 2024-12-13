@@ -1,5 +1,6 @@
 import type React from 'react'
 import { cookies, headers } from 'next/headers'
+import { redirect } from 'next/navigation'
 
 import { auth } from '@valhalla/auth'
 import {
@@ -17,6 +18,10 @@ export default async function DashboardLayout({
   const session = await auth.api.getSession({
     headers: await headers(),
   })
+
+  if (!session) {
+    return redirect('/')
+  }
 
   const cookieStore = await cookies()
   const defaultOpen = cookieStore.get('sidebar:state')?.value === 'true'

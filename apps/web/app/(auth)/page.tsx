@@ -1,13 +1,11 @@
 import { headers } from 'next/headers'
 import Image from 'next/image'
-import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
 import { auth } from '@valhalla/auth'
 import {
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@valhalla/design-system/components/ui/card'
@@ -36,9 +34,8 @@ export default async function LoginPage() {
         <Image
           src="/auth-background.jpg?height=1080&width=1920"
           alt="Auth background"
-          layout="fill"
-          objectFit="cover"
-          objectPosition="left center"
+          className="size-full object-cover object-left-top"
+          fill
           priority
         />
         <div className="absolute inset-0 bg-black/30" />
@@ -84,25 +81,7 @@ export default async function LoginPage() {
           </div>
           <SubmitButton />
         </CardContent>
-
-        <CardFooter className="mt-auto flex flex-col items-center gap-2">
-          <RegisterLink />
-        </CardFooter>
       </ValhallaAuthCard>
     </SignInForm>
-  )
-}
-
-const RegisterLink = () => {
-  return (
-    <p className="text-center text-sm text-muted-foreground">
-      没有账号？{' '}
-      <Link
-        href="/sign-up"
-        className="font-medium text-primary hover:text-primary/90"
-      >
-        注册
-      </Link>
-    </p>
   )
 }

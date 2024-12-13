@@ -1,35 +1,22 @@
-import { serve } from '@hono/node-server'
 import { input } from '@inquirer/prompts'
 import chalk from 'chalk'
 import { eq } from 'drizzle-orm'
-import { Hono } from 'hono'
+import fs from 'fs-extra'
 
 import { db } from '@valhalla/db'
 import { user } from '@valhalla/db/schema'
 
 import { auth } from '../src/auth'
 
-const app = new Hono()
+const admins = await db
+  .select()
+  .from(user)
+  .where(eq(user.role, 'admin'))
+  .execute()
 
-app.on(['POST', 'GET'], '/api/auth/**', (c) => {
-  return auth.handler(c.req.raw)
-})
-
-const server = serve(app)
-
-function cleanup() {
-  server.close(() => {
-    process.exit(0)
-  })
-}
-
-process.on('SIGTERM', cleanup)
-process.on('SIGINT', cleanup)
-process.on('SIGQUIT', cleanup)
-
-if (await db.select().from(user).where(eq(user.role, 'admin'))) {
+if (admins.length > 0) {
   const confirm = await input({
-    message: '管理员已存在，是否覆盖？',
+    message: '管理员已存在，是否新增？',
     default: 'n',
   })
   if (confirm !== 'y' && confirm !== 'Y') {
@@ -49,6 +36,8 @@ const password = await input({
   message: '请输入管理员密码',
 })
 
+fs.writeFileSync('users.json', JSON.stringify({}, null, 2))
+
 const admin = await auth.api.signUpEmail({
   body: {
     email,
@@ -57,15 +46,13 @@ const admin = await auth.api.signUpEmail({
   },
 })
 
-const userId = admin.user.id
-
 await db
   .update(user)
   .set({
-    id: userId,
     role: 'admin',
   })
-  .where(eq(user.id, userId))
+  .where(eq(user.id, admin.id))
+  .execute()
 
 console.log(chalk.green('管理员初始化完成'))
-cleanup()
+process.exit(0)

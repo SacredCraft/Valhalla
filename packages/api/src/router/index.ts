@@ -5,6 +5,7 @@ import { notificationsRouter } from './notifications'
 import { pathsRouter } from './paths'
 import { resourcesRouter } from './resources'
 import { sponsorsRouter } from './sponsors'
+import { usersRouter } from './users'
 
 export const router = pub.router({
   files: filesRouter,
@@ -13,4 +14,5 @@ export const router = pub.router({
   sponsors: sponsorsRouter,
   avatar: avatarRouter,
   paths: pathsRouter,
+  users: usersRouter,
 })

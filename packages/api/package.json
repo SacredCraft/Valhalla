@@ -23,6 +23,7 @@
   "devDependencies": {
     "@tanstack/react-query": "catalog:",
     "@total-typescript/ts-reset": "catalog:",
+    "@types/pg": "catalog:",
     "@types/react": "catalog:",
     "@valhalla/core": "workspace:*",
     "@valhalla/eslint-config": "workspace:*",

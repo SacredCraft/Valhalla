@@ -21,7 +21,7 @@
     "drizzle-orm": "catalog:"
   },
   "devDependencies": {
-    "@types/pg": "^8.11.10",
+    "@types/pg": "catalog:",
     "@valhalla/core": "workspace:*",
     "@valhalla/eslint-config": "workspace:*",
     "@valhalla/typescript-config": "workspace:*",
