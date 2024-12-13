@@ -49,8 +49,8 @@ const SignInForm = ({
       callbackURL: '/dashboard',
 
       fetchOptions: {
-        onError(e) {
-          toast.error(e.error.message)
+        onError() {
+          toast.error('登录失败，请检查邮箱和密码')
         },
 
         onSuccess() {
