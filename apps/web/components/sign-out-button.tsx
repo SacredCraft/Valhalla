@@ -19,8 +19,8 @@ export const SignOutButton = ({
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          toast.success('Logged out successfully. Redirecting to login page.')
-          router.push('/sign-in')
+          toast.success('成功登出。正在重定向到登录页面。')
+          router.push('/')
           router.refresh()
         },
       },

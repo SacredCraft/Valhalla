@@ -33,7 +33,7 @@
     "ky": "^1.7.2",
     "lenis": "^1.1.16",
     "lucide-react": "catalog:",
-    "motion": "^11.11.17",
+    "motion": "^11.14.1",
     "next": "catalog:",
     "nuqs": "^2.2.1",
     "oslo": "^1.2.1",

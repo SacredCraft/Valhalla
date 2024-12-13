@@ -21,13 +21,13 @@ import { signUp } from '@/lib/auth/client'
 
 const schema = z
   .object({
-    username: z.string().min(1),
-    email: z.string().email(),
-    password: z.string().min(8),
-    confirmPassword: z.string().min(8),
+    username: z.string().min(1, '用户名不能为空'),
+    email: z.string().email('无效的邮箱'),
+    password: z.string().min(8, '密码至少8位'),
+    confirmPassword: z.string().min(8, '密码至少8位'),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: 'Passwords do not match',
+    message: '两次输入的密码不一致',
     path: ['confirmPassword'],
   })
 
@@ -55,7 +55,7 @@ const SignUpForm = ({
       email,
       password,
 
-      callbackURL: '/',
+      callbackURL: '/dashboard',
 
       fetchOptions: {
         onError(e) {
@@ -63,7 +63,7 @@ const SignUpForm = ({
         },
 
         onSuccess() {
-          toast.success('Account created successfully')
+          toast.success('注册成功')
           form.reset()
         },
       },
@@ -87,11 +87,11 @@ const UsernameFormItem = () => {
       name="username"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Username</FormLabel>
+          <FormLabel>用户名</FormLabel>
           <FormControl>
             <Input
               className="focus:border-primary"
-              placeholder="John Doe"
+              placeholder="输入你的用户名"
               {...field}
             />
           </FormControl>
@@ -110,12 +110,12 @@ const EmailFormItem = () => {
       name="email"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Email Address</FormLabel>
+          <FormLabel>邮箱</FormLabel>
           <FormControl>
             <Input
               type="email"
               className="focus:border-primary"
-              placeholder="your@email.com"
+              placeholder="输入你的邮箱"
               autoComplete="email"
               {...field}
             />
@@ -135,12 +135,12 @@ const PasswordFormItem = () => {
       name="password"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Password</FormLabel>
+          <FormLabel>密码</FormLabel>
           <FormControl>
             <Input
               type="password"
               className="focus:border-primary"
-              placeholder="••••••••"
+              placeholder="输入你的密码"
               autoComplete="new-password"
               {...field}
             />
@@ -160,12 +160,12 @@ const ConfirmPasswordFormItem = () => {
       name="confirmPassword"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Confirm Password</FormLabel>
+          <FormLabel>确认密码</FormLabel>
           <FormControl>
             <Input
               type="password"
               className="focus:border-primary"
-              placeholder="••••••••"
+              placeholder="再次输入密码"
               autoComplete="new-password"
               {...field}
             />
@@ -181,7 +181,7 @@ const SubmitButton = () => {
   const { formState } = useFormContext()
   return (
     <Button type="submit" className="w-full" disabled={formState.isSubmitting}>
-      {formState.isSubmitting ? 'Creating account...' : 'Create Account'}
+      {formState.isSubmitting ? '创建账号中...' : '创建账号'}
     </Button>
   )
 }

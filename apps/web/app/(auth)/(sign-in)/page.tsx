@@ -15,15 +15,13 @@ import {
 import { ValhallaAuthCard } from '@/components/val-auth-card'
 
 import {
-  ConfirmPasswordFormItem,
   EmailFormItem,
   PasswordFormItem,
-  SignUpForm,
+  SignInForm,
   SubmitButton,
-  UsernameFormItem,
 } from './page.client'
 
-export default async function SignUpPage() {
+export default async function LoginPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
   })
@@ -33,7 +31,7 @@ export default async function SignUpPage() {
   }
 
   return (
-    <SignUpForm className="flex size-full max-h-[42rem] max-w-6xl items-center overflow-hidden border-4 border-card bg-card text-card-foreground sm:m-4 sm:rounded-3xl md:m-8 lg:m-12">
+    <SignInForm className="flex size-full max-h-[42rem] max-w-6xl items-center overflow-hidden border-4 border-card bg-card text-card-foreground sm:m-4 sm:rounded-3xl md:m-8 lg:m-12">
       <div className="relative h-full w-1/2 overflow-hidden rounded-r-[32px]">
         <Image
           src="/auth-background.jpg?height=1080&width=1920"
@@ -54,7 +52,7 @@ export default async function SignUpPage() {
             一切
           </h1>
           <p className="text-sm opacity-80">
-            注册 Valhalla 开始你的旅程
+            登录到 Valhalla 开始你的旅程
             <br />
             一切尽在掌握
           </p>
@@ -74,35 +72,36 @@ export default async function SignUpPage() {
         <CardContent className="mx-auto flex flex-1 flex-col justify-center space-y-8">
           <div className="flex flex-col gap-2">
             <CardTitle className="text-center font-serif text-3xl font-bold tracking-tight">
-              创建账号
+              欢迎回来
             </CardTitle>
             <CardDescription className="text-center">
-              开始使用我们的服务
+              是时候开始你的旅程了
             </CardDescription>
           </div>
           <div className="flex min-w-80 flex-col gap-2">
-            <UsernameFormItem />
             <EmailFormItem />
             <PasswordFormItem />
-            <ConfirmPasswordFormItem />
           </div>
           <SubmitButton />
         </CardContent>
 
         <CardFooter className="mt-auto flex flex-col items-center gap-2">
-          <LoginLink />
+          <RegisterLink />
         </CardFooter>
       </ValhallaAuthCard>
-    </SignUpForm>
+    </SignInForm>
   )
 }
 
-const LoginLink = () => {
+const RegisterLink = () => {
   return (
     <p className="text-center text-sm text-muted-foreground">
-      已有账号？{' '}
-      <Link href="/" className="font-medium text-primary hover:text-primary/90">
-        登录
+      没有账号？{' '}
+      <Link
+        href="/sign-up"
+        className="font-medium text-primary hover:text-primary/90"
+      >
+        注册
       </Link>
     </p>
   )

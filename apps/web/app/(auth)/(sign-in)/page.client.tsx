@@ -21,8 +21,8 @@ import { toast } from '@valhalla/design-system/components/ui/sonner'
 import { signIn } from '@/lib/auth/client'
 
 const schema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
+  email: z.string().email('无效的邮箱'),
+  password: z.string().min(8, '密码至少8位'),
 })
 
 const SignInForm = ({
@@ -46,7 +46,7 @@ const SignInForm = ({
       email,
       password,
 
-      callbackURL: '/',
+      callbackURL: '/dashboard',
 
       fetchOptions: {
         onError(e) {
@@ -54,7 +54,7 @@ const SignInForm = ({
         },
 
         onSuccess() {
-          toast.success('Logged in successfully')
+          toast.success('登录成功')
           form.reset()
         },
       },
@@ -78,12 +78,12 @@ const EmailFormItem = () => {
       name="email"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Email Address</FormLabel>
+          <FormLabel>邮箱</FormLabel>
           <FormControl>
             <Input
               type="email"
               className="focus:border-primary"
-              placeholder="your@email.com"
+              placeholder="输入你的邮箱"
               autoComplete="email"
               {...field}
             />
@@ -103,12 +103,12 @@ const PasswordFormItem = () => {
       name="password"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Password</FormLabel>
+          <FormLabel>密码</FormLabel>
           <FormControl>
             <Input
               type="password"
               className="focus:border-primary"
-              placeholder="••••••••"
+              placeholder="输入你的密码"
               autoComplete="current-password"
               {...field}
             />
@@ -124,7 +124,7 @@ const SubmitButton = () => {
   const { pending } = useFormStatus()
   return (
     <Button type="submit" className="w-full" disabled={pending}>
-      {pending ? 'Logging in...' : 'Login'}
+      {pending ? '登录中...' : '登录'}
     </Button>
   )
 }

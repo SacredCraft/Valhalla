@@ -5,20 +5,23 @@ import { motion } from 'motion/react'
 
 import { cn } from '@valhalla/design-system/utils/cn'
 
-interface valhallaAuthCardProps
+interface ValhallaAuthCardProps
   extends React.ComponentPropsWithoutRef<typeof motion.div> {
   children: React.ReactNode
   className?: string
 }
 
-const ValhallaAuthCard: React.FC<valhallaAuthCardProps> = ({
+const ValhallaAuthCard: React.FC<ValhallaAuthCardProps> = ({
   children,
   className,
   ...props
 }) => {
   return (
     <motion.div
-      className={cn('bg-card text-card-foreground shadow', className)}
+      className={cn(
+        'ml-auto w-full bg-card text-card-foreground shadow sm:w-1/2',
+        className
+      )}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
