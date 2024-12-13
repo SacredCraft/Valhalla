@@ -1,10 +1,6 @@
 'use client'
 
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
-
 import { orpc } from '@valhalla/api/react'
-
-import { authClient } from '@/lib/auth/client'
 
 import { columns } from './components/columns'
 import { DataTable } from './components/data-table'
