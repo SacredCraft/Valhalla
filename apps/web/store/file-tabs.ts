@@ -1,18 +1,7 @@
-import { del, get, set } from 'idb-keyval'
-import { createJSONStorage, persist, StateStorage } from 'zustand/middleware'
+import { createJSONStorage, persist } from 'zustand/middleware'
 import { createStore } from 'zustand/vanilla'
 
-const storage: StateStorage = {
-  getItem: async (name: string): Promise<string | null> => {
-    return (await get(name)) || null
-  },
-  setItem: async (name: string, value: string): Promise<void> => {
-    await set(name, value)
-  },
-  removeItem: async (name: string): Promise<void> => {
-    await del(name)
-  },
-}
+import { storage } from './shared'
 
 export interface FileTabsStore {
   tabs: {

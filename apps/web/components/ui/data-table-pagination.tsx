@@ -34,7 +34,8 @@ export function DataTablePagination<TData>({
           <Select
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value) => {
-              table.setPageSize(Number(value))
+              const newSize = Number(value)
+              table.setPageSize(newSize)
             }}
           >
             <SelectTrigger className="h-8 w-[70px]">
@@ -66,7 +67,9 @@ export function DataTablePagination<TData>({
           <Button
             variant="outline"
             className="size-8 p-0"
-            onClick={() => table.previousPage()}
+            onClick={() => {
+              table.previousPage()
+            }}
             disabled={!table.getCanPreviousPage()}
           >
             <span className="sr-only">Go to previous page</span>
@@ -75,7 +78,9 @@ export function DataTablePagination<TData>({
           <Button
             variant="outline"
             className="size-8 p-0"
-            onClick={() => table.nextPage()}
+            onClick={() => {
+              table.nextPage()
+            }}
             disabled={!table.getCanNextPage()}
           >
             <span className="sr-only">Go to next page</span>

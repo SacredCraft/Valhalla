@@ -27,6 +27,7 @@ import {
 } from '@valhalla/design-system/components/ui/table'
 
 import { DataTablePagination } from '@/components/ui/data-table-pagination'
+import { usePaginationStore } from '@/providers/pagination-provider'
 
 import { DataTableActions } from './data-table-actions'
 import { DataTableToolbar } from './data-table-toolbar'
@@ -44,6 +45,8 @@ export function DataTable({ columns, data }: DataTableProps) {
     []
   )
   const [sorting, setSorting] = React.useState<SortingState>([])
+  const { pagination, setPagination } = usePaginationStore((state) => state)
+  const [pageIndex, setPageIndex] = React.useState(0)
 
   const table = useReactTable({
     data,
@@ -53,6 +56,11 @@ export function DataTable({ columns, data }: DataTableProps) {
       columnVisibility,
       rowSelection,
       columnFilters,
+      pagination: {
+        pageIndex,
+        pageSize:
+          pagination.find((item) => item.name === 'users')?.pageSize ?? 10,
+      },
     },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
@@ -65,6 +73,15 @@ export function DataTable({ columns, data }: DataTableProps) {
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
+    onPaginationChange: (updater) => {
+      const newPagination =
+        typeof updater === 'function'
+          ? updater(table.getState().pagination)
+          : updater
+
+      setPageIndex(newPagination.pageIndex)
+      setPagination('users', newPagination.pageSize)
+    },
   })
 
   return (
