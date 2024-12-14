@@ -70,7 +70,7 @@ const SheetContent = React.forwardRef<
         <Cross2Icon className="h-4 w-4" />
         <span className="sr-only">Close</span>
       </SheetPrimitive.Close>
-      <ScrollArea>
+      <ScrollArea className="h-full">
         <div className="p-6">{children}</div>
       </ScrollArea>
     </SheetPrimitive.Content>
