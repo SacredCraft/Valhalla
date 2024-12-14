@@ -23,9 +23,11 @@ export function DataTableToolbar<TData>({
       <div className="flex flex-1 items-center space-x-2">
         <Input
           placeholder="搜索用户..."
-          value={(table.getColumn('用户名')?.getFilterValue() as string) ?? ''}
+          value={
+            (table.getColumn('用户信息')?.getFilterValue() as string) ?? ''
+          }
           onChange={(event) =>
-            table.getColumn('用户名')?.setFilterValue(event.target.value)
+            table.getColumn('用户信息')?.setFilterValue(event.target.value)
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />

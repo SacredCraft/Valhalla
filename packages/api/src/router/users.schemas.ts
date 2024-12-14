@@ -8,3 +8,9 @@ export const createUserSchema = z.object({
     required_error: '角色不能为空',
   }),
 })
+
+export const updateUserSchema = createUserSchema.partial().extend({
+  image: z.instanceof(File).optional(),
+  id: z.string(),
+  password: z.string().min(8, '密码至少8位').or(z.literal('')).optional(),
+})

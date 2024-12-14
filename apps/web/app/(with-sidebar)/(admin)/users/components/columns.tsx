@@ -8,6 +8,9 @@ import { Badge } from '@valhalla/design-system/components/ui/badge'
 import { Checkbox } from '@valhalla/design-system/components/ui/checkbox'
 
 import { DataTableColumnHeader } from '@/components/ui/data-table-column-header'
+import { ValhallaUserAvatar } from '@/components/ui/val-user-avatar'
+
+import { EditUser } from './edit-user'
 
 export const columns: ColumnDef<UserWithRole>[] = [
   {
@@ -35,18 +38,25 @@ export const columns: ColumnDef<UserWithRole>[] = [
     enableHiding: false,
   },
   {
-    id: '用户名',
+    id: '用户信息',
     accessorKey: 'name',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="用户名" />
+      <DataTableColumnHeader column={column} title="用户信息" />
     ),
-  },
-  {
-    id: '邮箱',
-    accessorKey: 'email',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="邮箱" />
-    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex items-center gap-2">
+          <ValhallaUserAvatar userId={row.original.id} />
+          <div className="flex flex-col">
+            <span>{row.original.name}</span>
+            <span className="text-xs text-muted-foreground">
+              {row.original.email}
+            </span>
+          </div>
+        </div>
+      )
+    },
+    filterFn: 'includesString',
   },
   {
     id: '角色',
@@ -102,6 +112,12 @@ export const columns: ColumnDef<UserWithRole>[] = [
     cell: ({ row }) => {
       const updatedAt = row.original.updatedAt
       return <span>{format(updatedAt, 'yyyy-MM-dd HH:mm:ss')}</span>
+    },
+  },
+  {
+    id: '操作',
+    cell: ({ row }) => {
+      return <EditUser user={row.original} />
     },
   },
 ]
