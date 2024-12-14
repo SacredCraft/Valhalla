@@ -4,7 +4,6 @@ import { AppleIcon, BoxIcon, TerminalIcon } from 'lucide-react'
 
 import { auth, type Session } from '@valhalla/auth'
 import { Button } from '@valhalla/design-system/components/ui/button'
-import ShimmerButton from '@valhalla/design-system/components/ui/shimmer-button'
 
 import {
   NavigationMenuContent,
@@ -48,9 +47,7 @@ const ValhallaActions = async () => {
       {session ? (
         <>
           <Link href="/dashboard">
-            <ShimmerButton className="h-8 px-3 text-sm" borderRadius="8px">
-              仪表盘
-            </ShimmerButton>
+            <Button>仪表盘</Button>
           </Link>
           <ValhallaAccountDropdown
             side="bottom"
