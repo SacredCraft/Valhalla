@@ -9,6 +9,9 @@
     "paths": {
       "@/*": ["src/*"],
 
+      "@valhalla/api": ["src"],
+      "@valhalla/api/*": ["src/*"],
+
       "@valhalla/core": ["../core/src"],
       "@valhalla/core/*": ["../core/src/*"],
 

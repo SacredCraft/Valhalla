@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { pub } from '../orpc'
+import { pub } from '@valhalla/api/orpc'
 
 const sponsorsSchema = z.array(
   z.object({

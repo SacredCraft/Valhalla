@@ -1,7 +1,6 @@
+import { authed } from '@valhalla/api/orpc'
+import { MatchLayoutInput } from '@valhalla/api/schemas'
 import { getRegistry } from '@valhalla/core/resource'
-
-import { authed } from '@/orpc'
-import { MatchLayoutInput } from '@/schemas'
 
 export const registryMiddleware = authed.middleware((_input, _ctx, meta) => {
   return meta.next({

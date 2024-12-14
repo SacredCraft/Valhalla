@@ -2,14 +2,13 @@ import path from 'path'
 import fs from 'fs-extra'
 import { z } from 'zod'
 
-import { checkFileExistMiddleware } from '@/middlewares/file'
-import { matchLayoutInput } from '@/schemas'
-
+import { checkFileExistMiddleware } from '@valhalla/api/middlewares/file'
 import {
   layoutsMiddleware,
   matchLayoutMiddleware,
-} from '../middlewares/registry'
-import { authed } from '../orpc'
+} from '@valhalla/api/middlewares/registry'
+import { authed } from '@valhalla/api/orpc'
+import { matchLayoutInput } from '@valhalla/api/schemas'
 
 export const filesRouter = authed
   .tags('Files')

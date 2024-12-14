@@ -2,11 +2,10 @@ import fs from 'fs-extra'
 import yaml from 'yaml'
 import { z } from 'zod'
 
+import { registryMiddleware } from '@valhalla/api/middlewares/registry'
+import { admin, authed } from '@valhalla/api/orpc'
 import { CONFIG_PATH } from '@valhalla/core/config'
 import { resolvePath } from '@valhalla/utils/path'
-
-import { registryMiddleware } from '@/middlewares/registry'
-import { admin, authed } from '@/orpc'
 
 import { pathsSchema } from './paths.schemas'
 

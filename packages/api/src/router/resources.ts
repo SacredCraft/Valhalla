@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
-import { registryMiddleware } from '../middlewares/registry'
-import { authed } from '../orpc'
+import { registryMiddleware } from '@valhalla/api/middlewares/registry'
+import { authed } from '@valhalla/api/orpc'
 
 export const getResources = authed
   .use(registryMiddleware)

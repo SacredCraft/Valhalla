@@ -6,12 +6,11 @@ import fs from 'fs-extra'
 import sharp from 'sharp'
 import { z } from 'zod'
 
+import { authed } from '@valhalla/api/orpc'
 import { systemConfig } from '@valhalla/core/config'
 import { eq } from '@valhalla/db'
 import { user as userSchema } from '@valhalla/db/schema'
 import { resolvePath } from '@valhalla/utils/path'
-
-import { authed } from '../orpc'
 
 export const uploadAvatar = authed
   .route({

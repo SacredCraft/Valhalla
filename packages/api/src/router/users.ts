@@ -1,6 +1,7 @@
 import { ORPCError } from '@orpc/server'
 import { z } from 'zod'
 
+import { admin } from '@valhalla/api/orpc'
 import { auth, hashPassword } from '@valhalla/auth'
 import { eq, inArray } from '@valhalla/db'
 import {
@@ -10,8 +11,6 @@ import {
   session,
   user,
 } from '@valhalla/db/schema'
-
-import { admin } from '@/orpc'
 
 import { uploadAvatar } from './avatar'
 import { createUserSchema, updateUserSchema } from './users.schemas'

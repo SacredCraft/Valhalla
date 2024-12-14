@@ -1,9 +1,8 @@
 import { z } from 'zod'
 
+import { authed } from '@valhalla/api/orpc'
 import { and, desc, eq, isNull } from '@valhalla/db'
 import { notification } from '@valhalla/db/schema'
-
-import { authed } from '../orpc'
 
 export const notificationsRouter = authed
   .tags('Notifications')
