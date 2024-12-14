@@ -1,14 +1,11 @@
 {
   "extends": "@valhalla/typescript-config/nextjs.json",
   "compilerOptions": {
-    "rootDir": ".",
     "baseUrl": ".",
     "declaration": false,
     "declarationMap": false,
     "paths": {
       "@/*": ["./*"],
-      "@valhalla/auth": ["../../packages/auth/src"],
-      "@valhalla/auth/*": ["../../packages/auth/src/*"],
       "@valhalla/core": ["../../packages/core/src"],
       "@valhalla/core/*": ["../../packages/core/src/*"],
       "@valhalla/db": ["../../packages/db/src"],

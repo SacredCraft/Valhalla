@@ -2,7 +2,7 @@ import path from 'path'
 import { ORPCError } from '@orpc/server'
 import fs from 'fs-extra'
 
-import { MatchLayoutInput } from '@/schemas'
+import { MatchLayoutInput } from '@valhalla/api/schemas'
 
 import { registryMiddleware } from './registry'
 

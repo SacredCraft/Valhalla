@@ -5,5 +5,10 @@
     "rootDir": ".",
     "composite": true,
     "incremental": true
-  }
+  },
+  "references": [
+    {
+      "path": "../core"
+    }
+  ]
 }
