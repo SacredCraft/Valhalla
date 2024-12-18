@@ -13,5 +13,8 @@ export const session = pgTable('session', {
     .references(() => user.id),
   impersonatedBy: text('impersonatedBy').references(() => user.id),
   createdAt: timestamp('createdAt').notNull().defaultNow(),
-  updatedAt: timestamp('updatedAt').notNull().defaultNow(),
+  updatedAt: timestamp('updatedAt')
+    .notNull()
+    .defaultNow()
+    .$onUpdateFn(() => new Date()),
 })

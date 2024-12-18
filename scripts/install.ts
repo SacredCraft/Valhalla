@@ -3,7 +3,7 @@ import chalk from 'chalk'
 import fs from 'fs-extra'
 import yaml from 'yaml'
 
-// 读取配置文件
+fs.ensureFileSync('configs/system.yaml')
 const config = yaml.parse(fs.readFileSync('configs/system.yaml', 'utf8'))
 
 let updates: any = {

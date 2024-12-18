@@ -5,7 +5,7 @@
   "author": "LioRael",
   "type": "module",
   "scripts": {
-    "configure": "tsx ./scripts/install.ts && pnpm -filter @valhalla/auth configure",
+    "configure": "tsx ./scripts/install.ts && pnpm turbo db:push && pnpm -filter @valhalla/auth configure",
     "format:check": "prettier --check .",
     "format:write": "prettier --write ."
   },
