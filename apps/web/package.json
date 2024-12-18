@@ -9,7 +9,7 @@
     "dev": "pnpm with-env tsx watch server.ts",
     "lint": "eslint . --max-warnings 0",
     "next": "next dev",
-    "start": "NODE_ENV=production pnpm with-env tsx server.ts",
+    "start": "cross-env NODE_ENV=production pnpm with-env tsx server.ts",
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
@@ -56,6 +56,7 @@
     "@valhalla/tailwind-config": "workspace:*",
     "@valhalla/typescript-config": "workspace:*",
     "autoprefixer": "catalog:",
+    "cross-env": "^7.0.3",
     "dotenv-cli": "catalog:",
     "postcss": "catalog:",
     "postcss-load-config": "^6.0.1",
