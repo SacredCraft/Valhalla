@@ -5,7 +5,8 @@
   "author": "LioRael",
   "type": "module",
   "scripts": {
-    "build": "pnpm with-env next build",
+    "build": "pnpm build:server && pnpm with-env next build",
+    "build:server": "tsx build.ts",
     "dev": "pnpm with-env tsx watch server.ts",
     "lint": "eslint . --max-warnings 0",
     "next": "next dev",
