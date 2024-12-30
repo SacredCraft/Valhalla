@@ -1,73 +1,46 @@
-import { Control } from 'react-hook-form'
+import { User } from 'better-auth'
+import { XIcon } from 'lucide-react'
 
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@valhalla/design-system/components/ui/form'
-import { Label } from '@valhalla/design-system/components/ui/label'
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from '@valhalla/design-system/components/ui/radio-group'
+import { Button } from '@valhalla/design-system/components/ui/button'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const RoleItem = ({ control }: { control: Control<any> }) => {
+import { ValhallaUserAvatar } from '@/components/ui/val-user-avatar'
+
+export function UserList({
+  users,
+  setUsers,
+}: {
+  users: User[]
+  setUsers: (users: User[]) => void
+}) {
+  if (users.length === 0) {
+    return <p className="text-sm text-muted-foreground">无用户</p>
+  }
+
   return (
-    <FormField
-      control={control}
-      name="role"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>角色</FormLabel>
-          <FormControl>
-            <RadioGroup
-              className="gap-2"
-              onValueChange={field.onChange}
-              defaultValue={field.value}
-            >
-              <div className="relative flex w-full items-start gap-2 rounded-lg border border-input p-4 shadow-sm shadow-black/5 has-[[data-state=checked]]:border-ring">
-                <RadioGroupItem
-                  value="admin"
-                  className="order-1 after:absolute after:inset-0"
-                />
-                <div className="grid grow gap-2">
-                  <Label htmlFor="radio-08-r1">
-                    管理员{' '}
-                    <span className="text-xs font-normal leading-[inherit] text-muted-foreground">
-                      (站点)
-                    </span>
-                  </Label>
-                  <p className="text-xs text-muted-foreground">
-                    将授予该用户整个平台的管理员身份
-                  </p>
-                </div>
-              </div>
-
-              <div className="relative flex w-full items-start gap-2 rounded-lg border border-input p-4 shadow-sm shadow-black/5 has-[[data-state=checked]]:border-ring">
-                <RadioGroupItem
-                  value="user"
-                  className="order-1 after:absolute after:inset-0"
-                />
-                <div className="grid grow gap-2">
-                  <Label htmlFor="radio-08-r2">
-                    用户{' '}
-                    <span className="text-xs font-normal leading-[inherit] text-muted-foreground">
-                      (站点)
-                    </span>
-                  </Label>
-                  <p className="text-xs text-muted-foreground">
-                    将授予该用户普通用户权限
-                  </p>
-                </div>
-              </div>
-            </RadioGroup>
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
+    <div className="flex flex-col gap-2">
+      {users.map((user) => (
+        <div
+          key={user.id}
+          className="group flex w-full items-center justify-between gap-2"
+        >
+          <div className="flex items-center gap-2">
+            <ValhallaUserAvatar userId={user.id} />
+            <div className="flex flex-col">
+              <p className="text-sm font-medium">{user.name}</p>
+              <p className="text-sm text-muted-foreground">{user.email}</p>
+            </div>
+          </div>
+          <Button
+            onClick={() => {
+              setUsers(users.filter((u) => u.id !== user.id))
+            }}
+            variant="outline"
+            size="icon"
+          >
+            <XIcon className="size-4" />
+          </Button>
+        </div>
+      ))}
+    </div>
   )
 }

@@ -1,12 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CheckIcon, CopyIcon } from 'lucide-react'
+import { User } from 'better-auth'
+import { CheckIcon, CopyIcon, PlusIcon, XIcon } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
-import { Control, useForm } from 'react-hook-form'
+import { Control, useForm, UseFormReturn } from 'react-hook-form'
 import { z } from 'zod'
 
 import { updateRoleSchema } from '@valhalla/api/router/resources.schemas'
 import { ResourceRoleWithUsersAndResources } from '@valhalla/db/schema'
+import { Badge } from '@valhalla/design-system/components/ui/badge'
 import { Button } from '@valhalla/design-system/components/ui/button'
 import {
   Form,
@@ -29,7 +31,11 @@ import {
 } from '@valhalla/design-system/components/ui/sheet'
 import { toast } from '@valhalla/design-system/components/ui/sonner'
 
+import { ResourceSelect } from '@/components/resource-select'
+import { UserSelect } from '@/components/user-select'
 import { orpc } from '@/lib/orpc/react'
+
+import { UserList } from './shared'
 
 const formSchema = updateRoleSchema.omit({ id: true })
 
@@ -92,12 +98,25 @@ function EditRoleForm({
     updateRole({ ...data, id: role.id })
   }
 
+  const { data: initialUsers, isLoading: isLoadingUsers } =
+    orpc.users.getUsers.useQuery({
+      ids: role.users ?? [],
+    })
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <RoleIdField role={role} />
         <RoleNameField control={form.control} />
         <RoleDescriptionField control={form.control} />
+        <FormResourcesField control={form.control} />
+        {!isLoadingUsers && (
+          <RoleUsersField
+            control={form.control}
+            form={form}
+            initialUsers={initialUsers ?? []}
+          />
+        )}
 
         <SheetFooter>
           <SubmitButton isPending={isPending} />
@@ -197,6 +216,98 @@ const RoleDescriptionField = ({
           <FormLabel>角色描述</FormLabel>
           <FormControl>
             <Input {...field} />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  )
+}
+
+const FormResourcesField = ({
+  control,
+}: {
+  control: Control<z.infer<typeof formSchema>>
+}) => {
+  return (
+    <FormField
+      control={control}
+      name="resources"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel className="flex items-center justify-between">
+            资源
+            <ResourceSelect value={field.value ?? []} onChange={field.onChange}>
+              <Button variant="ghost" className="size-8" size="icon">
+                <PlusIcon className="size-4" />
+              </Button>
+            </ResourceSelect>
+          </FormLabel>
+          <FormControl>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2">
+                {field.value?.map((resource) => (
+                  <Badge className="group gap-1" key={resource}>
+                    {resource}
+                    <XIcon
+                      onClick={() => {
+                        field.onChange(
+                          field.value?.filter((r) => r !== resource) ?? []
+                        )
+                      }}
+                      className="hidden size-3 cursor-pointer group-hover:block"
+                    />
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  )
+}
+
+const RoleUsersField = ({
+  control,
+  form,
+  initialUsers,
+}: {
+  control: Control<z.infer<typeof formSchema>>
+  form: UseFormReturn<z.infer<typeof formSchema>>
+  initialUsers: User[]
+}) => {
+  const [users, setUsers] = useState<User[]>(initialUsers)
+
+  useEffect(() => {
+    form.setValue(
+      'users',
+      users.map((user) => user.id)
+    )
+  }, [form, users])
+
+  return (
+    <FormField
+      control={control}
+      name="users"
+      render={() => (
+        <FormItem>
+          <FormLabel className="flex items-center justify-between">
+            用户
+            <UserSelect
+              value={users}
+              onChange={(user) => {
+                setUsers(user)
+              }}
+            >
+              <Button variant="ghost" className="size-8" size="icon">
+                <PlusIcon className="size-4" />
+              </Button>
+            </UserSelect>
+          </FormLabel>
+          <FormControl>
+            <UserList users={users} setUsers={setUsers} />
           </FormControl>
           <FormMessage />
         </FormItem>

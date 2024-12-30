@@ -19,8 +19,18 @@ export const getResources = authed
     path: '/list',
     summary: '列出资源',
   })
+  .input(
+    z.object({
+      search: z.string().optional(),
+    })
+  )
   .func(async (input, ctx) => {
-    return ctx.registry.resources
+    return Object.values(ctx.registry.resources).filter((resource) => {
+      if (input.search) {
+        return resource.name.includes(input.search)
+      }
+      return true
+    })
   })
 
 export const resourcesRouter = authed
@@ -158,15 +168,41 @@ export const resourcesRouter = authed
           .where(eq(resourceRole.id, input.id))
           .execute()
 
+        // 更新资源关联表
         await tx
           .delete(resourceRoleResource)
           .where(eq(resourceRoleResource.resourceRoleId, input.id))
           .execute()
 
+        if ((input.resources?.length ?? 0) > 0) {
+          await tx
+            .insert(resourceRoleResource)
+            .values(
+              input.resources?.map((resource) => ({
+                resourceRoleId: input.id,
+                resourceName: resource,
+              })) ?? []
+            )
+            .execute()
+        }
+
+        // 更新用户关联表
         await tx
           .delete(userResourceRole)
           .where(eq(userResourceRole.resourceRoleId, input.id))
           .execute()
+
+        if ((input.users?.length ?? 0) > 0) {
+          await tx
+            .insert(userResourceRole)
+            .values(
+              input.users?.map((user) => ({
+                resourceRoleId: input.id,
+                userId: user,
+              })) ?? []
+            )
+            .execute()
+        }
       })
     }),
   })

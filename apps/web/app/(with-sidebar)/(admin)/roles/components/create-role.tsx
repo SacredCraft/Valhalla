@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Plus } from 'lucide-react'
-import { Control, useForm } from 'react-hook-form'
+import { User } from 'better-auth'
+import { Plus, PlusIcon, XIcon } from 'lucide-react'
+import { Control, useForm, UseFormReturn } from 'react-hook-form'
 import { z } from 'zod'
 
 import { createRoleSchema } from '@valhalla/api/router/resources.schemas'
+import { Badge } from '@valhalla/design-system/components/ui/badge'
 import { Button } from '@valhalla/design-system/components/ui/button'
 import {
   Form,
@@ -27,7 +29,11 @@ import {
 } from '@valhalla/design-system/components/ui/sheet'
 import { toast } from '@valhalla/design-system/components/ui/sonner'
 
+import { ResourceSelect } from '@/components/resource-select'
+import { UserSelect } from '@/components/user-select'
 import { orpc } from '@/lib/orpc/react'
+
+import { UserList } from './shared'
 
 const formSchema = createRoleSchema
 
@@ -104,7 +110,7 @@ function CreateRoleForm({
         <FormName control={form.control} />
         <FormDescription control={form.control} />
         <FormResources control={form.control} />
-        <FormUsers control={form.control} />
+        <FormUsers control={form.control} form={form} />
         {children}
       </form>
     </Form>
@@ -166,9 +172,32 @@ const FormResources = ({
       name="resources"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>资源</FormLabel>
+          <FormLabel className="flex items-center justify-between">
+            资源
+            <ResourceSelect {...field}>
+              <Button variant="ghost" className="size-8" size="icon">
+                <PlusIcon className="size-4" />
+              </Button>
+            </ResourceSelect>
+          </FormLabel>
           <FormControl>
-            <Input {...field} />
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2">
+                {field.value.map((resource) => (
+                  <Badge className="group gap-1" key={resource}>
+                    {resource}
+                    <XIcon
+                      onClick={() => {
+                        field.onChange(
+                          field.value.filter((r) => r !== resource)
+                        )
+                      }}
+                      className="hidden size-3 cursor-pointer group-hover:block"
+                    />
+                  </Badge>
+                ))}
+              </div>
+            </div>
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -179,18 +208,41 @@ const FormResources = ({
 
 const FormUsers = ({
   control,
+  form,
 }: {
   control: Control<z.infer<typeof formSchema>>
+  form: UseFormReturn<z.infer<typeof formSchema>>
 }) => {
+  const [users, setUsers] = useState<User[]>([])
+
+  useEffect(() => {
+    form.setValue(
+      'users',
+      users.map((user) => user.id)
+    )
+  }, [form, users])
+
   return (
     <FormField
       control={control}
       name="users"
-      render={({ field }) => (
+      render={() => (
         <FormItem>
-          <FormLabel>用户</FormLabel>
+          <FormLabel className="flex items-center justify-between">
+            用户
+            <UserSelect
+              value={users}
+              onChange={(user) => {
+                setUsers(user)
+              }}
+            >
+              <Button variant="ghost" className="size-8" size="icon">
+                <PlusIcon className="size-4" />
+              </Button>
+            </UserSelect>
+          </FormLabel>
           <FormControl>
-            <Input {...field} />
+            <UserList users={users} setUsers={setUsers} />
           </FormControl>
           <FormMessage />
         </FormItem>

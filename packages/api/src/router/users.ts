@@ -3,7 +3,7 @@ import { z } from 'zod'
 
 import { admin } from '@valhalla/api/orpc'
 import { auth, hashPassword } from '@valhalla/auth'
-import { eq, inArray } from '@valhalla/db'
+import { eq, ilike, inArray } from '@valhalla/db'
 import {
   account,
   notification,
@@ -16,9 +16,25 @@ import { uploadAvatar } from './avatar'
 import { createUserSchema, updateUserSchema } from './users.schemas'
 
 export const usersRouter = admin.router({
-  list: admin.func(async (input, ctx) => {
-    return await ctx.db.select().from(user).execute()
-  }),
+  getUsers: admin
+    .input(z.object({ ids: z.array(z.string()) }))
+    .func(async (input, ctx) => {
+      return await ctx.db
+        .select()
+        .from(user)
+        .where(inArray(user.id, input.ids))
+        .execute()
+    }),
+
+  list: admin
+    .input(z.object({ search: z.string().optional() }))
+    .func(async (input, ctx) => {
+      return await ctx.db
+        .select()
+        .from(user)
+        .where(input.search ? ilike(user.name, `%${input.search}%`) : undefined)
+        .execute()
+    }),
 
   deleteUsers: admin
     .input(z.object({ ids: z.array(z.string()) }))
