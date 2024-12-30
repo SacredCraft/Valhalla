@@ -25,7 +25,7 @@ export default async function FilesPage() {
 }
 
 const Resources = async () => {
-  const resources = await getResources(undefined)
+  const resources = await getResources({})
   return (
     <div className="flex flex-col items-center justify-center">
       {Object.entries(resources).map(([key, resource]) => (
