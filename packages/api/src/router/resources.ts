@@ -1,7 +1,16 @@
+import { randomUUID } from 'crypto'
 import { z } from 'zod'
 
 import { registryMiddleware } from '@valhalla/api/middlewares/registry'
-import { authed } from '@valhalla/api/orpc'
+import { admin, authed } from '@valhalla/api/orpc'
+import { eq, inArray } from '@valhalla/db'
+import {
+  resourceRole,
+  resourceRoleResource,
+  userResourceRole,
+} from '@valhalla/db/schema'
+
+import { createRoleSchema, updateRoleSchema } from './resources.schemas'
 
 export const getResources = authed
   .use(registryMiddleware)
@@ -48,4 +57,116 @@ export const resourcesRouter = authed
           name: folder.name,
         }))
       }),
+
+    roles: admin
+      .route({
+        method: 'GET',
+        path: '/roles',
+        summary: '列出角色',
+      })
+      .func(async (input, ctx) => {
+        const roles = await ctx.db.select().from(resourceRole)
+
+        // 为每个角色获取关联的用户和资源
+        const rolesWithDetails = await Promise.all(
+          roles.map(async (role) => {
+            const users = await ctx.db
+              .select()
+              .from(userResourceRole)
+              .where(eq(userResourceRole.resourceRoleId, role.id))
+
+            const resources = await ctx.db
+              .select()
+              .from(resourceRoleResource)
+              .where(eq(resourceRoleResource.resourceRoleId, role.id))
+
+            return {
+              ...role,
+              users: users.map((u) => u.userId),
+              resources: resources.map((r) => r.resourceName),
+            }
+          })
+        )
+
+        return rolesWithDetails
+      }),
+
+    createRole: admin
+      .route({
+        method: 'POST',
+        path: '/roles',
+        summary: '创建角色',
+      })
+      .input(createRoleSchema)
+      .func(async (input, ctx) => {
+        const roleId = randomUUID()
+
+        // 事务处理确保数据一致性
+        return await ctx.db.transaction(async (tx) => {
+          // 插入角色主表
+          await tx.insert(resourceRole).values({
+            id: roleId,
+            name: input.name,
+            description: input.description,
+          })
+
+          // 插入资源关联表
+          if (input.resources.length > 0) {
+            await tx.insert(resourceRoleResource).values(
+              input.resources.map((resourceId) => ({
+                resourceRoleId: roleId,
+                resourceName: resourceId,
+              }))
+            )
+          }
+
+          // 插入用户关联表
+          if (input.users.length > 0) {
+            await tx.insert(userResourceRole).values(
+              input.users.map((userId) => ({
+                resourceRoleId: roleId,
+                userId,
+              }))
+            )
+          }
+
+          return { id: roleId }
+        })
+      }),
+
+    deleteRoles: admin
+      .route({
+        method: 'DELETE',
+        path: '/roles',
+        summary: '删除角色',
+      })
+      .input(z.object({ ids: z.array(z.string()) }))
+      .func(async (input, ctx) => {
+        return ctx.db
+          .delete(resourceRole)
+          .where(inArray(resourceRole.id, input.ids))
+      }),
+
+    updateRole: admin.input(updateRoleSchema).func((input, ctx) => {
+      return ctx.db.transaction(async (tx) => {
+        await tx
+          .update(resourceRole)
+          .set({
+            name: input.name,
+            description: input.description,
+          })
+          .where(eq(resourceRole.id, input.id))
+          .execute()
+
+        await tx
+          .delete(resourceRoleResource)
+          .where(eq(resourceRoleResource.resourceRoleId, input.id))
+          .execute()
+
+        await tx
+          .delete(userResourceRole)
+          .where(eq(userResourceRole.resourceRoleId, input.id))
+          .execute()
+      })
+    }),
   })

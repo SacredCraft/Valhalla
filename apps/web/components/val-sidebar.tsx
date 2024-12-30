@@ -42,13 +42,13 @@ const data = (pathname: string) => ({
     },
     {
       title: '角色管理',
-      url: '#',
+      url: '/roles',
       isActive: pathname.startsWith('/roles'),
       icon: Shield,
     },
     {
       title: '日志管理',
-      url: '#',
+      url: '/logs',
       isActive: pathname.startsWith('/logs'),
       icon: Database,
     },

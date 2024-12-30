@@ -58,3 +58,9 @@ export const userResourceRoleRelations = relations(
     }),
   })
 )
+
+export type ResourceRole = typeof resourceRole.$inferSelect
+export type ResourceRoleWithUsersAndResources = ResourceRole & {
+  resources: string[]
+  users: string[]
+}
