@@ -1,5 +1,4 @@
 'use client'
-'use client'
 
 import type React from 'react'
 import { motion } from 'motion/react'
