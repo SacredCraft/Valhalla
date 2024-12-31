@@ -50,7 +50,7 @@ const FilesPageContentInner = ({
 
   return layout !== undefined && isFileExist !== undefined ? (
     <ContentLayout
-      data={layout}
+      data={layout.matchLayout}
       isFileExist={isFileExist}
       resourceParams={resourceParams}
     />
