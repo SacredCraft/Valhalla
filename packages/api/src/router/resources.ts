@@ -25,12 +25,18 @@ export const getResources = authed
     })
   )
   .func(async (input, ctx) => {
-    return Object.values(ctx.registry.resources).filter((resource) => {
+    return ctx.resources.filter((resource) => {
       if (input.search) {
         return resource.name.includes(input.search)
       }
       return true
     })
+  })
+
+export const getOwnedResources = authed
+  .use(registryMiddleware)
+  .func(async (input, ctx) => {
+    return ctx.ownedResources
   })
 
 export const resourcesRouter = authed
@@ -49,6 +55,8 @@ export const resourcesRouter = authed
       }),
 
     list: getResources,
+
+    owned: getOwnedResources,
 
     folders: authed
       .use(registryMiddleware)

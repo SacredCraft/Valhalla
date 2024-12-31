@@ -1,0 +1,17 @@
+{
+  "name": "@valhalla/collaboration",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint . --max-warnings 0"
+  },
+  "dependencies": {
+    "@hocuspocus/extension-database": "^2.15.0",
+    "@hocuspocus/server": "^2.15.0",
+    "@valhalla/db": "workspace:*",
+    "ky": "1.7.4"
+  },
+  "devDependencies": {
+    "@valhalla/eslint-config": "workspace:*",
+    "@valhalla/typescript-config": "workspace:*"
+  }
+}

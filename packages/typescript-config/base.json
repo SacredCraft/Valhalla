@@ -24,6 +24,9 @@
       "@valhalla/core": ["../core/src"],
       "@valhalla/core/*": ["../core/src/*"],
 
+      "@valhalla/collaboration": ["../collaboration/src"],
+      "@valhalla/collaboration/*": ["../collaboration/src/*"],
+
       "@valhalla/db": ["../db/src"],
       "@valhalla/db/*": ["../db/src/*"],
 

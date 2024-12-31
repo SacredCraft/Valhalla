@@ -1,15 +1,38 @@
 import { authed } from '@valhalla/api/orpc'
 import { MatchLayoutInput } from '@valhalla/api/schemas'
 import { getRegistry } from '@valhalla/core/resource'
+import { eq, inArray } from '@valhalla/db'
+import { resourceRoleResource, userResourceRole } from '@valhalla/db/schema'
 
-export const registryMiddleware = authed.middleware((_input, _ctx, meta) => {
-  return meta.next({
-    context: {
-      registry: getRegistry(),
-      // ownedResources: getOwnedResources(context.user?.id),
-    },
-  })
-})
+export const registryMiddleware = authed.middleware(
+  async (_input, ctx, meta) => {
+    const registry = getRegistry()
+    const resources = Object.values(registry.resources)
+    const userResourceRoles = await ctx.db
+      .select()
+      .from(userResourceRole)
+      .where(eq(userResourceRole.userId, ctx.user?.id))
+
+    const resourceIds = userResourceRoles.map((role) => role.resourceRoleId)
+
+    const resourceRoleResources = await ctx.db
+      .select()
+      .from(resourceRoleResource)
+      .where(inArray(resourceRoleResource.resourceRoleId, resourceIds))
+
+    const ownedResources = resources.filter((resource) =>
+      resourceRoleResources.some((role) => role.resourceName === resource.name)
+    )
+
+    return meta.next({
+      context: {
+        registry,
+        resources,
+        ownedResources,
+      },
+    })
+  }
+)
 
 export const layoutsMiddleware = registryMiddleware.concat(
   (_input, ctx, meta) => {

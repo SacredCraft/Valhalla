@@ -7,7 +7,9 @@
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
+    "@hocuspocus/provider": "^2.15.0",
     "@hookform/resolvers": "^3.9.1",
+    "@monaco-editor/react": "4.7.0-rc.0",
     "@radix-ui/react-accordion": "^1.2.1",
     "@radix-ui/react-alert-dialog": "^1.1.2",
     "@radix-ui/react-aspect-ratio": "^1.1.0",
@@ -42,7 +44,9 @@
     "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.3.0",
     "input-otp": "^1.4.1",
+    "ky": "^1.7.4",
     "lucide-react": "catalog:",
+    "monaco-editor": "^0.52.2",
     "motion": "12.0.0-alpha.2",
     "next-themes": "^0.3.0",
     "react": "catalog:",
@@ -54,6 +58,7 @@
     "tailwind-merge": "catalog:",
     "tailwindcss-animate": "catalog:",
     "vaul": "^1.1.0",
+    "y-monaco": "^0.1.6",
     "zod": "catalog:"
   },
   "devDependencies": {
@@ -65,6 +70,7 @@
     "@valhalla/tailwind-config": "workspace:*",
     "@valhalla/typescript-config": "workspace:*",
     "autoprefixer": "catalog:",
+    "better-auth": "catalog:",
     "postcss": "catalog:",
     "postcss-load-config": "^6.0.1",
     "server-only": "^0.0.1",

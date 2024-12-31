@@ -3,6 +3,7 @@ import { parse } from 'url'
 import next from 'next'
 import chalk from 'chalk'
 
+import { configuration, Server } from '@valhalla/collaboration'
 import { systemConfig } from '@valhalla/core/config'
 import { initLifeCycle } from '@valhalla/core/life-cycle'
 import { getRegistry } from '@valhalla/core/resource'
@@ -10,11 +11,12 @@ import { getRegistry } from '@valhalla/core/resource'
 import './resources'
 import '@valhalla/core/init'
 
+import { WebSocketServer } from 'ws'
+
 const port = parseInt(process.env.PORT || '3000', 10)
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({
   dev,
-  turbo: true,
 })
 const handler = app.getRequestHandler()
 
@@ -40,8 +42,27 @@ initLifeCycle()
 
 app.prepare().then(() => {
   const server = createServer((req, res) => {
+    if (!req.url) return
     const parsedUrl = parse(req.url!, true)
     return handler(req, res, parsedUrl)
+  })
+
+  const wss = new WebSocketServer({ server })
+
+  const hocuspocus = Server.configure(configuration())
+
+  wss.on('connection', (server, request) => {
+    hocuspocus.handleConnection(server, request)
+  })
+
+  const originalOn = server.on.bind(server)
+  server.on = function (event, listener) {
+    return event !== 'upgrade' ? originalOn(event, listener) : server
+  }
+
+  server.once('error', (err) => {
+    console.error(err)
+    process.exit(1)
   })
 
   server.listen(port)
@@ -57,6 +78,7 @@ app.prepare().then(() => {
   console.log()
   console.log(` - Local:      http://localhost:${port}`)
   console.log(` - Network:    http://0.0.0.0:${port}`)
+  console.log(` - WebSocket:  ws://0.0.0.0:${port}`)
   console.log()
   console.log(` - Plugins:    ${Object.keys(plugins).join(', ')}`)
   console.log(

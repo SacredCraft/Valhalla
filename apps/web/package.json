@@ -23,6 +23,7 @@
     "@valhalla/api": "workspace:*",
     "@valhalla/assets": "workspace:*",
     "@valhalla/auth": "workspace:*",
+    "@valhalla/collaboration": "workspace:*",
     "@valhalla/core": "workspace:*",
     "@valhalla/db": "workspace:*",
     "@valhalla/design-system": "workspace:*",
