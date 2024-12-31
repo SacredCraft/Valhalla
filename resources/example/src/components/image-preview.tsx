@@ -2,21 +2,10 @@ import Image from 'next/image'
 import { DownloadIcon } from 'lucide-react'
 
 import { Button } from '@valhalla/design-system/components/ui/button'
-import {
-  ResourceContentContext,
-  useResourceContent,
-} from '@valhalla/design-system/resources/providers/resource-content-provider'
+import { useResourceContent } from '@valhalla/design-system/resources/providers/resource-content-provider'
 import { useResourceCore } from '@valhalla/design-system/resources/providers/resource-core-provider'
 
 export default function ImagePreview() {
-  return (
-    <ResourceContentContext>
-      <ImagePreviewInner />
-    </ResourceContentContext>
-  )
-}
-
-const ImagePreviewInner = () => {
   const {
     resourceContent: { data },
   } = useResourceContent() as {

@@ -26,5 +26,9 @@
     "react": "catalog:",
     "tailwindcss": "catalog:",
     "zod": "catalog:"
+  },
+  "dependencies": {
+    "@monaco-editor/react": "4.7.0-rc.0",
+    "monaco-editor": "^0.52.2"
   }
 }

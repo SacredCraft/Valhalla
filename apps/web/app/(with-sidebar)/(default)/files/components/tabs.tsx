@@ -102,7 +102,7 @@ const Tab = ({
     return null
   }
 
-  const Icon = Icons[matchLayout.icon ?? 'File']
+  const Icon = Icons[matchLayout.icon]
 
   return (
     <TabContextMenu index={index}>

@@ -30,7 +30,10 @@ export const filesRouter = authed
       )
       .use(matchLayoutMiddleware)
       .func(async (_input, ctx) => {
-        return ctx.matchLayout
+        return {
+          matchLayout: ctx.matchLayout,
+          icon: ctx.icon,
+        }
       }),
 
     exist: authed
@@ -102,6 +105,18 @@ export const filesRouter = authed
               )
             )
 
+            const icon = layout?.icon
+              ? layout.icon(
+                  {
+                    resourceName: input.resourceName,
+                    resourceFolder: input.resourceFolder,
+                    filePath: path.join(input.path, file),
+                    fileName: file,
+                  },
+                  resourceConfig
+                )
+              : 'File'
+
             const filePath = path.join(resolvedPath, file)
             const stat = fs.statSync(filePath)
 
@@ -110,7 +125,7 @@ export const filesRouter = authed
               isDirectory: stat.isDirectory(),
               size: stat.size,
               modifiedTime: stat.mtime.toISOString(),
-              icon: layout?.icon ?? 'File',
+              icon,
             }
           })
 

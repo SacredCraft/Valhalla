@@ -27,12 +27,12 @@ export const ResourcesContent = () => {
 }
 
 type ResourcesProps = {
-  data?: Record<string, Resource>
+  data?: Resource[]
   isLoading: boolean
 }
 
 export const ResourcesGrid = ({ data, isLoading }: ResourcesProps) => {
-  const resources = Object.values(data ?? {})
+  const resources = data ?? []
   return (
     <div className="grid grid-cols-1 gap-2 @[320px]:grid-cols-2 @[768px]:grid-cols-3 @[1024px]:grid-cols-4">
       {isLoading

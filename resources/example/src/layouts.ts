@@ -13,3 +13,31 @@ export const ImagePreviewLayout = {
   },
   component: 'ImagePreview',
 } satisfies Layout
+
+export const TextEditorLayout = {
+  name: 'TextEditor',
+  priority: 1,
+  match: (
+    ctx,
+    config: {
+      textExtensions: string[]
+    }
+  ) => {
+    return config.textExtensions.some((ext) => ctx.fileName.endsWith(ext))
+  },
+  icon: (ctx) => {
+    const ext = ctx.fileName.split('.').pop()
+    switch (ext) {
+      case 'json':
+        return 'JSON'
+      case 'yaml':
+      case 'yml':
+        return 'YAML'
+      case 'kt':
+        return 'Kotlin'
+      default:
+        return 'File'
+    }
+  },
+  component: 'TextEditor',
+} satisfies Layout

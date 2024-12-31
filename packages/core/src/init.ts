@@ -44,19 +44,19 @@ const createGlobalLayouts = () => {
     name: 'GlobalYAML',
     match: (ctx) => ctx.fileName.endsWith('.yaml'),
     priority: 0,
-    icon: 'YAML',
+    icon: () => 'YAML',
   })
   createGlobalLayout({
     name: 'GlobalJSON',
     match: (ctx) => ctx.fileName.endsWith('.json'),
     priority: 0,
-    icon: 'JSON',
+    icon: () => 'JSON',
   })
   createGlobalLayout({
     name: 'GlobalKotlin',
     match: (ctx) => ctx.fileName.endsWith('.kt'),
     priority: 0,
-    icon: 'Kotlin',
+    icon: () => 'Kotlin',
   })
 }
 

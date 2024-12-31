@@ -33,10 +33,15 @@ export const matchLayoutMiddleware = layoutsMiddleware.concat(
     const matchLayout =
       layouts.find((layout) => layout.match(input, resourceConfig)) ?? null
 
+    const icon = matchLayout?.icon
+      ? matchLayout.icon(input, resourceConfig)
+      : 'File'
+
     return meta.next({
       context: {
         ...ctx,
         matchLayout,
+        icon,
       },
     })
   }

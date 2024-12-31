@@ -6,4 +6,8 @@ registerLifeCycle('beforeInit', () => {
     name: 'ImagePreview',
     component: '@valhalla/example/components/image-preview',
   })
+  createComponent({
+    name: 'TextEditor',
+    component: '@valhalla/example/components/text-editor',
+  })
 })

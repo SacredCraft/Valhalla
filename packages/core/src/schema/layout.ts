@@ -10,7 +10,11 @@ export const matchContextSchema = z.object({
 const layoutSchema = z.object({
   name: z.string(),
   component: z.string().optional(),
-  icon: z.string().optional(),
+  icon: z
+    .function()
+    .args(matchContextSchema, z.any())
+    .returns(z.string())
+    .optional(),
   priority: z.number().default(0),
   match: z.function().args(matchContextSchema, z.any()).returns(z.boolean()),
 })

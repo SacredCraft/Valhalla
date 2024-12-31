@@ -4,7 +4,7 @@ import { createResource } from '@valhalla/core/resource'
 
 import './components'
 
-import { ImagePreviewLayout } from './layouts'
+import { ImagePreviewLayout, TextEditorLayout } from './layouts'
 
 const imageExtensions = [
   '.png',
@@ -16,6 +16,8 @@ const imageExtensions = [
   '.ico',
 ]
 
+const textExtensions = ['.txt', '.md', '.json', '.yaml', '.yml', '.toml']
+
 const example = createResource({
   name: 'example',
   description: '存储了一些美术资源',
@@ -23,8 +25,9 @@ const example = createResource({
   contentSchema: z.object({
     name: z.string().default('Bkm016'),
     imageExtensions: z.array(z.string()).default(imageExtensions),
+    textExtensions: z.array(z.string()).default(textExtensions),
   }),
-  layouts: [ImagePreviewLayout],
+  layouts: [ImagePreviewLayout, TextEditorLayout],
 })
 
 export { example }
