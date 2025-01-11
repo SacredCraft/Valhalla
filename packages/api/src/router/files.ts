@@ -7,6 +7,10 @@ import {
   layoutsMiddleware,
   matchLayoutMiddleware,
 } from '@valhalla/api/middlewares/registry'
+import {
+  availableResourcePathMiddleware,
+  resourcePermissionMiddleware,
+} from '@valhalla/api/middlewares/security'
 import { authed } from '@valhalla/api/orpc'
 import { matchLayoutInput } from '@valhalla/api/schemas'
 
@@ -62,10 +66,10 @@ export const filesRouter = authed
           path: z.string(),
         })
       )
+      .use(resourcePermissionMiddleware)
+      .use(availableResourcePathMiddleware)
       .func(async (input, ctx) => {
-        // 记得检查权限
-
-        const folders = ctx.registry.resourcesFolders[input.resourceName]
+        const folders = ctx.folders
         const folderPath = folders.find(
           (f) => f.name === input.resourceFolder
         )?.path

@@ -18,7 +18,6 @@ export const checkFileExistMiddleware = (throwError: boolean = true) =>
       }
       return meta.next({
         context: {
-          ...ctx,
           fileExist: false,
           filePath: null as string | null,
         },

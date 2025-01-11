@@ -38,7 +38,6 @@ export const layoutsMiddleware = registryMiddleware.concat(
   (_input, ctx, meta) => {
     return meta.next({
       context: {
-        ...ctx,
         layouts: getRegistry().layouts,
         resourceLayouts: getRegistry().resourceLayouts,
       },
@@ -62,7 +61,6 @@ export const matchLayoutMiddleware = layoutsMiddleware.concat(
 
     return meta.next({
       context: {
-        ...ctx,
         matchLayout,
         icon,
       },
