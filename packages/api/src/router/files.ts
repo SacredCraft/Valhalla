@@ -9,10 +9,13 @@ import {
 } from '@valhalla/api/middlewares/registry'
 import {
   availableResourcePathMiddleware,
+  fileEditMiddleware,
   resourcePermissionMiddleware,
 } from '@valhalla/api/middlewares/security'
 import { authed } from '@valhalla/api/orpc'
 import { matchLayoutInput } from '@valhalla/api/schemas'
+
+import { moveFileInput, renameFileInput } from './files.schemas'
 
 export const filesRouter = authed
   .tags('Files')
@@ -172,5 +175,49 @@ export const filesRouter = authed
           input.data,
           input.writeFileOptions
         )
+      }),
+
+    move: authed
+      .route({
+        method: 'POST',
+        path: '/move',
+        summary: '移动文件',
+      })
+      .input(moveFileInput)
+      .use(checkFileExistMiddleware(true))
+      .use(fileEditMiddleware)
+      .func(async (input, ctx) => {
+        const newPath = path.join(input.newPath, path.basename(ctx.filePath!))
+        ctx.securityCheck(newPath, input.resourceFolder)
+        return fs.renameSync(ctx.filePath!, newPath)
+      }),
+
+    rename: authed
+      .route({
+        method: 'POST',
+        path: '/rename',
+        summary: '重命名文件',
+      })
+      .input(renameFileInput)
+      .use(checkFileExistMiddleware(true))
+      .use(fileEditMiddleware)
+      .func(async (input, ctx) => {
+        const newPath = path.join(path.dirname(ctx.filePath!), input.newName)
+        ctx.securityCheck(newPath, input.resourceFolder)
+        return fs.renameSync(ctx.filePath!, newPath)
+      }),
+
+    delete: authed
+      .route({
+        method: 'POST',
+        path: '/delete',
+        summary: '删除文件',
+      })
+      .input(matchLayoutInput)
+      .use(checkFileExistMiddleware(true))
+      .use(fileEditMiddleware)
+      .func(async (input, ctx) => {
+        ctx.securityCheck(ctx.filePath!, input.resourceFolder)
+        return fs.unlinkSync(ctx.filePath!)
       }),
   })

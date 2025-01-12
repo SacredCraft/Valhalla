@@ -66,10 +66,15 @@ export const fileEditMiddleware = availableResourcePathMiddleware.concat(
   (input: { resourceName: string }, ctx, meta) => {
     const folders = ctx.folders
 
-    const securityCheck = (filePath: string) => {
-      const isInFolders = folders.some((folder) =>
-        filePath.startsWith(folder.path)
-      )
+    const securityCheck = (filePath: string, folder?: string) => {
+      let isInFolders = false
+
+      if (folder) {
+        isInFolders = filePath.startsWith(folder)
+      } else {
+        isInFolders = folders.some((folder) => filePath.startsWith(folder.path))
+      }
+
       if (!isInFolders) {
         throw new ORPCError({
           code: 'FORBIDDEN',
