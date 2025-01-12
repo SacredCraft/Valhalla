@@ -34,7 +34,12 @@ export const resourcePermissionMiddleware = registryMiddleware.concat(
       })
     }
 
-    return meta.next({})
+    return meta.next({
+      context: {
+        ...ctx,
+        ownedResources,
+      },
+    })
   }
 )
 
@@ -55,6 +60,7 @@ export const availableResourcePathMiddleware = registryMiddleware.concat(
 
     return meta.next({
       context: {
+        ...ctx,
         resource,
         folders,
       },
@@ -87,6 +93,7 @@ export const fileEditMiddleware = availableResourcePathMiddleware.concat(
 
     return meta.next({
       context: {
+        ...ctx,
         fs,
         securityCheck,
       },

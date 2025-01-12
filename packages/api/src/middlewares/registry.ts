@@ -20,9 +20,13 @@ export const registryMiddleware = authed.middleware(
       .from(resourceRoleResource)
       .where(inArray(resourceRoleResource.resourceRoleId, resourceIds))
 
-    const ownedResources = resources.filter((resource) =>
+    let ownedResources = resources.filter((resource) =>
       resourceRoleResources.some((role) => role.resourceName === resource.name)
     )
+
+    if (ctx.user.role === 'admin') {
+      ownedResources = resources
+    }
 
     return meta.next({
       context: {
@@ -38,6 +42,7 @@ export const layoutsMiddleware = registryMiddleware.concat(
   (_input, ctx, meta) => {
     return meta.next({
       context: {
+        ...ctx,
         layouts: getRegistry().layouts,
         resourceLayouts: getRegistry().resourceLayouts,
       },
@@ -61,6 +66,7 @@ export const matchLayoutMiddleware = layoutsMiddleware.concat(
 
     return meta.next({
       context: {
+        ...ctx,
         matchLayout,
         icon,
       },

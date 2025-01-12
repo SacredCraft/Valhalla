@@ -73,6 +73,7 @@ export const filesRouter = authed
       .use(availableResourcePathMiddleware)
       .func(async (input, ctx) => {
         const folders = ctx.folders
+
         const folderPath = folders.find(
           (f) => f.name === input.resourceFolder
         )?.path
@@ -90,6 +91,7 @@ export const filesRouter = authed
         }
 
         const resourceConfig = ctx.registry.resourcesConfigs[input.resourceName]
+
         const resourceLayouts = ctx.resourceLayouts[input.resourceName]
         const layouts = [...ctx.layouts, ...resourceLayouts].sort(
           (a, b) => b.priority - a.priority
