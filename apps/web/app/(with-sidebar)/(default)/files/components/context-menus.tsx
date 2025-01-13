@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { Edit, FilePlus, FolderPlus, Trash2, Upload } from 'lucide-react'
 import { useHotkeys } from 'react-hotkeys-hook'
 
+import { orpc } from '@valhalla/api/react'
+import { Button } from '@valhalla/design-system/components/ui/button'
 import {
   ContextMenu,
   ContextMenuContent,
@@ -12,6 +14,18 @@ import {
   ContextMenuShortcut,
   ContextMenuTrigger,
 } from '@valhalla/design-system/components/ui/context-menu'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@valhalla/design-system/components/ui/dialog'
+import { Input } from '@valhalla/design-system/components/ui/input'
+import { toast } from '@valhalla/design-system/components/ui/sonner'
 import { cn } from '@valhalla/design-system/utils/cn'
 
 import { ShortcutGroup } from '@/components/ui/shortcut'
@@ -24,9 +38,17 @@ import {
 
 const FolderContextMenu = ({
   children,
+  resourceName,
+  resourceFolder,
+  filePath,
+  fileName,
   ...props
 }: {
   children: React.ReactNode
+  resourceName: string
+  resourceFolder?: string
+  filePath?: string
+  fileName?: string
 } & React.ComponentPropsWithoutRef<typeof ContextMenuTrigger>) => {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -53,16 +75,82 @@ const FolderContextMenu = ({
           上传文件
         </MenuItem>
         <ContextMenuSeparator className="my-0" />
-        <MenuItem>
-          <Edit className="size-4" />
-          重命名
-        </MenuItem>
+        {resourceName && resourceFolder && filePath && (
+          <Rename
+            resourceName={resourceName}
+            resourceFolder={resourceFolder}
+            filePath={filePath}
+            fileName={fileName || filePath}
+          />
+        )}
         <MenuItem>
           <Trash2 className="size-4" />
           删除
         </MenuItem>
       </MenuContent>
     </ContextMenu>
+  )
+}
+
+const Rename = ({
+  resourceName,
+  resourceFolder,
+  filePath,
+  fileName,
+}: {
+  resourceName: string
+  resourceFolder: string
+  filePath: string
+  fileName: string
+}) => {
+  const [newName, setNewName] = useState(fileName)
+  const [open, setOpen] = useState(false)
+  const { mutateAsync } = orpc.files.rename.useMutation({
+    onSuccess: () => {
+      toast.success('重命名成功')
+      setOpen(false)
+    },
+    onError: () => {
+      toast.error('重命名失败')
+    },
+  })
+
+  const handleRename = async () => {
+    await mutateAsync({
+      resourceName,
+      resourceFolder,
+      filePath,
+      fileName,
+      newName,
+    })
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <MenuItem>
+          <Edit className="size-4" />
+          重命名
+        </MenuItem>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>重命名</DialogTitle>
+        </DialogHeader>
+        <DialogDescription>请输入新的文件名</DialogDescription>
+        <Input
+          value={newName}
+          onChange={(e) => setNewName(e.target.value)}
+          placeholder="请输入新的文件名"
+        />
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline">取消</Button>
+          </DialogClose>
+          <Button onClick={handleRename}>重命名</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
 
@@ -166,6 +254,9 @@ const MenuItem = ({
 }) => {
   return (
     <ContextMenuItem
+      onSelect={(e) => {
+        e.preventDefault()
+      }}
       className={cn(
         'min-w-48 gap-2 rounded-none py-1 first:rounded-t last:rounded-b',
         className

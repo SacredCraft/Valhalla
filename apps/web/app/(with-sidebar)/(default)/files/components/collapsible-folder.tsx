@@ -26,6 +26,10 @@ interface CollapsibleFolderProps {
   folderIcon?: boolean
   linkIcon?: boolean
   contextMenu?: React.ReactNode
+  resourceName: string
+  resourceFolder?: string
+  filePath?: string
+  fileName?: string
 }
 
 export const CollapsibleFolder = ({
@@ -35,6 +39,10 @@ export const CollapsibleFolder = ({
   folderIcon = true,
   linkIcon = false,
   contextMenu = true,
+  resourceName,
+  resourceFolder,
+  filePath,
+  fileName,
 }: CollapsibleFolderProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const { level } = useFolderContext()
@@ -70,7 +78,14 @@ export const CollapsibleFolder = ({
       >
         <CollapsibleTrigger asChild>
           {contextMenu ? (
-            <FolderContextMenu>{Trigger}</FolderContextMenu>
+            <FolderContextMenu
+              resourceName={resourceName}
+              resourceFolder={resourceFolder}
+              filePath={filePath}
+              fileName={fileName}
+            >
+              {Trigger}
+            </FolderContextMenu>
           ) : (
             Trigger
           )}

@@ -34,6 +34,7 @@ export const Resource = ({
 }) => {
   return (
     <CollapsibleFolder
+      resourceName={name}
       contextMenu={false}
       folderIcon={false}
       trigger={
@@ -117,7 +118,13 @@ const ResourceLinkedFolder = ({
   )
 
   return (
-    <CollapsibleFolder linkIcon trigger={<>{resourceFolder}</>}>
+    <CollapsibleFolder
+      linkIcon
+      resourceName={resourceName}
+      resourceFolder={resourceFolder}
+      filePath={resourceFolder}
+      trigger={<>{resourceFolder}</>}
+    >
       {data
         ?.filter((file) => file.isDirectory)
         .map((file) => (
@@ -168,7 +175,12 @@ const ResourceFolder = ({
   )
 
   return (
-    <CollapsibleFolder trigger={folderName}>
+    <CollapsibleFolder
+      resourceName={resourceName}
+      resourceFolder={resourceFolder}
+      filePath={folderPath}
+      trigger={folderName}
+    >
       {data
         ?.filter((file) => file.isDirectory)
         .map((file) => (
