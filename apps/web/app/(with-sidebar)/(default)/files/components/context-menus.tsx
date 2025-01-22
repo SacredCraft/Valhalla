@@ -76,17 +76,21 @@ const FolderContextMenu = ({
         </MenuItem>
         <ContextMenuSeparator className="my-0" />
         {resourceName && resourceFolder && filePath && (
-          <Rename
-            resourceName={resourceName}
-            resourceFolder={resourceFolder}
-            filePath={filePath}
-            fileName={fileName || filePath}
-          />
+          <>
+            <Rename
+              resourceName={resourceName}
+              resourceFolder={resourceFolder}
+              filePath={filePath}
+              fileName={fileName || filePath}
+            />
+            <DeleteFile
+              resourceName={resourceName}
+              resourceFolder={resourceFolder}
+              filePath={filePath}
+              fileName={fileName || filePath}
+            />
+          </>
         )}
-        <MenuItem>
-          <Trash2 className="size-4" />
-          删除
-        </MenuItem>
       </MenuContent>
     </ContextMenu>
   )
@@ -105,9 +109,12 @@ const Rename = ({
 }) => {
   const [newName, setNewName] = useState(fileName)
   const [open, setOpen] = useState(false)
+  const utils = orpc.useUtils()
   const { mutateAsync } = orpc.files.rename.useMutation({
     onSuccess: () => {
       toast.success('重命名成功')
+      utils.files.list.invalidate()
+      utils.resources.folders.invalidate()
       setOpen(false)
     },
     onError: () => {
@@ -176,6 +183,64 @@ const FileContextMenu = ({ children }: { children: React.ReactNode }) => {
         </MenuItem>
       </MenuContent>
     </ContextMenu>
+  )
+}
+
+const DeleteFile = ({
+  resourceName,
+  resourceFolder,
+  filePath,
+  fileName,
+}: {
+  resourceName: string
+  resourceFolder: string
+  filePath: string
+  fileName: string
+}) => {
+  const [open, setOpen] = useState(false)
+  const utils = orpc.useUtils()
+  const { mutateAsync } = orpc.files.delete.useMutation({
+    onSuccess: () => {
+      toast.success('删除成功')
+      utils.files.list.invalidate()
+      utils.resources.folders.invalidate()
+      setOpen(false)
+    },
+    onError: () => {
+      toast.error('删除失败')
+    },
+  })
+
+  const handleDelete = async () => {
+    await mutateAsync({
+      resourceName,
+      resourceFolder,
+      filePath,
+      fileName,
+    })
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <MenuItem>
+          <Trash2 className="size-4" />
+          删除
+        </MenuItem>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>删除</DialogTitle>
+        </DialogHeader>
+        <DialogDescription>确认删除文件 {filePath} 吗？</DialogDescription>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline">取消</Button>
+          </DialogClose>
+          <Button onClick={handleDelete}>删除</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
 

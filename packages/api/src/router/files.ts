@@ -1,4 +1,5 @@
 import path from 'path'
+import { ORPCError } from '@orpc/server'
 import fs from 'fs-extra'
 import { z } from 'zod'
 
@@ -220,6 +221,16 @@ export const filesRouter = authed
       .use(fileEditMiddleware)
       .func(async (input, ctx) => {
         ctx.securityCheck(ctx.filePath!, input.resourceFolder)
-        return fs.unlinkSync(ctx.filePath!)
+        try {
+          if (fs.statSync(ctx.filePath!).isDirectory()) {
+            return fs.removeSync(ctx.filePath!)
+          }
+          return fs.unlinkSync(ctx.filePath!)
+        } catch {
+          throw new ORPCError({
+            code: 'INTERNAL_SERVER_ERROR',
+            message: 'Failed to delete file',
+          })
+        }
       }),
   })

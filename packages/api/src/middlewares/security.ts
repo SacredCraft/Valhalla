@@ -72,11 +72,12 @@ export const fileEditMiddleware = availableResourcePathMiddleware.concat(
   (input: { resourceName: string }, ctx, meta) => {
     const folders = ctx.folders
 
-    const securityCheck = (filePath: string, folder?: string) => {
+    const securityCheck = (filePath: string, folderName?: string) => {
       let isInFolders = false
 
-      if (folder) {
-        isInFolders = filePath.startsWith(folder)
+      if (folderName) {
+        const folder = folders.find((folder) => folder.name === folderName)
+        isInFolders = filePath.startsWith(folder?.path ?? '')
       } else {
         isInFolders = folders.some((folder) => filePath.startsWith(folder.path))
       }
