@@ -16,7 +16,7 @@ import { createContext } from '@valhalla/design-system/utils/context'
 import { FolderContextMenu } from './context-menus'
 
 const folderVariants = cva(
-  'flex w-full items-center gap-1.5 px-1.5 py-1 text-sm transition-colors hover:bg-muted data-[context-menu-state=open]:bg-muted'
+  'flex w-full items-center gap-1.5 truncate px-1.5 py-1 text-sm transition-colors hover:bg-muted data-[context-menu-state=open]:bg-muted'
 )
 
 interface CollapsibleFolderProps {

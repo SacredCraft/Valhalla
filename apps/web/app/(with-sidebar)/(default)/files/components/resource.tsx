@@ -251,7 +251,7 @@ const ResourceFile = ({
           })
         }
         className={cn(
-          'flex w-full items-center gap-1.5 px-1.5 py-1 text-sm transition-colors hover:bg-muted data-[context-menu-state=open]:bg-muted',
+          'flex w-full items-center gap-1.5 truncate px-1.5 py-1 text-sm transition-colors hover:bg-muted data-[context-menu-state=open]:bg-muted',
           isActive && 'bg-primary/10 text-primary'
         )}
       >
