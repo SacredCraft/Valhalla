@@ -256,12 +256,12 @@ const ResourceFile = ({
         )}
       >
         <span
-          className="[&>svg]:size-4"
+          className="shrink-0 [&>svg]:size-4"
           style={{ marginLeft: `${level * 8 + 22}px` }}
         >
           {Icon ? <Icon.default /> : null}
         </span>
-        {fileName}
+        <span className="truncate">{fileName}</span>
       </button>
     </FileContextMenu>
   )

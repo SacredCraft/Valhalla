@@ -43,9 +43,6 @@
       "path": "../../packages/tailwind-config"
     },
     {
-      "path": "../../packages/utils"
-    },
-    {
       "path": "../../packages/collaboration"
     }
   ]
