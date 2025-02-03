@@ -16,7 +16,11 @@ import {
 import { authed } from '@valhalla/api/orpc'
 import { matchLayoutInput } from '@valhalla/api/schemas'
 
-import { moveFileInput, renameFileInput } from './files.schemas'
+import {
+  moveFileInput,
+  renameFileInput,
+  uploadFileInput,
+} from './files.schemas'
 
 export const filesRouter = authed
   .tags('Files')
@@ -232,5 +236,40 @@ export const filesRouter = authed
             message: 'Failed to delete file',
           })
         }
+      }),
+
+    upload: authed
+      .route({
+        method: 'POST',
+        path: '/upload',
+        summary: '上传文件',
+      })
+      .input(uploadFileInput)
+      .use(fileEditMiddleware)
+      .func(async (input, ctx) => {
+        const folders = ctx.registry.resourcesFolders[input.resourceName]
+        if (!folders) {
+          throw new ORPCError({
+            code: 'NOT_FOUND',
+            message: 'Resource not found',
+          })
+        }
+        const folder = folders.find(
+          (folder) => folder.name === input.resourceFolder
+        )
+        if (!folder) {
+          throw new ORPCError({
+            code: 'NOT_FOUND',
+            message: 'Resource folder not found',
+          })
+        }
+        const targetPath = path.join(
+          folder.path,
+          input.targetPath,
+          input.file.name
+        )
+        ctx.securityCheck(targetPath, input.resourceFolder)
+        const buffer = await input.file.arrayBuffer()
+        fs.writeFileSync(targetPath, Buffer.from(buffer))
       }),
   })

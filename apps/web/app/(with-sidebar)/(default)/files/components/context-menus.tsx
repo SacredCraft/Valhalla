@@ -35,6 +35,7 @@ import {
   useRemoveOtherTabs,
   useRemoveTab,
 } from '../hooks/use-remove-tab'
+import { UploadDialog } from './upload-dialog'
 
 const FolderContextMenu = ({
   children,
@@ -70,13 +71,14 @@ const FolderContextMenu = ({
           <FilePlus className="size-4" />
           新建文件
         </MenuItem>
-        <MenuItem>
-          <Upload className="size-4" />
-          上传文件
-        </MenuItem>
         <ContextMenuSeparator className="my-0" />
         {resourceName && resourceFolder && filePath && (
           <>
+            <UploadFile
+              resourceName={resourceName}
+              resourceFolder={resourceFolder}
+              filePath={filePath}
+            />
             <Rename
               resourceName={resourceName}
               resourceFolder={resourceFolder}
@@ -241,6 +243,29 @@ const DeleteFile = ({
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  )
+}
+
+const UploadFile = ({
+  resourceName,
+  resourceFolder,
+  filePath,
+}: {
+  resourceName: string
+  resourceFolder: string
+  filePath: string
+}) => {
+  return (
+    <UploadDialog
+      resourceName={resourceName}
+      resourceFolder={resourceFolder}
+      filePath={filePath}
+    >
+      <MenuItem>
+        <Upload className="size-4" />
+        上传文件
+      </MenuItem>
+    </UploadDialog>
   )
 }
 
