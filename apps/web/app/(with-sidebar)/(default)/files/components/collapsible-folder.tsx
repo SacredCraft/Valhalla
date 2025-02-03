@@ -50,19 +50,22 @@ export const CollapsibleFolder = ({
   const Trigger = (
     <button className={folderVariants()}>
       <ChevronRight
-        className={cn('size-4 transition-transform', isOpen && 'rotate-90')}
+        className={cn(
+          'size-4 shrink-0 transition-transform',
+          isOpen && 'rotate-90'
+        )}
         style={{
           marginLeft: `${level * 8}px`,
         }}
       />
       {linkIcon ? (
-        <Link className="size-4" />
+        <Link className="size-4 shrink-0" />
       ) : (
         folderIcon &&
         (isOpen ? (
-          <FolderOpen className="size-4" />
+          <FolderOpen className="size-4 shrink-0" />
         ) : (
-          <Folder className="size-4" />
+          <Folder className="size-4 shrink-0" />
         ))
       )}
       {trigger}
