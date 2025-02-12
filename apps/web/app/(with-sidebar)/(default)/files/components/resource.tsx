@@ -237,7 +237,12 @@ const ResourceFile = ({
   const Icon = Icons[icon]
 
   return (
-    <FileContextMenu>
+    <FileContextMenu
+      resourceName={resourceName}
+      resourceFolder={resourceFolder}
+      filePath={filePath}
+      fileName={fileName}
+    >
       <button
         onClick={() =>
           handleDoubleClick(() => {

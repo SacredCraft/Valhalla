@@ -163,7 +163,19 @@ const Rename = ({
   )
 }
 
-const FileContextMenu = ({ children }: { children: React.ReactNode }) => {
+const FileContextMenu = ({
+  children,
+  resourceName,
+  resourceFolder,
+  filePath,
+  fileName,
+}: {
+  children: React.ReactNode
+  resourceName: string
+  resourceFolder?: string
+  filePath?: string
+  fileName?: string
+}) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -175,14 +187,22 @@ const FileContextMenu = ({ children }: { children: React.ReactNode }) => {
         {children}
       </ContextMenuTrigger>
       <MenuContent>
-        <MenuItem>
-          <Edit className="size-4" />
-          重命名
-        </MenuItem>
-        <MenuItem>
-          <Trash2 className="size-4" />
-          删除
-        </MenuItem>
+        {resourceName && resourceFolder && filePath && (
+          <>
+            <Rename
+              resourceName={resourceName}
+              resourceFolder={resourceFolder}
+              filePath={filePath}
+              fileName={fileName || filePath}
+            />
+            <DeleteFile
+              resourceName={resourceName}
+              resourceFolder={resourceFolder}
+              filePath={filePath}
+              fileName={fileName || filePath}
+            />
+          </>
+        )}
       </MenuContent>
     </ContextMenu>
   )
