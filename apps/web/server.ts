@@ -15,8 +15,10 @@ import { WebSocketServer } from 'ws'
 
 const port = parseInt(process.env.PORT || '3000', 10)
 const dev = process.env.NODE_ENV !== 'production'
+const hostname = process.env.HOSTNAME || '0.0.0.0'
 const app = next({
   dev,
+  hostname,
 })
 const handler = app.getRequestHandler()
 
@@ -77,8 +79,8 @@ app.prepare().then(() => {
   )
   console.log()
   console.log(` - Local:      http://localhost:${port}`)
-  console.log(` - Network:    http://0.0.0.0:${port}`)
-  console.log(` - WebSocket:  ws://0.0.0.0:${port}`)
+  console.log(` - Network:    http://${hostname}:${port}`)
+  console.log(` - WebSocket:  ws://${hostname}:${port}`)
   console.log()
   console.log(` - Plugins:    ${Object.keys(plugins).join(', ')}`)
   console.log(
