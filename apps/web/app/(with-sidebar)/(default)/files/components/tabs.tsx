@@ -38,19 +38,19 @@ export const Tabs = ({
     }
   })
 
+  if (tabs.length === 0) {
+    return null
+  }
+
   return (
     <ScrollArea type="hover">
       <header className="flex items-center">
         {tabs.map((tab, index) => (
           <Tab
             key={`${tab.resourceName}-${tab.resourceFolder}-${tab.filePath}-${tab.fileName}`}
-            resourceName={tab.resourceName}
-            resourceFolder={tab.resourceFolder}
-            filePath={tab.filePath}
-            fileName={tab.fileName}
+            {...tab}
             index={index}
             isActive={currentTab === index}
-            isModified={tab.isModified}
             setTabs={() => setCurrentTab(index)}
           >
             {tab.fileName}
@@ -85,7 +85,7 @@ const Tab = ({
 }) => {
   const [isCloseHovered, setIsCloseHovered] = useState(false)
   const removeTab = useRemoveTab()
-  const { data: matchLayout } = orpc.files.layout.useQuery({
+  const { data: matchLayout, isLoading } = orpc.files.layout.useQuery({
     resourceName,
     resourceFolder,
     filePath,
@@ -96,9 +96,12 @@ const Tab = ({
     setTabs()
   })
 
+  if (isLoading) {
+    return null
+  }
+
   if (!matchLayout) {
-    // TODO: 文件可能已被删除或重命名
-    // TODO: remove from store
+    removeTab(index)
     return null
   }
 

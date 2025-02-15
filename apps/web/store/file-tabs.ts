@@ -17,7 +17,7 @@ export interface FileTabsStore {
     filePath: string
     resourceName: string
     resourceFolder: string
-    currentTabIndex: number
+    currentTabIndex?: number
   }) => number
   removeTab: (index: number) => void
   removeOtherTabs: (index: number) => void
@@ -34,7 +34,7 @@ export const createFileTabsStore = () =>
           filePath: string
           resourceName: string
           resourceFolder: string
-          currentTabIndex: number
+          currentTabIndex?: number
         }) => {
           const existingTabIndex = get().tabs.findIndex(
             (t) =>
@@ -43,18 +43,23 @@ export const createFileTabsStore = () =>
               t.resourceName === tab.resourceName &&
               t.resourceFolder === tab.resourceFolder
           )
+
           if (existingTabIndex === -1) {
+            const insertIndex =
+              typeof tab.currentTabIndex === 'number'
+                ? tab.currentTabIndex + 1
+                : get().tabs.length
+
             const newTabs = [
-              ...get().tabs.slice(0, tab.currentTabIndex + 1),
-              {
-                ...tab,
-                isModified: false,
-              },
-              ...get().tabs.slice(tab.currentTabIndex + 1),
+              ...get().tabs.slice(0, insertIndex),
+              { ...tab, isModified: false },
+              ...get().tabs.slice(insertIndex),
             ]
+
             set({ tabs: newTabs })
-            return tab.currentTabIndex + 1
+            return insertIndex
           }
+
           return existingTabIndex
         },
         removeTab: (index: number) => {
