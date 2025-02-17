@@ -43,10 +43,14 @@ export const Inner = ({
   const [cache, setCache] = useState<string | undefined>(content)
   const [editorRef, setEditorRef] = useState<editor.IStandaloneCodeEditor>()
   const [mounted, setMounted] = useState(false)
-
   const [contentInitialed, setContentInitialed] = useState(false)
 
   const { provider, user } = useRoom()
+
+  useEffect(() => {
+    setContentInitialed(false)
+    setCache(content)
+  }, [filePath, content])
 
   const handleOnMount = useCallback((e: editor.IStandaloneCodeEditor) => {
     setEditorRef(e)
@@ -61,8 +65,11 @@ export const Inner = ({
       provider.on('synced', () => {
         setContentInitialed(true)
         const type = provider.document.getText('monaco')
-        if (cache && !type.toJSON()) {
-          type.insert(0, cache.toString())
+        if (type.length > 0) {
+          type.delete(0, type.length)
+        }
+        if (cache) {
+          type.insert(0, cache)
         }
       })
     }
