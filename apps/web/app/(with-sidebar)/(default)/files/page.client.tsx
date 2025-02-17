@@ -25,16 +25,27 @@ const getResourceParams = (
 
 export const FilesPageContent = () => {
   const { currentTabIndex, setCurrentTabIndex } = useTabs()
-  const { tabs } = useFileTabsStore((state) => state)
-  const currentTab = tabs[currentTabIndex]
+  const { tabs, setIsModified } = useFileTabsStore((state) => state)
+  const currentTab = tabs?.[currentTabIndex]
 
   const resourceParams = getResourceParams(currentTab)
+
+  const isModified = Boolean(currentTab?.isModified)
+
+  const handleSetIsModified = (isModified: boolean) => {
+    console.log('isModified', isModified)
+    setIsModified(currentTabIndex, isModified)
+  }
 
   return (
     <>
       <Tabs currentTab={currentTabIndex} setCurrentTab={setCurrentTabIndex} />
       {resourceParams && (
-        <FilesPageContentInner resourceParams={resourceParams} />
+        <FilesPageContentInner
+          resourceParams={resourceParams}
+          isModified={isModified}
+          setIsModified={handleSetIsModified}
+        />
       )}
     </>
   )
@@ -42,8 +53,12 @@ export const FilesPageContent = () => {
 
 const FilesPageContentInner = ({
   resourceParams,
+  isModified,
+  setIsModified,
 }: {
   resourceParams: Parameters<typeof orpc.files.layout.useQuery>[0]
+  isModified: boolean
+  setIsModified: (isModified: boolean) => void
 }) => {
   const { data: layout } = orpc.files.layout.useQuery(resourceParams)
   const { data: isFileExist } = orpc.files.exist.useQuery(resourceParams)
@@ -53,6 +68,8 @@ const FilesPageContentInner = ({
       data={layout.matchLayout}
       isFileExist={isFileExist}
       resourceParams={resourceParams}
+      isModified={isModified}
+      setIsModified={setIsModified}
     />
   ) : null
 }

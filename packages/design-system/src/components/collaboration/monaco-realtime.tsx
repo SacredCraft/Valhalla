@@ -62,8 +62,7 @@ export const Inner = ({
 
   useEffect(() => {
     if (provider && !contentInitialed) {
-      provider.on('synced', () => {
-        setContentInitialed(true)
+      const handleSync = () => {
         const type = provider.document.getText('monaco')
         if (type.length > 0) {
           type.delete(0, type.length)
@@ -71,14 +70,19 @@ export const Inner = ({
         if (cache) {
           type.insert(0, cache)
         }
-      })
+        setContentInitialed(true)
+      }
+
+      provider.on('synced', handleSync)
+      return () => {
+        provider.off('synced', handleSync)
+      }
     }
   }, [provider, cache, contentInitialed])
 
   useEffect(() => {
     if (mounted && editorRef && provider) {
       const ydoc = provider.document
-
       const awareness = provider.awareness
       const type = ydoc.getText('monaco')
 
@@ -108,7 +112,9 @@ export const Inner = ({
           loading={false}
           path={filePath}
           onMount={handleOnMount}
-          onChange={(value) => setCache(value)}
+          onChange={(value) => {
+            setCache(value)
+          }}
           {...editorProps}
         />
       )}

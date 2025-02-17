@@ -17,10 +17,14 @@ export const ContentLayout = ({
   data,
   isFileExist,
   resourceParams,
+  isModified,
+  setIsModified,
 }: {
   data: Layout | null | undefined
   isFileExist: boolean
   resourceParams: Parameters<typeof orpc.files.layout.useQuery>[0]
+  isModified: boolean
+  setIsModified: (isModified: boolean) => void
 }) => {
   if (!isFileExist) {
     return <NotFoundFileState />
@@ -39,6 +43,8 @@ export const ContentLayout = ({
         resourceFolder={resourceParams.resourceFolder}
         filePath={resourceParams.filePath}
         fileName={resourceParams.fileName}
+        isModified={isModified}
+        setIsModified={setIsModified}
       >
         {Comp ? <Comp.default /> : null}
       </ResourceCoreContext>

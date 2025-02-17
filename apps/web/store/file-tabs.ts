@@ -22,6 +22,7 @@ export interface FileTabsStore {
   removeTab: (index: number) => void
   removeOtherTabs: (index: number) => void
   removeAllTabs: () => void
+  setIsModified: (index: number, isModified: boolean) => void
 }
 
 export const createFileTabsStore = () =>
@@ -72,6 +73,13 @@ export const createFileTabsStore = () =>
         },
         removeAllTabs: () => {
           set({ tabs: [] })
+        },
+        setIsModified: (index: number, isModified: boolean) => {
+          set({
+            tabs: get().tabs.map((tab, i) =>
+              i === index ? { ...tab, isModified } : tab
+            ),
+          })
         },
       }),
       {

@@ -1,5 +1,5 @@
 import { useImperativeHandle, useRef, useState } from 'react'
-import { Editor, EditorProps, OnMount } from '@monaco-editor/react'
+import { Editor, EditorProps, OnChange, OnMount } from '@monaco-editor/react'
 import { editor } from 'monaco-editor'
 
 import { useIsMobile } from '@valhalla/design-system/hooks/use-mobile'
@@ -9,11 +9,12 @@ import { useResourceCore } from '@valhalla/design-system/resources/providers/res
 
 export function TextEditor({
   ref,
+  onChange,
   ...editorProps
 }: {
   ref: React.RefObject<{ getValue: () => string | undefined }>
 } & EditorProps) {
-  const { fileName } = useResourceCore()
+  const { fileName, setIsModified } = useResourceCore()
   const {
     resourceContent: { data: resourceContent, isLoading },
   } = useResourceContent({
@@ -29,6 +30,10 @@ export function TextEditor({
       ref={ref}
       defaultValue={resourceContent?.toString()}
       fileName={fileName}
+      onChange={(value, ev) => {
+        setIsModified(true)
+        onChange?.(value, ev)
+      }}
       {...editorProps}
     />
   )
@@ -38,10 +43,12 @@ export const MonacoEditor = ({
   ref,
   defaultValue,
   fileName,
+  onChange,
 }: {
   ref: React.RefObject<{ getValue: () => string | undefined }>
   defaultValue: string | undefined
   fileName: string
+  onChange?: OnChange
 }) => {
   const [code, setCode] = useState<string | undefined>(defaultValue)
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null)
@@ -73,7 +80,10 @@ export const MonacoEditor = ({
       theme={resolvedTheme === 'dark' ? 'vs-dark' : 'light'}
       onMount={onMount}
       value={code}
-      onChange={(value) => setCode(value)}
+      onChange={(value, ev) => {
+        setCode(value)
+        onChange?.(value, ev)
+      }}
       options={editorOptions}
     />
   )
