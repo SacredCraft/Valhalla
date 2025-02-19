@@ -1,6 +1,7 @@
-import { useImperativeHandle, useRef, useState } from 'react'
+import { useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { Editor, EditorProps, OnChange, OnMount } from '@monaco-editor/react'
 import { editor } from 'monaco-editor'
+import * as monaco from 'monaco-editor'
 
 import { useIsMobile } from '@valhalla/design-system/hooks/use-mobile'
 import { useTheme } from '@valhalla/design-system/hooks/use-theme'
@@ -14,14 +15,28 @@ export function TextEditor({
 }: {
   ref: React.RefObject<{ getValue: () => string | undefined }>
 } & EditorProps) {
-  const { fileName, setIsModified } = useResourceCore()
+  const { fileName, setIsModified, isModified } = useResourceCore()
   const {
     resourceContent: { data: resourceContent, isLoading },
+    saveResourceContent,
   } = useResourceContent({
     encoding: 'utf-8',
   }) as {
     resourceContent: { data: string | undefined | null; isLoading: boolean }
+    saveResourceContent: (content: string) => void
   }
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isModified) {
+        e.preventDefault()
+        e.returnValue = ''
+      }
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [isModified])
 
   if (isLoading) return null
 
@@ -34,6 +49,12 @@ export function TextEditor({
         setIsModified(true)
         onChange?.(value, ev)
       }}
+      onSave={(value) => {
+        if (value) {
+          saveResourceContent(value)
+          setIsModified(false)
+        }
+      }}
       {...editorProps}
     />
   )
@@ -44,11 +65,13 @@ export const MonacoEditor = ({
   defaultValue,
   fileName,
   onChange,
+  onSave,
 }: {
   ref: React.RefObject<{ getValue: () => string | undefined }>
   defaultValue: string | undefined
   fileName: string
   onChange?: OnChange
+  onSave?: (value: string) => void
 }) => {
   const [code, setCode] = useState<string | undefined>(defaultValue)
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null)
@@ -67,6 +90,14 @@ export const MonacoEditor = ({
   const onMount: OnMount = (editor) => {
     editorRef.current = editor
     editorRef.current?.focus()
+
+    editor.addCommand(
+      monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyS,
+      (e) => {
+        e?.preventDefault?.()
+        onSave?.(editorRef.current?.getValue() ?? '')
+      }
+    )
   }
 
   useImperativeHandle(ref, () => ({

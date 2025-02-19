@@ -1,3 +1,5 @@
+import { useCallback } from 'react'
+
 import { orpc } from '@valhalla/api/react'
 
 import { useResourceCore } from './resource-core-provider'
@@ -17,10 +19,23 @@ export function useResourceContent(
     readFileOptions,
   })
 
-  const saveResourceContent = orpc.files.save.useMutation()
+  const { mutate: saveResourceContent } = orpc.files.save.useMutation()
+
+  const handleSaveResourceContent = useCallback(
+    (content: string) => {
+      saveResourceContent({
+        resourceName,
+        resourceFolder,
+        filePath,
+        fileName,
+        data: content,
+      })
+    },
+    [saveResourceContent, resourceName, resourceFolder, filePath, fileName]
+  )
 
   return {
     resourceContent,
-    saveResourceContent,
+    saveResourceContent: handleSaveResourceContent,
   }
 }
