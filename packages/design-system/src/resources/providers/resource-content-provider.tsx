@@ -9,7 +9,8 @@ export function useResourceContent(
     typeof orpc.files.read.useQuery
   >[0]['readFileOptions']
 ) {
-  const { resourceName, resourceFolder, filePath, fileName } = useResourceCore()
+  const { resourceName, resourceFolder, filePath, fileName, setIsModified } =
+    useResourceCore()
 
   const resourceContent = orpc.files.read.useQuery({
     resourceName,
@@ -20,15 +21,25 @@ export function useResourceContent(
   })
 
   const { mutate: saveResourceContent } = orpc.files.save.useMutation()
-
   const handleSaveResourceContent = useCallback(
     (content: string) => {
-      saveResourceContent({
-        resourceName,
-        resourceFolder,
-        filePath,
-        fileName,
-        data: content,
+      return new Promise<void>((resolve, reject) => {
+        saveResourceContent(
+          {
+            resourceName,
+            resourceFolder,
+            filePath,
+            fileName,
+            data: content,
+          },
+          {
+            onSuccess: () => {
+              resolve()
+              setIsModified(false)
+            },
+            onError: (error) => reject(error),
+          }
+        )
       })
     },
     [saveResourceContent, resourceName, resourceFolder, filePath, fileName]

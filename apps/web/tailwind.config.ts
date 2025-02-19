@@ -5,6 +5,8 @@ import { config as preset } from '@valhalla/tailwind-config/src/config'
 const config = {
   content: [
     './node_modules/@valhalla/design-system/src/components/ui/**/*.{ts,tsx}',
+    './node_modules/@valhalla/design-system/src/components/layout/**/*.{ts,tsx}',
+    './node_modules/@valhalla/design-system/src/components/collaboration/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './lib/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',

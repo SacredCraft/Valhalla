@@ -9,6 +9,7 @@ import { TextEditor } from '@valhalla/design-system/components/layout/text-edito
 import { useResourceContent } from '@valhalla/design-system/resources/providers/resource-content-provider'
 import { useResourceCore } from '@valhalla/design-system/resources/providers/resource-core-provider'
 
+import { SaveButton } from '../layout/save-button'
 import { MonacoAwareness } from './monaco-awareness'
 import { useRoom } from './room'
 
@@ -39,17 +40,17 @@ export const Inner = ({
   content: string
   ref: React.RefObject<{ getValue: () => string | undefined }>
 }) => {
-  const { filePath } = useResourceCore()
-  const [cache, setCache] = useState<string | undefined>(content)
+  const { filePath, setIsModified } = useResourceCore()
   const [editorRef, setEditorRef] = useState<editor.IStandaloneCodeEditor>()
   const [mounted, setMounted] = useState(false)
   const [contentInitialed, setContentInitialed] = useState(false)
+  const [currentContent, setCurrentContent] = useState(content)
 
   const { provider, user } = useRoom()
 
   useEffect(() => {
     setContentInitialed(false)
-    setCache(content)
+    setCurrentContent(content)
   }, [filePath, content])
 
   const handleOnMount = useCallback((e: editor.IStandaloneCodeEditor) => {
@@ -67,8 +68,8 @@ export const Inner = ({
         if (type.length > 0) {
           type.delete(0, type.length)
         }
-        if (cache) {
-          type.insert(0, cache)
+        if (currentContent) {
+          type.insert(0, currentContent)
         }
         setContentInitialed(true)
       }
@@ -78,7 +79,7 @@ export const Inner = ({
         provider.off('synced', handleSync)
       }
     }
-  }, [provider, cache, contentInitialed])
+  }, [provider, currentContent, contentInitialed])
 
   useEffect(() => {
     if (mounted && editorRef && provider) {
@@ -102,7 +103,13 @@ export const Inner = ({
         awareness?.destroy()
       }
     }
-  }, [editorRef, provider, mounted])
+  }, [editorRef, provider, mounted, setIsModified, content])
+
+  useEffect(() => {
+    if (ref && ref.current && editorRef) {
+      ref.current.getValue = () => editorRef.getValue()
+    }
+  }, [ref, editorRef])
 
   return (
     <>
@@ -112,8 +119,9 @@ export const Inner = ({
           loading={false}
           path={filePath}
           onMount={handleOnMount}
+          value={currentContent}
           onChange={(value) => {
-            setCache(value)
+            setCurrentContent(value ?? '')
           }}
           {...editorProps}
         />
@@ -128,6 +136,7 @@ export const Inner = ({
         username={user.name}
         avatar={user.image ?? null}
       />
+      <SaveButton cache={currentContent} />
     </>
   )
 }

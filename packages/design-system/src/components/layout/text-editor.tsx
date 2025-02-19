@@ -2,6 +2,7 @@ import { useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { Editor, EditorProps, OnChange, OnMount } from '@monaco-editor/react'
 import { editor } from 'monaco-editor'
 import * as monaco from 'monaco-editor'
+import { toast } from 'sonner'
 
 import { useIsMobile } from '@valhalla/design-system/hooks/use-mobile'
 import { useTheme } from '@valhalla/design-system/hooks/use-theme'
@@ -15,7 +16,7 @@ export function TextEditor({
 }: {
   ref: React.RefObject<{ getValue: () => string | undefined }>
 } & EditorProps) {
-  const { fileName, setIsModified, isModified } = useResourceCore()
+  const { fileName, isModified, setIsModified } = useResourceCore()
   const {
     resourceContent: { data: resourceContent, isLoading },
     saveResourceContent,
@@ -23,7 +24,7 @@ export function TextEditor({
     encoding: 'utf-8',
   }) as {
     resourceContent: { data: string | undefined | null; isLoading: boolean }
-    saveResourceContent: (content: string) => void
+    saveResourceContent: (content: string) => Promise<void>
   }
 
   useEffect(() => {
@@ -49,10 +50,9 @@ export function TextEditor({
         setIsModified(true)
         onChange?.(value, ev)
       }}
-      onSave={(value) => {
+      onSave={async (value) => {
         if (value) {
-          saveResourceContent(value)
-          setIsModified(false)
+          await saveResourceContent(value)
         }
       }}
       {...editorProps}
@@ -71,7 +71,7 @@ export const MonacoEditor = ({
   defaultValue: string | undefined
   fileName: string
   onChange?: OnChange
-  onSave?: (value: string) => void
+  onSave?: (value: string) => Promise<void>
 }) => {
   const [code, setCode] = useState<string | undefined>(defaultValue)
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null)
@@ -93,9 +93,16 @@ export const MonacoEditor = ({
 
     editor.addCommand(
       monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyS,
-      (e) => {
+      async (e) => {
         e?.preventDefault?.()
-        onSave?.(editorRef.current?.getValue() ?? '')
+        toast.promise(
+          onSave?.(editorRef.current?.getValue() ?? '') ?? Promise.resolve(),
+          {
+            loading: '保存中...',
+            success: '保存成功',
+            error: '保存失败',
+          }
+        )
       }
     )
   }
