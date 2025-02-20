@@ -18,7 +18,7 @@ export const useAddTabs = () => {
 
     if (existingIndex !== -1) {
       // 如果标签已存在，直接切换到该标签
-      setCurrentTabIndex(existingIndex)
+      setCurrentTabIndex(existingIndex, true)
       return existingIndex
     }
 
@@ -28,7 +28,7 @@ export const useAddTabs = () => {
     const newTabIndex = tabs.length
     // 设置当前标签为新添加的标签
     setTimeout(() => {
-      setCurrentTabIndex(newTabIndex)
+      setCurrentTabIndex(newTabIndex, true)
     }, 0)
 
     return newTabIndex

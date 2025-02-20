@@ -9,13 +9,11 @@ export const useTabs = () => {
   )
   const { tabs } = useFileTabsStore((state) => state)
 
-  const safeSetCurrentTabIndex = (index: number) => {
-    // 确保索引在有效范围内
-    if (tabs.length === 0) {
-      setCurrentTabIndex(0)
+  const safeSetCurrentTabIndex = (index: number, forceSet?: boolean) => {
+    if (forceSet) {
+      setCurrentTabIndex(index)
       return
     }
-
     const safeIndex = Math.max(0, Math.min(index, tabs.length - 1))
     setCurrentTabIndex(safeIndex)
   }
