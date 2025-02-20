@@ -335,4 +335,78 @@ export const filesRouter = authed
           })
         }
       }),
+
+    createFolder: authed
+      .route({
+        method: 'POST',
+        path: '/create-folder',
+        summary: '创建文件夹',
+      })
+      .input(
+        z.object({
+          resourceName: z.string(),
+          resourceFolder: z.string(),
+          path: z.string(),
+          folderName: z.string(),
+        })
+      )
+      .use(fileEditMiddleware)
+      .func(async (input, ctx) => {
+        const folders = ctx.registry.resourcesFolders[input.resourceName]
+        if (!folders) {
+          throw new ORPCError({
+            code: 'NOT_FOUND',
+            message: 'Resource not found',
+          })
+        }
+        const folder = folders.find(
+          (folder) => folder.name === input.resourceFolder
+        )
+        if (!folder) {
+          throw new ORPCError({
+            code: 'NOT_FOUND',
+            message: 'Resource folder not found',
+          })
+        }
+        const targetPath = path.join(folder.path, input.path, input.folderName)
+        ctx.securityCheck(targetPath, input.resourceFolder)
+        fs.mkdirSync(targetPath)
+      }),
+
+    createFile: authed
+      .route({
+        method: 'POST',
+        path: '/create-file',
+        summary: '创建文件',
+      })
+      .input(
+        z.object({
+          resourceName: z.string(),
+          resourceFolder: z.string(),
+          path: z.string(),
+          fileName: z.string(),
+        })
+      )
+      .use(fileEditMiddleware)
+      .func(async (input, ctx) => {
+        const folders = ctx.registry.resourcesFolders[input.resourceName]
+        if (!folders) {
+          throw new ORPCError({
+            code: 'NOT_FOUND',
+            message: 'Resource not found',
+          })
+        }
+        const folder = folders.find(
+          (folder) => folder.name === input.resourceFolder
+        )
+        if (!folder) {
+          throw new ORPCError({
+            code: 'NOT_FOUND',
+            message: 'Resource folder not found',
+          })
+        }
+        const targetPath = path.join(folder.path, input.path, input.fileName)
+        ctx.securityCheck(targetPath, input.resourceFolder)
+        fs.writeFileSync(targetPath, '')
+      }),
   })

@@ -122,8 +122,9 @@ const ResourceLinkedFolder = ({
       linkIcon
       resourceName={resourceName}
       resourceFolder={resourceFolder}
-      filePath={resourceFolder}
+      filePath="/"
       trigger={<>{resourceFolder}</>}
+      linkedFolder
     >
       {data
         ?.filter((file) => file.isDirectory)

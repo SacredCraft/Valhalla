@@ -1,7 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import path from 'path'
+import { useEffect, useState } from 'react'
 import {
+  ArrowRight,
   Download,
   Edit,
   FilePlus,
@@ -50,6 +52,7 @@ const FolderContextMenu = ({
   resourceFolder,
   filePath,
   fileName,
+  linkedFolder = false,
   ...props
 }: {
   children: React.ReactNode
@@ -57,6 +60,7 @@ const FolderContextMenu = ({
   resourceFolder?: string
   filePath?: string
   fileName?: string
+  linkedFolder?: boolean
 } & React.ComponentPropsWithoutRef<typeof ContextMenuTrigger>) => {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -70,39 +74,51 @@ const FolderContextMenu = ({
         {children}
       </ContextMenuTrigger>
       <MenuContent>
-        <MenuItem>
-          <FolderPlus className="size-4" />
-          新建文件夹
-        </MenuItem>
-        <MenuItem>
-          <FilePlus className="size-4" />
-          新建文件
-        </MenuItem>
-        <ContextMenuSeparator className="my-0" />
         {resourceName && resourceFolder && filePath && (
           <>
+            <CreateFolder
+              resourceName={resourceName}
+              resourceFolder={resourceFolder}
+              filePath={filePath}
+            />
+            <CreateFile
+              resourceName={resourceName}
+              resourceFolder={resourceFolder}
+              filePath={filePath}
+            />
+            <ContextMenuSeparator className="my-0" />
             <UploadFile
               resourceName={resourceName}
               resourceFolder={resourceFolder}
               filePath={filePath}
             />
-            <DownloadFile
-              resourceName={resourceName}
-              resourceFolder={resourceFolder}
-              filePath={filePath}
-            />
-            <Rename
-              resourceName={resourceName}
-              resourceFolder={resourceFolder}
-              filePath={filePath}
-              fileName={fileName || filePath}
-            />
-            <DeleteFile
-              resourceName={resourceName}
-              resourceFolder={resourceFolder}
-              filePath={filePath}
-              fileName={fileName || filePath}
-            />
+            {!linkedFolder && (
+              <>
+                <DownloadFile
+                  resourceName={resourceName}
+                  resourceFolder={resourceFolder}
+                  filePath={filePath}
+                />
+                <MoveFile
+                  resourceName={resourceName}
+                  resourceFolder={resourceFolder}
+                  filePath={filePath}
+                  fileName={fileName || filePath}
+                />
+                <Rename
+                  resourceName={resourceName}
+                  resourceFolder={resourceFolder}
+                  filePath={filePath}
+                  fileName={fileName || filePath}
+                />
+                <DeleteFile
+                  resourceName={resourceName}
+                  resourceFolder={resourceFolder}
+                  filePath={filePath}
+                  fileName={fileName || filePath}
+                />
+              </>
+            )}
           </>
         )}
       </MenuContent>
@@ -458,6 +474,205 @@ const MenuItem = ({
     >
       {children}
     </ContextMenuItem>
+  )
+}
+
+const CreateFolder = ({
+  resourceName,
+  resourceFolder,
+  filePath,
+}: {
+  resourceName: string
+  resourceFolder: string
+  filePath: string
+}) => {
+  const [folderName, setFolderName] = useState('')
+  const [open, setOpen] = useState(false)
+  const utils = orpc.useUtils()
+  const { mutateAsync } = orpc.files.createFolder.useMutation({
+    onSuccess: () => {
+      toast.success('创建成功')
+      utils.files.list.invalidate()
+      utils.resources.folders.invalidate()
+      setOpen(false)
+    },
+    onError: () => {
+      toast.error('创建失败')
+    },
+  })
+
+  const handleCreate = async () => {
+    await mutateAsync({
+      resourceName,
+      resourceFolder,
+      path: filePath,
+      folderName,
+    })
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <MenuItem>
+          <FolderPlus className="size-4" />
+          新建文件夹
+        </MenuItem>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>新建文件夹</DialogTitle>
+        </DialogHeader>
+        <DialogDescription>请输入文件夹名称</DialogDescription>
+        <Input
+          value={folderName}
+          onChange={(e) => setFolderName(e.target.value)}
+          placeholder="请输入文件夹名称"
+        />
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline">取消</Button>
+          </DialogClose>
+          <Button onClick={handleCreate}>创建</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+const CreateFile = ({
+  resourceName,
+  resourceFolder,
+  filePath,
+}: {
+  resourceName: string
+  resourceFolder: string
+  filePath: string
+}) => {
+  const [fileName, setFileName] = useState('')
+  const [open, setOpen] = useState(false)
+  const utils = orpc.useUtils()
+  const { mutateAsync } = orpc.files.createFile.useMutation({
+    onSuccess: () => {
+      toast.success('创建成功')
+      utils.files.list.invalidate()
+      utils.resources.folders.invalidate()
+      setOpen(false)
+    },
+    onError: () => {
+      toast.error('创建失败')
+    },
+  })
+
+  const handleCreate = async () => {
+    await mutateAsync({
+      resourceName,
+      resourceFolder,
+      path: filePath,
+      fileName,
+    })
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <MenuItem>
+          <FilePlus className="size-4" />
+          新建文件
+        </MenuItem>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>新建文件</DialogTitle>
+        </DialogHeader>
+        <DialogDescription>请输入文件名</DialogDescription>
+        <Input
+          value={fileName}
+          onChange={(e) => setFileName(e.target.value)}
+          placeholder="请输入文件名"
+        />
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline">取消</Button>
+          </DialogClose>
+          <Button onClick={handleCreate}>创建</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+const MoveFile = ({
+  resourceName,
+  resourceFolder,
+  filePath,
+  fileName,
+}: {
+  resourceName: string
+  resourceFolder: string
+  filePath: string
+  fileName: string
+}) => {
+  // 获取当前文件所在的目录路径
+  const currentPath = path.dirname(filePath)
+  const [newPath, setNewPath] = useState(currentPath)
+  const [open, setOpen] = useState(false)
+  const utils = orpc.useUtils()
+
+  // 当对话框打开时,重置路径为当前路径
+  useEffect(() => {
+    if (open) {
+      setNewPath(currentPath)
+    }
+  }, [open, currentPath])
+
+  const { mutateAsync } = orpc.files.move.useMutation({
+    onSuccess: () => {
+      toast.success('移动成功')
+      utils.files.list.invalidate()
+      utils.resources.folders.invalidate()
+      setOpen(false)
+    },
+    onError: () => {
+      toast.error('移动失败')
+    },
+  })
+
+  const handleMove = async () => {
+    await mutateAsync({
+      resourceName,
+      resourceFolder,
+      filePath,
+      fileName,
+      newPath,
+    })
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <MenuItem>
+          <ArrowRight className="size-4" />
+          移动
+        </MenuItem>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>移动文件</DialogTitle>
+        </DialogHeader>
+        <DialogDescription>请输入目标路径</DialogDescription>
+        <Input
+          value={newPath}
+          onChange={(e) => setNewPath(e.target.value)}
+          placeholder="请输入目标路径"
+        />
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline">取消</Button>
+          </DialogClose>
+          <Button onClick={handleMove}>移动</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
 

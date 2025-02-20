@@ -30,6 +30,7 @@ interface CollapsibleFolderProps {
   resourceFolder?: string
   filePath?: string
   fileName?: string
+  linkedFolder?: boolean
 }
 
 export const CollapsibleFolder = ({
@@ -43,6 +44,7 @@ export const CollapsibleFolder = ({
   resourceFolder,
   filePath,
   fileName,
+  linkedFolder = false,
 }: CollapsibleFolderProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const { level } = useFolderContext()
@@ -86,6 +88,7 @@ export const CollapsibleFolder = ({
               resourceFolder={resourceFolder}
               filePath={filePath}
               fileName={fileName}
+              linkedFolder={linkedFolder}
             >
               {Trigger}
             </FolderContextMenu>
