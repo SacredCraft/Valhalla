@@ -16,7 +16,32 @@ const imageExtensions = [
   '.ico',
 ]
 
-const textExtensions = ['.txt', '.md', '.json', '.yaml', '.yml', '.toml']
+const textExtensions = [
+  '.conf',
+  '.properties',
+  '.view',
+  '.txt',
+  '.md',
+  '.json',
+  '.yaml',
+  '.yml',
+  '.toml',
+  '.js',
+  '.ts',
+  '.jsx',
+  '.tsx',
+  '.css',
+  '.java',
+  '.kt',
+  '.kts',
+  '.py',
+  '.php',
+  '.go',
+  '.c',
+  '.cpp',
+  '.h',
+  '.rs',
+]
 
 const example = createResource({
   name: 'example',
