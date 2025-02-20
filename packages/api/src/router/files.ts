@@ -1,5 +1,7 @@
+import os from 'os'
 import path from 'path'
 import { ORPCError } from '@orpc/server'
+import archiver from 'archiver'
 import fs from 'fs-extra'
 import { z } from 'zod'
 
@@ -271,5 +273,66 @@ export const filesRouter = authed
         ctx.securityCheck(targetPath, input.resourceFolder)
         const buffer = await input.file.arrayBuffer()
         fs.writeFileSync(targetPath, Buffer.from(buffer))
+      }),
+
+    download: authed
+      .route({
+        method: 'GET',
+        path: '/download',
+        summary: '下载文件',
+      })
+      .input(matchLayoutInput)
+      .use(checkFileExistMiddleware(true))
+      .func(async (_input, ctx) => {
+        try {
+          const stat = fs.statSync(ctx.filePath!)
+
+          // 如果是文件，直接返回文件内容
+          if (!stat.isDirectory()) {
+            // 使用 Buffer.from 确保返回正确的 Buffer 对象
+            const fileContent = fs.readFileSync(ctx.filePath!)
+            return Buffer.from(fileContent)
+          }
+
+          // 如果是文件夹，创建 zip 文件
+          const archive = archiver('zip', {
+            zlib: { level: 9 },
+          })
+
+          // 创建临时文件来存储 zip
+          const tempFile = path.join(
+            os.tmpdir(), // 使用系统临时目录
+            `temp_${Date.now()}_${path.basename(ctx.filePath!)}.zip`
+          )
+
+          const output = fs.createWriteStream(tempFile)
+
+          // 等待 zip 文件创建完成
+          await new Promise((resolve, reject) => {
+            output.on('close', resolve)
+            output.on('error', reject)
+            archive.on('error', reject)
+
+            archive.pipe(output)
+            archive.directory(ctx.filePath!, false)
+            archive.finalize()
+          })
+
+          // 读取并返回 zip 文件内容
+          const zipContent = fs.readFileSync(tempFile)
+
+          // 删除临时文件
+          fs.unlinkSync(tempFile)
+
+          // 确保返回正确的 Buffer 对象
+          return Buffer.from(zipContent)
+        } catch (error) {
+          console.error('Download error:', error)
+          throw new ORPCError({
+            code: 'INTERNAL_SERVER_ERROR',
+            message: '文件下载失败',
+            cause: error,
+          })
+        }
       }),
   })

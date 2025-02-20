@@ -15,6 +15,7 @@
     "@valhalla/auth": "workspace:*",
     "@valhalla/db": "workspace:*",
     "@valhalla/utils": "workspace:*",
+    "archiver": "^7.0.1",
     "chokidar": "^4.0.1",
     "globby": "^14.0.2",
     "sharp": "^0.33.5",
@@ -23,6 +24,7 @@
   "devDependencies": {
     "@tanstack/react-query": "catalog:",
     "@total-typescript/ts-reset": "catalog:",
+    "@types/archiver": "^6.0.3",
     "@types/pg": "catalog:",
     "@types/react": "catalog:",
     "@valhalla/core": "workspace:*",

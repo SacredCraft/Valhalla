@@ -1,7 +1,14 @@
 'use client'
 
 import { useState } from 'react'
-import { Edit, FilePlus, FolderPlus, Trash2, Upload } from 'lucide-react'
+import {
+  Download,
+  Edit,
+  FilePlus,
+  FolderPlus,
+  Trash2,
+  Upload,
+} from 'lucide-react'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import { orpc } from '@valhalla/api/react'
@@ -75,6 +82,11 @@ const FolderContextMenu = ({
         {resourceName && resourceFolder && filePath && (
           <>
             <UploadFile
+              resourceName={resourceName}
+              resourceFolder={resourceFolder}
+              filePath={filePath}
+            />
+            <DownloadFile
               resourceName={resourceName}
               resourceFolder={resourceFolder}
               filePath={filePath}
@@ -189,6 +201,11 @@ const FileContextMenu = ({
       <MenuContent>
         {resourceName && resourceFolder && filePath && (
           <>
+            <DownloadFile
+              resourceName={resourceName}
+              resourceFolder={resourceFolder}
+              filePath={filePath}
+            />
             <Rename
               resourceName={resourceName}
               resourceFolder={resourceFolder}
@@ -286,6 +303,72 @@ const UploadFile = ({
         上传文件
       </MenuItem>
     </UploadDialog>
+  )
+}
+
+const DownloadFile = ({
+  resourceName,
+  resourceFolder,
+  filePath,
+}: {
+  resourceName: string
+  resourceFolder: string
+  filePath: string
+}) => {
+  const { mutateAsync } = orpc.files.download.useMutation({
+    onError: () => {
+      toast.error('下载失败')
+    },
+  })
+
+  const handleDownload = async () => {
+    try {
+      const response = await mutateAsync({
+        resourceName,
+        resourceFolder,
+        filePath,
+        fileName: 'download',
+      })
+
+      // 从响应中提取数据数组
+      let uint8Array
+      if (response && 'data' in response) {
+        uint8Array = new Uint8Array(response.data as number[])
+      } else if (Buffer.isBuffer(response)) {
+        uint8Array = new Uint8Array(response as Buffer)
+      } else if (Array.isArray(response)) {
+        uint8Array = new Uint8Array(response)
+      } else {
+        throw new Error('Invalid response format')
+      }
+
+      const blob = new Blob([uint8Array], { type: 'application/octet-stream' })
+      const url = window.URL.createObjectURL(blob)
+
+      const a = document.createElement('a')
+      a.href = url
+      const fileName = filePath.split('/').pop() || 'download'
+      const isDirectory = !fileName.includes('.')
+      a.download = isDirectory ? `${fileName}.zip` : fileName
+
+      document.body.appendChild(a)
+      a.click()
+
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+
+      toast.success('下载成功')
+    } catch (error) {
+      console.error('Download failed:', error)
+      toast.error('下载失败')
+    }
+  }
+
+  return (
+    <MenuItem onClick={handleDownload}>
+      <Download className="size-4" />
+      下载
+    </MenuItem>
   )
 }
 
