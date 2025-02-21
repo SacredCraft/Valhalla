@@ -113,7 +113,7 @@ const Tab = ({
         onClick={setTabs}
         className={cn(
           'group relative flex h-9 min-w-[112px] cursor-pointer select-none items-center gap-1 bg-transparent px-2 text-start text-sm transition-colors hover:bg-primary/10',
-          '[&>svg]:size-4',
+          'shrink-0 flex-nowrap [&>svg]:size-4',
           isActive
             ? 'fill-primary text-primary'
             : 'fill-muted-foreground text-muted-foreground'
