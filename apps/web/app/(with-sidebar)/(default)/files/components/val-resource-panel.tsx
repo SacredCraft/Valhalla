@@ -17,6 +17,7 @@ import {
   SheetTrigger,
 } from '@valhalla/design-system/components/ui/sheet'
 import { useIsMobile } from '@valhalla/design-system/hooks/use-mobile'
+import { cn } from '@valhalla/design-system/utils/cn'
 
 export const ValResourcePanel = ({
   children,
@@ -30,18 +31,17 @@ export const ValResourcePanel = ({
   const isMobile = useIsMobile()
   const [collapsed, setCollapsed] = useState(false)
 
-  if (collapsed) {
-    return (
-      <div className="absolute bottom-2 left-2 z-[9999]">
-        <CollapseButton collapsed={collapsed} setCollapsed={setCollapsed} />
-      </div>
-    )
-  }
-
   return isMobile ? (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon">
+        <Button
+          className={cn(
+            'visible relative h-[calc(100svh-3rem)]',
+            collapsed && 'invisible'
+          )}
+          variant="ghost"
+          size="icon"
+        >
           <Folder className="size-4" />
         </Button>
       </SheetTrigger>
@@ -58,7 +58,7 @@ export const ValResourcePanel = ({
   ) : (
     <>
       <ResizablePanel
-        className="relative h-[calc(100svh-3rem)]"
+        className={cn('relative h-[calc(100svh-3rem)]', collapsed && 'hidden')}
         defaultSize={defaultSize}
         maxSize={maxSize}
       >
@@ -67,7 +67,20 @@ export const ValResourcePanel = ({
           <CollapseButton collapsed={collapsed} setCollapsed={setCollapsed} />
         </div>
       </ResizablePanel>
-      <ResizableHandle className="transition-colors hover:w-1 hover:bg-primary/30" />
+      <ResizableHandle
+        className={cn(
+          'transition-colors hover:w-1 hover:bg-primary/30',
+          collapsed && 'hidden'
+        )}
+      />
+      <div
+        className={cn(
+          'invisible absolute bottom-2 left-2 z-[9999]',
+          collapsed && 'visible'
+        )}
+      >
+        <CollapseButton collapsed={collapsed} setCollapsed={setCollapsed} />
+      </div>
     </>
   )
 }
