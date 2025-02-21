@@ -52,17 +52,17 @@ export const ValResourcePanel = ({
             你可以在这里管理你的资源，包括文件和文件夹。
           </SheetDescription>
         </SheetHeader>
-        {children}
+        <div className="h-[calc(100vh-8rem)] overflow-y-auto">{children}</div>
       </SheetContent>
     </Sheet>
   ) : (
     <>
       <ResizablePanel
-        className="relative"
+        className="relative h-[calc(100svh-3rem)]"
         defaultSize={defaultSize}
         maxSize={maxSize}
       >
-        {children}
+        <div className="h-full overflow-y-auto">{children}</div>
         <div className="absolute bottom-2 right-2">
           <CollapseButton collapsed={collapsed} setCollapsed={setCollapsed} />
         </div>

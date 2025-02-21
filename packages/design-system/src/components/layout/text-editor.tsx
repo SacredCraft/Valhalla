@@ -114,17 +114,20 @@ export const MonacoEditor = ({
   }))
 
   return (
-    <Editor
-      height="calc(100svh - 84px)"
-      path={fileName}
-      theme={resolvedTheme === 'dark' ? 'vs-dark' : 'light'}
-      onMount={onMount}
-      value={code}
-      onChange={(value, ev) => {
-        setCode(value)
-        onChange?.(value, ev)
-      }}
-      options={editorOptions}
-    />
+    <div className="h-full w-full">
+      <Editor
+        height="calc(100svh - 84px)"
+        width="100%"
+        path={fileName}
+        theme={resolvedTheme === 'dark' ? 'vs-dark' : 'light'}
+        onMount={onMount}
+        value={code}
+        onChange={(value, ev) => {
+          setCode(value)
+          onChange?.(value, ev)
+        }}
+        options={editorOptions}
+      />
+    </div>
   )
 }

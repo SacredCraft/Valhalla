@@ -17,7 +17,10 @@ export default async function FilesPage() {
       <ValResourcePanel defaultSize={20} maxSize={30}>
         <Resources />
       </ValResourcePanel>
-      <ResizablePanel className="flex flex-col" defaultSize={80}>
+      <ResizablePanel
+        className="flex flex-col overflow-hidden"
+        defaultSize={80}
+      >
         <FilesPageContent />
       </ResizablePanel>
     </ResizablePanelGroup>
