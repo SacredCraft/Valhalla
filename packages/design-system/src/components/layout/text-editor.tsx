@@ -85,6 +85,8 @@ export const MonacoEditor = ({
     minimap: {
       enabled: isMobile ? true : false,
     },
+    scrollBeyondLastLine: false,
+    overviewRulerBorder: false,
   } as editor.IStandaloneEditorConstructionOptions
 
   const onMount: OnMount = (editor) => {
