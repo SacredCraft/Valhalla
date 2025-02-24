@@ -5,8 +5,7 @@ import { format } from 'date-fns'
 
 import { ResourceRoleWithUsersAndResources } from '@valhalla/db/schema'
 import { Checkbox } from '@valhalla/design-system/components/ui/checkbox'
-
-import { DataTableColumnHeader } from '@/components/ui/data-table-column-header'
+import { DataTableColumnHeader } from '@valhalla/design-system/components/ui/data-table-column-header'
 
 import { EditRole } from './edit-role'
 

@@ -4,7 +4,16 @@ import { createResource } from '@valhalla/core/resource'
 
 import './components'
 
-import { ImagePreviewLayout, TextEditorLayout } from './layouts'
+import { copy } from 'fs-extra'
+
+import { registerLifeCycle } from '@valhalla/core/life-cycle'
+import { resolvePath } from '@valhalla/utils/path'
+
+import {
+  ImagePreviewLayout,
+  ItemEditorLayout,
+  TextEditorLayout,
+} from './layouts'
 
 const imageExtensions = [
   '.png',
@@ -52,7 +61,14 @@ const example = createResource({
     imageExtensions: z.array(z.string()).default(imageExtensions),
     textExtensions: z.array(z.string()).default(textExtensions),
   }),
-  layouts: [ImagePreviewLayout, TextEditorLayout],
+  layouts: [ImagePreviewLayout, TextEditorLayout, ItemEditorLayout],
+})
+
+registerLifeCycle('beforeInit', () => {
+  copy(
+    resolvePath('resources', 'example', 'assets'),
+    resolvePath('apps', 'web', 'public', 'assets', 'example')
+  )
 })
 
 export { example }

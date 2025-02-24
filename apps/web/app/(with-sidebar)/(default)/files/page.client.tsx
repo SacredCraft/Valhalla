@@ -1,5 +1,7 @@
 'use client'
 
+import { ScrollArea } from '@valhalla/design-system/components/ui/scroll-area'
+
 import { orpc } from '@/lib/orpc/react'
 import { useFileTabsStore } from '@/providers/file-tabs-provider'
 import { FileTabsStore } from '@/store/file-tabs'
@@ -40,13 +42,15 @@ export const FilesPageContent = () => {
   return (
     <>
       <Tabs currentTab={currentTabIndex} setCurrentTab={setCurrentTabIndex} />
-      {resourceParams && (
-        <FilesPageContentInner
-          resourceParams={resourceParams}
-          isModified={isModified}
-          setIsModified={handleSetIsModified}
-        />
-      )}
+      <ScrollArea className="h-[calc(100svh-84px)]">
+        {resourceParams && (
+          <FilesPageContentInner
+            resourceParams={resourceParams}
+            isModified={isModified}
+            setIsModified={handleSetIsModified}
+          />
+        )}
+      </ScrollArea>
     </>
   )
 }

@@ -4,7 +4,6 @@ import { Table } from '@tanstack/react-table'
 import { X } from 'lucide-react'
 
 import { Button } from '@valhalla/design-system/components/ui/button'
-import { DataTableFacetedFilter } from '@valhalla/design-system/components/ui/data-table-faceted-filter'
 import { DataTableViewOptions } from '@valhalla/design-system/components/ui/data-table-view-options'
 import { Input } from '@valhalla/design-system/components/ui/input'
 
@@ -21,35 +20,15 @@ export function DataTableToolbar<TData>({
     <div className="flex items-center justify-between px-2">
       <div className="flex flex-1 items-center space-x-2">
         <Input
-          placeholder="搜索用户..."
+          placeholder="搜索物品..."
           value={
-            (table.getColumn('用户信息')?.getFilterValue() as string) ?? ''
+            (table.getColumn('显示名称')?.getFilterValue() as string) ?? ''
           }
           onChange={(event) =>
-            table.getColumn('用户信息')?.setFilterValue(event.target.value)
+            table.getColumn('显示名称')?.setFilterValue(event.target.value)
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />
-        {table.getColumn('角色') && (
-          <DataTableFacetedFilter
-            column={table.getColumn('角色')}
-            title="角色"
-            options={[
-              { label: '管理员', value: 'admin' },
-              { label: '用户', value: 'user' },
-            ]}
-          />
-        )}
-        {table.getColumn('状态') && (
-          <DataTableFacetedFilter
-            column={table.getColumn('状态')}
-            title="状态"
-            options={[
-              { label: '正常', value: false },
-              { label: '封禁', value: true },
-            ]}
-          />
-        )}
         {isFiltered && (
           <Button
             variant="ghost"

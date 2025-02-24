@@ -11,9 +11,17 @@
   "scripts": {
     "lint": "eslint . --max-warnings 0"
   },
+  "dependencies": {
+    "@monaco-editor/react": "4.7.0-rc.0",
+    "monaco-editor": "^0.52.2",
+    "motion": "^12.4.7",
+    "yaml": "^2.6.1"
+  },
   "devDependencies": {
+    "@hookform/resolvers": "^3.9.1",
+    "@tanstack/react-table": "^8.20.6",
     "@types/react": "catalog:",
-    "@valhalla/api": "workspace:*",
+    "@valhalla/api": "workspace:^",
     "@valhalla/core": "workspace:*",
     "@valhalla/design-system": "workspace:*",
     "@valhalla/eslint-config": "workspace:*",
@@ -24,11 +32,8 @@
     "postcss": "catalog:",
     "postcss-load-config": "6.0.1",
     "react": "catalog:",
+    "react-hook-form": "catalog:",
     "tailwindcss": "catalog:",
     "zod": "catalog:"
-  },
-  "dependencies": {
-    "@monaco-editor/react": "4.7.0-rc.0",
-    "monaco-editor": "^0.52.2"
   }
 }

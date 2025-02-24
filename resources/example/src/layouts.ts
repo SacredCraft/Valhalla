@@ -41,3 +41,16 @@ export const TextEditorLayout = {
   },
   component: 'TextEditor',
 } satisfies Layout
+
+export const ItemEditorLayout = {
+  name: 'ItemEditor',
+  priority: 2,
+  match: (ctx) => {
+    return (
+      ctx.filePath.includes('item') &&
+      ctx.filePath.includes('FrontierItem') &&
+      ctx.fileName.endsWith('.yml')
+    )
+  },
+  component: 'ItemEditor',
+} satisfies Layout

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 import type React from 'react'
 import { createORPCClient } from '@orpc/client'
 import { createORPCReact } from '@orpc/react'
@@ -25,6 +25,18 @@ const getQueryClient = () => {
   return clientQueryClientSingleton
 }
 
+const ORPCClientContext = createContext<
+  ReturnType<typeof createORPCClient<typeof router>> | undefined
+>(undefined)
+
+export const useORPCClient = () => {
+  const client = useContext(ORPCClientContext)
+  if (!client) {
+    throw new Error('ORPCClient not found')
+  }
+  return client
+}
+
 /**
  * This component is used to initialize the orpc & react-query pairing on the client side.
  * @param props The props to the component.
@@ -41,14 +53,16 @@ export function ORPCProvider(props: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ORPCContext.Provider
-        value={{
-          client,
-          queryClient,
-        }}
-      >
-        {props.children}
-      </ORPCContext.Provider>
+      <ORPCClientContext.Provider value={client}>
+        <ORPCContext.Provider
+          value={{
+            client,
+            queryClient,
+          }}
+        >
+          {props.children}
+        </ORPCContext.Provider>
+      </ORPCClientContext.Provider>
     </QueryClientProvider>
   )
 }

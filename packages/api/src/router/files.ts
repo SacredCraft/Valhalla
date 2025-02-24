@@ -24,6 +24,92 @@ import {
   uploadFileInput,
 } from './files.schemas'
 
+export const list = authed
+  .use(layoutsMiddleware)
+  .route({
+    method: 'GET',
+    path: '/list',
+    summary: '列出文件',
+  })
+  .input(
+    z.object({
+      resourceName: z.string(),
+      resourceFolder: z.string(),
+      path: z.string(),
+    })
+  )
+  .use(resourcePermissionMiddleware)
+  .use(availableResourcePathMiddleware)
+  .func(async (input, ctx) => {
+    const folders = ctx.folders
+
+    const folderPath = folders.find(
+      (f) => f.name === input.resourceFolder
+    )?.path
+
+    // Folder 不存在
+    if (!folderPath) {
+      return []
+    }
+
+    const resolvedPath = path.join(folderPath, input.path)
+
+    // 验证 resolvedPath 是否存在
+    if (!fs.existsSync(resolvedPath)) {
+      return []
+    }
+
+    const resourceConfig = ctx.registry.resourcesConfigs[input.resourceName]
+
+    const resourceLayouts = ctx.resourceLayouts[input.resourceName]
+    const layouts = [...ctx.layouts, ...resourceLayouts].sort(
+      (a, b) => b.priority - a.priority
+    )
+
+    // 获取目录下的文件基础信息 不读取文件内容
+    const files = fs
+      .readdirSync(resolvedPath)
+      .filter((file) => !file.startsWith('.DS_Store'))
+      .map((file) => {
+        const layout = layouts.find((layout) =>
+          layout.match(
+            {
+              resourceName: input.resourceName,
+              resourceFolder: input.resourceFolder,
+              filePath: path.join(input.path, file),
+              fileName: file,
+            },
+            resourceConfig
+          )
+        )
+
+        const icon = layout?.icon
+          ? layout.icon(
+              {
+                resourceName: input.resourceName,
+                resourceFolder: input.resourceFolder,
+                filePath: path.join(input.path, file),
+                fileName: file,
+              },
+              resourceConfig
+            )
+          : 'File'
+
+        const filePath = path.join(resolvedPath, file)
+        const stat = fs.statSync(filePath)
+
+        return {
+          name: file,
+          isDirectory: stat.isDirectory(),
+          size: stat.size,
+          modifiedTime: stat.mtime.toISOString(),
+          icon,
+        }
+      })
+
+    return files
+  })
+
 export const filesRouter = authed
   .tags('Files')
   .prefix('/files')
@@ -62,91 +148,7 @@ export const filesRouter = authed
         return ctx.fileExist
       }),
 
-    list: authed
-      .use(layoutsMiddleware)
-      .route({
-        method: 'GET',
-        path: '/list',
-        summary: '列出文件',
-      })
-      .input(
-        z.object({
-          resourceName: z.string(),
-          resourceFolder: z.string(),
-          path: z.string(),
-        })
-      )
-      .use(resourcePermissionMiddleware)
-      .use(availableResourcePathMiddleware)
-      .func(async (input, ctx) => {
-        const folders = ctx.folders
-
-        const folderPath = folders.find(
-          (f) => f.name === input.resourceFolder
-        )?.path
-
-        // Folder 不存在
-        if (!folderPath) {
-          return []
-        }
-
-        const resolvedPath = path.join(folderPath, input.path)
-
-        // 验证 resolvedPath 是否存在
-        if (!fs.existsSync(resolvedPath)) {
-          return []
-        }
-
-        const resourceConfig = ctx.registry.resourcesConfigs[input.resourceName]
-
-        const resourceLayouts = ctx.resourceLayouts[input.resourceName]
-        const layouts = [...ctx.layouts, ...resourceLayouts].sort(
-          (a, b) => b.priority - a.priority
-        )
-
-        // 获取目录下的文件基础信息 不读取文件内容
-        const files = fs
-          .readdirSync(resolvedPath)
-          .filter((file) => !file.startsWith('.DS_Store'))
-          .map((file) => {
-            const layout = layouts.find((layout) =>
-              layout.match(
-                {
-                  resourceName: input.resourceName,
-                  resourceFolder: input.resourceFolder,
-                  filePath: path.join(input.path, file),
-                  fileName: file,
-                },
-                resourceConfig
-              )
-            )
-
-            const icon = layout?.icon
-              ? layout.icon(
-                  {
-                    resourceName: input.resourceName,
-                    resourceFolder: input.resourceFolder,
-                    filePath: path.join(input.path, file),
-                    fileName: file,
-                  },
-                  resourceConfig
-                )
-              : 'File'
-
-            const filePath = path.join(resolvedPath, file)
-            const stat = fs.statSync(filePath)
-
-            return {
-              name: file,
-              isDirectory: stat.isDirectory(),
-              size: stat.size,
-              modifiedTime: stat.mtime.toISOString(),
-              icon,
-            }
-          })
-
-        return files
-      }),
+    list,
 
     read: authed
       .route({

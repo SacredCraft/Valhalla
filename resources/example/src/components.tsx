@@ -10,4 +10,8 @@ registerLifeCycle('beforeInit', () => {
     name: 'TextEditor',
     component: '@valhalla/example/components/text-editor',
   })
+  createComponent({
+    name: 'ItemEditor',
+    component: '@valhalla/example/components/item-editor/index',
+  })
 })

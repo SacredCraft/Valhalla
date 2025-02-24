@@ -17,6 +17,7 @@ import {
 } from '@tanstack/react-table'
 import { UserWithRole } from 'better-auth/plugins'
 
+import { DataTablePagination } from '@valhalla/design-system/components/ui/data-table-pagination'
 import {
   Table,
   TableBody,
@@ -26,7 +27,6 @@ import {
   TableRow,
 } from '@valhalla/design-system/components/ui/table'
 
-import { DataTablePagination } from '@/components/ui/data-table-pagination'
 import { usePaginationStore } from '@/providers/pagination-provider'
 
 import { DataTableActions } from './data-table-actions'

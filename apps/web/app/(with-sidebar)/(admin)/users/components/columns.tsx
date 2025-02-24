@@ -6,8 +6,8 @@ import { format } from 'date-fns'
 
 import { Badge } from '@valhalla/design-system/components/ui/badge'
 import { Checkbox } from '@valhalla/design-system/components/ui/checkbox'
+import { DataTableColumnHeader } from '@valhalla/design-system/components/ui/data-table-column-header'
 
-import { DataTableColumnHeader } from '@/components/ui/data-table-column-header'
 import { ValhallaUserAvatar } from '@/components/ui/val-user-avatar'
 
 import { EditUser } from './edit-user'

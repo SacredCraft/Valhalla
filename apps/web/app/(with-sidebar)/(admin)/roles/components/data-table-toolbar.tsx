@@ -4,9 +4,8 @@ import { Table } from '@tanstack/react-table'
 import { X } from 'lucide-react'
 
 import { Button } from '@valhalla/design-system/components/ui/button'
+import { DataTableViewOptions } from '@valhalla/design-system/components/ui/data-table-view-options'
 import { Input } from '@valhalla/design-system/components/ui/input'
-
-import { DataTableViewOptions } from '@/components/ui/data-table-view-options'
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>
