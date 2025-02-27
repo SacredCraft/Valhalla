@@ -133,7 +133,7 @@ const UnauthorizedState = () => {
 
 const NotFoundFileState = () => {
   return (
-    <StateWrapper className="h-full">
+    <StateWrapper className="h-[calc(100svh-84px)]">
       <div className="flex size-20 items-center justify-center rounded-full bg-secondary">
         <CrossIcon />
       </div>
@@ -149,7 +149,7 @@ const NotFoundFileState = () => {
 
 const NotFoundLayoutState = () => {
   return (
-    <StateWrapper className="h-full">
+    <StateWrapper className="h-[calc(100svh-84px)]">
       <div className="flex size-20 items-center justify-center rounded-full bg-secondary">
         <CrossIcon />
       </div>

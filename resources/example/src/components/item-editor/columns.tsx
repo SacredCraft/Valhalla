@@ -1,10 +1,13 @@
 'use client'
 
+import path from 'path'
 import Image from 'next/image'
 import { ColumnDef } from '@tanstack/react-table'
 
+import { orpc } from '@valhalla/api/react'
 import { Checkbox } from '@valhalla/design-system/components/ui/checkbox'
 import { DataTableColumnHeader } from '@valhalla/design-system/components/ui/data-table-column-header'
+import { useResourceCore } from '@valhalla/design-system/resources/providers/resource-core-provider'
 
 import { useItemEditor } from './hooks'
 
@@ -54,19 +57,7 @@ export const columns: ColumnDef<Item>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="2D 图标" />
     ),
-    cell: ({ row }) => {
-      const icon = row.original.icon
-      return (
-        <div className="border rounded p-1 w-fit">
-          <Image
-            src={`/assets/example/${icon.file}/@2d.png`}
-            alt={icon.file}
-            width={32}
-            height={32}
-          />
-        </div>
-      )
-    },
+    cell: ({ row }) => <Icon row={row.original} />,
   },
   {
     id: 'ID',
@@ -109,4 +100,35 @@ const ID = ({ row }: { row: Item }) => {
   )
 
   return <>{id}</>
+}
+
+const Icon = ({ row }: { row: Item }) => {
+  const icon = row.icon
+  const { filePath, resourceName, resourceFolder } = useResourceCore()
+  const folder = path.dirname(filePath)
+  const iconPath = path.join(folder, icon.file, '@2d.png')
+  const { data } = orpc.files.read.useQuery({
+    filePath: iconPath,
+    fileName: '@2d.png',
+    resourceName: resourceName,
+    resourceFolder: resourceFolder,
+    readFileOptions: {
+      encoding: 'base64',
+    },
+  }) as { data: string }
+
+  return (
+    <div className="border rounded p-1 w-fit">
+      {data ? (
+        <Image
+          src={`data:image/png;base64,${data}`}
+          alt={icon.file}
+          width={32}
+          height={32}
+        />
+      ) : (
+        <div className="w-6 h-6 bg-gray-200 rounded-md" />
+      )}
+    </div>
+  )
 }
