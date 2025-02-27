@@ -28,6 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@valhalla/design-system/components/ui/select'
+import { toast } from '@valhalla/design-system/components/ui/sonner'
 import { useResourceCore } from '@valhalla/design-system/resources/providers/resource-core-provider'
 import { cn } from '@valhalla/design-system/utils/cn'
 
@@ -53,6 +54,7 @@ type ItemEditorProps = {
 const formSchema = z.any()
 
 export const ItemDetailsEditor = ({ item }: ItemEditorProps) => {
+  const { setCurrentItem } = useItemEditor()
   return (
     <AnimatePresence>
       {item && (
@@ -63,21 +65,27 @@ export const ItemDetailsEditor = ({ item }: ItemEditorProps) => {
           exit={{ opacity: 0, x: 100 }}
         >
           <ScrollArea className="h-[calc(100svh-85px)]">
-            <div className="p-4 space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-bold flex items-center gap-2">
-                  <Edit className="w-4 h-4" /> 物品编辑
-                </h3>
-                <div className="flex items-center gap-2">
-                  <Button variant="outline" size="icon">
-                    <Save className="w-4 h-4" />
-                  </Button>
-                  <Button variant="outline" size="icon">
-                    <X className="w-4 h-4" />
-                  </Button>
+            <div className="p-4">
+              <ItemEditorForm item={item}>
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-bold flex items-center gap-2">
+                    <Edit className="w-4 h-4" /> 物品编辑
+                  </h3>
+                  <div className="flex items-center gap-2">
+                    <Button variant="outline" size="icon" type="submit">
+                      <Save className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      type="button"
+                      onClick={() => setCurrentItem(null)}
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
-              </div>
-              <ItemEditorForm item={item} />
+              </ItemEditorForm>
             </div>
           </ScrollArea>
         </motion.div>
@@ -86,8 +94,12 @@ export const ItemDetailsEditor = ({ item }: ItemEditorProps) => {
   )
 }
 
-const ItemEditorForm = ({ item }: ItemEditorProps) => {
-  const { parsedContent } = useItemEditor()
+const ItemEditorForm = ({
+  item,
+  children,
+}: ItemEditorProps & { children: React.ReactNode }) => {
+  const { parsedContent, setCurrentItem, saveCurrentItem, extra } =
+    useItemEditor()
   const id = Object.keys(parsedContent ?? {}).find(
     (key) => parsedContent?.[key].name === item?.name
   )
@@ -100,26 +112,46 @@ const ItemEditorForm = ({ item }: ItemEditorProps) => {
       category: 'weapon',
     },
   })
+  const { mutate: uploadFile } = orpc.files.upload.useMutation()
+  const { filePath, resourceName, resourceFolder } = useResourceCore()
+  const folder = path.dirname(filePath)
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+    setCurrentItem(values)
+    saveCurrentItem()
+    if (extra.files[values.icon.file]) {
+      uploadFile({
+        targetPath: path.join(folder, values.icon.file),
+        file: extra.files[values.icon.file],
+        resourceName: resourceName,
+        resourceFolder: resourceFolder,
+      })
+    }
+    toast.success('保存成功')
   }
+
+  useEffect(() => {
+    console.log(parsedContent)
+  }, [parsedContent])
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <Group label="基本参数">
-          <ID form={form} />
-          <DisplayName form={form} />
-        </Group>
-        <Group label="物品类型">
-          <Quality form={form} />
-          <Category form={form} />
-          <ItemType form={form} />
-        </Group>
-        <Group label="贴图材质">
-          <TwoDIcon form={form} />
-        </Group>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {children}
+        <div className="space-y-8">
+          <Group label="基本参数">
+            <ID form={form} />
+            <DisplayName form={form} />
+          </Group>
+          <Group label="物品类型">
+            <Quality form={form} />
+            <Category form={form} />
+            <ItemType form={form} />
+          </Group>
+          <Group label="贴图材质">
+            <TwoDIcon form={form} />
+          </Group>
+        </div>
       </form>
     </Form>
   )
@@ -280,6 +312,7 @@ const TwoDIcon = ({
 }: {
   form: UseFormReturn<z.infer<typeof formSchema>>
 }) => {
+  const { extra, setExtra } = useItemEditor()
   const { filePath, resourceName, resourceFolder } = useResourceCore()
   const [imageUrl, setImageUrl] = useState<string | null>(null)
   const folder = path.dirname(filePath)
@@ -305,6 +338,13 @@ const TwoDIcon = ({
     reader.onload = (e) => {
       setImageUrl(e.target?.result as string)
       form.setValue('icon.file', file.name)
+      setExtra({
+        ...extra,
+        files: {
+          ...extra.files,
+          [file.name]: file,
+        },
+      })
     }
     reader.readAsDataURL(file)
   }

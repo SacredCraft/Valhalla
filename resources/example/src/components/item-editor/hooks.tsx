@@ -5,8 +5,10 @@ import { ItemConfig, ItemEditorContext } from './context'
 
 export const useCurrentItem = ({
   parsedContent,
+  setParsedContent,
 }: {
   parsedContent: ItemConfig | null
+  setParsedContent: (parsedContent: ItemConfig) => void
 }) => {
   const [index, setIndex] = useState<number>(-1)
   const [currentItem, setCurrentItem] = useState<Item | null>(null)
@@ -31,7 +33,7 @@ export const useCurrentItem = ({
 
   const saveCurrentItem = () => {
     if (parsedContent && currentItem) {
-      parsedContent[currentItem.name] = currentItem
+      setParsedContent(parsedContent)
     }
   }
 

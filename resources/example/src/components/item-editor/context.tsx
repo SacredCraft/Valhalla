@@ -6,6 +6,12 @@ export type ItemConfig = {
   [key: string]: Item
 }
 
+export type ItemEditorExtra = {
+  files: {
+    [key: string]: File
+  }
+}
+
 export const ItemEditorContext = createContext<{
   currentItem: Item | null
   setCurrentItem: (item: Item | null) => void
@@ -14,6 +20,8 @@ export const ItemEditorContext = createContext<{
   index: number
   setIndex: (index: number) => void
   saveCurrentItem: () => void
+  extra: ItemEditorExtra
+  setExtra: (extra: ItemEditorExtra) => void
 }>({
   currentItem: null,
   setCurrentItem: () => {},
@@ -22,4 +30,8 @@ export const ItemEditorContext = createContext<{
   index: 0,
   setIndex: () => {},
   saveCurrentItem: () => {},
+  extra: {
+    files: {},
+  },
+  setExtra: () => {},
 })

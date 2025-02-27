@@ -4,7 +4,7 @@ import yaml from 'yaml'
 import { useResourceContent } from '@valhalla/design-system/resources/providers/resource-content-provider'
 
 import { columns } from './columns'
-import { ItemConfig, ItemEditorContext } from './context'
+import { ItemConfig, ItemEditorContext, ItemEditorExtra } from './context'
 import { DataTable } from './data-table'
 import { ItemDetailsEditor } from './editor'
 import { useCurrentItem } from './hooks'
@@ -19,7 +19,10 @@ export default function ItemEditorLayout() {
   }
   const [parsedContent, setParsedContent] = useState<ItemConfig | null>(null)
   const { currentItem, setCurrentItem, index, setIndex, saveCurrentItem } =
-    useCurrentItem({ parsedContent })
+    useCurrentItem({ parsedContent, setParsedContent })
+  const [extra, setExtra] = useState<ItemEditorExtra>({
+    files: {},
+  })
 
   useEffect(() => {
     if (resourceContent) {
@@ -42,6 +45,8 @@ export default function ItemEditorLayout() {
         index,
         setIndex,
         saveCurrentItem,
+        extra,
+        setExtra,
       }}
     >
       <div className="flex h-full">
