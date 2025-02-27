@@ -1,11 +1,15 @@
 'use client'
 
+import path from 'path'
+import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Edit, Save, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useForm, UseFormReturn } from 'react-hook-form'
 import { z } from 'zod'
 
+import { orpc } from '@valhalla/api/react'
 import { Button } from '@valhalla/design-system/components/ui/button'
 import {
   Form,
@@ -24,6 +28,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@valhalla/design-system/components/ui/select'
+import { useResourceCore } from '@valhalla/design-system/resources/providers/resource-core-provider'
+import { cn } from '@valhalla/design-system/utils/cn'
 
 import { Item } from './columns'
 import { useItemEditor } from './hooks'
@@ -110,6 +116,9 @@ const ItemEditorForm = ({ item }: ItemEditorProps) => {
           <Quality form={form} />
           <Category form={form} />
           <ItemType form={form} />
+        </Group>
+        <Group label="贴图材质">
+          <TwoDIcon form={form} />
         </Group>
       </form>
     </Form>
@@ -263,5 +272,106 @@ const ItemType = ({
         </FormItem>
       )}
     />
+  )
+}
+
+const TwoDIcon = ({
+  form,
+}: {
+  form: UseFormReturn<z.infer<typeof formSchema>>
+}) => {
+  const { filePath, resourceName, resourceFolder } = useResourceCore()
+  const [imageUrl, setImageUrl] = useState<string | null>(null)
+  const folder = path.dirname(filePath)
+  const iconPath = path.join(folder, form.getValues('icon.file'), '@2d.png')
+  const { data } = orpc.files.read.useQuery({
+    filePath: iconPath,
+    fileName: '@2d.png',
+    resourceName: resourceName,
+    resourceFolder: resourceFolder,
+    readFileOptions: {
+      encoding: 'base64',
+    },
+  })
+
+  useEffect(() => {
+    if (data) {
+      setImageUrl(`data:image/png;base64,${data}`)
+    }
+  }, [data])
+
+  const handleChange = (file: File) => {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      setImageUrl(e.target?.result as string)
+      form.setValue('icon.file', file.name)
+    }
+    reader.readAsDataURL(file)
+  }
+
+  return (
+    <FormField
+      control={form.control}
+      name="icon.file"
+      render={() => (
+        <FormItem>
+          <FormLabel>2D</FormLabel>
+          <FormControl>
+            <UploadIcon className="size-12" onChange={handleChange}>
+              {imageUrl ? (
+                <Image
+                  src={imageUrl}
+                  alt="2D 图标"
+                  width={48}
+                  height={48}
+                  className="rounded-md object-cover aspect-square w-full h-full"
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-200 rounded-md" />
+              )}
+            </UploadIcon>
+          </FormControl>
+        </FormItem>
+      )}
+    />
+  )
+}
+
+const UploadIcon = ({
+  children,
+  onChange,
+  className,
+}: {
+  children: React.ReactNode
+  onChange: (file: File) => void
+  className?: string
+}) => {
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  return (
+    <>
+      <button
+        className={cn(
+          'border rounded p-1 w-fit block hover:bg-gray-50',
+          className
+        )}
+        onClick={() => inputRef.current?.click()}
+        type="button"
+      >
+        {children}
+      </button>
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => {
+          const file = e.target.files?.[0]
+          if (file) {
+            onChange(file)
+          }
+        }}
+      />
+    </>
   )
 }
