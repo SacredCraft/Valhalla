@@ -10,6 +10,7 @@ import { DataTableColumnHeader } from '@valhalla/design-system/components/ui/dat
 import { useResourceCore } from '@valhalla/design-system/resources/providers/resource-core-provider'
 
 import { useItemEditor } from './hooks'
+import { ItemRow } from './types'
 
 export type Item = {
   display: string
@@ -26,7 +27,7 @@ export type Item = {
   'item-type': string
 }
 
-export const columns: ColumnDef<Item>[] = [
+export const columns: ColumnDef<ItemRow>[] = [
   {
     id: '选择',
     header: ({ table }) => (
@@ -69,41 +70,37 @@ export const columns: ColumnDef<Item>[] = [
   },
   {
     id: '显示名称',
-    accessorKey: 'display',
+    accessorKey: 'data.display',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="显示名称" />
     ),
   },
   {
     id: '类型',
-    accessorKey: 'item-type',
+    accessorKey: 'data.item-type',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="类型" />
     ),
   },
   {
     id: '品质',
-    accessorKey: 'quality',
+    accessorKey: 'data.quality',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="品质" />
     ),
   },
 ]
 
-const ID = ({ row }: { row: Item }) => {
+const ID = ({ row }: { row: ItemRow }) => {
   const { parsedContent } = useItemEditor()
 
   if (!parsedContent) return null
 
-  const id = Object.keys(parsedContent).find(
-    (key) => parsedContent[key].name === row.name
-  )
-
-  return <>{id}</>
+  return <>{row.id}</>
 }
 
-const Icon = ({ row }: { row: Item }) => {
-  const icon = row.icon
+const Icon = ({ row }: { row: ItemRow }) => {
+  const icon = row.data.icon
   const { filePath, resourceName, resourceFolder } = useResourceCore()
   const folder = path.dirname(filePath)
   const iconPath = path.join(folder, icon.file, '@2d.png')

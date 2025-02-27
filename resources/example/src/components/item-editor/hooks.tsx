@@ -1,7 +1,7 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 
-import { Item } from './columns'
-import { ItemConfig, ItemEditorContext } from './context'
+import { ItemEditorContext } from './context'
+import { Item, ItemConfig, ItemWithId } from './types'
 
 export const useCurrentItem = ({
   parsedContent,
@@ -10,34 +10,26 @@ export const useCurrentItem = ({
   parsedContent: ItemConfig | null
   setParsedContent: (parsedContent: ItemConfig) => void
 }) => {
-  const [index, setIndex] = useState<number>(-1)
-  const [currentItem, setCurrentItem] = useState<Item | null>(null)
+  const [currentItem, setCurrentItem] = useState<ItemWithId | null>(null)
 
-  useEffect(() => {
-    // 如果 index 变化，则更新 currentItem
-    if (
-      parsedContent &&
-      index >= 0 &&
-      index < Object.keys(parsedContent).length
-    ) {
-      setCurrentItem(parsedContent[Object.keys(parsedContent)[index]])
-    }
-  }, [parsedContent, index])
-
-  useEffect(() => {
-    // 如果 currentItem 变化，则更新 index
+  const saveCurrentItem = (newItem: Item & { id: string }) => {
     if (parsedContent && currentItem) {
-      setIndex(Object.keys(parsedContent).indexOf(currentItem.name))
-    }
-  }, [parsedContent, currentItem])
+      const newParsedContent = { ...parsedContent }
+      if (newItem.id !== currentItem.id) {
+        delete newParsedContent[currentItem.id]
+      }
+      const { id: _, ...itemWithoutId } = newItem
+      newParsedContent[newItem.id] = itemWithoutId
+      setParsedContent(newParsedContent)
 
-  const saveCurrentItem = () => {
-    if (parsedContent && currentItem) {
-      setParsedContent(parsedContent)
+      setCurrentItem({
+        id: newItem.id,
+        data: itemWithoutId,
+      })
     }
   }
 
-  return { currentItem, setCurrentItem, index, setIndex, saveCurrentItem }
+  return { currentItem, setCurrentItem, saveCurrentItem }
 }
 
 export const useItemEditor = () => {

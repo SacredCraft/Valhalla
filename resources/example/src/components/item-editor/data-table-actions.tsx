@@ -1,15 +1,10 @@
 'use client'
 
-import { Table } from '@tanstack/react-table'
 import { Plus } from 'lucide-react'
 
 import { Button } from '@valhalla/design-system/components/ui/button'
 
-import { Item } from './columns'
-
-interface DataTableActionsProps {
-  table: Table<Item>
-}
+import { DataTableActionsProps } from './types'
 
 export function DataTableActions({ table }: DataTableActionsProps) {
   return (

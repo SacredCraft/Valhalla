@@ -4,10 +4,11 @@ import yaml from 'yaml'
 import { useResourceContent } from '@valhalla/design-system/resources/providers/resource-content-provider'
 
 import { columns } from './columns'
-import { ItemConfig, ItemEditorContext, ItemEditorExtra } from './context'
+import { ItemEditorContext } from './context'
 import { DataTable } from './data-table'
 import { ItemDetailsEditor } from './editor'
 import { useCurrentItem } from './hooks'
+import { ItemConfig, ItemEditorExtra } from './types'
 
 export default function ItemEditorLayout() {
   const {
@@ -18,8 +19,10 @@ export default function ItemEditorLayout() {
     resourceContent: { data: string; isLoading: boolean }
   }
   const [parsedContent, setParsedContent] = useState<ItemConfig | null>(null)
-  const { currentItem, setCurrentItem, index, setIndex, saveCurrentItem } =
-    useCurrentItem({ parsedContent, setParsedContent })
+  const { currentItem, setCurrentItem, saveCurrentItem } = useCurrentItem({
+    parsedContent,
+    setParsedContent,
+  })
   const [extra, setExtra] = useState<ItemEditorExtra>({
     files: {},
   })
@@ -42,8 +45,6 @@ export default function ItemEditorLayout() {
         setCurrentItem,
         parsedContent,
         setParsedContent,
-        index,
-        setIndex,
         saveCurrentItem,
         extra,
         setExtra,
@@ -51,7 +52,13 @@ export default function ItemEditorLayout() {
     >
       <div className="flex h-full">
         {parsedContent && (
-          <DataTable columns={columns} data={Object.values(parsedContent)} />
+          <DataTable
+            columns={columns}
+            data={Object.entries(parsedContent).map(([id, item]) => ({
+              id,
+              data: { ...item, id: undefined },
+            }))}
+          />
         )}
         <ItemDetailsEditor item={currentItem} />
       </div>

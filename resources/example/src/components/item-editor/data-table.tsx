@@ -1,7 +1,6 @@
 'use client'
 
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
@@ -16,15 +15,10 @@ import {
   TableRow,
 } from '@valhalla/design-system/components/ui/table'
 
-import { type Item } from './columns'
 import { DataTableActions } from './data-table-actions'
 import { DataTableToolbar } from './data-table-toolbar'
 import { useItemEditor } from './hooks'
-
-interface DataTableProps<TValue> {
-  columns: ColumnDef<Item, TValue>[]
-  data: Item[]
-}
+import { DataTableProps } from './types'
 
 export function DataTable<TValue>({ columns, data }: DataTableProps<TValue>) {
   const table = useReactTable({
@@ -67,10 +61,13 @@ export function DataTable<TValue>({ columns, data }: DataTableProps<TValue>) {
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
                   onClick={() => {
-                    if (currentItem?.name !== row.original.name) {
-                      setCurrentItem(row.original)
-                    } else {
+                    if (currentItem?.id === row.original.id) {
                       setCurrentItem(null)
+                    } else {
+                      setCurrentItem({
+                        id: row.original.id,
+                        data: row.original.data,
+                      })
                     }
                   }}
                 >

@@ -34,6 +34,7 @@ import { cn } from '@valhalla/design-system/utils/cn'
 
 import { Item } from './columns'
 import { useItemEditor } from './hooks'
+import { ItemEditorProps } from './types'
 
 // quality 映射
 const qualityMap = {
@@ -45,10 +46,6 @@ const qualityMap = {
   '6': '极品',
   '7': '传说',
   '8': '圣器',
-}
-
-type ItemEditorProps = {
-  item: Item | null
 }
 
 const formSchema = z.any()
@@ -98,17 +95,14 @@ const ItemEditorForm = ({
   item,
   children,
 }: ItemEditorProps & { children: React.ReactNode }) => {
-  const { parsedContent, setCurrentItem, saveCurrentItem, extra } =
-    useItemEditor()
-  const id = Object.keys(parsedContent ?? {}).find(
-    (key) => parsedContent?.[key].name === item?.name
-  )
+  const { saveCurrentItem, extra } = useItemEditor()
+  const id = item?.id
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      ...item,
+      ...item?.data,
       id,
-      quality: item?.quality === 0 ? '1' : item?.quality.toString(),
+      quality: item?.data.quality === 0 ? '1' : item?.data.quality.toString(),
       category: 'weapon',
     },
   })
@@ -117,8 +111,7 @@ const ItemEditorForm = ({
   const folder = path.dirname(filePath)
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    setCurrentItem(values)
-    saveCurrentItem()
+    saveCurrentItem(values)
     if (extra.files[values.icon.file]) {
       uploadFile({
         targetPath: path.join(folder, values.icon.file),
@@ -129,10 +122,6 @@ const ItemEditorForm = ({
     }
     toast.success('保存成功')
   }
-
-  useEffect(() => {
-    console.log(parsedContent)
-  }, [parsedContent])
 
   return (
     <Form {...form}>
