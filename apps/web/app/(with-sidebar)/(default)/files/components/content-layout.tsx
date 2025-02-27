@@ -37,7 +37,7 @@ export const ContentLayout = ({
   const Comp = Components[data.component]
 
   return (
-    <Suspense fallback={<LoadingState className="h-full" />}>
+    <Suspense fallback={<LoadingState className="h-[calc(100svh-84px)]" />}>
       <ResourceCoreContext
         resourceName={resourceParams.resourceName}
         resourceFolder={resourceParams.resourceFolder}
