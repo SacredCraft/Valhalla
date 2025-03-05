@@ -1,7 +1,6 @@
 'use client'
 
 import path from 'path'
-import { log } from 'util'
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { zodResolver } from '@hookform/resolvers/zod'
