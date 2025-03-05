@@ -9,6 +9,7 @@ import { Checkbox } from '@valhalla/design-system/components/ui/checkbox'
 import { DataTableColumnHeader } from '@valhalla/design-system/components/ui/data-table-column-header'
 import { useResourceCore } from '@valhalla/design-system/resources/providers/resource-core-provider'
 
+import { qualityMap } from './editor'
 import { useItemEditor } from './hooks'
 import { ItemRow } from './types'
 
@@ -88,6 +89,7 @@ export const columns: ColumnDef<ItemRow>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="品质" />
     ),
+    cell: ({ row }) => <>{qualityMap[row.original.data.quality]}</>,
   },
 ]
 

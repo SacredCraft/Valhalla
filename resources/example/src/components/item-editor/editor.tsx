@@ -35,7 +35,7 @@ import { useItemEditor } from './hooks'
 import { ItemEditorProps } from './types'
 
 // quality 映射
-const qualityMap = {
+export const qualityMap: { [key: number]: string } = {
   1: '粗糙',
   2: '普通',
   3: '奇巧',
