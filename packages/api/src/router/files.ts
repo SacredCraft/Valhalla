@@ -274,7 +274,15 @@ export const filesRouter = authed
         )
         ctx.securityCheck(targetPath, input.resourceFolder)
         const buffer = await input.file.arrayBuffer()
-        fs.writeFileSync(targetPath, Buffer.from(buffer))
+        try {
+          fs.writeFileSync(targetPath, Buffer.from(buffer))
+        } catch (error) {
+          console.error(error)
+          throw new ORPCError({
+            code: 'INTERNAL_SERVER_ERROR',
+            message: 'Failed to upload file',
+          })
+        }
       }),
 
     download: authed

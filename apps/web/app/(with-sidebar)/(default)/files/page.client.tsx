@@ -35,7 +35,6 @@ export const FilesPageContent = () => {
   const isModified = Boolean(currentTab?.isModified)
 
   const handleSetIsModified = (isModified: boolean) => {
-    console.log('isModified', isModified)
     setIsModified(currentTabIndex, isModified)
   }
 

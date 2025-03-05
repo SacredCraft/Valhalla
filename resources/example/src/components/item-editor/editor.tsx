@@ -1,6 +1,7 @@
 'use client'
 
 import path from 'path'
+import { log } from 'util'
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -28,24 +29,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@valhalla/design-system/components/ui/select'
-import { toast } from '@valhalla/design-system/components/ui/sonner'
 import { useResourceCore } from '@valhalla/design-system/resources/providers/resource-core-provider'
 import { cn } from '@valhalla/design-system/utils/cn'
 
-import { Item } from './columns'
 import { useItemEditor } from './hooks'
 import { ItemEditorProps } from './types'
 
 // quality 映射
 const qualityMap = {
-  '1': '粗糙',
-  '2': '普通',
-  '3': '奇巧',
-  '4': '精粹',
-  '5': '稀有',
-  '6': '极品',
-  '7': '传说',
-  '8': '圣器',
+  1: '粗糙',
+  2: '普通',
+  3: '奇巧',
+  4: '精粹',
+  5: '稀有',
+  6: '极品',
+  7: '传说',
+  8: '圣器',
 }
 
 const formSchema = z.any()
@@ -102,25 +101,27 @@ const ItemEditorForm = ({
     defaultValues: {
       ...item?.data,
       id,
-      quality: item?.data.quality === 0 ? '1' : item?.data.quality.toString(),
+      quality: item?.data.quality === 0 ? 1 : item?.data.quality,
       category: 'weapon',
     },
   })
   const { mutate: uploadFile } = orpc.files.upload.useMutation()
-  const { filePath, resourceName, resourceFolder } = useResourceCore()
+  const { filePath, resourceName, resourceFolder, fileName } = useResourceCore()
   const folder = path.dirname(filePath)
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     saveCurrentItem(values)
-    if (extra.files[values.icon.file]) {
+    if (extra.files['@2d.png']) {
       uploadFile({
-        targetPath: path.join(folder, values.icon.file),
-        file: extra.files[values.icon.file],
+        targetPath: path.join(
+          folder,
+          path.basename(fileName, path.extname(fileName))
+        ),
+        file: extra.files['@2d.png'],
         resourceName: resourceName,
         resourceFolder: resourceFolder,
       })
     }
-    toast.success('保存成功')
   }
 
   return (
@@ -214,7 +215,11 @@ const Quality = ({
         <FormItem className="w-full">
           <FormLabel>品质</FormLabel>
           <FormControl>
-            <Select onValueChange={field.onChange} {...field}>
+            <Select
+              {...field}
+              onValueChange={(value) => field.onChange(Number(value))}
+              value={field.value.toString()}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="品质" />
               </SelectTrigger>
@@ -323,15 +328,18 @@ const TwoDIcon = ({
   }, [data])
 
   const handleChange = (file: File) => {
+    const renamedFile = new File([file], '@2d.png', {
+      type: file.type,
+      lastModified: file.lastModified,
+    })
     const reader = new FileReader()
     reader.onload = (e) => {
       setImageUrl(e.target?.result as string)
-      form.setValue('icon.file', file.name)
       setExtra({
         ...extra,
         files: {
           ...extra.files,
-          [file.name]: file,
+          ['@2d.png']: renamedFile,
         },
       })
     }

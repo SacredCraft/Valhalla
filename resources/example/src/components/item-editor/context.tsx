@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 
-import { ItemConfig, ItemEditorContextType, ItemEditorExtra } from './types'
+import { ItemEditorContextType } from './types'
 
 export const ItemEditorContext = createContext<ItemEditorContextType>({
   currentItem: null,
